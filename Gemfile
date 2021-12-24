@@ -3,46 +3,43 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.3"
 
-# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.0.0"
-
-# Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
-
-# Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 5.0"
-
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-# gem "jbuilder"
-
-# Use Redis adapter to run Action Cable in production
-# gem "redis", "~> 4.0"
-
-# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-# gem "kredis"
-
-# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
-
-# Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", require: false
-
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
-
-# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem "rack-cors"
+gem 'auth0'
+gem 'bootsnap',           '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
+gem 'ddtrace',                        require: 'ddtrace/auto_instrument'  # Datadog Metrics Instrumentation
+gem 'dotenv-rails',                   require: 'dotenv/rails-now'         # ENV file management
+gem 'image_processing',   '~> 1.12'                                        # Use Active Storage variant
+# gem 'jsonapi-resources',  '~> 0.10.5'                                     # JSONAPI::Resources             https://jsonapi-resources.com/
+gem 'jwt'
+gem 'kredis'                                                              # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
+gem 'okcomputer'                                                          # Health Check
+gem 'pg',                 '~> 1.1'                                        # Use postgresql as the database for Active Record
+gem 'phonelib'
+gem 'puma',               '~> 5.5'                                        # Use Puma as the app server
+gem 'rack-cors'                                                           # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+gem 'rails',              '~> 7.0.0'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
+gem 'valid_email'
+gem 'redis',              '~> 4.0'                                        # Use Redis adapter to run Action Cable in production
+# gem 'stripe-rails',       '~> 2.3.1'                                      # Stripe Payment Processing
 
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem 'byebug',                        platforms: [:mri, :mingw, :x64_mingw]                     # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'factory_bot_rails'
+  gem 'faker'                                                             # Generate fake data
+  gem 'rspec-rails',       '~> 5.0.2'
+  gem 'rubocop-rails',                 require: false
+  gem 'pry'
 end
 
 group :development do
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+  gem 'annotate'
+  gem 'foreman'
 end
 
+# gem 'bcrypt',           '~> 3.1.7'                                        # Use Active Model has_secure_password
+# gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]        # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+
+# gem 'devise',             '~> 4.8.0'                                      # User Authentication and Authorization
+# gem 'doorkeeper',         '~> 5.5.4'                                      # Oauth2 Engine
+# gem 'doorkeeper-jwt',     '~> 0.4.0'                                      # JSON Web Tokens
+# gem 'jsonapi-serializer', '~> 2.2.0'                                      # JSONAPI Serializer             https://github.com/jsonapi-serializer/jsonapi-serializer
+# gem 'grape',              '~> 1.6.0'                                      # Grape API
