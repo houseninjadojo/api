@@ -24,13 +24,15 @@ class Property < ApplicationRecord
   has_one :address, as: :addressible
   belongs_to :user
 
-  validates :user_id,
-    presence: true
-  validates :square_footage,
-    numericality: {
-      only_integer: true,
-      greater_than_or_equal_to: 0,
-    }
+  validates :user_id,         presence: true
+  validates :lot_size,        numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :home_size,       numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :garage_size,     numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :home_age,        numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :estimated_value, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :bedrooms,        numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :bathrooms,       numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :pools,           numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates_associated :address
 
   # Return the `default` property

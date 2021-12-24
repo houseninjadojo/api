@@ -23,19 +23,11 @@ class User < ApplicationRecord
   has_many :properties
 
   # Validations
-  validates :first_name,
-    presence: true
-  validates :last_name,
-    presence: true
-  validates :email,
-    presence: true
-  validates :phone_number,
-    presence: true,
-    phone: true
-  validates :gender,
-    inclusion: {
-      in: %w(male female other)
-    }
+  validates :first_name,   presence: true
+  validates :last_name,    presence: true
+  validates :email,        presence: true
+  validates :phone_number, presence: true, phone: true
+  validates :gender,       inclusion: { in: %w(male female other) }
 
   # Temporary password token management
   # VGS Volatile tokens expire in 1 hour
