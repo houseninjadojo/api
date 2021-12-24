@@ -7,10 +7,12 @@ gem 'auth0'
 gem 'bootsnap',           '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
 gem 'ddtrace',                        require: 'ddtrace/auto_instrument'  # Datadog Metrics Instrumentation
 gem 'dotenv-rails',                   require: 'dotenv/rails-now'         # ENV file management
+gem 'graphiti'
 gem 'hiredis'
 gem 'image_processing',   '~> 1.12'                                        # Use Active Storage variant
 # gem 'jsonapi-resources',  '~> 0.10.5'                                     # JSONAPI::Resources             https://jsonapi-resources.com/
 gem 'jwt'
+gem 'kaminari'
 gem 'kredis'                                                              # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 gem 'okcomputer'                                                          # Health Check
 gem 'pg',                 '~> 1.1'                                        # Use postgresql as the database for Active Record
@@ -24,17 +26,21 @@ gem 'sidekiq',            '~> 6.3'
 gem 'valid_email'
 
 group :development, :test do
-  gem 'byebug',                        platforms: [:mri, :mingw, :x64_mingw]                     # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'factory_bot_rails'
-  gem 'faker'                                                             # Generate fake data
-  gem 'rspec-rails',       '~> 5.0.2'
-  gem 'rubocop-rails',                 require: false
+  gem 'faker'                                              # Generate fake data
+  gem 'graphiti_spec_helpers'
+  gem 'rspec-rails',           '~> 5.0.2'
+  gem 'rubocop-rails',                     require: false
   gem 'pry'
 end
 
 group :development do
   gem 'annotate'
   gem 'foreman'
+end
+
+group :test do
+  gem 'database_cleaner'
 end
 
 # gem 'bcrypt',           '~> 3.1.7'                                        # Use Active Model has_secure_password

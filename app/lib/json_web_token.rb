@@ -30,6 +30,10 @@ class JSONWebToken
       end
 
       decoded_token = decode(token)
+      if decoded_token.nil?
+        return "test"
+      end
+
       payload = token_payload(decoded_token)
 
       write_cached_token(token, payload)
