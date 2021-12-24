@@ -1,0 +1,14 @@
+# Ensure our dependencies are kept up-to-date
+# See https://docs.github.com/en/code-security/supply-chain-security/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  # Ruby
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "mileszim"
+    reviewers:
+      - "mileszim"

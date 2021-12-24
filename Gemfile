@@ -17,9 +17,10 @@ gem 'phonelib'
 gem 'puma',               '~> 5.5'                                        # Use Puma as the app server
 gem 'rack-cors'                                                           # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails',              '~> 7.0.0'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'valid_email'
-gem 'redis',              '~> 4.0'                                        # Use Redis adapter to run Action Cable in production
+gem 'redis',              '~> 4.5'                                        # Use Redis adapter to run Action Cable in production
+gem 'sidekiq',            '~> 6.3'
 # gem 'stripe-rails',       '~> 2.3.1'                                      # Stripe Payment Processing
+gem 'valid_email'
 
 group :development, :test do
   gem 'byebug',                        platforms: [:mri, :mingw, :x64_mingw]                     # Call 'byebug' anywhere in the code to stop execution and get a debugger console

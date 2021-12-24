@@ -1,0 +1,34 @@
+domains: &domains
+  app: api.houseninja.co             # default domain
+  landing: www.houseninja.co         # default www domain
+  localhost: localhost
+
+shared:
+  name: api                          # name of the app
+  lang: en_US.UTF-8
+  port: 3000
+  email:
+    default: noreply@houseninja.co   # default email
+    reply_to: hello@houseninja.co    # reply to email
+
+development:
+  domains:
+    <<: *domains
+    app: localhost:3000
+    assets: localhost:3000
+
+test:
+  domains:
+    <<: *domains
+    app: localhost:3000
+    assets: localhost:3000
+
+sandbox:
+  domains:
+    <<: *domains
+    app: sandbox.api.houseninja.co    # staging app domain
+
+production:
+  domains:
+    <<: *domains
+    app: api.houseninja.co            # production app domain

@@ -1,0 +1,33 @@
+environment:
+  - NAMESPACE_ORG=houseninja
+  - NAMESPACE_ENV
+  - NAMESPACE_SERVICE
+  - NAMESPACE_RESOURCE
+services:
+  web:
+    # annotations:
+    #   - test.annotation.org/value=foobar
+    # build: .
+    command: bundle exec rails server
+    domain: ${DOMAIN}
+    environment:
+      - DATABASE_URL
+      - NAMESPACE_ENV
+      - NAMESPACE_SERVICE=api
+      - NAMESPACE_RESOURCE=app
+      - RACK_ENV
+      - RAILS_ENV
+      - RAILS_MASTER_KEY
+    health: /health
+    image: ghcr.io/houseninjadojo/api
+    internal: false
+    port: 3000
+    termination:
+      grace: 45
+    timeout: 120
+    deployment:
+      minimum: 50
+      maximum: 200
+  # metrics:
+  #   agent: true
+  #   image: awesome/metrics

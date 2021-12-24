@@ -26,4 +26,21 @@
 !/tmp/storage/.keep
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
+/config/**/*.key
+
+# ENV
+.env.local
+
+# Apple
+.DS_Store
+.Trashes
+
+# Redis
+*.rdb
+/config/credentials/sandbox.key
+
+/config/credentials/development.key
+
+/config/credentials/test.key
+
+/config/credentials/production.key
