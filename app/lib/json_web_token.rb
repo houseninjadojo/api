@@ -12,6 +12,7 @@ require 'uri'
 
 class JSONWebToken
   HEADER_REGEX = /\ABearer\s([a-zA-Z0-9\-\_\~\+\\]+\.[a-zA-Z0-9\-\_\~\+\\]+\.[a-zA-Z0-9\-\_\~\+\\]*)\z/
+  CACHE_NAMESPACE = 'jwt'
 
   class << self
     # Decode and Verify a JWT
@@ -24,14 +25,23 @@ class JSONWebToken
     def verify(token:)
       cached = fetch_cached_token(token)
       if cached.present?
+        puts "CACHED"
         return cached
       end
 
+      decoded_token = decode(token)
+      payload = token_payload(decoded_token)
+
+      write_cached_token(token, payload)
+      return payload
+    end
+
+    def decode(token)
       begin
         decoded = JWT.decode(token, nil, true, **decoder_options) do |header|
           jwks_hash[header['kid']]
         end
-        payload = token_payload(decoded)
+        return decoded
       rescue JWT::ExpiredSignature, JWT::InvalidIatError
         # Expired
         # puts "EXPIRED"
@@ -48,13 +58,10 @@ class JSONWebToken
         # Etc
         return nil
       end
-
-      write_cached_token(token, payload)
-      return payload
     end
 
     def jwks
-      Rails.cache.fetch('jwt:json_web_keys', expires_in: 24.hours, race_condition_ttl: 10.seconds) do
+      cache.fetch('json_web_keys', expires_in: 24.hours, race_condition_ttl: 10.seconds, namespace: CACHE_NAMESPACE) do
         uri = URI("https://#{Rails.application.credentials.auth[:domain]}/.well-known/jwks.json")
         response = Net::HTTP.get(uri)
         JSON.parse(response)
@@ -62,7 +69,7 @@ class JSONWebToken
     end
 
     def jwks_hash
-      Rails.cache.fetch('jwt:json_web_keys_hash', expires_in: 24.hours, race_condition_ttl: 10.seconds) do
+      cache.fetch('json_web_keys_hash', expires_in: 24.hours, race_condition_ttl: 10.seconds, namespace: CACHE_NAMESPACE) do
         jwk_hash = Array(jwks['keys'])
         map = jwk_hash.map do |key|
           [
@@ -78,16 +85,21 @@ class JSONWebToken
 
     private
 
+    def cache
+      Rails.cache
+    end
+
     def fetch_cached_token(token)
-      Rails.cache.read("jwt:#{token}")
+      cache.read(token, namespace: CACHE_NAMESPACE)
     end
 
     def write_cached_token(token, payload)
-      Rails.cache.write(
-        "jwt:#{token}",
+      cache.write(
+        token,
         payload,
         expires_in: payload[:expires_in].seconds,
         race_condition_ttl: 10.seconds,
+        namespace: CACHE_NAMESPACE,
       )
     end
 

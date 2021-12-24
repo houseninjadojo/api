@@ -44,5 +44,14 @@ module HouseNinja
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Store a reference to the encryption key in the encrypted message for
+    # more performant decryption
+    # @see https://edgeguides.rubyonrails.org/active_record_encryption.html#storing-key-references
+    config.active_record.encryption.store_key_references = true
+
+    # Set Redis as the cache store
+    # @see https://guides.rubyonrails.org/caching_with_rails.html#activesupport-cache-rediscachestore
+    config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
   end
 end
