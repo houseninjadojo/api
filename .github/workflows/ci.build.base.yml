@@ -18,30 +18,40 @@ on:
 jobs:
   base:
     name: Base
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      - 
-        uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
-        with:
-          docker_repo: ghcr.io/houseninjadojo/api-base
-          build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
-          dockerfile: platform/docker/Dockerfile.builder
+    # runs-on: ubuntu-latest
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
+    with:
+      docker_repo: ghcr.io/houseninjadojo/api-base
+      build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
+      dockerfile: platform/docker/Dockerfile.builder
+    # steps:
+    #   -
+    #     name: Checkout
+    #     uses: actions/checkout@v2
+    #   - 
+    #     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
+    #     with:
+    #       docker_repo: ghcr.io/houseninjadojo/api-base
+    #       build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
+    #       dockerfile: platform/docker/Dockerfile.builder
   intermediate:
     name: Intermediate
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      - 
-        uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
-        with:
-          docker_repo: ghcr.io/houseninjadojo/api-intermediate
-          build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
-          dockerfile: platform/docker/Dockerfile.intermediate
+    # runs-on: ubuntu-latest
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
+    with:
+      docker_repo: ghcr.io/houseninjadojo/api-intermediate
+      build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
+      dockerfile: platform/docker/Dockerfile.intermediate
+    # steps:
+    #   -
+    #     name: Checkout
+    #     uses: actions/checkout@v2
+    #   - 
+    #     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
+    #     with:
+    #       docker_repo: ghcr.io/houseninjadojo/api-intermediate
+    #       build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
+    #       dockerfile: platform/docker/Dockerfile.intermediate
       # -
       #   name: Checkout
       #   uses: actions/checkout@v2
