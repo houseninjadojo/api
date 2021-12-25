@@ -18,7 +18,7 @@ class Auth::CreateUserJob < ApplicationJob
       email_verified: false,
       # phone_number: user.phone_number,
       # phone_verified: false,
-      blocked: false,å
+      blocked: false,
       name: user.name,
       # connection: connection,
       password: user.password,

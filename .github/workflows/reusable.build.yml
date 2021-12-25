@@ -1,31 +1,32 @@
-name: CI - Build
+name: build container
+# description: Build and push a docker container
 
-# on:
-#   push:
-#     branches:
-#       - main
-
-# Trigger after tests pass
 on:
-  workflow_run:
-    workflows:
-      - "CI - Tests"
-    branches:
-      - main
-    types: 
-      - completed
+  workflow_call:
+    description: Build and push a docker container
+    inputs:
+      docker_repo:
+        required: true
+        type: string
+      build_args:
+        required: false
+        type: string
+        default: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
+      dockerfile:
+        required: false
+        type: string
+        default: Dockerfile
 
 env:
   RUBY_VERSION: 3.0.3
   # NODE_VERSION: '16.x'
   BUILD_MODE: true
-  DOCKER_REPO: ghcr.io/houseninjadojo/api
+  DOCKER_REPO: ${{ inputs.docker_repo }}
 
 jobs:
   build:
-    name: CI - Build
+    name: build and push
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       -
         name: Checkout
@@ -56,12 +57,12 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
+          file: ${{ inputs.dockerfile }}
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
-          tags: |
-            ${{ env.DOCKER_REPO }}:latest
+            ${{ inputs.build_args }}
+          tags: ${{ env.DOCKER_REPO }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       -

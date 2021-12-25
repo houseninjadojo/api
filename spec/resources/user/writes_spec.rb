@@ -30,7 +30,7 @@ RSpec.describe UserResource, type: :resource do
         data: {
           id: user.id.to_s,
           type: 'users',
-          attributes: { } # Todo!
+          attributes: {} # Todo!
         }
       }
     end

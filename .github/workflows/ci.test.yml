@@ -1,0 +1,64 @@
+name: CI / Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+env:
+  RUBY_VERSION: 3.0.3
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
+  # ImageOS: ubuntu20 # Self Hosted
+
+jobs:
+  rspec:
+    name: "rspec"
+    runs-on: ubuntu-latest # change to `self-hosted` for, well, self hosted runners
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_DB: houseninja_test
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:6-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    env:
+      RAILS_ENV: test
+      NAMESPACE_ENV: test
+      PGHOST: localhost
+      PGPASSWORD: postgres
+      PGUSER: postgres
+      REDIS_URL: redis://localhost:6379/0
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Ruby and install gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: Setup test database
+        run: bundle exec rails db:setup
+      
+      - name: Run Tests
+        run: bundle exec rspec
