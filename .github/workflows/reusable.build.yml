@@ -1,9 +1,7 @@
 name: build container
-# description: Build and push a docker container
 
 on:
   workflow_call:
-    description: Build and push a docker container
     inputs:
       docker_repo:
         required: true
@@ -11,21 +9,22 @@ on:
       build_args:
         required: false
         type: string
-        default: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
       dockerfile:
         required: false
         type: string
         default: Dockerfile
+    secrets:
+      RAILS_MASTER_KEY:
+        required: true
 
 env:
   RUBY_VERSION: 3.0.3
-  # NODE_VERSION: '16.x'
   BUILD_MODE: true
   DOCKER_REPO: ${{ inputs.docker_repo }}
 
 jobs:
   build:
-    name: build and push
+    name: build
     runs-on: ubuntu-latest
     steps:
       -
@@ -61,6 +60,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
+            RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
             ${{ inputs.build_args }}
           tags: ${{ env.DOCKER_REPO }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
