@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - actions
     # paths:
     #   - Gemfile.lock
     #   - platform/docker/Dockerfile.builder
