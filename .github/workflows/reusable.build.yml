@@ -1,7 +1,9 @@
 name: build container
+# description: Build and push a docker container
 
 on:
   workflow_call:
+    description: Build and push a docker container
     inputs:
       docker_repo:
         required: true
