@@ -34,14 +34,14 @@ ActiveRecord::Schema.define(version: 2021_12_24_054111) do
 
   create_table "properties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
-    t.integer "lot_size"
-    t.integer "home_size"
-    t.integer "garage_size"
-    t.integer "home_age"
+    t.float "lot_size"
+    t.float "home_size"
+    t.float "garage_size"
+    t.integer "year_built"
     t.string "estimated_value"
-    t.integer "bedrooms"
-    t.integer "bathrooms"
-    t.integer "pools"
+    t.float "bedrooms"
+    t.float "bathrooms"
+    t.float "pools"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_properties_on_user_id"

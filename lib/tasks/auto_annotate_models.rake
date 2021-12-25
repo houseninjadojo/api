@@ -27,6 +27,12 @@ if Rails.env.development?
       'sort'                 => "false",
       'force'                => "false",
       'trace'                => "false",
+      'additional_file_patterns' => [File.join(
+        Rails.root,
+        'app',
+        'resources',
+        '%MODEL_NAME%_resource.rb'
+      )]
     })
   end
 

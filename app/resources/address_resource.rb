@@ -33,10 +33,12 @@ class AddressResource < ApplicationResource
 
   attribute :id,               :uuid
   attribute :addressible_id,   :uuid
-  # attribute :addressible_type, :string
+  attribute :addressible_type, :string do
+    @object.addressible_type.downcase
+  end
 
-  attribute :street1, :string
-  attribute :street2, :string
+  attribute :street1, :string, sortable: false
+  attribute :street2, :string, sortable: false
   attribute :city,    :string
   attribute :zipcode, :string
   attribute :state,   :string

@@ -4,14 +4,14 @@
 #
 #  id              :uuid             not null, primary key
 #  user_id         :uuid
-#  lot_size        :integer
-#  home_size       :integer
-#  garage_size     :integer
-#  home_age        :integer
+#  lot_size        :float
+#  home_size       :float
+#  garage_size     :float
+#  year_built      :integer
 #  estimated_value :string
-#  bedrooms        :integer
-#  bathrooms       :integer
-#  pools           :integer
+#  bedrooms        :float
+#  bathrooms       :float
+#  pools           :float
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #

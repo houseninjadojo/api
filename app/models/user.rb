@@ -17,7 +17,6 @@
 #  index_users_on_gender        (gender)
 #  index_users_on_phone_number  (phone_number) UNIQUE
 #
-
 class User < ApplicationRecord
   # Associations
   has_many :properties
