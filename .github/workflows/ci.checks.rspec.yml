@@ -1,36 +1,19 @@
-name: CI / Tests
+name: CI / Checks
 
 on:
   pull_request:
     branches:
       - main
-      # - production
   push:
     branches:
       - main
-      # - production
 
 env:
   RUBY_VERSION: 3.0.3
-  # NODE_VERSION: '16.x'
   RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
   # ImageOS: ubuntu20 # Self Hosted
 
 jobs:
-  lint:
-    name: "lint"
-    runs-on: ubuntu-latest
-    # environment: test
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Ruby and install gems
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ env.RUBY_VERSION }}
-          bundler-cache: true
-      - name: Run RuboCop
-        run: bundle exec rubocop --parallel
-
   rspec:
     name: "rspec"
     runs-on: ubuntu-latest # change to `self-hosted` for, well, self hosted runners
