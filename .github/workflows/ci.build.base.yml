@@ -22,7 +22,7 @@ jobs:
     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     with:
       docker_repo: ghcr.io/houseninjadojo/api-base
-      build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
+      # build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
       dockerfile: platform/docker/Dockerfile.builder
     secrets:
       RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
@@ -42,7 +42,7 @@ jobs:
     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     with:
       docker_repo: ghcr.io/houseninjadojo/api-intermediate
-      build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
+      # build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
       dockerfile: platform/docker/Dockerfile.intermediate
     secrets:
       RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
