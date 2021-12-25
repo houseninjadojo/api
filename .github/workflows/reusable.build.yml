@@ -3,7 +3,6 @@ name: build container
 
 on:
   workflow_call:
-    description: Build and push a docker container
     inputs:
       docker_repo:
         required: true
