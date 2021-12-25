@@ -24,7 +24,7 @@ env:
 jobs:
   release:
     name: Release
-    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     with:
       docker_repo: ghcr.io/houseninjadojo/api
       build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
