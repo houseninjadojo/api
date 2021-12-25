@@ -24,12 +24,17 @@ env:
 jobs:
   release:
     name: Release
-    runs-on: ubuntu-latest
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
+    with:
+      docker_repo: ghcr.io/houseninjadojo/api
+      build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
+      dockerfile: Dockerfile
+    # runs-on: ubuntu-latest
     # if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    steps:
-      - uses: ./.github/workflows/reusable.build.yml
-        with:
-          docker_repo: ghcr.io/houseninjadojo/api
+    # steps:
+    #   - uses: ./.github/workflows/reusable.build.yml
+    #     with:
+    #       docker_repo: ghcr.io/houseninjadojo/api
 #       -
 #         name: Checkout
 #         uses: actions/checkout@v2

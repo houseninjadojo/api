@@ -19,7 +19,7 @@ jobs:
   base:
     name: Base
     # runs-on: ubuntu-latest
-    uses: ./.github/workflows/reusable.build.yml@v1
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
     with:
       docker_repo: ghcr.io/houseninjadojo/api-base
       build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
@@ -37,7 +37,7 @@ jobs:
   intermediate:
     name: Intermediate
     # runs-on: ubuntu-latest
-    uses: ./.github/workflows/reusable.build.yml@v1
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@v1
     with:
       docker_repo: ghcr.io/houseninjadojo/api-intermediate
       build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
