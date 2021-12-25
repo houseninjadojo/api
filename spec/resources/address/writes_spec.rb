@@ -30,7 +30,7 @@ RSpec.describe AddressResource, type: :resource do
         data: {
           id: address.id.to_s,
           type: 'addresses',
-          attributes: { } # Todo!
+          attributes: {} # Todo!
         }
       }
     end

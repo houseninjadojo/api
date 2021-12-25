@@ -30,7 +30,7 @@ RSpec.describe PropertyResource, type: :resource do
         data: {
           id: property.id.to_s,
           type: 'properties',
-          attributes: { } # Todo!
+          attributes: {} # Todo!
         }
       }
     end

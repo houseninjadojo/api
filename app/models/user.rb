@@ -37,7 +37,7 @@ class User < ApplicationRecord
   def password
     Rails.cache.read(self.id, namespace: 'user:password')
   end
-  
+
   # Get the user's default property
   #
   # @return {Property}
