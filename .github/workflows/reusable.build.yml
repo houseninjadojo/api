@@ -1,5 +1,4 @@
 name: build container
-# description: Build and push a docker container
 
 on:
   workflow_call:
@@ -20,13 +19,12 @@ on:
 
 env:
   RUBY_VERSION: 3.0.3
-  # NODE_VERSION: '16.x'
   BUILD_MODE: true
   DOCKER_REPO: ${{ inputs.docker_repo }}
 
 jobs:
   build:
-    name: build and push
+    name: build
     runs-on: ubuntu-latest
     steps:
       -
