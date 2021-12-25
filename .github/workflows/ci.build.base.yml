@@ -5,10 +5,10 @@ on:
     branches:
       - main
       - fix-linter
-    paths:
-      - Gemfile.lock
-      - platform/docker/Dockerfile.builder
-      - platform/docker/Dockerfile.intermediate
+    # paths:
+    #   - Gemfile.lock
+    #   - platform/docker/Dockerfile.builder
+    #   - platform/docker/Dockerfile.intermediate
 # env:
 #   RUBY_VERSION: 3.0.3
 #   # NODE_VERSION: '16.x'
