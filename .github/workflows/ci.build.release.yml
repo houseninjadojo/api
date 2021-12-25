@@ -27,8 +27,10 @@ jobs:
     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     with:
       docker_repo: ghcr.io/houseninjadojo/api
-      build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
+      build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
       dockerfile: Dockerfile
+    secrets:
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
     # runs-on: ubuntu-latest
     # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     # steps:
