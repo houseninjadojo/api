@@ -1,5 +1,5 @@
-FROM --platform=$BUILDPLATFORM ghcr.io/houseninjadojo/houseninja-api-builder:latest AS Builder
-FROM --platform=$BUILDPLATFORM ghcr.io/houseninjadojo/houseninja-api-intermediate:latest
+FROM --platform=$BUILDPLATFORM ghcr.io/houseninjadojo/api-base:latest AS Builder
+FROM --platform=$BUILDPLATFORM ghcr.io/houseninjadojo/api-intermediate:latest
 
 # Workaround to trigger Builder's ONBUILDs to finish:
 # COPY --from=Builder /etc/alpine-release /tmp/dummy
