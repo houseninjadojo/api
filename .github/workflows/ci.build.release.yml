@@ -1,4 +1,4 @@
-name: CI - Build
+name: CI / Build
 
 # on:
 #   push:
@@ -9,7 +9,7 @@ name: CI - Build
 on:
   workflow_run:
     workflows:
-      - "CI - Tests"
+      - "CI / Tests"
     branches:
       - main
     types: 
@@ -23,7 +23,7 @@ env:
 
 jobs:
   build:
-    name: CI - Build
+    name: Release
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:

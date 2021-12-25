@@ -1,4 +1,4 @@
-name: CI - Rebuild Base
+name: CI / Build
 
 on:
   push:
@@ -15,8 +15,8 @@ env:
   DOCKER_REPO_ORG: ghcr.io/houseninjadojo
 
 jobs:
-  rebuild:
-    name: CI - Rebuild Base
+  build:
+    name: Base
     runs-on: ubuntu-latest
     steps:
       -
