@@ -4,14 +4,14 @@
 #
 #  id              :uuid             not null, primary key
 #  user_id         :uuid
-#  lot_size        :float
-#  home_size       :float
-#  garage_size     :float
-#  year_built      :integer
+#  lot_size        :integer
+#  home_size       :integer
+#  garage_size     :integer
+#  home_age        :integer
 #  estimated_value :string
-#  bedrooms        :float
-#  bathrooms       :float
-#  pools           :float
+#  bedrooms        :integer
+#  bathrooms       :integer
+#  pools           :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
@@ -19,7 +19,6 @@
 #
 #  index_properties_on_user_id  (user_id)
 #
-
 class PropertyResource < ApplicationResource
   self.model = Property
   self.type = :properties
@@ -32,15 +31,14 @@ class PropertyResource < ApplicationResource
   attribute :id,      :uuid
   attribute :user_id, :uuid
 
-  attribute :lot_size,        :float,   sortable: false
-  attribute :home_size,       :float,   sortable: false
-  attribute :garage_size,     :float,   sortable: false
-  attribute :home_age,        :integer, sortable: false
-  attribute :year_built,      :integer, sortable: false
-  attribute :estimated_value, :string,  sortable: false
-  attribute :bedrooms,        :float,   sortable: false
-  attribute :bathrooms,       :float,   sortable: false
-  attribute :pools,           :float,   sortable: false
+  attribute :lot_size,        :integer
+  attribute :home_size,       :integer
+  attribute :garage_size,     :integer
+  attribute :home_age,        :integer
+  attribute :estimated_value, :string
+  attribute :bedrooms,        :integer
+  attribute :bathrooms,       :integer
+  attribute :pools,           :integer
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]

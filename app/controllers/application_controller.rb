@@ -19,8 +19,4 @@ class ApplicationController < ActionController::API
   def respond_with(payload)
     render jsonapi: payload
   end
-
-  def show_detailed_exceptions?
-    ['development', 'sandbox'].include?(Rails.env)
-  end
 end

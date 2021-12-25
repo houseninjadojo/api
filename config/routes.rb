@@ -1,6 +1,3 @@
-# == Route Map
-#
-
 Rails.application.routes.draw do
   # Mounts
   mount OkComputer::Engine, at: '/health'           # Health Checks

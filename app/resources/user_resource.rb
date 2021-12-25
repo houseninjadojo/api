@@ -1,22 +1,3 @@
-# == Schema Information
-#
-# Table name: users
-#
-#  id           :uuid             not null, primary key
-#  first_name   :string           not null
-#  last_name    :string           not null
-#  email        :string           default(""), not null
-#  phone_number :string           not null
-#  gender       :string           default("other"), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#
-# Indexes
-#
-#  index_users_on_email         (email) UNIQUE
-#  index_users_on_gender        (gender)
-#  index_users_on_phone_number  (phone_number) UNIQUE
-#
 class UserResource < ApplicationResource
   self.model = User
   self.type = :users
@@ -26,8 +7,8 @@ class UserResource < ApplicationResource
   has_many :properties
 
   attribute :id,           :uuid
-  attribute :first_name,   :string, sortable: false
-  attribute :last_name,    :string, sortable: false
+  attribute :first_name,   :string
+  attribute :last_name,    :string
   attribute :phone_number, :string
   attribute :email,        :string
   attribute :gender,       :string_enum, allow: ['male', 'female', 'other']

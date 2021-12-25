@@ -4,14 +4,14 @@
 #
 #  id              :uuid             not null, primary key
 #  user_id         :uuid
-#  lot_size        :float
-#  home_size       :float
-#  garage_size     :float
-#  year_built      :integer
+#  lot_size        :integer
+#  home_size       :integer
+#  garage_size     :integer
+#  home_age        :integer
 #  estimated_value :string
-#  bedrooms        :float
-#  bathrooms       :float
-#  pools           :float
+#  bedrooms        :integer
+#  bathrooms       :integer
+#  pools           :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
@@ -25,14 +25,14 @@ class Property < ApplicationRecord
   belongs_to :user
 
   validates :user_id,         presence: true
-  validates :lot_size,        numericality: { greater_than_or_equal_to: 0 }
-  validates :home_size,       numericality: { greater_than_or_equal_to: 0 }
-  validates :garage_size,     numericality: { greater_than_or_equal_to: 0 }
-  validates :home_age,        numericality: { greater_than_or_equal_to: 0 }
-  validates :estimated_value, numericality: { greater_than_or_equal_to: 0 }
-  validates :bedrooms,        numericality: { greater_than_or_equal_to: 0 }
-  validates :bathrooms,       numericality: { greater_than_or_equal_to: 0 }
-  validates :pools,           numericality: { greater_than_or_equal_to: 0 }
+  validates :lot_size,        numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :home_size,       numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :garage_size,     numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :home_age,        numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :estimated_value, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :bedrooms,        numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :bathrooms,       numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :pools,           numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates_associated :address
 
   # Return the `default` property
@@ -41,10 +41,5 @@ class Property < ApplicationRecord
   # @todo add a real default type deal when we open up multiple properties
   def self.find_default_for(user:)
     user.properties.first
-  end
-
-  # Get the current home age
-  def home_age
-    Time.now.year - self.year_built
   end
 end
