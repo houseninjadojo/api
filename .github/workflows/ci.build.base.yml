@@ -19,7 +19,7 @@ jobs:
   base:
     name: Base
     # runs-on: ubuntu-latest
-    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@${{ github.ref_name }}
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@actions
     with:
       docker_repo: ghcr.io/houseninjadojo/api-base
       dockerfile: platform/docker/Dockerfile.builder
@@ -38,7 +38,7 @@ jobs:
   intermediate:
     name: Intermediate
     # runs-on: ubuntu-latest
-    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@${{ github.ref_name }}
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@actions
     with:
       docker_repo: ghcr.io/houseninjadojo/api-intermediate
       dockerfile: platform/docker/Dockerfile.intermediate
