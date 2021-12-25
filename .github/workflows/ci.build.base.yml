@@ -20,7 +20,11 @@ jobs:
     name: Base
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/reusable.build.yml
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        uses: ./.github/workflows/reusable.build.yml
         with:
           docker_repo: ghcr.io/houseninjadojo/api-base
           build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
@@ -29,7 +33,11 @@ jobs:
     name: Intermediate
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/reusable.build.yml
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        uses: ./.github/workflows/reusable.build.yml
         with:
           docker_repo: ghcr.io/houseninjadojo/api-intermediate
           build_args: RAILS_MASTER_KEY=${{ secrets.RAILS_TEST_MASTER_KEY }}
