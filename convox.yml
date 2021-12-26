@@ -12,7 +12,6 @@ services:
     domain: ${DOMAIN}
     environment:
       - DATABASE_URL
-      - NAMESPACE_ENV
       - NAMESPACE_SERVICE=api
       - NAMESPACE_RESOURCE=app
       - RACK_ENV
@@ -25,6 +24,22 @@ services:
     termination:
       grace: 45
     timeout: 120
+    deployment:
+      minimum: 50
+      maximum: 200
+  worker:
+    command: bundle exec sidekiq -q critical -q default -q mailers
+    environment:
+      - DATABASE_URL
+      - NAMESPACE_SERVICE=api
+      - NAMESPACE_RESOURCE=app
+      - RACK_ENV
+      - RAILS_ENV
+      - RAILS_MASTER_KEY
+    image: ghcr.io/houseninjadojo/api
+    internal: true
+    termination:
+      grace: 45
     deployment:
       minimum: 50
       maximum: 200
