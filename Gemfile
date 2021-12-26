@@ -8,7 +8,7 @@ gem 'bootsnap',           '>= 1.9.3', require: false                      # Redu
 gem 'ddtrace',                        require: 'ddtrace/auto_instrument'  # Datadog Metrics Instrumentation
 gem 'dotenv-rails',                   require: 'dotenv/rails-now'         # ENV file management
 gem 'graphiti'
-gem 'hiredis'
+# gem 'hiredis'
 gem 'image_processing',   '~> 1.12'                                        # Use Active Storage variant
 # gem 'jsonapi-resources',  '~> 0.10.5'                                     # JSONAPI::Resources             https://jsonapi-resources.com/
 gem 'jwt'
