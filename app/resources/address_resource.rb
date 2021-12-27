@@ -26,16 +26,13 @@ class AddressResource < ApplicationResource
 
   primary_endpoint 'addresses', [:index, :show, :create, :update, :destroy]
 
-  belongs_to :property,
-    foreign_key: :addressible_id,
-    primary_key: :id,
-    resource: PropertyResource
-
-  attribute :id,               :uuid
-  attribute :addressible_id,   :uuid
-  attribute :addressible_type, :string do
-    @object.addressible_type.downcase
+  polymorphic_belongs_to :addressible do
+    group_by(:addressible_type) do
+      on(:Property)
+    end
   end
+
+  attribute :id, :uuid
 
   attribute :street1, :string, sortable: false
   attribute :street2, :string, sortable: false

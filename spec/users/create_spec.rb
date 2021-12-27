@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "users#create", type: :request do
   subject(:make_request) do
-    jsonapi_post "//users", payload
+    jsonapi_post "/users", payload
   end
 
   describe 'basic create' do

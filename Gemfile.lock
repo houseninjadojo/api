@@ -7,6 +7,15 @@ GIT
       activerecord (>= 3.2, < 7.1)
       rake (>= 10.4, < 14.0)
 
+GIT
+  remote: https://github.com/mileszim/graphiti_spec_helpers.git
+  revision: 7dd9716bd6743de4263a58a42b5575583331f1d7
+  branch: master
+  specs:
+    graphiti_spec_helpers (1.0.5)
+      graphiti (>= 1.0.alpha.1)
+      rspec (~> 3.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -145,9 +154,6 @@ GEM
       rescue_registry (~> 0.3.0)
     graphiti_errors (1.1.2)
       jsonapi-serializable (~> 0.1)
-    graphiti_spec_helpers (1.0.5)
-      graphiti (>= 1.0.alpha.1)
-      rspec (~> 3.0)
     http-accept (1.7.0)
     http-cookie (1.0.4)
       domain_name (~> 0.5)
@@ -335,7 +341,7 @@ DEPENDENCIES
   foreman
   graphiti
   graphiti-rails
-  graphiti_spec_helpers
+  graphiti_spec_helpers!
   image_processing (~> 1.12)
   jwt
   kaminari

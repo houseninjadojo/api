@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "addresses#update", type: :request do
   subject(:make_request) do
-    jsonapi_put "//addresses/#{address.id}", payload
+    jsonapi_put "/addresses/#{address.id}", payload
   end
 
   describe 'basic update' do
@@ -14,14 +14,14 @@ RSpec.describe "addresses#update", type: :request do
           id: address.id.to_s,
           type: 'addresses',
           attributes: {
-            # ... your attrs here
+            street1: '1 abc street',
+            street2: 'street line 2'
           }
         }
       }
     end
 
-    # Replace 'xit' with 'it' after adding attributes
-    xit 'updates the resource' do
+    it 'updates the resource' do
       expect(AddressResource).to receive(:find).and_call_original
       expect {
         make_request

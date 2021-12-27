@@ -7,9 +7,9 @@ Rails.application.routes.draw do
   # mount Stripe::Engine,     at: '/webhooks/stripe'  # Stripe Webhooks
 
   defaults format: :jsonapi do
-    resources :users
-    resources :properties
     resources :addresses
+    resources :properties
+    resources :users
 
     root to: 'home#index'
   end

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "addresses#destroy", type: :request do
   subject(:make_request) do
-    jsonapi_delete "//addresses/#{address.id}"
+    jsonapi_delete "/addresses/#{address.id}"
   end
 
   describe 'basic destroy' do

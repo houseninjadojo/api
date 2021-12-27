@@ -22,6 +22,14 @@
 
 FactoryBot.define do
   factory :property do
-
+    user
+    lot_size { Faker::Number.between(from: 10_000, to: 1_000_000) }
+    home_size { Faker::Number.between(from: 1_000, to: 10_000) }
+    garage_size { Faker::Number.between(from: 0, to: 2) }
+    year_built { Faker::Number.between(from: 1900, to: Time.now.year) }
+    estimated_value { Faker::Number.between(from: 500_000, to: 15_000_000) }
+    bedrooms { Faker::Number.between(from: 0, to: 10) }
+    bathrooms { Faker::Number.between(from: 0, to: 10) }
+    pools { Faker::Number.between(from: 0, to: 1) }
   end
 end

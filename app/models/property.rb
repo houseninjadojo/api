@@ -45,6 +45,10 @@ class Property < ApplicationRecord
 
   # Get the current home age
   def home_age
-    Time.now.year - self.year_built
+    if self.year_built.present?
+      Time.now.year - self.year_built
+    else
+      nil
+    end
   end
 end

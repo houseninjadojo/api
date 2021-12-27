@@ -6,6 +6,7 @@ require File.expand_path('../config/environment', __dir__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'graphiti_spec_helpers/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -72,9 +73,9 @@ RSpec.configure do |config|
   config.include GraphitiSpecHelpers::RSpec
   config.include GraphitiSpecHelpers::Sugar
   # Raise errors during tests by default
-  config.before :each do
-    GraphitiErrors.disable!
-  end
+  # config.before :each do
+  #   GraphitiErrors.disable!
+  # end
 
   # Clean your DB between test runs
   config.before(:suite) do
@@ -92,3 +93,5 @@ RSpec.configure do |config|
     end
   end
 end
+
+Faker::Config.locale = 'en-US'
