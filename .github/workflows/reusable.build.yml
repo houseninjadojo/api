@@ -18,17 +18,27 @@ on:
         required: true
       GHCR_TOKEN:
         required: true
+      SLACK_WEBHOOK_URL:
+        required: true
 
 env:
   RUBY_VERSION: 3.0.3
   BUILD_MODE: true
   DOCKER_REPO: ${{ inputs.docker_repo }}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
   build:
     name: build
     runs-on: ubuntu-latest
     steps:
+      -
+        uses: act10ns/slack@v1
+        with:
+          status: starting
+          channel: '#ci-cd'
+          message: Starting Docker Build and Push...
+        if: always()
       -
         name: Checkout
         uses: actions/checkout@v2
@@ -77,3 +87,10 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      -
+        uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          channel: '#ci-cd'
+        if: always()
