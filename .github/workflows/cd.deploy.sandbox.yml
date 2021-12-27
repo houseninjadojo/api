@@ -12,6 +12,7 @@ env:
   CONVOX_RACK: sandbox
   CONVOX_APP: api
   CONVOX_SERVICE: web
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CI_CD }}
 
 jobs:
   deploy:
@@ -19,6 +20,13 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      -
+        uses: act10ns/slack@v1
+        with:
+          status: starting
+          channel: '#ci-cd'
+          message: '[SANDBOX] start deployment'
+        if: always()
       -
         id: checkout
         uses: actions/checkout@v2
@@ -53,3 +61,10 @@ jobs:
           rack: ${{ env.CONVOX_RACK }}
           app: ${{ env.CONVOX_APP }}
           release: ${{ steps.build.outputs.release }}
+      -
+        uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          channel: '#workflows'
+        if: always()
