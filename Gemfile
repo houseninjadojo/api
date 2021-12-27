@@ -8,9 +8,8 @@ gem 'bootsnap',           '>= 1.9.3', require: false                      # Redu
 gem 'ddtrace',                        require: 'ddtrace/auto_instrument'  # Datadog Metrics Instrumentation
 gem 'dotenv-rails',                   require: 'dotenv/rails-now'         # ENV file management
 gem 'graphiti'
-# gem 'hiredis'
+gem 'graphiti-rails'
 gem 'image_processing',   '~> 1.12'                                        # Use Active Storage variant
-# gem 'jsonapi-resources',  '~> 0.10.5'                                     # JSONAPI::Resources             https://jsonapi-resources.com/
 gem 'jwt'
 gem 'kaminari'
 gem 'kredis'                                                              # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
@@ -21,6 +20,7 @@ gem 'puma',               '~> 5.5'                                        # Use 
 gem 'rack-cors'                                                           # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails',              '~> 7.0.0'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'redis',              '~> 4.5'                                        # Use Redis adapter to run Action Cable in production
+gem 'responders'
 gem 'seedbank'
 gem 'sidekiq',            '~> 6.3'
 # gem 'stripe-rails',       '~> 2.3.1'                                      # Stripe Payment Processing
@@ -46,9 +46,3 @@ end
 
 # gem 'bcrypt',           '~> 3.1.7'                                        # Use Active Model has_secure_password
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]        # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-
-# gem 'devise',             '~> 4.8.0'                                      # User Authentication and Authorization
-# gem 'doorkeeper',         '~> 5.5.4'                                      # Oauth2 Engine
-# gem 'doorkeeper-jwt',     '~> 0.4.0'                                      # JSON Web Tokens
-# gem 'jsonapi-serializer', '~> 2.2.0'                                      # JSONAPI Serializer             https://github.com/jsonapi-serializer/jsonapi-serializer
-# gem 'grape',              '~> 1.6.0'                                      # Grape API

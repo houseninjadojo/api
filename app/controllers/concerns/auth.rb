@@ -12,6 +12,7 @@ module Auth
   end
 
   def current_user
+    return nil unless current_token.present?
     @current_user ||= User.find_by(id: current_token.user_id)
   end
 
@@ -19,18 +20,8 @@ module Auth
     if current_token.present?
       current_token
     else
-      render_unauthorized!
+      raise ActionController::Unauthorized
     end
-  end
-
-  def render_unauthorized!
-    render json: {
-      errors: [
-        status: "401",
-        title: "Not Authorized",
-        details: "Not Authorized",
-      ]
-    }, status: :unauthorized
   end
 
   private

@@ -1,0 +1,53 @@
+name: CD / Deploy / Sandbox
+
+on:
+  registry_package:
+    types:
+      - published
+
+env:
+  PACKAGE_NAME: api
+  CONVOX_RACK: sandbox
+  CONVOX_APP: api
+  CONVOX_SERVICE: web
+
+jobs:
+  deploy:
+    if: github.event.registry_package.package.name == ${{ env.PACKAGE_NAME }}
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      -
+        id: checkout
+        uses: actions/checkout@v2
+      -
+        id: login
+        name: authenticate with cluster
+        uses: convox/action-login@v2
+        with:
+          password: ${{ secrets.CONVOX_DEPLOY_KEY }}
+      -
+        id: build
+        name: build release package
+        uses: convox/action-build@v1
+        with:
+          rack: ${{ env.CONVOX_RACK }}
+          app: ${{ env.CONVOX_APP }}
+      -
+        id: migrate
+        name: run database migrations
+        uses: convox/action-run@v1
+        with:
+          rack: ${{ env.CONVOX_RACK }}
+          app: ${{ env.CONVOX_APP }}
+          service: ${{ env.CONVOX_SERVICE }}
+          release: ${{ steps.build.outputs.release }}
+          command: bundle exec rails db:migrate
+      -
+        id: promote
+        name: promote release
+        uses: convox/action-promote@v1
+        with:
+          rack: ${{ env.CONVOX_RACK }}
+          app: ${{ env.CONVOX_APP }}
+          release: ${{ steps.build.outputs.release }}
