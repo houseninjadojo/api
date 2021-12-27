@@ -3,7 +3,7 @@ Datadog.configure do |c|
   c.service = 'api'
 
   # Enable in production only
-  c.tracer.enabled = Rails.env.production?
+  c.tracer.enabled = ['production', 'sandbox'].include?(Rails.env)
   # c.tracer.enabled = true
 
   # Misc
