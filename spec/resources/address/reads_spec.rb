@@ -29,34 +29,34 @@ RSpec.describe AddressResource, type: :resource do
   end
 
   describe 'sorting' do
-    describe 'by id' do
-      let!(:address1) { create(:address) }
-      let!(:address2) { create(:address) }
+    describe 'by city' do
+      let!(:address1) { create(:address, city: 'Austin' ) }
+      let!(:address2) { create(:address, city: 'Zion') }
 
       context 'when ascending' do
         before do
-          params[:sort] = 'id'
+          params[:sort] = 'city'
         end
 
         it 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            address1.id,
-            address2.id
+          expect(d.map(&:city)).to eq([
+            address1.city,
+            address2.city
           ])
         end
       end
 
       context 'when descending' do
         before do
-          params[:sort] = '-id'
+          params[:sort] = '-city'
         end
 
         it 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            address2.id,
-            address1.id
+          expect(d.map(&:city)).to eq([
+            address2.city,
+            address1.city
           ])
         end
       end
@@ -64,6 +64,21 @@ RSpec.describe AddressResource, type: :resource do
   end
 
   describe 'sideloading' do
-    # ... your tests ...
+    let(:address) { create(:address) }
+
+    describe 'addressible' do
+      let!(:property) { create(:property, address: address) }
+
+      before do
+        params[:include] = 'addressible'
+      end
+
+      it 'sideloads property relationship' do
+        render
+        a = d[0].sideload(:addressible)
+        expect(a.jsonapi_type).to eq('properties')
+        expect(a.id).to eq(property.id)
+      end
+    end
   end
 end

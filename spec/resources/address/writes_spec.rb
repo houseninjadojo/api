@@ -2,11 +2,20 @@ require 'rails_helper'
 
 RSpec.describe AddressResource, type: :resource do
   describe 'creating' do
+    let(:property) { create(:property) }
     let(:payload) do
       {
         data: {
           type: 'addresses',
-          attributes: attributes_for(:address)
+          attributes: attributes_for(:address),
+          relationships: {
+            addressible: {
+              data: {
+                type: 'properties',
+                id: property.id
+              }
+            }
+          }
         }
       }
     end
@@ -30,7 +39,9 @@ RSpec.describe AddressResource, type: :resource do
         data: {
           id: address.id.to_s,
           type: 'addresses',
-          attributes: {} # Todo!
+          attributes: {
+            city: 'Neverland',
+          }
         }
       }
     end
@@ -39,11 +50,11 @@ RSpec.describe AddressResource, type: :resource do
       AddressResource.find(payload)
     end
 
-    xit 'works (add some attributes and enable this spec)' do
+    it 'works' do
       expect {
         expect(instance.update_attributes).to eq(true)
       }.to change { address.reload.updated_at }
-      # .and change { address.foo }.to('bar') <- example
+      .and change { address.city }.to('Neverland')
     end
   end
 

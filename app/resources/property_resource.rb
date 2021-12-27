@@ -27,10 +27,11 @@ class PropertyResource < ApplicationResource
   primary_endpoint 'properties', [:index, :show, :create, :update, :destroy]
 
   belongs_to :user
-  has_one    :address
+  polymorphic_has_one :address, as: :addressible
 
-  attribute :id,      :uuid
-  attribute :user_id, :uuid
+  attribute :id, :uuid
+
+  attribute :user_id, :uuid, only: [:filterable]
 
   attribute :lot_size,        :float,   sortable: false
   attribute :home_size,       :float,   sortable: false

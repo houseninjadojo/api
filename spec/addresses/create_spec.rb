@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe "addresses#create", type: :request do
   subject(:make_request) do
-    jsonapi_post "//addresses", payload
+    jsonapi_post "/addresses", payload
   end
 
   describe 'basic create' do
+    let(:property) { create(:property) }
     let(:params) do
       attributes_for(:address)
     end
@@ -13,7 +14,15 @@ RSpec.describe "addresses#create", type: :request do
       {
         data: {
           type: 'addresses',
-          attributes: params
+          attributes: params,
+          relationships: {
+            addressible: {
+              data: {
+                type: 'properties',
+                id: property.id
+              }
+            }
+          }
         }
       }
     end

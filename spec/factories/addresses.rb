@@ -23,6 +23,11 @@
 
 FactoryBot.define do
   factory :address do
-
+    association :addressible, factory: :property
+    street1 { Faker::Address.street_address }
+    street2 { }
+    city { Faker::Address.city }
+    zipcode { Faker::Address.zip_code }
+    state { Faker::Address.state_abbr }
   end
 end

@@ -1,12 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe PropertyResource, type: :resource do
+  let(:user) { create(:user) }
+  let(:temp_id) { SecureRandom.uuid }
+
   describe 'creating' do
     let(:payload) do
       {
         data: {
           type: 'properties',
-          attributes: attributes_for(:property)
+          attributes: attributes_for(:property),
+          relationships: {
+            address: {
+              data: {
+                :'temp-id' => temp_id,
+                type: 'addresses',
+                method: 'create'
+              }
+            },
+            user: {
+              data: {
+                type: 'users',
+                id: user.id
+              }
+            }
+          },
+          included: [
+            {
+              :'temp-id' => temp_id,
+              type: 'addresses',
+              attributes: attributes_for(:address)
+            }
+          ]
         }
       }
     end
@@ -30,7 +55,9 @@ RSpec.describe PropertyResource, type: :resource do
         data: {
           id: property.id.to_s,
           type: 'properties',
-          attributes: {} # Todo!
+          attributes: {
+            lot_size: 123_456
+          }
         }
       }
     end
@@ -39,11 +66,11 @@ RSpec.describe PropertyResource, type: :resource do
       PropertyResource.find(payload)
     end
 
-    xit 'works (add some attributes and enable this spec)' do
+    it 'works (add some attributes and enable this spec)' do
       expect {
         expect(instance.update_attributes).to eq(true)
       }.to change { property.reload.updated_at }
-      # .and change { property.foo }.to('bar') <- example
+      .and change { property.lot_size }.to(123_456)
     end
   end
 

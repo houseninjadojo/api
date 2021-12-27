@@ -30,33 +30,33 @@ RSpec.describe UserResource, type: :resource do
 
   describe 'sorting' do
     describe 'by id' do
-      let!(:user1) { create(:user) }
-      let!(:user2) { create(:user) }
+      let!(:user1) { create(:user, email: 'a@houseninja.co') }
+      let!(:user2) { create(:user, email: 'b@houseninja.co') }
 
       context 'when ascending' do
         before do
-          params[:sort] = 'id'
+          params[:sort] = 'email'
         end
 
         it 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            user1.id,
-            user2.id
+          expect(d.map(&:email)).to eq([
+            user1.email,
+            user2.email
           ])
         end
       end
 
       context 'when descending' do
         before do
-          params[:sort] = '-id'
+          params[:sort] = '-email'
         end
 
         it 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            user2.id,
-            user1.id
+          expect(d.map(&:email)).to eq([
+            user2.email,
+            user1.email
           ])
         end
       end
@@ -64,6 +64,20 @@ RSpec.describe UserResource, type: :resource do
   end
 
   describe 'sideloading' do
-    # ... your tests ...
+    describe 'property' do
+      let!(:user) { create(:user) }
+      let!(:property) { create(:property, user: user) }
+
+      before do
+        params[:include] = 'properties'
+      end
+
+      it 'sideloads user properties' do
+        render
+        a = d[0].sideload(:properties)[0]
+        expect(a.jsonapi_type).to eq('properties')
+        expect(a.id).to eq(property.id)
+      end
+    end
   end
 end

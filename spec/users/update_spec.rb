@@ -14,14 +14,14 @@ RSpec.describe "users#update", type: :request do
           id: user.id.to_s,
           type: 'users',
           attributes: {
-            # ... your attrs here
+            first_name: 'Bob',
+            last_name: 'Saget'
           }
         }
       }
     end
 
-    # Replace 'xit' with 'it' after adding attributes
-    xit 'updates the resource' do
+    it 'updates the resource' do
       expect(UserResource).to receive(:find).and_call_original
       expect {
         make_request
