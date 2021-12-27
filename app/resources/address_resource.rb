@@ -34,6 +34,12 @@ class AddressResource < ApplicationResource
 
   attribute :id, :uuid
 
+  # attribute :addressible_id,   :uuid,   only: [:filterable]
+  # attribute :addressible_type, :string, only: [:filterable]
+
+  filter :addressible_id,   :uuid
+  filter :addressible_type, :string
+
   attribute :street1, :string, sortable: false
   attribute :street2, :string, sortable: false
   attribute :city,    :string

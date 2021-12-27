@@ -6,7 +6,7 @@ RSpec.describe "addresses#update", type: :request do
   end
 
   describe 'basic update' do
-    let!(:address) { create(:address) }
+    let(:address) { create(:address) }
 
     let(:payload) do
       {

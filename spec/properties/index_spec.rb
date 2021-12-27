@@ -4,7 +4,7 @@ RSpec.describe "properties#index", type: :request do
   let(:params) { {} }
 
   subject(:make_request) do
-    jsonapi_get "//properties", params: params
+    jsonapi_get "/properties", params: params
   end
 
   describe 'basic fetch' do

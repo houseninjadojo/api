@@ -6,7 +6,7 @@ RSpec.describe "addresses#create", type: :request do
   end
 
   describe 'basic create' do
-    let!(:property) { create(:property) }
+    let(:property) { create(:property) }
     let(:params) do
       attributes_for(:address)
     end

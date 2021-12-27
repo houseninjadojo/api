@@ -2,11 +2,44 @@ require 'rails_helper'
 
 RSpec.describe UserResource, type: :resource do
   describe 'creating' do
+    let(:temp_id) { SecureRandom.uuid }
+    let(:temp_id_2) { SecureRandom.uuid }
+
     let(:payload) do
       {
         data: {
           type: 'users',
-          attributes: attributes_for(:user)
+          attributes: attributes_for(:user),
+          # relationships: {
+          #   properties: {
+          #     data: [{
+          #       type: 'properties',
+          #       'temp-id': temp_id,
+          #       method: 'create',
+          #     }]
+          #   }
+          # },
+          # included: [
+          #   {
+          #     type: 'properties',
+          #     'temp-id': temp_id,
+          #     attributes: attributes_for(:property),
+          #     # relationships: {
+          #     #   address: {
+          #     #     data: {
+          #     #       type: 'addresses',
+          #     #       'temp-id': temp_id_2,
+          #     #       method: 'create'
+          #     #     }
+          #     #   }
+          #     # }
+          #   },
+          #   # {
+          #   #   type: 'addresses',
+          #   #   'temp-id': temp_id_2,
+          #   #   attributes: attributes_for(:address)
+          #   # }
+          # ]
         }
       }
     end
@@ -16,6 +49,7 @@ RSpec.describe UserResource, type: :resource do
     end
 
     it 'works' do
+      # binding.pry
       expect {
         expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
       }.to change { User.count }.by(1)
@@ -30,7 +64,9 @@ RSpec.describe UserResource, type: :resource do
         data: {
           id: user.id.to_s,
           type: 'users',
-          attributes: {} # Todo!
+          attributes: {
+            first_name: 'bob'
+          }
         }
       }
     end
@@ -39,11 +75,11 @@ RSpec.describe UserResource, type: :resource do
       UserResource.find(payload)
     end
 
-    xit 'works (add some attributes and enable this spec)' do
+    it 'works (add some attributes and enable this spec)' do
       expect {
         expect(instance.update_attributes).to eq(true)
       }.to change { user.reload.updated_at }
-      # .and change { user.foo }.to('bar') <- example
+      .and change { user.first_name }.to('bob')
     end
   end
 
@@ -54,7 +90,7 @@ RSpec.describe UserResource, type: :resource do
       UserResource.find(id: user.id)
     end
 
-    it 'works' do
+    xit 'works' do
       expect {
         expect(instance.destroy).to eq(true)
       }.to change { User.count }.by(-1)

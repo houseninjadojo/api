@@ -24,11 +24,10 @@ class Property < ApplicationRecord
   has_one :address, as: :addressible
   belongs_to :user
 
-  validates :user_id,         presence: true
   validates :lot_size,        numericality: { greater_than_or_equal_to: 0 }
   validates :home_size,       numericality: { greater_than_or_equal_to: 0 }
   validates :garage_size,     numericality: { greater_than_or_equal_to: 0 }
-  validates :home_age,        numericality: { greater_than_or_equal_to: 0 }
+  validates :year_built,      numericality: { greater_than_or_equal_to: 0 }
   validates :estimated_value, numericality: { greater_than_or_equal_to: 0 }
   validates :bedrooms,        numericality: { greater_than_or_equal_to: 0 }
   validates :bathrooms,       numericality: { greater_than_or_equal_to: 0 }

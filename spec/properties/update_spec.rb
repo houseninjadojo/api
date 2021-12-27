@@ -6,7 +6,7 @@ RSpec.describe "properties#update", type: :request do
   end
 
   describe 'basic update' do
-    let!(:property) { create(:property) }
+    let(:property) { create(:property) }
 
     let(:payload) do
       {
@@ -14,14 +14,14 @@ RSpec.describe "properties#update", type: :request do
           id: property.id.to_s,
           type: 'properties',
           attributes: {
-            # ... your attrs here
+            lot_size: 123_456,
+            pools: 10
           }
         }
       }
     end
 
-    # Replace 'xit' with 'it' after adding attributes
-    xit 'updates the resource' do
+    it 'updates the resource' do
       expect(PropertyResource).to receive(:find).and_call_original
       expect {
         make_request

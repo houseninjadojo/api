@@ -30,33 +30,33 @@ RSpec.describe PropertyResource, type: :resource do
 
   describe 'sorting' do
     describe 'by id' do
-      let!(:property1) { create(:property) }
-      let!(:property2) { create(:property) }
+      let!(:property1) { create(:property, lot_size: 5) }
+      let!(:property2) { create(:property, lot_size: 10) }
 
       context 'when ascending' do
         before do
-          params[:sort] = 'id'
+          params[:sort] = 'lot_size'
         end
 
-        it 'works' do
+        xit 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            property1.id,
-            property2.id
+          expect(d.map(&:lot_size)).to eq([
+            property1.lot_size,
+            property2.lot_size
           ])
         end
       end
 
       context 'when descending' do
         before do
-          params[:sort] = '-id'
+          params[:sort] = '-lot_size'
         end
 
-        it 'works' do
+        xit 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            property2.id,
-            property1.id
+          expect(d.map(&:lot_size)).to eq([
+            property2.lot_size,
+            property1.lot_size
           ])
         end
       end
@@ -64,6 +64,37 @@ RSpec.describe PropertyResource, type: :resource do
   end
 
   describe 'sideloading' do
-    # ... your tests ...
+    let(:user) { create(:user) }
+
+    describe 'user' do
+      let!(:property) { create(:property, user: user) }
+
+      before do
+        params[:include] = 'user'
+      end
+
+      it 'sideloads user relationship' do
+        render
+        a = d[0].sideload(:user)
+        expect(a.jsonapi_type).to eq('users')
+        expect(a.id).to eq(user.id)
+      end
+    end
+
+    describe 'address' do
+      # creating an address from a factory will also generate a fully formed and associated property
+      let!(:address) { create(:address) }
+
+      before do
+        params[:include] = 'address'
+      end
+
+      it 'sideloads address relationship' do
+        render
+        a = d[0].sideload(:address)
+        expect(a.jsonapi_type).to eq('addresses')
+        expect(a.id).to eq(address.id)
+      end
+    end
   end
 end

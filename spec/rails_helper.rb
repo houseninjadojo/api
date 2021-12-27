@@ -72,10 +72,6 @@ RSpec.configure do |config|
 
   config.include GraphitiSpecHelpers::RSpec
   config.include GraphitiSpecHelpers::Sugar
-  # Raise errors during tests by default
-  # config.before :each do
-  #   GraphitiErrors.disable!
-  # end
 
   # Clean your DB between test runs
   config.before(:suite) do

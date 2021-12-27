@@ -4,7 +4,7 @@ RSpec.describe "users#show", type: :request do
   let(:params) { {} }
 
   subject(:make_request) do
-    jsonapi_get "//users/#{user.id}", params: params
+    jsonapi_get "/users/#{user.id}", params: params
   end
 
   describe 'basic fetch' do
