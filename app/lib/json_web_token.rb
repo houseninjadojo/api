@@ -25,13 +25,12 @@ class JSONWebToken
     def verify(token:)
       cached = fetch_cached_token(token)
       if cached.present?
-        puts "CACHED"
         return cached
       end
 
       decoded_token = decode(token)
       if decoded_token.nil?
-        return "test"
+        return nil
       end
 
       payload = token_payload(decoded_token)

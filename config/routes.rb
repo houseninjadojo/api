@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   mount OkComputer::Engine, at: '/health'           # Health Checks
   # mount Stripe::Engine,     at: '/webhooks/stripe'  # Stripe Webhooks
 
-  resources :users
-  resources :properties
-  resources :addresses
+  defaults format: :jsonapi do
+    resources :users
+    resources :properties
+    resources :addresses
+
+    root to: 'home#index'
+  end
 end

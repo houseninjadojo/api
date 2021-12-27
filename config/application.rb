@@ -6,6 +6,8 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+require 'graphiti/rails/railtie'
+
 # Require settings
 require_relative "../lib/core_ext/rails/settings"
 
@@ -53,5 +55,11 @@ module HouseNinja
     # Set Redis as the cache store
     # @see https://guides.rubyonrails.org/caching_with_rails.html#activesupport-cache-rediscachestore
     config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
+
+    # I18n Configuration
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+
+    # config.debug_exception_response_format = :api
+    # config.action_dispatch.show_exceptions = false
   end
 end

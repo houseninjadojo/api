@@ -3,6 +3,16 @@ environment:
   - NAMESPACE_ENV
   - NAMESPACE_SERVICE
   - NAMESPACE_RESOURCE
+resources:
+  database:
+    type: postgres
+    options:
+      version: 14
+      storage: 20
+  redis:
+    type: redis
+    options:
+      version: 6.2
 services:
   web:
     # annotations:
@@ -11,7 +21,6 @@ services:
     command: bundle exec rails server
     domain: ${DOMAIN}
     environment:
-      - DATABASE_URL
       - NAMESPACE_SERVICE=api
       - NAMESPACE_RESOURCE=app
       - RACK_ENV
@@ -21,6 +30,9 @@ services:
     image: ghcr.io/houseninjadojo/api
     internal: false
     port: 3000
+    resources:
+      - database
+      - redis
     termination:
       grace: 45
     timeout: 120
@@ -30,7 +42,6 @@ services:
   worker:
     command: bundle exec sidekiq -q critical -q default -q mailers
     environment:
-      - DATABASE_URL
       - NAMESPACE_SERVICE=api
       - NAMESPACE_RESOURCE=app
       - RACK_ENV
@@ -38,6 +49,9 @@ services:
       - RAILS_MASTER_KEY
     image: ghcr.io/houseninjadojo/api
     internal: true
+    resources:
+      - database
+      - redis
     termination:
       grace: 45
     deployment:
