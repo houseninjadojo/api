@@ -16,6 +16,8 @@ on:
     secrets:
       RAILS_MASTER_KEY:
         required: true
+      GHCR_TOKEN:
+        required: true
 
 env:
   RUBY_VERSION: 3.0.3
@@ -50,7 +52,9 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          # Future Miles: Don't replace this with GITHUB_TOKEN
+          # We need to use GHCR_PAT in order to trigger the package update event
+          password: ${{ secrets.GHCR_TOKEN }}
       -
         name: Build and push
         uses: docker/build-push-action@v2

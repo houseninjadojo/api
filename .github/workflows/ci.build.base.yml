@@ -18,6 +18,7 @@ jobs:
       dockerfile: platform/docker/Dockerfile.builder
     secrets:
       RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
+      GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   intermediate:
     name: Intermediate Container
     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
@@ -26,3 +27,4 @@ jobs:
       dockerfile: platform/docker/Dockerfile.intermediate
     secrets:
       RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
+      GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
