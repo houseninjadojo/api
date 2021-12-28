@@ -29,7 +29,7 @@ gem 'valid_email'
 group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'                                              # Generate fake data
-  gem 'graphiti_spec_helpers', github: 'mileszim/graphiti_spec_helpers', branch: 'master'
+  gem 'graphiti_spec_helpers'
   gem 'rspec-rails',           '~> 5.0.2'
   gem 'rubocop-rails',                     require: false
   gem 'pry'
