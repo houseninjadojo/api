@@ -62,11 +62,12 @@ class Auth::CreateUserJob < ApplicationJob
     options = Rails.application.credentials.auth.slice(
       :client_id,
       :client_secret,
-      :domain,
+      :management_domain,
     ).merge({
       api_version: 2,
       timeout: 10,
     })
+    options[:domain] = options[:management_domain]
     @client ||= Auth0Client.new(**options)
   end
 
