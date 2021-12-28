@@ -1,7 +1,7 @@
 require "#{Rails.root}/lib/core_ext/rails/action_controller/exceptions"
 
 class ApplicationController < ActionController::API
-  # include Auth
+  include Auth
   include Graphiti::Rails::Responders
 
   def context
