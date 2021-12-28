@@ -31,7 +31,7 @@ class UserResource < ApplicationResource
   attribute :phone_number, :string
   attribute :email,        :string
   attribute :gender,       :string_enum, allow: ['male', 'female', 'other']
-  attribute :password,     :string,      only: [:writeable]
+  attribute :password,     :string,      readable: false
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
