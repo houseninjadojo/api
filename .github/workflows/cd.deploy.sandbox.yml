@@ -8,7 +8,7 @@ on:
       - completed
 
 concurrency:
-  group: sandbox-deploy
+  group: sandbox
 
 env:
   PACKAGE_NAME: api

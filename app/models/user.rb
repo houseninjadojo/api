@@ -30,12 +30,16 @@ class User < ApplicationRecord
 
   # Temporary password token management
   # VGS Volatile tokens expire in 1 hour
+  attr_reader :_password
+  
   def password=(val)
-    Rails.cache.write(self.id, val, namespace: 'user:password', expires_in: 1.hour)
+    @_password = Kredis.string("#{self.id}:tmp:password_token", expires_in: 1.hour)
+    @_password.value = val
   end
 
   def password
-    Rails.cache.read(self.id, namespace: 'user:password')
+    @_password ||= Kredis.string("#{self.id}:tmp:password_token")
+    @_password&.value
   end
 
   # Get the user's default property
@@ -52,4 +56,9 @@ class User < ApplicationRecord
     "#{self.first_name} #{self.last_name}"
   end
   alias name full_name
+
+  # Ensure User is synced to Auth0
+  after_create do |user|
+    Auth::CreateUserJob.perform_later(user.id)
+  end
 end
