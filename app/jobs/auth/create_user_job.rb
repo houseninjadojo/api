@@ -12,7 +12,7 @@ unless Rails.env.test?
             timeout: timeout,
             headers: headers,
             payload: body,
-            
+
             # Add our VGS Proxy options
             proxy: ::VGS.outbound_proxy,
             ssl_cert_store: ::VGS.cert_store,

@@ -31,7 +31,7 @@ class User < ApplicationRecord
   # Temporary password token management
   # VGS Volatile tokens expire in 1 hour
   attr_reader :_password
-  
+
   def password=(val)
     @_password = Kredis.string("#{self.id}:tmp:password_token", expires_in: 1.hour)
     @_password.value = val
