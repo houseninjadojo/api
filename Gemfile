@@ -22,7 +22,7 @@ gem 'rails',              '~> 7.0.1'                                      # Bund
 gem 'redis',              '~> 4.5'                                        # Use Redis adapter to run Action Cable in production
 gem 'responders'
 gem 'seedbank'
-gem 'sidekiq',            '~> 6.3'
+gem 'sidekiq',            '~> 6.4'
 # gem 'stripe-rails',       '~> 2.3.1'                                      # Stripe Payment Processing
 gem 'valid_email'
 
