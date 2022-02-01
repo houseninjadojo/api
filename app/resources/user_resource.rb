@@ -2,14 +2,15 @@
 #
 # Table name: users
 #
-#  id           :uuid             not null, primary key
-#  first_name   :string           not null
-#  last_name    :string           not null
-#  email        :string           default(""), not null
-#  phone_number :string           not null
-#  gender       :string           default("other"), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                :uuid             not null, primary key
+#  first_name        :string           not null
+#  last_name         :string           not null
+#  email             :string           default(""), not null
+#  phone_number      :string           not null
+#  gender            :string           default("other"), not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  requested_zipcode :string
 #
 # Indexes
 #
@@ -32,6 +33,8 @@ class UserResource < ApplicationResource
   attribute :email,        :string
   attribute :gender,       :string_enum, allow: ['male', 'female', 'other']
   attribute :password,     :string,      readable: false
+
+  attribute :requested_zipcode, :string, readable: false
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]

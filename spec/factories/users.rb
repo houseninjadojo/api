@@ -2,14 +2,15 @@
 #
 # Table name: users
 #
-#  id           :uuid             not null, primary key
-#  first_name   :string           not null
-#  last_name    :string           not null
-#  email        :string           default(""), not null
-#  phone_number :string           not null
-#  gender       :string           default("other"), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                :uuid             not null, primary key
+#  first_name        :string           not null
+#  last_name         :string           not null
+#  email             :string           default(""), not null
+#  phone_number      :string           not null
+#  gender            :string           default("other"), not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  requested_zipcode :string
 #
 # Indexes
 #
