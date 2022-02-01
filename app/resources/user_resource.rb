@@ -25,6 +25,7 @@ class UserResource < ApplicationResource
   primary_endpoint 'users', [:index, :show, :create, :update]
 
   has_many :properties
+  has_many :devices
 
   attribute :id,           :uuid
   attribute :first_name,   :string, sortable: false

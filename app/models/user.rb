@@ -20,6 +20,7 @@
 #
 class User < ApplicationRecord
   # Associations
+  has_many :devices
   has_many :properties
 
   # Validations

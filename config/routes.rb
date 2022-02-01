@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   defaults format: :jsonapi do
     resources :addresses
+    resources :devices
     resources :properties
     resources :users
 

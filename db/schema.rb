@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_01_200131) do
+ActiveRecord::Schema.define(version: 2022_02_01_203154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -30,6 +30,30 @@ ActiveRecord::Schema.define(version: 2022_02_01_200131) do
     t.index ["city"], name: "index_addresses_on_city"
     t.index ["state"], name: "index_addresses_on_state"
     t.index ["zipcode"], name: "index_addresses_on_zipcode"
+  end
+
+  create_table "devices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.string "apns_device_token"
+    t.string "fcm_token"
+    t.string "device_id"
+    t.string "name"
+    t.string "model"
+    t.string "platform"
+    t.string "operating_system"
+    t.string "os_version"
+    t.string "manufacturer"
+    t.string "is_virtual"
+    t.string "mem_used"
+    t.string "disk_free"
+    t.string "disk_total"
+    t.string "real_disk_free"
+    t.string "real_disk_total"
+    t.string "web_view_version"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["device_id"], name: "index_devices_on_device_id", unique: true
+    t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
   create_table "properties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -61,5 +85,6 @@ ActiveRecord::Schema.define(version: 2022_02_01_200131) do
     t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
   end
 
+  add_foreign_key "devices", "users"
   add_foreign_key "properties", "users"
 end
