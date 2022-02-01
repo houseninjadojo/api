@@ -38,3 +38,4 @@ sandbox:
 production:
   <<: *default
   url: <%= ENV["DATABASE_URL"] %>
+  sslca: vendor/certs/aws/aurora/global-bundle.pem 
