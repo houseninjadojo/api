@@ -1,20 +1,20 @@
 require 'rails_helper'
 
-RSpec.describe "properties#destroy", type: :request do
+RSpec.describe "home_care_tips#destroy", type: :request do
   subject(:make_request) do
-    jsonapi_delete "//properties/#{property.id}"
+    jsonapi_delete "/home-care-tips/#{home_care_tip.id}"
   end
 
   describe 'basic destroy' do
-    let!(:property) { create(:property) }
+    let!(:home_care_tip) { create(:home_care_tip) }
 
     xit 'updates the resource' do
-      expect(PropertyResource).to receive(:find).and_call_original
+      expect(HomeCareTipResource).to receive(:find).and_call_original
       expect {
         make_request
         expect(response.status).to eq(200), response.body
-      }.to change { Property.count }.by(-1)
-      expect { property.reload }
+      }.to change { HomeCareTip.count }.by(-1)
+      expect { home_care_tip.reload }
         .to raise_error(ActiveRecord::RecordNotFound)
       expect(json).to eq('meta' => {})
     end

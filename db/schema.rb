@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_02_030455) do
+ActiveRecord::Schema.define(version: 2022_02_02_032956) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -62,6 +62,16 @@ ActiveRecord::Schema.define(version: 2022_02_02_030455) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["device_id"], name: "index_devices_on_device_id", unique: true
     t.index ["user_id"], name: "index_devices_on_user_id"
+  end
+
+  create_table "home_care_tips", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "label", null: false
+    t.string "description"
+    t.boolean "show_button", default: true, null: false
+    t.string "default_hn_chat_message", default: ""
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["label"], name: "index_home_care_tips_on_label"
   end
 
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

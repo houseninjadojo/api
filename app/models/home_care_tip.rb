@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: home_care_tips
+#
+#  id                      :uuid             not null, primary key
+#  label                   :string           not null
+#  description             :string
+#  show_button             :boolean          default(TRUE), not null
+#  default_hn_chat_message :string           default("")
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#
+# Indexes
+#
+#  index_home_care_tips_on_label  (label)
+#
+class HomeCareTip < ApplicationRecord
+  # validations
+  validates :show_button, presence: true, inclusion: { in: [true, false] }
+  validates :label,       presence: true
+end
