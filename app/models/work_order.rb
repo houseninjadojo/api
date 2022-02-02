@@ -18,4 +18,6 @@
 #
 class WorkOrder < ApplicationRecord
   belongs_to :property
+
+  # validates_associated :property
 end
