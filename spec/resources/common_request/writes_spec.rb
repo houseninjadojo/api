@@ -30,7 +30,7 @@ RSpec.describe CommonRequestResource, type: :resource do
         data: {
           id: common_request.id.to_s,
           type: 'common_requests',
-          attributes: { } # Todo!
+          attributes: {} # Todo!
         }
       }
     end
