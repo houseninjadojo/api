@@ -39,6 +39,7 @@ class Auth::CreateUserJob < ApplicationJob
     options = options_for_user(user)
 
     auth_client.create_user(auth_connection, options)
+    user.update!(auth_zero_user_created: true)
   end
 
   private

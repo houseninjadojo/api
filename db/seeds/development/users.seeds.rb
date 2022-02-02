@@ -8,6 +8,7 @@ User.find_or_create_by!(
   phone_number: '+19254514431',
   email: 'miles@houseninja.co',
   gender: 'male',
+  auth_zero_user_created: true,
 )
 
 User.find_or_create_by!(
@@ -17,4 +18,5 @@ User.find_or_create_by!(
   phone_number: '+16467976636',
   email: 'achilles@houseninja.co',
   gender: 'male',
+  auth_zero_user_created: true,
 )

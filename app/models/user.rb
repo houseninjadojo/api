@@ -2,15 +2,16 @@
 #
 # Table name: users
 #
-#  id                :uuid             not null, primary key
-#  first_name        :string           not null
-#  last_name         :string           not null
-#  email             :string           default(""), not null
-#  phone_number      :string           not null
-#  gender            :string           default("other"), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  requested_zipcode :string
+#  id                     :uuid             not null, primary key
+#  first_name             :string           not null
+#  last_name              :string           not null
+#  email                  :string           default(""), not null
+#  phone_number           :string           not null
+#  gender                 :string           default("other"), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  requested_zipcode      :string
+#  auth_zero_user_created :boolean          default(FALSE)
 #
 # Indexes
 #
@@ -61,7 +62,11 @@ class User < ApplicationRecord
   alias name full_name
 
   # Ensure User is synced to Auth0
-  after_create do |user|
-    Auth::CreateUserJob.perform_later(user.id)
+  after_save do |user|
+    if user.auth_zero_user_created == false
+      Auth::CreateUserJob.perform_later(user.id)
+    else
+      # Update Password Job Here
+    end
   end
 end
