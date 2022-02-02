@@ -39,7 +39,7 @@ RSpec.describe PaymentMethodResource, type: :resource do
         data: {
           id: payment_method.id.to_s,
           type: 'credit-cards',
-          attributes: { } # Todo!
+          attributes: {} # Todo!
         }
       }
     end

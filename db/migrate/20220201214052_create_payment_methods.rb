@@ -3,7 +3,7 @@ class CreatePaymentMethods < ActiveRecord::Migration[7.0]
     create_table :payment_methods, id: :uuid do |t|
       t.string :type
       t.references :user, type: :uuid, foreign_key: true, null: false
-      
+
       t.string :stripe_token
       t.string :brand
       t.string :country
