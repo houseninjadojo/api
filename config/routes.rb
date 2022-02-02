@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   defaults format: :jsonapi do
     resources :addresses
+    resources :common_requests, path: 'common-requests', only: [:index, :show]
     resources :devices
     resources :properties
     resources :users
