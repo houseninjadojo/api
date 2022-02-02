@@ -21,6 +21,7 @@
 #
 
 class PropertyResource < ApplicationResource
+  self.serializer = KebabCaseSerializer
   self.model = Property
   self.type = :properties
 

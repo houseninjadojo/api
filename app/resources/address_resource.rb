@@ -21,6 +21,7 @@
 #  index_addresses_on_zipcode      (zipcode)
 #
 class AddressResource < ApplicationResource
+  # self.serializer = KebabCaseSerializer
   self.model = Address
   self.type = :addresses
 

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :devices
     resources :properties
     resources :users
+    resources :payment_methods, path: 'payment-methods'
 
     root to: 'home#index'
   end

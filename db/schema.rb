@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_01_203154) do
+ActiveRecord::Schema.define(version: 2022_02_01_214052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -56,6 +56,23 @@ ActiveRecord::Schema.define(version: 2022_02_01_203154) do
     t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
+  create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "type"
+    t.uuid "user_id", null: false
+    t.string "stripe_token"
+    t.string "brand"
+    t.string "country"
+    t.string "cvv"
+    t.string "exp_month"
+    t.string "exp_year"
+    t.string "card_number"
+    t.string "zipcode"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stripe_token"], name: "index_payment_methods_on_stripe_token", unique: true
+    t.index ["user_id"], name: "index_payment_methods_on_user_id"
+  end
+
   create_table "properties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
     t.float "lot_size"
@@ -86,5 +103,6 @@ ActiveRecord::Schema.define(version: 2022_02_01_203154) do
   end
 
   add_foreign_key "devices", "users"
+  add_foreign_key "payment_methods", "users"
   add_foreign_key "properties", "users"
 end

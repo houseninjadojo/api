@@ -18,7 +18,9 @@
 #  index_users_on_gender        (gender)
 #  index_users_on_phone_number  (phone_number) UNIQUE
 #
+
 class UserResource < ApplicationResource
+  self.serializer = KebabCaseSerializer
   self.model = User
   self.type = :users
 

@@ -2,6 +2,8 @@
 # holds configuration/methods for subclasses.
 # All Resources should inherit from ApplicationResource.
 class ApplicationResource < Graphiti::Resource
+  # self.serializer = KebabCaseSerializer
+
   # Use the ActiveRecord Adapter for all subclasses.
   # Subclasses can still override this default.
   self.abstract_class = true

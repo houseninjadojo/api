@@ -21,6 +21,7 @@
 class User < ApplicationRecord
   # Associations
   has_many :devices
+  has_many :payment_methods
   has_many :properties
 
   # Validations

@@ -29,6 +29,7 @@
 #  index_devices_on_user_id    (user_id)
 #
 class DeviceResource < ApplicationResource
+  # self.serializer = KebabCaseSerializer
   self.model = Device
   self.type = :devices
 
