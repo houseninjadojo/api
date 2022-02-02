@@ -14,10 +14,12 @@
 #  pools           :float
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  service_area_id :uuid
 #
 # Indexes
 #
-#  index_properties_on_user_id  (user_id)
+#  index_properties_on_service_area_id  (service_area_id)
+#  index_properties_on_user_id          (user_id)
 #
 
 require 'rails_helper'

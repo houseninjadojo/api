@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe PropertyResource, type: :resource do
   let(:user) { create(:user) }
   let(:temp_id) { SecureRandom.uuid }
+  let(:service_area) { create(:service_area) }
 
   describe 'creating' do
     let(:payload) do
@@ -16,6 +17,12 @@ RSpec.describe PropertyResource, type: :resource do
                 :'temp-id' => temp_id,
                 type: 'addresses',
                 method: 'create'
+              }
+            },
+            service_area: {
+              data: {
+                type: 'service-areas',
+                id: service_area.id
               }
             },
             user: {

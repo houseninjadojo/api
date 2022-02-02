@@ -14,15 +14,18 @@
 #  pools           :float
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  service_area_id :uuid
 #
 # Indexes
 #
-#  index_properties_on_user_id  (user_id)
+#  index_properties_on_service_area_id  (service_area_id)
+#  index_properties_on_user_id          (user_id)
 #
 
 class Property < ApplicationRecord
   has_many :work_orders
   has_one :address, as: :addressible
+  belongs_to :service_area
   belongs_to :user
 
   validates :lot_size,        numericality: { greater_than_or_equal_to: 0 }

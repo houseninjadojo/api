@@ -6,6 +6,7 @@ RSpec.describe "properties#create", type: :request do
   end
 
   describe 'basic create' do
+    let(:service_area) { create(:service_area) }
     let(:user) { create(:user) }
     let(:params) do
       attributes_for(:property)
@@ -20,6 +21,12 @@ RSpec.describe "properties#create", type: :request do
               data: {
                 type: 'users',
                 id: user.id
+              }
+            },
+            service_area: {
+              data: {
+                type: 'service-areas',
+                id: service_area.id
               }
             }
           }

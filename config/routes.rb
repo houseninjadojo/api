@@ -10,9 +10,10 @@ Rails.application.routes.draw do
     resources :addresses
     resources :common_requests, path: 'common-requests', only: [:index, :show]
     resources :devices
-    resources :properties
-    resources :users
     resources :payment_methods, path: 'payment-methods'
+    resources :properties
+    resources :service_areas, path: 'service-areas', only: [:index, :show]
+    resources :users
     resources :work_orders, path: 'work-orders'
 
     root to: 'home#index'

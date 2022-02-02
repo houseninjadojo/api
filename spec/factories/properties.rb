@@ -14,14 +14,17 @@
 #  pools           :float
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  service_area_id :uuid
 #
 # Indexes
 #
-#  index_properties_on_user_id  (user_id)
+#  index_properties_on_service_area_id  (service_area_id)
+#  index_properties_on_user_id          (user_id)
 #
 
 FactoryBot.define do
   factory :property do
+    service_area
     user
     lot_size { Faker::Number.between(from: 10_000, to: 1_000_000) }
     home_size { Faker::Number.between(from: 1_000, to: 10_000) }

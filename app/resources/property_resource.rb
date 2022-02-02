@@ -14,10 +14,12 @@
 #  pools           :float
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  service_area_id :uuid
 #
 # Indexes
 #
-#  index_properties_on_user_id  (user_id)
+#  index_properties_on_service_area_id  (service_area_id)
+#  index_properties_on_user_id          (user_id)
 #
 
 class PropertyResource < ApplicationResource
@@ -27,12 +29,14 @@ class PropertyResource < ApplicationResource
   primary_endpoint 'properties', [:index, :show, :create, :update, :destroy]
 
   has_many :work_orders
+  belongs_to :service_area
   belongs_to :user
   polymorphic_has_one :address, as: :addressible
 
   attribute :id, :uuid
 
   attribute :user_id, :uuid, only: [:filterable]
+  attribute :service_area_id, :uuid, only: [:filterable]
 
   attribute :lot_size,        :float,   sortable: false
   attribute :home_size,       :float,   sortable: false
