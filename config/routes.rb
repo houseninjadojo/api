@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :properties
     resources :users
     resources :payment_methods, path: 'payment-methods'
+    resources :work_orders, path: 'work-orders'
 
     root to: 'home#index'
   end

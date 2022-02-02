@@ -20,7 +20,6 @@
 #
 
 class UserResource < ApplicationResource
-  self.serializer = KebabCaseSerializer
   self.model = User
   self.type = :users
 

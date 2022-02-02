@@ -7,8 +7,11 @@ class HomeController < ApplicationController
     link_self = { self: "#{root_url}/" }
     link_resources = {
       addresses: "#{root_url}/addresses",
+      devices: "#{root_url}/devices",
+      'payment-methods': "#{root_url}/payment-methods",
       properties: "#{root_url}/properties",
       users: "#{root_url}/users",
+      'work-orders': "#{root_url}/work-orders",
     }
 
     if current_user.present?

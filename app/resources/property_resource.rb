@@ -21,12 +21,12 @@
 #
 
 class PropertyResource < ApplicationResource
-  self.serializer = KebabCaseSerializer
   self.model = Property
   self.type = :properties
 
   primary_endpoint 'properties', [:index, :show, :create, :update, :destroy]
 
+  has_many :work_orders
   belongs_to :user
   polymorphic_has_one :address, as: :addressible
 

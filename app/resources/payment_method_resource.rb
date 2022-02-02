@@ -22,7 +22,6 @@
 #  index_payment_methods_on_user_id       (user_id)
 #
 class PaymentMethodResource < ApplicationResource
-  # self.serializer = KebabCaseSerializer
   # self.model = CreditCard
   self.type = 'payment-methods'
 

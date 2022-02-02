@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_01_214052) do
+ActiveRecord::Schema.define(version: 2022_02_02_014520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -102,7 +102,20 @@ ActiveRecord::Schema.define(version: 2022_02_01_214052) do
     t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
   end
 
+  create_table "work_orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "property_id", null: false
+    t.string "status"
+    t.string "description"
+    t.string "vendor"
+    t.string "scheduled_date"
+    t.string "scheduled_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["property_id"], name: "index_work_orders_on_property_id"
+  end
+
   add_foreign_key "devices", "users"
   add_foreign_key "payment_methods", "users"
   add_foreign_key "properties", "users"
+  add_foreign_key "work_orders", "properties"
 end

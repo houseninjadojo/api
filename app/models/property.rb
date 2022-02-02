@@ -21,6 +21,7 @@
 #
 
 class Property < ApplicationRecord
+  has_many :work_orders
   has_one :address, as: :addressible
   belongs_to :user
 
