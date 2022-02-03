@@ -7,7 +7,8 @@ class DevicesController < ApplicationController
     if params.dig(:filter, :device_id)
       devices = DeviceResource.all(params)
     else
-      devices = DeviceResource.all({ filters: { device_id: '' } })
+      # search for nothing
+      devices = DeviceResource.all({ filter: { device_id: 0 } })
     end
     respond_with(devices)
   end
