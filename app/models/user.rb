@@ -63,7 +63,7 @@ class User < ApplicationRecord
 
   # Ensure User is synced to Auth0
   after_save do |user|
-    if user.auth_zero_user_created == false
+    if user.password.present? && user.auth_zero_user_created == false
       Auth::CreateUserJob.perform_later(user.id)
     else
       # Update Password Job Here
