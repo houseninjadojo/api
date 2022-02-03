@@ -12,24 +12,20 @@ class DevicesController < ApplicationController
   end
 
   def create
-    device = DeviceResource.find(params)
-
-    # new device
-    if !device.errors.empty?
+    begin
+      device = DeviceResource.find(params)
+      if device.update_attributes
+        render jsonapi: device, status: 201
+      else
+        render jsonapi_errors: device
+      end
+    rescue Graphiti::Errors::RecordNotFound
       device = DeviceResource.build(params)
       if device.save
         render jsonapi: device, status: 201
       else
         render jsonapi_errors: device
       end
-      return
-    end
-    # / new device
-
-    if device.update_attributes
-      render jsonapi: device, status: 201
-    else
-      render jsonapi_errors: device
     end
   end
 
