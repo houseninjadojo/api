@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_request!, except: [:create, :update]
+  before_action :authenticate_request!, except: [:create, :update, :show]
 
   def index
     users = UserResource.all(params)
