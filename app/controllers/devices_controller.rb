@@ -1,8 +1,14 @@
 class DevicesController < ApplicationController
-  before_action :authenticate_request!, except: [:create, :update]
+  before_action :authenticate_request!, except: [:create, :update, :index]
 
   def index
-    devices = DeviceResource.all(params)
+    # rudimentary security
+    # only filter if we know the device_id
+    if params.dig(:filter, :device_id)
+      devices = DeviceResource.all(params)
+    else
+      devices = DeviceResource.all({})
+    end
     respond_with(devices)
   end
 
@@ -12,20 +18,11 @@ class DevicesController < ApplicationController
   end
 
   def create
-    begin
-      device = DeviceResource.find(params)
-      if device.update_attributes
-        render jsonapi: device, status: 201
-      else
-        render jsonapi_errors: device
-      end
-    rescue Graphiti::Errors::RecordNotFound
-      device = DeviceResource.build(params)
-      if device.save
-        render jsonapi: device, status: 201
-      else
-        render jsonapi_errors: device
-      end
+    device = DeviceResource.build(params)
+    if device.save
+      render jsonapi: device, status: 201
+    else
+      render jsonapi_errors: device
     end
   end
 
