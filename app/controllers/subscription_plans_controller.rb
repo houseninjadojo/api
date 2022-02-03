@@ -1,4 +1,6 @@
 class SubscriptionPlansController < ApplicationController
+  before_action :authenticate_request!, except: [:index, :show]
+
   def index
     subscription_plans = SubscriptionPlanResource.all(params)
     respond_with(subscription_plans)

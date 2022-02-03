@@ -1,4 +1,6 @@
 class CreditCardsController < ApplicationController
+  # before_action :authenticate_request!, except: [:create, :update]
+
   def index
     credit_cards = CreditCardResource.all(params)
     respond_with(credit_cards)
