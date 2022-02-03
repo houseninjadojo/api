@@ -1,4 +1,6 @@
 class DevicesController < ApplicationController
+  before_action :authenticate_request!, except: [:create, :update]
+
   def index
     devices = DeviceResource.all(params)
     respond_with(devices)
