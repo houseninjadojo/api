@@ -7,7 +7,7 @@ gem 'auth0'
 gem 'bootsnap',           '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
 gem 'ddtrace',                        require: 'ddtrace/auto_instrument'  # Datadog Metrics Instrumentation
 gem 'dotenv-rails',                   require: 'dotenv/rails-now'         # ENV file management
-gem 'graphiti'
+gem 'graphiti', github: 'houseninjadojo/graphiti', branch: 'activerecord-filter-array-eq'
 gem 'graphiti-rails'
 gem 'image_processing',   '~> 1.12'                                        # Use Active Storage variant
 gem 'jwt'
