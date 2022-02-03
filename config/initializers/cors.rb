@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "app.houseninja.co co.houseninja.app co.houseninja.application co.houseninja.application://"
+    origins %w(app.houseninja.co co.houseninja.app co.houseninja.application co.houseninja.application://)
 
     resource "*",
       headers: :any,
