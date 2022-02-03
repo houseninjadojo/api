@@ -53,7 +53,7 @@ class Auth::CreateUserJob < ApplicationJob
       # phone_verified: false,
       blocked: false,
       name: user.name,
-      # connection: connection,
+      connection: auth_connection,
       password: user.password,
       verify_email: true,
     }
