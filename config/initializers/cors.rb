@@ -7,7 +7,9 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "app.houseninja.co", "co.houseninja.app", "co.houseninja.application", "co.houseninja.application://"
+    # origins 'co.houseninja.application://' 'app.houseninja.co', 'co.houseninja.app', 'co.houseninja.application',
+    # origins "*" 
+    origins /co\.houseninja\.application\:\/\//, "app.houseninja.co", "sandbox.app.houseninja.co"
 
     resource "*",
       headers: :any,
