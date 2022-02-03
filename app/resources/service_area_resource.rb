@@ -24,7 +24,7 @@ class ServiceAreaResource < ApplicationResource
   attribute :id, :uuid
 
   attribute :name, :string, except: [:writeable]
-  attribute :zipcodes, :string, except: [:writeable]
+  attribute :zipcodes, :array, except: [:writeable]
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
