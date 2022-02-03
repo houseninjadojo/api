@@ -61,4 +61,5 @@ module HouseNinja
 
     # config.debug_exception_response_format = :api
     # config.action_dispatch.show_exceptions = false
+  end
 end
