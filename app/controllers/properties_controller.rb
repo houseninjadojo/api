@@ -1,4 +1,6 @@
 class PropertiesController < ApplicationController
+  before_action :authenticate_request!, except: [:create]
+
   def index
     properties = PropertyResource.all(params)
     respond_with(properties)
