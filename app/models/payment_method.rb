@@ -15,6 +15,7 @@
 #  zipcode      :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  last_four    :string
 #
 # Indexes
 #
@@ -27,4 +28,6 @@ class PaymentMethod < ApplicationRecord
   ]
 
   belongs_to :user
+
+  validates :stripe_token, uniqueness: true
 end

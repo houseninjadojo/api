@@ -15,6 +15,7 @@
 #  zipcode      :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  last_four    :string
 #
 # Indexes
 #
@@ -24,5 +25,6 @@
 FactoryBot.define do
   factory :payment_method do
     user
+    stripe_token { Faker::Stripe.valid_token }
   end
 end

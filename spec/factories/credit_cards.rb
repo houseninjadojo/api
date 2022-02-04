@@ -15,6 +15,7 @@
 #  zipcode      :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  last_four    :string
 #
 # Indexes
 #
@@ -27,8 +28,8 @@ FactoryBot.define do
     brand { [:mastercard, :visa].sample }
     country { "US" }
     cvv { "123" }
-    exp_month { 1.year.from_now.strftime("%m") }
-    exp_year { 1.year.from_now.strftime("%Y") }
+    exp_month { Faker::Stripe.month }
+    exp_year { Faker::Stripe.year }
     card_number { Faker::Finance.credit_card(brand) }
     zipcode { Faker::Address.zip_code }
   end

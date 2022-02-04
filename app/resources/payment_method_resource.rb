@@ -15,6 +15,7 @@
 #  zipcode      :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  last_four    :string
 #
 # Indexes
 #
@@ -33,6 +34,8 @@ class PaymentMethodResource < ApplicationResource
   primary_endpoint 'payment-methods', [:index, :show, :create, :update]
 
   attribute :id, :uuid
+
+  attribute :stripe_token, :string, except: [:sortable]
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
