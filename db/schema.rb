@@ -16,22 +16,6 @@ ActiveRecord::Schema.define(version: 2022_02_04_071756) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "addressible_type"
-    t.uuid "addressible_id"
-    t.string "street1"
-    t.string "street2"
-    t.string "city"
-    t.string "zipcode"
-    t.string "state"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["addressible_type", "addressible_id"], name: "index_addresses_on_addressible"
-    t.index ["city"], name: "index_addresses_on_city"
-    t.index ["state"], name: "index_addresses_on_state"
-    t.index ["zipcode"], name: "index_addresses_on_zipcode"
-  end
-
   create_table "common_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "caption"
     t.string "img_uri"
