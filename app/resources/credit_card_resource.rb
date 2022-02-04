@@ -33,4 +33,5 @@ class CreditCardResource < PaymentMethodResource
   attribute :exp_year,    :string
   attribute :card_number, :string, readable: false
   attribute :zipcode,     :string
+  attribute :last_four,   :string, except: [:sortable]
 end

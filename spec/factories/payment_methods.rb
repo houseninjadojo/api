@@ -25,6 +25,6 @@
 FactoryBot.define do
   factory :payment_method do
     user
-    stripe_token { Faker::Stripe.valid_token }
+    stripe_token { Faker::Crypto.md5 }
   end
 end

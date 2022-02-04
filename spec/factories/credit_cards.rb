@@ -27,10 +27,11 @@ FactoryBot.define do
     # user
     brand { [:mastercard, :visa].sample }
     country { "US" }
-    cvv { "123" }
+    cvv { Faker::Stripe.ccv }
     exp_month { Faker::Stripe.month }
     exp_year { Faker::Stripe.year }
     card_number { Faker::Finance.credit_card(brand) }
     zipcode { Faker::Address.zip_code }
+    last_four { "1111" }
   end
 end
