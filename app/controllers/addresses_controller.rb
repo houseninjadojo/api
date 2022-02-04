@@ -1,4 +1,6 @@
 class AddressesController < ApplicationController
+  before_action :authenticate_request!, except: [:create]
+
   def index
     addresses = AddressResource.all(params)
     respond_with(addresses)
