@@ -45,7 +45,6 @@ class PropertyResource < ApplicationResource
   attribute :lot_size,        :float,   sortable: false
   attribute :home_size,       :float,   sortable: false
   attribute :garage_size,     :float,   sortable: false
-  attribute :home_age,        :integer, sortable: false
   attribute :year_built,      :integer, sortable: false
   attribute :estimated_value, :string,  sortable: false
   attribute :bedrooms,        :float,   sortable: false
