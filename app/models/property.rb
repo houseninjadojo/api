@@ -32,14 +32,14 @@ class Property < ApplicationRecord
   belongs_to :service_area
   belongs_to :user
 
-  validates :lot_size,        numericality: { greater_than_or_equal_to: 0 }
-  validates :home_size,       numericality: { greater_than_or_equal_to: 0 }
-  validates :garage_size,     numericality: { greater_than_or_equal_to: 0 }
-  validates :year_built,      numericality: { greater_than_or_equal_to: 0 }
-  validates :estimated_value, numericality: { greater_than_or_equal_to: 0 }
-  validates :bedrooms,        numericality: { greater_than_or_equal_to: 0 }
-  validates :bathrooms,       numericality: { greater_than_or_equal_to: 0 }
-  validates :pools,           numericality: { greater_than_or_equal_to: 0 }
+  # validates :lot_size,        numericality: { greater_than_or_equal_to: 0 }
+  # validates :home_size,       numericality: { greater_than_or_equal_to: 0 }
+  # validates :garage_size,     numericality: { greater_than_or_equal_to: 0 }
+  # validates :year_built,      numericality: { greater_than_or_equal_to: 0 }
+  # validates :estimated_value, numericality: { greater_than_or_equal_to: 0 }
+  # validates :bedrooms,        numericality: { greater_than_or_equal_to: 0 }
+  # validates :bathrooms,       numericality: { greater_than_or_equal_to: 0 }
+  # validates :pools,           numericality: { greater_than_or_equal_to: 0 }
 
   validates :default, uniqueness: { scope: [:user_id] }
 
