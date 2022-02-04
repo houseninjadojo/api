@@ -54,4 +54,20 @@ class Property < ApplicationRecord
       nil
     end
   end
+
+  def default=(val)
+    # noop
+  end
+
+  def default
+    # noop
+  end
+
+  def selected=(val)
+    # noop
+  end
+
+  def selected
+    # noop
+  end
 end

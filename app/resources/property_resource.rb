@@ -48,6 +48,9 @@ class PropertyResource < ApplicationResource
   attribute :bathrooms,       :float,   sortable: false
   attribute :pools,           :float,   sortable: false
 
+  attribute :default,  :boolean, only: [:writeable] # => noop for now
+  attribute :selected, :boolean, only: [:writeable] # => noop for now
+
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
 end
