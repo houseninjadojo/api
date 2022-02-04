@@ -34,5 +34,6 @@ ServiceArea.find_or_create_by({
     78757,
     78758,
     78759,
-  ]
+  ],
+  calendar_url: "https://meetings.hubspot.com/house-ninja/atx?embed=true",
 })

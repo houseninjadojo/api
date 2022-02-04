@@ -2,11 +2,12 @@
 #
 # Table name: service_areas
 #
-#  id         :uuid             not null, primary key
-#  name       :string           not null
-#  zipcodes   :string           default([]), not null, is an Array
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id           :uuid             not null, primary key
+#  name         :string           not null
+#  zipcodes     :string           default([]), not null, is an Array
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  calendar_url :string
 #
 # Indexes
 #
@@ -23,8 +24,9 @@ class ServiceAreaResource < ApplicationResource
 
   attribute :id, :uuid
 
-  attribute :name, :string, except: [:writeable]
-  attribute :zipcodes, :array, except: [:writeable]
+  attribute :name,         :string, except: [:writeable]
+  attribute :zipcodes,     :array,  except: [:writeable]
+  attribute :calendar_url, :string, except: [:writeable, :sortable]
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]

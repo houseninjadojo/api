@@ -2,11 +2,12 @@
 #
 # Table name: service_areas
 #
-#  id         :uuid             not null, primary key
-#  name       :string           not null
-#  zipcodes   :string           default([]), not null, is an Array
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id           :uuid             not null, primary key
+#  name         :string           not null
+#  zipcodes     :string           default([]), not null, is an Array
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  calendar_url :string
 #
 # Indexes
 #
@@ -53,5 +54,6 @@ FactoryBot.define do
         78759,
       ]
     }
+    calendar_url { "https://meetings.hubspot.com/miles-zimmerman?embed=true" }
   end
 end
