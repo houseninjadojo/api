@@ -43,7 +43,6 @@ class PropertyResource < ApplicationResource
   has_many :work_orders
   belongs_to :service_area
   belongs_to :user
-  polymorphic_has_one :address, as: :addressible
 
   attribute :id, :uuid
 

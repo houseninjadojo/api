@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   # mount Stripe::Engine,     at: '/webhooks/stripe'  # Stripe Webhooks
 
   defaults format: :jsonapi do
-    resources :addresses,          path: 'addresses',          only: [:index, :show, :create, :update]
     resources :common_requests,    path: 'common-requests',    only: [:index, :show]
     resources :devices,            path: 'devices',            only: [:index, :show, :create, :update]
     resources :home_care_tips,     path: 'home-care-tips',     only: [:index, :show]
