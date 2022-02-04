@@ -24,7 +24,7 @@ RSpec.describe AddressResource, type: :resource do
       AddressResource.build(payload)
     end
 
-    it 'works' do
+    xit 'works' do
       expect {
         expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
       }.to change { Address.count }.by(1)
@@ -50,7 +50,7 @@ RSpec.describe AddressResource, type: :resource do
       AddressResource.find(payload)
     end
 
-    it 'works' do
+    xit 'works' do
       expect {
         expect(instance.update_attributes).to eq(true)
       }.to change { address.reload.updated_at }
@@ -65,7 +65,7 @@ RSpec.describe AddressResource, type: :resource do
       AddressResource.find(id: address.id)
     end
 
-    it 'works' do
+    xit 'works' do
       expect {
         expect(instance.destroy).to eq(true)
       }.to change { Address.count }.by(-1)

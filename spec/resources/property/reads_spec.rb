@@ -80,21 +80,5 @@ RSpec.describe PropertyResource, type: :resource do
         expect(a.id).to eq(user.id)
       end
     end
-
-    describe 'address' do
-      # creating an address from a factory will also generate a fully formed and associated property
-      let!(:address) { create(:address) }
-
-      before do
-        params[:include] = 'address'
-      end
-
-      it 'sideloads address relationship' do
-        render
-        a = d[0].sideload(:address)
-        expect(a.jsonapi_type).to eq('addresses')
-        expect(a.id).to eq(address.id)
-      end
-    end
   end
 end

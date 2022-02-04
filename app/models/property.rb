@@ -17,18 +17,25 @@
 #  service_area_id :uuid
 #  default         :boolean
 #  selected        :boolean
+#  street_address1 :string
+#  street_address2 :string
+#  city            :string
+#  zipcode         :string
+#  state           :string
 #
 # Indexes
 #
+#  index_properties_on_city                  (city)
 #  index_properties_on_service_area_id       (service_area_id)
+#  index_properties_on_state                 (state)
 #  index_properties_on_user_id               (user_id)
 #  index_properties_on_user_id_and_default   (user_id,default) UNIQUE
 #  index_properties_on_user_id_and_selected  (user_id,selected)
+#  index_properties_on_zipcode               (zipcode)
 #
 
 class Property < ApplicationRecord
   has_many :work_orders
-  has_one :address, as: :addressible
   belongs_to :service_area
   belongs_to :user
 
@@ -42,8 +49,6 @@ class Property < ApplicationRecord
   # validates :pools,           numericality: { greater_than_or_equal_to: 0 }
 
   validates :default, uniqueness: { scope: [:user_id] }
-
-  validates_associated :address
 
   # Return the `default` property
   # As of now, just return the first (and probably only)

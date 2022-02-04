@@ -10,7 +10,7 @@ RSpec.describe "addresses#show", type: :request do
   describe 'basic fetch' do
     let!(:address) { create(:address) }
 
-    it 'works' do
+    xit 'works' do
       expect(AddressResource).to receive(:find).and_call_original
       make_request
       expect(response.status).to eq(200)

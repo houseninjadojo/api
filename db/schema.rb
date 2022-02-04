@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_04_031446) do
+ActiveRecord::Schema.define(version: 2022_02_04_071756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -106,10 +106,18 @@ ActiveRecord::Schema.define(version: 2022_02_04_031446) do
     t.uuid "service_area_id"
     t.boolean "default"
     t.boolean "selected"
+    t.string "street_address1"
+    t.string "street_address2"
+    t.string "city"
+    t.string "zipcode"
+    t.string "state"
+    t.index ["city"], name: "index_properties_on_city"
     t.index ["service_area_id"], name: "index_properties_on_service_area_id"
+    t.index ["state"], name: "index_properties_on_state"
     t.index ["user_id", "default"], name: "index_properties_on_user_id_and_default", unique: true
     t.index ["user_id", "selected"], name: "index_properties_on_user_id_and_selected"
     t.index ["user_id"], name: "index_properties_on_user_id"
+    t.index ["zipcode"], name: "index_properties_on_zipcode"
   end
 
   create_table "service_areas", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

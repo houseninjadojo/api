@@ -21,7 +21,7 @@ RSpec.describe "addresses#update", type: :request do
       }
     end
 
-    it 'updates the resource' do
+    xit 'updates the resource' do
       expect(AddressResource).to receive(:find).and_call_original
       expect {
         make_request

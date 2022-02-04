@@ -9,9 +9,8 @@ after 'development:users' do
     bedrooms: 3,
     bathrooms: 2.5,
     pools: 0,
-  )
-  miles_property.create_address!(
-    street1: '3226 Burton Court',
+
+    street_address1: '3226 Burton Court',
     city: 'Lafayette',
     state: 'CA',
     zipcode: '94549',

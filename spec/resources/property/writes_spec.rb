@@ -12,13 +12,6 @@ RSpec.describe PropertyResource, type: :resource do
           type: 'properties',
           attributes: attributes_for(:property),
           relationships: {
-            address: {
-              data: {
-                :'temp-id' => temp_id,
-                type: 'addresses',
-                method: 'create'
-              }
-            },
             service_area: {
               data: {
                 type: 'service-areas',
@@ -31,14 +24,7 @@ RSpec.describe PropertyResource, type: :resource do
                 id: user.id
               }
             }
-          },
-          included: [
-            {
-              :'temp-id' => temp_id,
-              type: 'addresses',
-              attributes: attributes_for(:address)
-            }
-          ]
+          }
         }
       }
     end

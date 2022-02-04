@@ -17,19 +17,32 @@
 #  service_area_id :uuid
 #  default         :boolean
 #  selected        :boolean
+#  street_address1 :string
+#  street_address2 :string
+#  city            :string
+#  zipcode         :string
+#  state           :string
 #
 # Indexes
 #
+#  index_properties_on_city                  (city)
 #  index_properties_on_service_area_id       (service_area_id)
+#  index_properties_on_state                 (state)
 #  index_properties_on_user_id               (user_id)
 #  index_properties_on_user_id_and_default   (user_id,default) UNIQUE
 #  index_properties_on_user_id_and_selected  (user_id,selected)
+#  index_properties_on_zipcode               (zipcode)
 #
 
 FactoryBot.define do
   factory :property do
     service_area
     user
+    street_address1 { Faker::Address.street_address }
+    street_address2 { }
+    city { Faker::Address.city }
+    zipcode { Faker::Address.zip_code }
+    state { Faker::Address.state_abbr }
     lot_size { Faker::Number.between(from: 10_000, to: 1_000_000) }
     home_size { Faker::Number.between(from: 1_000, to: 10_000) }
     garage_size { Faker::Number.between(from: 0, to: 2) }

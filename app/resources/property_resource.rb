@@ -17,13 +17,21 @@
 #  service_area_id :uuid
 #  default         :boolean
 #  selected        :boolean
+#  street_address1 :string
+#  street_address2 :string
+#  city            :string
+#  zipcode         :string
+#  state           :string
 #
 # Indexes
 #
+#  index_properties_on_city                  (city)
 #  index_properties_on_service_area_id       (service_area_id)
+#  index_properties_on_state                 (state)
 #  index_properties_on_user_id               (user_id)
 #  index_properties_on_user_id_and_default   (user_id,default) UNIQUE
 #  index_properties_on_user_id_and_selected  (user_id,selected)
+#  index_properties_on_zipcode               (zipcode)
 #
 
 class PropertyResource < ApplicationResource
@@ -41,6 +49,12 @@ class PropertyResource < ApplicationResource
 
   attribute :user_id, :uuid, only: [:filterable]
   attribute :service_area_id, :uuid, only: [:filterable]
+
+  attribute :street_address1, :string
+  attribute :street_address2, :string
+  attribute :city,            :string
+  attribute :state,           :string
+  attribute :zipcode,         :string
 
   attribute :lot_size,        :float,   sortable: false
   attribute :home_size,       :float,   sortable: false
