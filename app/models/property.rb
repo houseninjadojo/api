@@ -15,11 +15,15 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  service_area_id :uuid
+#  default         :boolean
+#  selected        :boolean
 #
 # Indexes
 #
-#  index_properties_on_service_area_id  (service_area_id)
-#  index_properties_on_user_id          (user_id)
+#  index_properties_on_service_area_id       (service_area_id)
+#  index_properties_on_user_id               (user_id)
+#  index_properties_on_user_id_and_default   (user_id,default) UNIQUE
+#  index_properties_on_user_id_and_selected  (user_id,selected)
 #
 
 class Property < ApplicationRecord
@@ -36,6 +40,9 @@ class Property < ApplicationRecord
   validates :bedrooms,        numericality: { greater_than_or_equal_to: 0 }
   validates :bathrooms,       numericality: { greater_than_or_equal_to: 0 }
   validates :pools,           numericality: { greater_than_or_equal_to: 0 }
+
+  validates :default, uniqueness: { scope: [:user_id] }
+
   validates_associated :address
 
   # Return the `default` property
@@ -53,21 +60,5 @@ class Property < ApplicationRecord
     else
       nil
     end
-  end
-
-  def default=(val)
-    # noop
-  end
-
-  def default
-    # noop
-  end
-
-  def selected=(val)
-    # noop
-  end
-
-  def selected
-    # noop
   end
 end

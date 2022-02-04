@@ -15,11 +15,15 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  service_area_id :uuid
+#  default         :boolean
+#  selected        :boolean
 #
 # Indexes
 #
-#  index_properties_on_service_area_id  (service_area_id)
-#  index_properties_on_user_id          (user_id)
+#  index_properties_on_service_area_id       (service_area_id)
+#  index_properties_on_user_id               (user_id)
+#  index_properties_on_user_id_and_default   (user_id,default) UNIQUE
+#  index_properties_on_user_id_and_selected  (user_id,selected)
 #
 
 FactoryBot.define do
@@ -34,5 +38,7 @@ FactoryBot.define do
     bedrooms { Faker::Number.between(from: 0, to: 10) }
     bathrooms { Faker::Number.between(from: 0, to: 10) }
     pools { Faker::Number.between(from: 0, to: 1) }
+    default { true }
+    selected { true }
   end
 end

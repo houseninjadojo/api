@@ -15,11 +15,15 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  service_area_id :uuid
+#  default         :boolean
+#  selected        :boolean
 #
 # Indexes
 #
-#  index_properties_on_service_area_id  (service_area_id)
-#  index_properties_on_user_id          (user_id)
+#  index_properties_on_service_area_id       (service_area_id)
+#  index_properties_on_user_id               (user_id)
+#  index_properties_on_user_id_and_default   (user_id,default) UNIQUE
+#  index_properties_on_user_id_and_selected  (user_id,selected)
 #
 
 class PropertyResource < ApplicationResource
@@ -48,8 +52,8 @@ class PropertyResource < ApplicationResource
   attribute :bathrooms,       :float,   sortable: false
   attribute :pools,           :float,   sortable: false
 
-  attribute :default,  :boolean, only: [:writeable] # => noop for now
-  attribute :selected, :boolean, only: [:writeable] # => noop for now
+  attribute :default,  :boolean
+  attribute :selected, :boolean
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
