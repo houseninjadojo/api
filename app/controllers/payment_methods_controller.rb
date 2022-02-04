@@ -1,4 +1,6 @@
 class PaymentMethodsController < ApplicationController
+  before_action :authenticate_request!, except: [:create]
+
   def index
     payment_methods = PaymentMethodResource.all(params)
     respond_with(payment_methods)
