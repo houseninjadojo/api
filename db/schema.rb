@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_05_025642) do
+ActiveRecord::Schema.define(version: 2022_02_05_094716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -163,6 +163,17 @@ ActiveRecord::Schema.define(version: 2022_02_05_025642) do
     t.index ["gender"], name: "index_users_on_gender"
     t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
     t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id", unique: true
+  end
+
+  create_table "webhook_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "webhookable_type"
+    t.bigint "webhookable_id"
+    t.string "service", default: "", null: false
+    t.json "payload"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["service"], name: "index_webhook_events_on_service"
+    t.index ["webhookable_type", "webhookable_id"], name: "index_webhook_events_on_webhookable"
   end
 
   create_table "work_orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
