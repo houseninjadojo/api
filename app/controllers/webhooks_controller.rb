@@ -15,6 +15,17 @@ class WebhooksController < ApplicationController
     end
   end
 
+  def hubspot
+    event = request.body.read
+    begin
+      content = JSON.parse(event)
+      WebhookEvent.create!(service: 'hubspot', payload: content)
+    rescue
+      WebhookEvent.create!(service: 'hubspot', payload: event)
+    end
+    render status: :ok
+  end
+
   private
 
   def build_stripe_webhook_event
