@@ -16,6 +16,12 @@ class WebhooksController < ApplicationController
   end
 
   def hubspot
+    if params[:code]
+      response = Hubspot::Oauth.create(params[:code])
+      Rails.logger.info(response)
+      redirect_to "https://app.hubspot.com/integrations-settings"
+    end
+
     event = request.body.read
     begin
       content = JSON.parse(event)

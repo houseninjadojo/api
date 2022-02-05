@@ -10,6 +10,7 @@ gem 'dotenv-rails',                   require: 'dotenv/rails-now'         # ENV 
 gem 'graphiti', github: 'houseninjadojo/graphiti', branch: 'activerecord-filter-array-eq'
 gem 'graphiti-rails'
 gem 'image_processing',   '~> 1.12'                                        # Use Active Storage variant
+gem 'hubspot-api-ruby', github: 'captaincontrat/hubspot-api-ruby'
 gem 'jwt'
 gem 'kaminari'
 gem 'kredis'                                                              # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
