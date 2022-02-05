@@ -26,7 +26,7 @@ Datadog.configure do |c|
     distributed_tracing: true,
     job_service:         'workers',
     service_name:        'api',
-    log_injection:       true,
+    log_injection:       true
 
   c.use :redis,
     service_name: 'redis'
