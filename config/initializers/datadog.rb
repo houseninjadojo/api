@@ -17,6 +17,6 @@ Datadog.configure do |c|
   }
 
   # Integrations
-  c.use :rails,   service_name: 'api'
+  c.use :rails,   service_name: 'api',   log_injection: true
   c.use :sidekiq, service_name: 'worker'
 end

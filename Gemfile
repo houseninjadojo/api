@@ -13,6 +13,7 @@ gem 'image_processing',   '~> 1.12'                                        # Use
 gem 'jwt'
 gem 'kaminari'
 gem 'kredis'                                                              # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
+gem 'lograge',            '~> 0.11.2'
 gem 'okcomputer'                                                          # Health Check
 gem 'pg',                 '~> 1.3'                                        # Use postgresql as the database for Active Record
 gem 'phonelib'

@@ -60,6 +60,10 @@ module HouseNinja
     # I18n Configuration
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
 
+    # lograge
+    config.lograge.base_controller_class = 'ActionController::API'
+    config.lograge.formatter = Lograge::Formatters::Json.new
+
     # config.debug_exception_response_format = :api
     # config.action_dispatch.show_exceptions = false
   end
