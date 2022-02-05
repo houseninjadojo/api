@@ -26,20 +26,23 @@ class User < ApplicationRecord
   after_create_commit :create_stripe_customer,
     unless: -> (user) { user.stripe_customer_id.present? }
 
-  after_update_commit :update_stripe_customer,
-    if:     -> (user) { user.stripe_customer_id.present? },
-    unless: -> (user) { user.saved_change_to_attribute?(:stripe_customer_id) }
-
   after_save :create_auth_user,
     if:     -> (user) { user.password.present? },
     unless: -> (user) { user.auth_zero_user_created == true }
+
+  after_update_commit :update_stripe_customer,
+    if:     -> (user) { user.stripe_customer_id.present? },
+    unless: -> (user) { user.saved_change_to_attribute?(:stripe_customer_id) }
 
   after_update_commit :update_auth_user,
     if:     -> (user) { user.auth_zero_user_created == true },
     unless: -> (user) { user.saved_changes.keys.intersect? ["stripe_customer_id", "auth_zero_user_created"] }
 
-  after_destroy_commit :delete_auth_user
-  after_destroy_commit :delete_stripe_customer
+  after_destroy_commit :delete_auth_user,
+    if: -> (user) { user.auth_zero_user_created == true }
+
+  after_destroy_commit :delete_stripe_customer,
+    if: -> (user) { user.stripe_customer_id.present? }
 
   # Associations
   has_many :devices
