@@ -29,9 +29,11 @@ class PaymentMethodResource < ApplicationResource
   self.polymorphic = [
     'CreditCardResource',
   ]
-  belongs_to :user
 
   primary_endpoint 'payment-methods', [:index, :show, :create, :update]
+
+  belongs_to :user
+  has_one    :subscription
 
   attribute :id, :uuid
 

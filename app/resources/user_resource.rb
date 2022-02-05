@@ -30,6 +30,7 @@ class UserResource < ApplicationResource
 
   has_many :properties
   has_many :devices
+  has_one  :subscription
 
   attribute :id,           :uuid
   attribute :first_name,   :string, sortable: false

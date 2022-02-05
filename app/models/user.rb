@@ -48,6 +48,7 @@ class User < ApplicationRecord
   has_many :devices
   has_many :payment_methods
   has_many :properties
+  has_one  :subscription
 
   # Validations
   validates :first_name,         presence: true

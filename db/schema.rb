@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_04_203141) do
+ActiveRecord::Schema.define(version: 2022_02_05_025642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -123,8 +123,29 @@ ActiveRecord::Schema.define(version: 2022_02_04_203141) do
     t.string "perk", default: ""
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "stripe_price_id"
     t.index ["interval"], name: "index_subscription_plans_on_interval"
     t.index ["slug"], name: "index_subscription_plans_on_slug"
+    t.index ["stripe_price_id"], name: "index_subscription_plans_on_stripe_price_id", unique: true
+  end
+
+  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "payment_method_id", null: false
+    t.uuid "subscription_plan_id", null: false
+    t.uuid "user_id", null: false
+    t.string "stripe_subscription_id"
+    t.string "status"
+    t.datetime "canceled_at", precision: 6
+    t.datetime "trial_start", precision: 6
+    t.datetime "trial_end", precision: 6
+    t.datetime "current_period_start", precision: 6
+    t.datetime "current_period_end", precision: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["payment_method_id"], name: "index_subscriptions_on_payment_method_id"
+    t.index ["stripe_subscription_id"], name: "index_subscriptions_on_stripe_subscription_id"
+    t.index ["subscription_plan_id"], name: "index_subscriptions_on_subscription_plan_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -159,5 +180,8 @@ ActiveRecord::Schema.define(version: 2022_02_04_203141) do
   add_foreign_key "devices", "users"
   add_foreign_key "payment_methods", "users"
   add_foreign_key "properties", "users"
+  add_foreign_key "subscriptions", "payment_methods"
+  add_foreign_key "subscriptions", "subscription_plans"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "work_orders", "properties"
 end
