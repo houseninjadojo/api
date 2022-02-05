@@ -17,6 +17,21 @@ Datadog.configure do |c|
   }
 
   # Integrations
-  c.use :rails,   service_name: 'api',   log_injection: true
-  c.use :sidekiq, service_name: 'worker'
+  # c.use :active_job,    service_name: 'worker'
+  # c.use :active_record, service_name: 'database'
+  # c.use :aws,           service_name: 'aws'
+  c.use :rails,
+    cache_service:       'cache',
+    database_service:    'database',
+    distributed_tracing: true,
+    job_service:         'workers',
+    service_name:        'api',
+    log_injection:       true,
+
+  c.use :redis,
+    service_name: 'redis'
+
+  c.use :sidekiq,
+    service_name: 'sidekiq',
+    tag_args:     true
 end
