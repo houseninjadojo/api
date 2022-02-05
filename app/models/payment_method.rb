@@ -27,7 +27,26 @@ class PaymentMethod < ApplicationRecord
     'CreditCard',
   ]
 
+  # callbacks
+  after_create_commit :attach_to_stripe_customer,
+    if:     -> (payment_method) { payment_method.stripe_token.present? },
+    unless: -> (payment_method) { payment_method.user_id.empty? }
+
+  after_destroy_commit :detach_from_stripe,
+    if: -> (payment_method) { payment_method.stripe_token.present? }
+
+  # associations
   belongs_to :user
 
-  validates :stripe_token, uniqueness: true
+  # validations
+  validates :stripe_token, uniqueness: true, allow_nil: true
+
+  # callbacks
+  def attach_to_stripe_customer
+    Stripe::AttachPaymentMethodJob.perform_later(self, self.user)
+  end
+
+  def detach_from_stripe
+    Stripe::DetachPaymentMethodJob.perform_later(self.stripe_token)
+  end
 end
