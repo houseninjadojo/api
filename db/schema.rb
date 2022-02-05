@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_04_094558) do
+ActiveRecord::Schema.define(version: 2022_02_04_203141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -137,9 +137,11 @@ ActiveRecord::Schema.define(version: 2022_02_04_094558) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "requested_zipcode"
     t.boolean "auth_zero_user_created", default: false
+    t.string "stripe_customer_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["gender"], name: "index_users_on_gender"
     t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
+    t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id", unique: true
   end
 
   create_table "work_orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

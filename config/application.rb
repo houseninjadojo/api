@@ -8,8 +8,9 @@ Bundler.require(*Rails.groups)
 
 require 'graphiti/rails/railtie'
 
-# Require settings
+# core_ext
 require_relative "../lib/core_ext/rails/settings"
+require_relative "../lib/core_ext/ruby/array/intersect"
 
 module HouseNinja
   class Application < Rails::Application

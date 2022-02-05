@@ -23,7 +23,7 @@ gem 'redis',              '~> 4.5'                                        # Use 
 gem 'responders'
 gem 'seedbank'
 gem 'sidekiq',            '~> 6.4'
-# gem 'stripe-rails',       '~> 2.3.1'                                      # Stripe Payment Processing
+gem 'stripe',             '~> 5.43.0'
 gem 'valid_email'
 
 group :development, :test do

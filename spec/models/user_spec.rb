@@ -12,12 +12,14 @@
 #  updated_at             :datetime         not null
 #  requested_zipcode      :string
 #  auth_zero_user_created :boolean          default(FALSE)
+#  stripe_customer_id     :string
 #
 # Indexes
 #
-#  index_users_on_email         (email) UNIQUE
-#  index_users_on_gender        (gender)
-#  index_users_on_phone_number  (phone_number) UNIQUE
+#  index_users_on_email               (email) UNIQUE
+#  index_users_on_gender              (gender)
+#  index_users_on_phone_number        (phone_number) UNIQUE
+#  index_users_on_stripe_customer_id  (stripe_customer_id) UNIQUE
 #
 
 require 'rails_helper'
