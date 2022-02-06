@@ -151,19 +151,19 @@ class User < ApplicationRecord
 
   # sync
 
-  def sync_flag(service:)
-    Kredis.flag("sync:user:#{self.id}:#{service}")
+  def sync_flag
+    Kredis.flag("user:sync:#{self.id}")
   end
 
-  def mark_sync_flag!(service:)
-    sync_flag(service: service).mark(expires_in: 30.seconds)
+  def mark_sync_flag!
+    sync_flag.mark(expires_in: 1.minute)
   end
 
   def update_from_service(service, payload)
-    if sync_flag(service: service).marked?
+    if sync_flag.marked?
       return # we already updated
     else
-      mark_sync_flag!(service: service)
+      mark_sync_flag!
     end
 
     User.transaction do
