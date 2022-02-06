@@ -8,10 +8,8 @@ class Hubspot::HandleWebhookJob < ApplicationJob
     @payload = payload
     case @payload["subscriptionId"]
     when "contact.propertyChange"
-      model, attribute = model_and_attribute
-      resource = model.find_by(hubspot_id: hubspot_id)
-      resource.update_from_service("hubspot", { attribute => attribute_value })
-      webhook_event.update(processed_at: Time.now)
+      update_user
+      return
     when "contact.creation"
       user = User.find_by(hubspot_id: hubspot_id)
       if user.present?
@@ -58,6 +56,20 @@ class Hubspot::HandleWebhookJob < ApplicationJob
     when "lifecyclestage"
       #
     end
+    []
+  end
+
+  def update_user
+    model, attribute = model_and_attribute
+
+    if model.nil?
+      webhook_event.update(processed_at: Time.now)
+      return
+    end
+
+    resource = model.find_by(hubspot_id: hubspot_id)
+    resource.update_from_service("hubspot", { attribute => attribute_value })
+    webhook_event.update(processed_at: Time.now)
   end
 
   # # "subscriptionType"=>"contact.propertyChange"
