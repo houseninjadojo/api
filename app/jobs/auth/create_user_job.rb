@@ -1,4 +1,5 @@
 class Auth::CreateUserJob < ApplicationJob
+  sidekiq_options retry: 1
   queue_as :critical
 
   # @see https://auth0.com/docs/api/management/v2#!/Users/post_users

@@ -13,30 +13,36 @@
 #  requested_zipcode      :string
 #  auth_zero_user_created :boolean          default(FALSE)
 #  stripe_customer_id     :string
+#  hubspot_id             :string
+#  hubspot_contact_object :jsonb
 #
 # Indexes
 #
 #  index_users_on_email               (email) UNIQUE
 #  index_users_on_gender              (gender)
+#  index_users_on_hubspot_id          (hubspot_id) UNIQUE
 #  index_users_on_phone_number        (phone_number) UNIQUE
 #  index_users_on_stripe_customer_id  (stripe_customer_id) UNIQUE
 #
 class User < ApplicationRecord
   # Callbacks
   after_create_commit :create_stripe_customer,
-    unless: -> (user) { user.stripe_customer_id.present? }
+    unless: :should_not_create_stripe_customer?
+
+  after_create_commit :create_hubspot_contact,
+    unless: :should_not_create_hubspot_contact?
 
   after_save :create_auth_user,
     if:     -> (user) { user.password.present? },
-    unless: -> (user) { user.auth_zero_user_created == true }
+    unless: :should_not_create_auth_user?
 
-  after_update_commit :update_stripe_customer,
-    if:     -> (user) { user.stripe_customer_id.present? },
-    unless: -> (user) { user.saved_change_to_attribute?(:stripe_customer_id) }
+  # after_update_commit :update_stripe_customer,
+  #   if:     -> (user) { user.stripe_customer_id.present? },
+  #   unless: :should_not_sync_user?
 
-  after_update_commit :update_auth_user,
-    if:     -> (user) { user.auth_zero_user_created == true },
-    unless: -> (user) { user.saved_changes.keys.intersect? ["stripe_customer_id", "auth_zero_user_created"] }
+  # after_update_commit :update_auth_user,
+  #   if:     -> (user) { user.auth_zero_user_created == true },
+  #   unless: :should_not_sync_user?
 
   after_destroy_commit :delete_auth_user,
     if: -> (user) { user.auth_zero_user_created == true }
@@ -57,6 +63,7 @@ class User < ApplicationRecord
   validates :phone_number,       presence: true, phone: true
   validates :gender,             inclusion: { in: %w(male female other) }
   validates :stripe_customer_id, uniqueness: true, allow_nil: true
+  validates :hubspot_id,         uniqueness: true, allow_nil: true
 
   # Temporary password token management
   # VGS Volatile tokens expire in 1 hour
@@ -118,5 +125,63 @@ class User < ApplicationRecord
 
   def delete_stripe_customer
     Stripe::DeleteCustomerJob.perform_later(stripe_customer_id)
+  end
+
+  def create_hubspot_contact
+    Hubspot::CreateContactJob.perform_later(self)
+  end
+
+  def update_hubspot_contact
+    Hubspot::UpdateContactJob.perform_later(self)
+  end
+
+  # sync gates
+
+  def should_not_create_auth_user?
+    self.auth_zero_user_created == true
+  end
+
+  def should_not_create_stripe_customer?
+    self.stripe_customer_id.present?
+  end
+
+  def should_not_create_hubspot_contact?
+    self.hubspot_id.present?
+  end
+
+  # sync
+
+  def sync_flag(service:)
+    Kredis.flag("sync:user:#{self.id}:#{service}")
+  end
+
+  def mark_sync_flag!(service:)
+    sync_flag(service: service).mark(expires_in: 30.seconds)
+  end
+
+  def update_from_service(service, payload)
+    if sync_flag(service: service).marked?
+      return # we already updated
+    else
+      mark_sync_flag!(service: service)
+    end
+
+    User.transaction do
+      payload.each do |k, v|
+        update_attribute(k, v)
+      end
+    end
+
+    case service
+    when "hubspot"
+      update_auth_user
+      update_stripe_customer
+    when "stripe"
+      update_auth_user
+      update_hubspot_contact
+    when "auth0"
+      update_stripe_customer
+      update_hubspot_contact
+    end
   end
 end

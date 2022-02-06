@@ -10,7 +10,7 @@ class WebhooksController < ApplicationController
       Rails.logger.error(e)
       render status: 400
     rescue Stripe::SignatureVerificationError => e
-      puts e
+      Rails.logger.error(e)
       render status: 400
     end
   end
@@ -25,7 +25,10 @@ class WebhooksController < ApplicationController
     event = request.body.read
     begin
       content = JSON.parse(event)
-      WebhookEvent.create!(service: 'hubspot', payload: content)
+      event = WebhookEvent.create!(service: 'hubspot', payload: content)
+      content.each do |payload|
+        Hubspot::HandleWebhookJob.perform_later(webhook_event, payload)
+      end
     rescue
       WebhookEvent.create!(service: 'hubspot', payload: event)
     end

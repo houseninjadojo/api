@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_05_094716) do
+ActiveRecord::Schema.define(version: 2022_02_06_032549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -159,8 +159,11 @@ ActiveRecord::Schema.define(version: 2022_02_05_094716) do
     t.string "requested_zipcode"
     t.boolean "auth_zero_user_created", default: false
     t.string "stripe_customer_id"
+    t.string "hubspot_id"
+    t.jsonb "hubspot_contact_object"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["gender"], name: "index_users_on_gender"
+    t.index ["hubspot_id"], name: "index_users_on_hubspot_id", unique: true
     t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
     t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id", unique: true
   end
@@ -172,6 +175,7 @@ ActiveRecord::Schema.define(version: 2022_02_05_094716) do
     t.json "payload"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "processed_at"
     t.index ["service"], name: "index_webhook_events_on_service"
     t.index ["webhookable_type", "webhookable_id"], name: "index_webhook_events_on_webhookable"
   end
