@@ -32,6 +32,7 @@ class SubscriptionResource < ApplicationResource
   belongs_to :payment_method
   belongs_to :subscription_plan
   belongs_to :user
+  has_many   :invoices
 
   attribute :id, :uuid
 

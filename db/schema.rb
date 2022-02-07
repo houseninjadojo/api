@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_06_032549) do
+ActiveRecord::Schema.define(version: 2022_02_07_193701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -58,6 +58,26 @@ ActiveRecord::Schema.define(version: 2022_02_06_032549) do
     t.index ["label"], name: "index_home_care_tips_on_label"
   end
 
+  create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "promo_code_id"
+    t.uuid "subscription_id"
+    t.uuid "user_id"
+    t.string "description"
+    t.string "status"
+    t.string "total"
+    t.datetime "period_start", precision: 6
+    t.datetime "period_end", precision: 6
+    t.string "stripe_id"
+    t.jsonb "stripe_object"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["promo_code_id"], name: "index_invoices_on_promo_code_id"
+    t.index ["status"], name: "index_invoices_on_status"
+    t.index ["stripe_id"], name: "index_invoices_on_stripe_id", unique: true
+    t.index ["subscription_id"], name: "index_invoices_on_subscription_id"
+    t.index ["user_id"], name: "index_invoices_on_user_id"
+  end
+
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "type"
     t.uuid "user_id", null: false
@@ -74,6 +94,40 @@ ActiveRecord::Schema.define(version: 2022_02_06_032549) do
     t.string "last_four"
     t.index ["stripe_token"], name: "index_payment_methods_on_stripe_token", unique: true
     t.index ["user_id"], name: "index_payment_methods_on_user_id"
+  end
+
+  create_table "payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "invoice_id"
+    t.uuid "user_id"
+    t.uuid "payment_method_id"
+    t.string "amount"
+    t.string "description"
+    t.string "statement_descriptor"
+    t.string "status"
+    t.boolean "refunded", default: false, null: false
+    t.boolean "paid", default: false, null: false
+    t.string "stripe_id"
+    t.jsonb "stripe_object"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["invoice_id"], name: "index_payments_on_invoice_id"
+    t.index ["payment_method_id"], name: "index_payments_on_payment_method_id"
+    t.index ["status"], name: "index_payments_on_status"
+    t.index ["stripe_id"], name: "index_payments_on_stripe_id", unique: true
+    t.index ["user_id"], name: "index_payments_on_user_id"
+  end
+
+  create_table "promo_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "active", default: false, null: false
+    t.string "code", null: false
+    t.string "name"
+    t.string "percent_off"
+    t.string "stripe_id"
+    t.jsonb "stripe_object"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["code"], name: "index_promo_codes_on_code", unique: true
+    t.index ["stripe_id"], name: "index_promo_codes_on_stripe_id", unique: true
   end
 
   create_table "properties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -193,7 +247,13 @@ ActiveRecord::Schema.define(version: 2022_02_06_032549) do
   end
 
   add_foreign_key "devices", "users"
+  add_foreign_key "invoices", "promo_codes"
+  add_foreign_key "invoices", "subscriptions"
+  add_foreign_key "invoices", "users"
   add_foreign_key "payment_methods", "users"
+  add_foreign_key "payments", "invoices"
+  add_foreign_key "payments", "payment_methods"
+  add_foreign_key "payments", "users"
   add_foreign_key "properties", "users"
   add_foreign_key "subscriptions", "payment_methods"
   add_foreign_key "subscriptions", "subscription_plans"

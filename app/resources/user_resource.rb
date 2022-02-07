@@ -31,8 +31,9 @@ class UserResource < ApplicationResource
 
   primary_endpoint 'users', [:index, :show, :create, :update]
 
-  has_many :properties
   has_many :devices
+  has_many :invoices
+  has_many :properties
   has_one  :subscription
 
   attribute :id,           :uuid

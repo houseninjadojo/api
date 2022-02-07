@@ -9,6 +9,7 @@
 #  payload          :json
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  processed_at     :datetime
 #
 # Indexes
 #

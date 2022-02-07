@@ -38,6 +38,7 @@ class PaymentMethod < ApplicationRecord
   # associations
   belongs_to :user
   has_one    :subscription
+  has_many   :payments
 
   # validations
   validates :stripe_token, uniqueness: true, allow_nil: true

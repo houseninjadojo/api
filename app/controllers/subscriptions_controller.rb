@@ -1,4 +1,6 @@
 class SubscriptionsController < ApplicationController
+  before_action :authenticate_request!, except: [:create]
+
   def index
     subscriptions = SubscriptionResource.all(params)
     respond_with(subscriptions)
