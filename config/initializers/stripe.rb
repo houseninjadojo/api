@@ -2,7 +2,7 @@ require 'stripe'
 
 # Stripe Configuration
 
-Stripe.api_key = Rails.application.credentials.stripe.secret_key
+Stripe.api_key = Rails.secrets.dig(:stripe, :secret_key)
 
 if Rails.env.production?
   Stripe.log_level = Stripe::LEVEL_INFO

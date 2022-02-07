@@ -68,3 +68,9 @@ module HouseNinja
     # config.action_dispatch.show_exceptions = false
   end
 end
+
+module Rails
+  def self.secrets
+    Rails.application.credentials
+  end
+end
