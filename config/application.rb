@@ -61,7 +61,7 @@ module HouseNinja
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
 
     # lograge
-    config.lograge.enabled = false
+    config.lograge.enabled = ['production', 'sandbox'].include?(Rails.env)
     config.lograge.base_controller_class = 'ActionController::API'
     config.lograge.formatter = Lograge::Formatters::Json.new
     config.lograge.custom_options = lambda do |event|

@@ -4,11 +4,12 @@
 Rails.application.routes.draw do
   # Mounts
   mount OkComputer::Engine, at: '/health'           # Health Checks
-  # mount Stripe::Engine,     at: '/webhooks/stripe'  # Stripe Webhooks
 
+  # webhooks
   post '/webhooks/hubspot', to: 'webhooks#hubspot'
   post '/webhooks/stripe',  to: 'webhooks#stripe'
 
+  # api
   defaults format: :jsonapi do
     resources :common_requests,    path: 'common-requests',    only: [:index, :show]
     resources :devices,            path: 'devices',            only: [:index, :show, :create, :update]
