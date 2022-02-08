@@ -2,16 +2,20 @@ class PaymentMethodsController < ApplicationController
   before_action :authenticate_request!, except: [:create]
 
   def index
-    payment_methods = PaymentMethodResource.all(params)
+    authorize!
+    scope = authorized_scope(PaymentMethod.all)
+    payment_methods = PaymentMethodResource.all(params, scope)
     respond_with(payment_methods)
   end
 
   def show
     payment_method = PaymentMethodResource.find(params)
+    authorize! payment_method.data
     respond_with(payment_method)
   end
 
   def create
+    authorize!
     payment_method = PaymentMethodResource.build(params)
 
     if payment_method.save
@@ -23,6 +27,7 @@ class PaymentMethodsController < ApplicationController
 
   def update
     payment_method = PaymentMethodResource.find(params)
+    authorize! payment_method.data
 
     if payment_method.update_attributes
       render jsonapi: payment_method
@@ -33,6 +38,7 @@ class PaymentMethodsController < ApplicationController
 
   def destroy
     payment_method = PaymentMethodResource.find(params)
+    authorize! payment_method.data
 
     if payment_method.destroy
       render jsonapi: { meta: {} }, status: 200

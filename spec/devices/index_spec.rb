@@ -11,7 +11,7 @@ RSpec.describe "devices#index", type: :request do
     let!(:device1) { create(:device) }
     let!(:device2) { create(:device) }
 
-    xit 'works' do
+    it 'works' do
       expect(DeviceResource).to receive(:all).and_call_original
       make_request
       expect(response.status).to eq(200), response.body

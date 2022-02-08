@@ -8,6 +8,7 @@ class ApplicationPolicy < ActionPolicy::Base
   # Read more about authorization context: https://actionpolicy.evilmartians.io/#/authorization_context
 
   scope_matcher :resource, ->(target) { target < Graphiti::Resource }
+  scope_matcher :query, Graphiti::Query
 
   private
 

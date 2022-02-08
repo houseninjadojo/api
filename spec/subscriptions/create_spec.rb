@@ -41,6 +41,10 @@ RSpec.describe "subscriptions#create", type: :request do
       }
     end
 
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
+
     it 'works' do
       expect(SubscriptionResource).to receive(:build).and_call_original
       expect {

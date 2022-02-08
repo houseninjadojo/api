@@ -10,6 +10,10 @@ RSpec.describe "promo_codes#show", type: :request do
   describe 'basic fetch' do
     let!(:promo_code) { create(:promo_code) }
 
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(create(:user))
+    }
+
     it 'works' do
       expect(PromoCodeResource).to receive(:find).and_call_original
       make_request

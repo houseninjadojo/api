@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "service_areas#index", type: :request do
-  let(:params) { {} }
+  let(:params) { { filter: { zipcodes: [78702] } } }
 
   subject(:make_request) do
     jsonapi_get "/service-areas", params: params

@@ -15,8 +15,8 @@ class UsersController < ApplicationController
   end
 
   def create
+    authorize!
     user = UserResource.build(params)
-    # authorize! user.data
 
     if user.save
       render jsonapi: user, status: 201

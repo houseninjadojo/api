@@ -27,6 +27,10 @@ RSpec.describe "work_orders#create", type: :request do
       }
     end
 
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(create(:user))
+    }
+
     it 'works' do
       expect(WorkOrderResource).to receive(:build).and_call_original
       expect {

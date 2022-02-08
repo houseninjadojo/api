@@ -13,8 +13,8 @@ class CommonRequestsController < ApplicationController
   end
 
   def create
+    authorize!
     common_request = CommonRequestResource.build(params)
-    # authorize! common_request
 
     if common_request.save
       render jsonapi: common_request, status: 201

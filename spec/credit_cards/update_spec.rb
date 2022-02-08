@@ -6,7 +6,8 @@ RSpec.describe "credit_cards#update", type: :request do
   end
 
   describe 'basic update' do
-    let!(:credit_card) { create(:credit_card) }
+    let!(:user) { create(:user) }
+    let!(:credit_card) { create(:credit_card, user: user) }
 
     let(:payload) do
       {
@@ -19,6 +20,10 @@ RSpec.describe "credit_cards#update", type: :request do
         }
       }
     end
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     # Replace 'xit' with 'it' after adding attributes
     it 'updates the resource' do

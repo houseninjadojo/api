@@ -1,15 +1,19 @@
 class PaymentsController < ApplicationController
   def index
-    payments = PaymentResource.all(params)
+    authorize!
+    scope = authorized_scope(Payment.all)
+    payments = PaymentResource.all(params, scope)
     respond_with(payments)
   end
 
   def show
     payment = PaymentResource.find(params)
+    authorize! payment.data
     respond_with(payment)
   end
 
   def create
+    authorize!
     payment = PaymentResource.build(params)
 
     if payment.save
@@ -21,6 +25,7 @@ class PaymentsController < ApplicationController
 
   def update
     payment = PaymentResource.find(params)
+    authorize! payment.data
 
     if payment.update_attributes
       render jsonapi: payment
@@ -31,6 +36,7 @@ class PaymentsController < ApplicationController
 
   def destroy
     payment = PaymentResource.find(params)
+    authorize! payment.data
 
     if payment.destroy
       render jsonapi: { meta: {} }, status: 200

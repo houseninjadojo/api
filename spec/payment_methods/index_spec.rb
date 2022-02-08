@@ -8,8 +8,13 @@ RSpec.describe "payment_methods#index", type: :request do
   end
 
   describe 'basic fetch' do
-    let!(:payment_method1) { create(:credit_card) }
-    let!(:payment_method2) { create(:credit_card) }
+    let!(:user) { create(:user) }
+    let!(:payment_method1) { create(:credit_card, user: user) }
+    let!(:payment_method2) { create(:credit_card, user: user) }
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     xit 'works' do
       expect(PaymentMethodResource).to receive(:all).and_call_original

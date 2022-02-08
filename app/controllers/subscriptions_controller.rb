@@ -2,16 +2,20 @@ class SubscriptionsController < ApplicationController
   before_action :authenticate_request!, except: [:create]
 
   def index
-    subscriptions = SubscriptionResource.all(params)
+    authorize!
+    scope = Subscription.all
+    subscriptions = SubscriptionResource.all(params, scope)
     respond_with(subscriptions)
   end
 
   def show
     subscription = SubscriptionResource.find(params)
+    authorize! subscription.data
     respond_with(subscription)
   end
 
   def create
+    authorize!
     subscription = SubscriptionResource.build(params)
 
     if subscription.save
@@ -23,6 +27,7 @@ class SubscriptionsController < ApplicationController
 
   def update
     subscription = SubscriptionResource.find(params)
+    authorize! subscription.data
 
     if subscription.update_attributes
       render jsonapi: subscription
@@ -33,6 +38,7 @@ class SubscriptionsController < ApplicationController
 
   def destroy
     subscription = SubscriptionResource.find(params)
+    authorize! subscription.data
 
     if subscription.destroy
       render jsonapi: { meta: {} }, status: 200
