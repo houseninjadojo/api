@@ -28,7 +28,7 @@ class UserPolicy < ApplicationPolicy
     if user.present?
       user.id == record.id
     else
-      record.object.hubspot_id.nil? && record.object.auth_zero_user_created.nil? && record.object.stripe_customer_id.nil?
+      record.hubspot_id.nil? && record.auth_zero_user_created.nil? && record.stripe_customer_id.nil?
     end
   end
 

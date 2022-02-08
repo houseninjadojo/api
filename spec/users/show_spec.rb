@@ -10,6 +10,8 @@ RSpec.describe "users#show", type: :request do
   describe 'basic fetch' do
     let!(:user) { create(:user) }
 
+    before { allow_any_instance_of(Auth).to receive(:current_user).and_return(user) }
+
     it 'works' do
       expect(UserResource).to receive(:find).and_call_original
       make_request

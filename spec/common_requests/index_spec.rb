@@ -11,6 +11,10 @@ RSpec.describe "common_requests#index", type: :request do
     let!(:common_request1) { create(:common_request) }
     let!(:common_request2) { create(:common_request) }
 
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(create(:user))
+    }
+
     it 'works' do
       expect(CommonRequestResource).to receive(:all).and_call_original
       make_request

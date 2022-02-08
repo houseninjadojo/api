@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "users#update", type: :request do
   subject(:make_request) do
-    jsonapi_put "//users/#{user.id}", payload
+    jsonapi_put "/users/#{user.id}", payload
   end
 
   describe 'basic update' do
@@ -20,6 +20,8 @@ RSpec.describe "users#update", type: :request do
         }
       }
     end
+
+    before { allow_any_instance_of(Auth).to receive(:current_user).and_return(user) }
 
     it 'updates the resource' do
       expect(UserResource).to receive(:find).and_call_original
