@@ -1,8 +1,11 @@
 require "#{Rails.root}/lib/core_ext/rails/action_controller/exceptions"
 
 class ApplicationController < ActionController::API
+  include ActionPolicy::Controller
   include Auth
   include Graphiti::Rails::Responders
+
+  authorize :user, through: :current_user
 
   def context
     {
