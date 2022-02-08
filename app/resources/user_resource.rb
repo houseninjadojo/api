@@ -36,6 +36,10 @@ class UserResource < ApplicationResource
   has_many :properties
   has_one  :subscription
 
+  def base_scope
+    User.where(id: context.current_user.id)
+  end
+
   attribute :id,           :uuid
   attribute :first_name,   :string, sortable: false
   attribute :last_name,    :string, sortable: false

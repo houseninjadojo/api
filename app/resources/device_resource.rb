@@ -36,6 +36,10 @@ class DeviceResource < ApplicationResource
 
   belongs_to :user
 
+  def base_scope
+    Device.where(user_id: context.current_user.id)
+  end
+
   attribute :id,                :uuid
   attribute :apns_device_token, :string, except: [:sortable, :readable]
   attribute :fcm_token,         :string, except: [:sortable, :readable]

@@ -35,6 +35,10 @@ class InvoiceResource < ApplicationResource
   belongs_to :subscription
   belongs_to :user
 
+  def base_scope
+    Invoice.where(user_id: context.current_user.id)
+  end
+
   attribute :id, :uuid
 
   attribute :payment_id,      :uuid, only: [:filterable]
