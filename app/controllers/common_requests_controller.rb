@@ -1,15 +1,19 @@
 class CommonRequestsController < ApplicationController
   def index
-    common_requests = CommonRequestResource.all(params)
+    authorize!
+    scope = authorized_scope(CommonRequest.all)
+    common_requests = CommonRequestResource.all(params, scope)
     respond_with(common_requests)
   end
 
   def show
     common_request = CommonRequestResource.find(params)
+    authorize! common_request.data
     respond_with(common_request)
   end
 
   def create
+    authorize!
     common_request = CommonRequestResource.build(params)
 
     if common_request.save
@@ -21,6 +25,7 @@ class CommonRequestsController < ApplicationController
 
   def update
     common_request = CommonRequestResource.find(params)
+    authorize! common_request.data
 
     if common_request.update_attributes
       render jsonapi: common_request
@@ -31,6 +36,7 @@ class CommonRequestsController < ApplicationController
 
   def destroy
     common_request = CommonRequestResource.find(params)
+    authorize! common_request.data
 
     if common_request.destroy
       render jsonapi: { meta: {} }, status: 200

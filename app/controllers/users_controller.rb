@@ -2,16 +2,20 @@ class UsersController < ApplicationController
   before_action :authenticate_request!, except: [:create, :update, :show]
 
   def index
-    users = UserResource.all(params)
+    authorize!
+    scope = authorized_scope(User.all)
+    users = UserResource.all(params, scope)
     respond_with(users)
   end
 
   def show
     user = UserResource.find(params)
+    authorize! user.data
     respond_with(user)
   end
 
   def create
+    authorize!
     user = UserResource.build(params)
 
     if user.save
@@ -23,6 +27,7 @@ class UsersController < ApplicationController
 
   def update
     user = UserResource.find(params)
+    authorize! user.data
 
     if user.update_attributes
       render jsonapi: user
@@ -33,6 +38,7 @@ class UsersController < ApplicationController
 
   def destroy
     user = UserResource.find(params)
+    authorize! user.data
 
     if user.destroy
       render jsonapi: { meta: {} }, status: 200

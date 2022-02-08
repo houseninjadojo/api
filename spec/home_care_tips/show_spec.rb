@@ -10,6 +10,10 @@ RSpec.describe "home_care_tips#show", type: :request do
   describe 'basic fetch' do
     let!(:home_care_tip) { create(:home_care_tip) }
 
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(create(:user))
+    }
+
     it 'works' do
       expect(HomeCareTipResource).to receive(:find).and_call_original
       make_request

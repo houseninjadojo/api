@@ -10,6 +10,10 @@ RSpec.describe "common_requests#show", type: :request do
   describe 'basic fetch' do
     let!(:common_request) { create(:common_request) }
 
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(create(:user))
+    }
+
     it 'works' do
       expect(CommonRequestResource).to receive(:find).and_call_original
       make_request

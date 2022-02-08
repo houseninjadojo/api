@@ -39,7 +39,7 @@ class DeviceResource < ApplicationResource
   attribute :id,                :uuid
   attribute :apns_device_token, :string, except: [:sortable, :readable]
   attribute :fcm_token,         :string, except: [:sortable, :readable]
-  attribute :device_id,         :string, except: []
+  attribute :device_id,         :string #, except: []
   attribute :name,              :string, except: [:sortable]
   attribute :model,             :string, except: [:sortable]
   attribute :platform,          :string, except: [:sortable]

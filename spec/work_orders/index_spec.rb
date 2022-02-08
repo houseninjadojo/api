@@ -8,8 +8,14 @@ RSpec.describe "work_orders#index", type: :request do
   end
 
   describe 'basic fetch' do
-    let!(:work_order1) { create(:work_order) }
-    let!(:work_order2) { create(:work_order) }
+    let!(:user) { create(:user) }
+    let!(:property) { create(:property, user: user) }
+    let!(:work_order1) { create(:work_order, property: property) }
+    let!(:work_order2) { create(:work_order, property: property) }
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     it 'works' do
       expect(WorkOrderResource).to receive(:all).and_call_original

@@ -8,8 +8,13 @@ RSpec.describe "properties#index", type: :request do
   end
 
   describe 'basic fetch' do
-    let!(:property1) { create(:property) }
-    let!(:property2) { create(:property) }
+    let!(:user) { create(:user) }
+    let!(:property1) { create(:property, user: user) }
+    let!(:property2) { create(:property, user: user, default: false) }
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     it 'works' do
       expect(PropertyResource).to receive(:all).and_call_original

@@ -11,6 +11,10 @@ RSpec.describe "home_care_tips#index", type: :request do
     let!(:home_care_tip1) { create(:home_care_tip) }
     let!(:home_care_tip2) { create(:home_care_tip) }
 
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(create(:user))
+    }
+
     it 'works' do
       expect(HomeCareTipResource).to receive(:all).and_call_original
       make_request

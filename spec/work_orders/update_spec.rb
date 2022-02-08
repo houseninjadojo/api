@@ -6,7 +6,9 @@ RSpec.describe "work_orders#update", type: :request do
   end
 
   describe 'basic update' do
-    let!(:work_order) { create(:work_order) }
+    let!(:user) { create(:user) }
+    let!(:property) { create(:property, user: user)}
+    let!(:work_order) { create(:work_order, property: property) }
 
     let(:payload) do
       {
@@ -19,6 +21,10 @@ RSpec.describe "work_orders#update", type: :request do
         }
       }
     end
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     # Replace 'xit' with 'it' after adding attributes
     it 'updates the resource' do

@@ -1,15 +1,19 @@
 class WorkOrdersController < ApplicationController
   def index
-    work_orders = WorkOrderResource.all(params)
+    authorize!
+    scope = authorized_scope(WorkOrder.all)
+    work_orders = WorkOrderResource.all(params, scope)
     respond_with(work_orders)
   end
 
   def show
     work_order = WorkOrderResource.find(params)
+    authorize! work_order.data
     respond_with(work_order)
   end
 
   def create
+    authorize!
     work_order = WorkOrderResource.build(params)
 
     if work_order.save
@@ -21,6 +25,7 @@ class WorkOrdersController < ApplicationController
 
   def update
     work_order = WorkOrderResource.find(params)
+    authorize! work_order.data
 
     if work_order.update_attributes
       render jsonapi: work_order
@@ -31,6 +36,7 @@ class WorkOrdersController < ApplicationController
 
   def destroy
     work_order = WorkOrderResource.find(params)
+    authorize! work_order.data
 
     if work_order.destroy
       render jsonapi: { meta: {} }, status: 200

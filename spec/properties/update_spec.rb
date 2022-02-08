@@ -2,11 +2,12 @@ require 'rails_helper'
 
 RSpec.describe "properties#update", type: :request do
   subject(:make_request) do
-    jsonapi_put "//properties/#{property.id}", payload
+    jsonapi_put "/properties/#{property.id}", payload
   end
 
   describe 'basic update' do
-    let(:property) { create(:property) }
+    let(:user) { create(:user) }
+    let(:property) { create(:property, user: user) }
 
     let(:payload) do
       {
@@ -20,6 +21,10 @@ RSpec.describe "properties#update", type: :request do
         }
       }
     end
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     it 'updates the resource' do
       expect(PropertyResource).to receive(:find).and_call_original

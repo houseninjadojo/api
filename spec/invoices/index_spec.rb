@@ -8,8 +8,13 @@ RSpec.describe "invoices#index", type: :request do
   end
 
   describe 'basic fetch' do
-    let!(:invoice1) { create(:invoice) }
-    let!(:invoice2) { create(:invoice) }
+    let!(:user) { create(:user) }
+    let!(:invoice1) { create(:invoice, user: user) }
+    let!(:invoice2) { create(:invoice, user: user) }
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     it 'works' do
       expect(InvoiceResource).to receive(:all).and_call_original

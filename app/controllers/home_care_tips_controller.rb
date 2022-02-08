@@ -1,15 +1,19 @@
 class HomeCareTipsController < ApplicationController
   def index
-    home_care_tips = HomeCareTipResource.all(params)
+    authorize!
+    scope = authorized_scope(HomeCareTip.all)
+    home_care_tips = HomeCareTipResource.all(params, scope)
     respond_with(home_care_tips)
   end
 
   def show
     home_care_tip = HomeCareTipResource.find(params)
+    authorize! home_care_tip.data
     respond_with(home_care_tip)
   end
 
   def create
+    authorize!
     home_care_tip = HomeCareTipResource.build(params)
 
     if home_care_tip.save
@@ -21,6 +25,7 @@ class HomeCareTipsController < ApplicationController
 
   def update
     home_care_tip = HomeCareTipResource.find(params)
+    authorize! home_care_tip.data
 
     if home_care_tip.update_attributes
       render jsonapi: home_care_tip
@@ -31,6 +36,7 @@ class HomeCareTipsController < ApplicationController
 
   def destroy
     home_care_tip = HomeCareTipResource.find(params)
+    authorize! home_care_tip.data
 
     if home_care_tip.destroy
       render jsonapi: { meta: {} }, status: 200

@@ -8,7 +8,12 @@ RSpec.describe "credit_cards#show", type: :request do
   end
 
   describe 'basic fetch' do
-    let!(:credit_card) { create(:credit_card) }
+    let!(:user) { create(:user) }
+    let!(:credit_card) { create(:credit_card, user: user) }
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     it 'works' do
       expect(PaymentMethodResource).to receive(:find).and_call_original
