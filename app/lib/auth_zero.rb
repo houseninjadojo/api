@@ -1,3 +1,35 @@
+unless Rails.env.test?
+  module Auth0
+    module Mixins
+      module HTTPProxy
+        # Overload this method in the Auth0 ruby gem in order to
+        # inject the VGS Proxy configuration
+        # @see https://github.com/auth0/ruby-auth0/blob/cc794c0c76ab84b9cd659aa4bd0dd5c3e452b02f/lib/auth0/mixins/httpproxy.rb#L108
+        def call(method, url, timeout, headers, body = nil)
+          RestClient::Request.execute(
+            method: method,
+            url: url,
+            timeout: timeout,
+            headers: headers,
+            payload: body,
+
+            # Add our VGS Proxy options
+            proxy: ::VGS.outbound_proxy,
+            ssl_cert_store: ::VGS.cert_store,
+          )
+        rescue RestClient::Exception => e
+          case e
+          when RestClient::RequestTimeout
+            raise Auth0::RequestTimeout.new(e.message)
+          else
+            return e.response
+          end
+        end
+      end
+    end
+  end
+end
+
 module AuthZero
   class Client
     include Singleton
@@ -65,35 +97,3 @@ module AuthZero
     Rails.application.credentials.auth[:connection]
   end
 end
-
-# unless Rails.env.test?
-#   module Auth0
-#     module Mixins
-#       module HTTPProxy
-#         # Overload this method in the Auth0 ruby gem in order to
-#         # inject the VGS Proxy configuration
-#         # @see https://github.com/auth0/ruby-auth0/blob/cc794c0c76ab84b9cd659aa4bd0dd5c3e452b02f/lib/auth0/mixins/httpproxy.rb#L108
-#         def call(method, url, timeout, headers, body = nil)
-#           RestClient::Request.execute(
-#             method: method,
-#             url: url,
-#             timeout: timeout,
-#             headers: headers,
-#             payload: body,
-
-#             # Add our VGS Proxy options
-#             proxy: ::VGS.outbound_proxy,
-#             ssl_cert_store: ::VGS.cert_store,
-#           )
-#         rescue RestClient::Exception => e
-#           case e
-#           when RestClient::RequestTimeout
-#             raise Auth0::RequestTimeout.new(e.message)
-#           else
-#             return e.response
-#           end
-#         end
-#       end
-#     end
-#   end
-# end

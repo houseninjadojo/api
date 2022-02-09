@@ -31,9 +31,9 @@ class PaymentMethod < ApplicationRecord
   after_create_commit :create_stripe_payment_method,
     unless: -> (payment_method) { payment_method.stripe_token.present? }
 
-  # after_create_commit :attach_to_stripe_customer,
-  #   if:     -> (payment_method) { payment_method.stripe_token.present? },
-  #   unless: -> (payment_method) { payment_method.user_id.empty? }
+  after_save_commit :attach_to_stripe_customer,
+    if:     -> (payment_method) { payment_method.saved_change_to_attribute?(:stripe_token, from: nil) },
+    unless: -> (payment_method) { payment_method.user_id.empty? }
 
   after_destroy_commit :detach_from_stripe,
     if: -> (payment_method) { payment_method.stripe_token.present? }

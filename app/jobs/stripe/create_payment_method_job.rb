@@ -5,8 +5,10 @@ class Stripe::CreatePaymentMethodJob < ApplicationJob
     return if payment_method.stripe_token.present?
 
     params = params(payment_method)
-    payment_method = Stripe::PaymentMethod.create(params)
-    payment_method.update!(stripe_token: payment_method.id)
+    response = Stripe::PaymentMethod.create(params, {
+      proxy: Rails.secrets.dig(:vgs, :outbound, :proxy_url)
+    })
+    payment_method.update!(stripe_token: response.id)
 
     if payment_method.user && payment_method.user.stripe_customer_id.present?
       Stripe::AttachPaymentMethodJob.perform_later(payment_method, payment_method.user)
@@ -22,7 +24,7 @@ class Stripe::CreatePaymentMethodJob < ApplicationJob
         number: payment_method.card_number,
         exp_month: payment_method.exp_month,
         exp_year: payment_method.exp_year,
-        cvv: payment_method,
+        cvc: payment_method.cvv,
       }
     }
   end
