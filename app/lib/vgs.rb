@@ -7,7 +7,7 @@ class VGS
     def cert_store
       store = OpenSSL::X509::Store.new
       store.set_default_paths
-      store.add_file(Rails.application.credentials.vgs.outbound.ssl_cert)
+      store.add_file(Rails.secrets.dig(:vgs, :outbound, :ssl_cert))
       store
     end
   end
