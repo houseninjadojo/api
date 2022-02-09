@@ -17,9 +17,28 @@ Datadog.configure do |c|
   }
 
   # Integrations
+
   # c.use :active_job,    service_name: 'worker'
   # c.use :active_record, service_name: 'database'
   # c.use :aws,           service_name: 'aws'
+
+  c.use :http, describes: /api\.stripe\.com/ do |http|
+    http.service_name    = 'api.stripe.com'
+    http.split_by_domain = false
+  end
+
+  c.use :http, describes: /(sandbox\.)?auth\.houseninja\.co/ do |http|
+    http.service_name    = 'auth'
+    http.split_by_domain = false
+  end
+
+  c.use :http, describes: /api\.hubapi\.com/ do |http|
+    http.service_name    = 'api.hubapi.com'
+    http.split_by_domain = false
+  end
+
+  c.use :http, split_by_domain: true
+
   c.use :rails,
     cache_service:       'cache',
     database_service:    'database',

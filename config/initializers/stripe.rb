@@ -2,11 +2,16 @@ require 'stripe'
 
 # Stripe Configuration
 
-Stripe.api_key = Rails.secrets.dig(:stripe, :secret_key)
-Stripe.proxy   = Rails.secrets.dig(:vgs, :outbound, :proxy_url)
+Stripe.api_key        = Rails.secrets.dig(:stripe, :secret_key)
+Stripe.proxy          = Rails.secrets.dig(:vgs, :outbound, :proxy_url)
 Stripe.ca_bundle_path = Rails.secrets.dig(:vgs, :outbound, :ssl_cert)
 
-if Rails.env.production?
+if Rails.env.test?
+  Stripe.proxy          = nil
+  Stripe.ca_bundle_path = Stripe::DEFAULT_CA_BUNDLE_PATH
+end
+
+if Rails.env.production? || Rails.env.sandbox?
   Stripe.log_level = Stripe::LEVEL_INFO
 end
 
