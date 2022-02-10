@@ -15,6 +15,7 @@ Datadog.configure do |c|
     'service': ENV["NAMESPACE_SERVICE"] || 'api',
     'resource': ENV["NAMESPACE_RESOURCE"] || 'app',
   }
+  c.version = ENV['HEROKU_SLUG_COMMIT']
 
   # Integrations
 

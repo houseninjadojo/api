@@ -17,7 +17,7 @@ class Hubspot::CreateContactJob < ApplicationJob
       email:     user.email,
       firstname: user.first_name,
       lastname:  user.last_name,
-      phone:     user.phone,
+      phone:     user.phone_number,
       zip:       user.requested_zipcode,
     }
   end
