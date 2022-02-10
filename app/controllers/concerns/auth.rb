@@ -13,7 +13,9 @@ module Auth
 
   def current_user
     return nil unless current_token.present?
-    @current_user ||= User.find_by(id: current_token.user_id)
+    user = User.find_by(id: current_token.user_id)
+    Sentry.set_user(email: user.email)
+    @current_user ||= user
   end
 
   def authenticate_request!
