@@ -9,7 +9,7 @@ RSpec.describe "subscriptions#show", type: :request do
 
   describe 'basic fetch' do
     let!(:user) { create(:user) }
-    let!(:subscription) { create(:subscription) }
+    let!(:subscription) { create(:subscription, user: user) }
 
     before {
       allow_any_instance_of(Auth).to receive(:current_user).and_return(user)

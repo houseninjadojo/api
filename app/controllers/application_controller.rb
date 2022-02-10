@@ -19,6 +19,11 @@ class ApplicationController < ActionController::API
     title: I18n.t('exceptions.actioncontroller.unauthorized.title'),
     message: -> (e) { I18n.t('exceptions.actioncontroller.unauthorized.detail') }
 
+  register_exception ActionPolicy::Unauthorized,
+    status: 401,
+    title: I18n.t('exceptions.actioncontroller.unauthorized.title'),
+    message: -> (e) { I18n.t('exceptions.actioncontroller.unauthorized.detail') }
+
   def show_detailed_exceptions?
     # ['development', 'sandbox'].include?(Rails.env)
     false

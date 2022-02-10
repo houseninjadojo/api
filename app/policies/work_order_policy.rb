@@ -6,7 +6,8 @@ class WorkOrderPolicy < ApplicationPolicy
   end
 
   def show?
-    record.property.present? && record.property.user_id
+    deny! if record.nil? || user.nil? || record.property.nil?
+    record.property.user_id == user.id
   end
 
   def create?
@@ -14,7 +15,8 @@ class WorkOrderPolicy < ApplicationPolicy
   end
 
   def update?
-    record.property.present? && record.property.user_id == user.id
+    deny! if record.nil? || user.nil? || record.property.nil?
+    record.property.user_id == user.id
   end
 
   def destroy?
@@ -24,6 +26,6 @@ class WorkOrderPolicy < ApplicationPolicy
   # Scoping
   # See https://actionpolicy.evilmartians.io/#/scoping
   relation_scope do |relation|
-    relation.includes(:property).where(property: { user_id: user.id })
+    relation.includes(:property).where(property: { user_id: user.try(:id) })
   end
 end

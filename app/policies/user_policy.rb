@@ -6,7 +6,8 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    user.id == record.id
+    deny! if record.nil? || user.nil?
+    record.id == user.id
   end
 
   def create?
@@ -14,10 +15,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
+    deny! if record.nil?
     if user.present?
-      user.id == record.id
+      record.id == user.id
     else
-      record.hubspot_id.nil? && record.auth_zero_user_created.nil? && record.stripe_customer_id.nil?
+      record.try(:hubspot_id).nil? && record.try(:auth_zero_user_created).nil? && record.try(:stripe_customer_id).nil?
     end
   end
 
@@ -29,6 +31,6 @@ class UserPolicy < ApplicationPolicy
   # See https://actionpolicy.evilmartians.io/#/scoping
   relation_scope do |relation|
     # next relation if user.admin?
-    relation.where(id: user.id)
+    relation.where(id: user.try(:id))
   end
 end

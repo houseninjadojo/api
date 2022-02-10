@@ -6,7 +6,8 @@ class DevicePolicy < ApplicationPolicy
   end
 
   def show?
-    user.id == record.user_id
+    deny! if record.nil? || user.nil?
+    record.user_id == user.id
   end
 
   def create?
@@ -14,7 +15,8 @@ class DevicePolicy < ApplicationPolicy
   end
 
   def update?
-    user.id == record.user_id
+    deny! if record.nil? || user.nil?
+    record.user_id == user.id
   end
 
   def destroy?

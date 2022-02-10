@@ -4,7 +4,8 @@ class PaymentPolicy < ApplicationPolicy
   end
 
   def show?
-    record.user_id = user.id
+    deny! if record.nil? || user.nil?
+    record.user_id == user.id
   end
 
   def create?
@@ -24,7 +25,7 @@ class PaymentPolicy < ApplicationPolicy
   relation_scope do |relation|
     relation
       .includes(:payment_method)
-      .where(payment_method: { user_id: user.id })
-      .or(relation.where(user_id: user.id))
+      .where(payment_method: { user_id: user.try(:id) })
+      .or(relation.where(user_id: user.try(:id)))
   end
 end

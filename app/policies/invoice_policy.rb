@@ -6,6 +6,7 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def show?
+    deny! if record.nil? || user.nil?
     record.user_id == user.id
   end
 
@@ -14,6 +15,7 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def update?
+    deny! if record.nil? || user.nil?
     record.user_id == user.id
   end
 
@@ -28,7 +30,7 @@ class InvoicePolicy < ApplicationPolicy
     # invoice => payment => payment_method.user_id = ? OR invoice.user_id = ?
     relation
       .includes(payment: [:payment_method])
-      .where(payment: { payment_methods: { user_id: user.id } })
-      .or(relation.where(user_id: user.id))
+      .where(payment: { payment_methods: { user_id: user.try(:id) } })
+      .or(relation.where(user_id: user.try(:id)))
   end
 end
