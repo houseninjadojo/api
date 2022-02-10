@@ -36,6 +36,8 @@ class DeviceResource < ApplicationResource
 
   belongs_to :user
 
+  attribute :user_id, :uuid, only: [:filterable]
+
   attribute :id,                :uuid
   attribute :apns_device_token, :string, except: [:sortable, :readable]
   attribute :fcm_token,         :string, except: [:sortable, :readable]

@@ -35,9 +35,11 @@ class PaymentMethodResource < ApplicationResource
   belongs_to :user
   has_one    :subscription
 
+  attribute :user_id, :uuid, only: [:filterable]
+
   attribute :id, :uuid
 
-  attribute :stripe_token, :string, except: [:sortable]
+  # attribute :stripe_token, :string, except: [:sortable]
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]

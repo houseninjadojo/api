@@ -46,7 +46,7 @@ class PropertyResource < ApplicationResource
 
   attribute :id, :uuid
 
-  attribute :user_id, :uuid, only: [:filterable]
+  attribute :user_id,         :uuid, only: [:filterable]
   attribute :service_area_id, :uuid, only: [:filterable]
 
   attribute :street_address1, :string

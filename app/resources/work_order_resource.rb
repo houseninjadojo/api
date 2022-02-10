@@ -24,6 +24,8 @@ class WorkOrderResource < ApplicationResource
 
   belongs_to :property
 
+  attribute :property_id, :uuid, only: [:filterable]
+
   attribute :id, :uuid
 
   attribute :description,    :string, except: [:sortable]
