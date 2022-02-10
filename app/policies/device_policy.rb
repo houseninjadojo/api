@@ -15,6 +15,8 @@ class DevicePolicy < ApplicationPolicy
   end
 
   def update?
+    puts "\n\n\n\nDEVICE UPDATE POLICY - RECORD: #{record}"
+    puts "DEVICE UPDATE POLICY - RECORD USERID: #{record.user_id}"
     deny! if record.nil? || user.nil?
     record.user_id == user.id
   end
