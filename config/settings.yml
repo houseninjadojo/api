@@ -10,12 +10,14 @@ shared:
   email:
     default: noreply@houseninja.co   # default email
     reply_to: hello@houseninja.co    # reply to email
+  protocol: 'https'
 
 development:
   domains:
     <<: *domains
     app: localhost:3000
     assets: localhost:3000
+  protocol: 'http'
 
 test:
   domains:
