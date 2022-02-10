@@ -1,5 +1,6 @@
 class DevicePolicy < ApplicationPolicy
-  authorize :user, allow_nil: true
+  authorize :user,   allow_nil: true
+  authorize :params, allow_nil: true
 
   def index?
     true
@@ -15,9 +16,10 @@ class DevicePolicy < ApplicationPolicy
   end
 
   def update?
-    puts "DEVICE PAYLOAD RELATIONSHIPS: #{record}"
+    user_id = params.dig(:data, :relationships, :user, :id)
+    puts "DEVICE PARAMS: #{params}"
     deny! if record.nil? || user.nil?
-    record.user_id == user.id
+    user_id == user.id
   end
 
   def destroy?
