@@ -5,7 +5,8 @@ class ApplicationController < ActionController::API
   include Auth
   include Graphiti::Rails::Responders
 
-  authorize :user, through: :current_user
+  authorize :user,   through: :current_user
+  authorize :params, through: :params
 
   def context
     {

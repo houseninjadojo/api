@@ -10,6 +10,8 @@ class ApplicationPolicy < ActionPolicy::Base
   scope_matcher :resource, ->(target) { target < Graphiti::Resource }
   scope_matcher :query, Graphiti::Query
 
+  authorize :params, optional: true
+
   private
 
   # Define shared methods useful for most policies.

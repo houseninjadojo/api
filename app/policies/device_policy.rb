@@ -1,6 +1,5 @@
 class DevicePolicy < ApplicationPolicy
-  authorize :user,   allow_nil: true
-  authorize :params, allow_nil: true
+  authorize :user, allow_nil: true
 
   def index?
     true
