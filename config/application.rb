@@ -64,6 +64,7 @@ module HouseNinja
     config.lograge.enabled = ['production', 'sandbox'].include?(Rails.env)
     config.lograge.base_controller_class = 'ActionController::API'
     config.lograge.formatter = Lograge::Formatters::Json.new
+    config.lograge.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new($stdout))
     config.lograge.custom_options = lambda do |event|
       # Retrieves trace information for current thread
       correlation = Datadog.tracer.active_correlation
