@@ -33,7 +33,7 @@ class DevicesController < ApplicationController
 
   def update
     device = DeviceResource.find(params)
-    authorize! device.data
+    authorize! device.payload.relationships
 
     if device.update_attributes
       render jsonapi: device
