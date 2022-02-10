@@ -16,7 +16,8 @@ class WorkOrderPolicy < ApplicationPolicy
 
   def update?
     deny! if record.nil? || user.nil? || record.property.nil?
-    record.property.user_id == user.id
+    user_id = params.dig(:data, :relationships, :user, :data, :id)
+    record.user_id == user.id || user_id == user.id
   end
 
   def destroy?

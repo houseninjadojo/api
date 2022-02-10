@@ -15,10 +15,9 @@ class DevicePolicy < ApplicationPolicy
   end
 
   def update?
-    user_id = params.dig(:data, :relationships, :user, :id)
-    puts "DEVICE PARAMS: #{params}"
     deny! if record.nil? || user.nil?
-    user_id == user.id
+    user_id = params.dig(:data, :relationships, :user, :data, :id)
+    record.user_id == user.id || user_id == user.id
   end
 
   def destroy?
