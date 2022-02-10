@@ -4,6 +4,7 @@
 Rails.application.routes.draw do
   # Mounts
   mount OkComputer::Engine, at: '/health'           # Health Checks
+  # mount VandalUi::Engine,   at: '/vandal' if Rails.env.development?
 
   # webhooks
   post '/webhooks/hubspot', to: 'webhooks#hubspot'
