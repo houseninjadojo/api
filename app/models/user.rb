@@ -25,6 +25,8 @@
 #  index_users_on_stripe_customer_id  (stripe_customer_id) UNIQUE
 #
 class User < ApplicationRecord
+  encrypts :hubspot_contact_object
+
   # Callbacks
   after_create_commit :create_stripe_customer,
     unless: :should_not_create_stripe_customer?
