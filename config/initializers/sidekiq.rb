@@ -1,11 +1,13 @@
-redis_config = { url: ENV['REDIS_URL'] }
-
-# if ['production', 'sandbox'].include?(Rails.env)
-#   redis_config = {
-#     url: ENV['REDIS_URL'],
-
-#   }
-# end
+if Rails.env.production?
+  redis_config = {
+    url: ENV['REDIS_URL'],
+    verify_mode: OpenSSL::SSL::VERIFY_NONE,
+  }
+else
+  redis_config = {
+    url: ENV['REDIS_URL'],
+  }
+end
 
 Sidekiq.configure_server do |config|
   config.redis = redis_config
