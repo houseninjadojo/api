@@ -1,7 +1,9 @@
 if Rails.env.production?
   redis_config = {
     url: ENV['REDIS_URL'],
-    verify_mode: OpenSSL::SSL::VERIFY_NONE,
+    ssl_params: {
+      verify_mode: OpenSSL::SSL::VERIFY_NONE
+    },
   }
 else
   redis_config = {

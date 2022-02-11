@@ -88,5 +88,10 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # redis
-  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'], verify_mode: OpenSSL::SSL::VERIFY_NONE }
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_URL'],
+    ssl_params: {
+      verify_mode: OpenSSL::SSL::VERIFY_NONE,
+    },
+  }
 end
