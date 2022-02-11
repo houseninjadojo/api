@@ -49,4 +49,15 @@ class UserResource < ApplicationResource
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
+
+  attribute :intercom_hash, :string do
+    unless @object.devices.empty?
+      platform = @object.devices.order(created_at: :desc).first.platform
+      OpenSSL::HMAC.hexdigest(
+        'sha256', # hash function
+        Rails.secrets.dig(:intercom, :identity_verification_secret, platform.to_sym), # secret key (keep safe!)
+        @object.id.to_s # user's id
+      )
+    end
+  end
 end

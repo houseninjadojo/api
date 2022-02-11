@@ -5,7 +5,7 @@ Sentry.init do |config|
   config.environment = ENV['NAMESPACE_ENV']
   config.release     = ENV['HEROKU_SLUG_COMMIT']
 
-  config.enabled_environments = %w[production sandbox]
+  config.enabled_environments = %w(production sandbox)
 
   # Set tracesSampleRate to 1.0 to capture 100%
   # of transactions for performance monitoring.
