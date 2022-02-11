@@ -20,7 +20,11 @@ Datadog.configure do |c|
   # Integrations
 
   # c.use :active_job,    service_name: 'worker'
-  # c.use :active_record, service_name: 'database'
+
+  c.use :active_record,
+    orm_service_name: 'orm',     # Service name used for the mapping portion of query results to ActiveRecord objects. Inherits service name from parent by default.
+    service_name:     'database' # Service name used for database portion of active_record instrumentation.
+
   # c.use :aws,           service_name: 'aws'
 
   c.use :http, describes: /api\.stripe\.com/ do |http|
