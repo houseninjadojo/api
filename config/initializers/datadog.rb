@@ -55,3 +55,9 @@ Datadog.configure do |c|
     service_name: 'sidekiq',
     tag_args:     true
 end
+
+Datadog::Pipeline.before_flush(
+  # Remove spans that are trafficked to sentry
+  Datadog::Pipeline::SpanFilter.new { |span| span.get_tag('network.destination.ip') == 'o1061437.ingest.sentry.io' },
+  Datadog::Pipeline::SpanFilter.new { |span| span.get_tag('peer.sevice') == 'o1061437.ingest.sentry.io' }
+)
