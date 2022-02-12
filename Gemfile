@@ -5,6 +5,7 @@ ruby "3.0.3"
 
 gem 'auth0'
 gem 'action_policy',      '~> 0.6.0'
+gem 'aws-sdk-s3',                     require: false
 gem 'bootsnap',           '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
 gem 'ddtrace',                        require: 'ddtrace/auto_instrument'  # Datadog Metrics Instrumentation
 gem 'dotenv-rails',                   require: 'dotenv/rails-now'         # ENV file management
