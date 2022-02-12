@@ -62,6 +62,10 @@ end
 
 Datadog::Pipeline.before_flush(
   # Remove spans that are trafficked to sentry
-  Datadog::Pipeline::SpanFilter.new { |span| span.get_tag('network.destination.ip') == 'o1061437.ingest.sentry.io' },
-  Datadog::Pipeline::SpanFilter.new { |span| span.get_tag('peer.sevice') == 'o1061437.ingest.sentry.io' }
+  Datadog::Pipeline::SpanFilter.new { |span| span.get_tag('sevice') =~ /\.sentry\.io/ },
+  Datadog::Pipeline::SpanFilter.new { |span| span.service =~ /\.sentry\.io/ }
 )
+
+Datadog::Pipeline.before_flush do |trace|
+  trace.delete_if { |span| span.service =~ /\.sentry\.io/ }
+end
