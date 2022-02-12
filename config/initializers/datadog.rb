@@ -4,7 +4,18 @@ Datadog.configure do |c|
 
   # Enable in production only
   c.tracer.enabled = ['production', 'sandbox'].include?(Rails.env)
-  # c.tracer.enabled = true
+
+  c.tracer sampler: Datadog::PrioritySampler.new(
+    post_sampler: Datadog::Sampling::RuleSampler.new(
+      [
+        Datadog::Sampling::SimpleRule.new(service: 'o1061437.ingest.sentry.io', sample_rate: 0.0),
+        Datadog::Sampling::SimpleRule.new(name: 'sidekiq.job_fetch', sample_rate: 0.05),
+        Datadog::Sampling::SimpleRule.new(name: 'sidekiq.heartbeat', sample_rate: 0.05),
+        Datadog::Sampling::SimpleRule.new(name: 'sidekiq.job_fetch', sample_rate: 0.05),
+        Datadog::Sampling::SimpleRule.new(name: 'BRPOP', sample_rate: 0.05)
+      ]
+    )
+  )
 
   # Misc
   # c.partial_flush.enabled = true
