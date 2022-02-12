@@ -11,8 +11,10 @@ Datadog.configure do |c|
         Datadog::Sampling::SimpleRule.new(service: 'o1061437.ingest.sentry.io', sample_rate: 0.0),
         Datadog::Sampling::SimpleRule.new(name: 'sidekiq.job_fetch', sample_rate: 0.05),
         Datadog::Sampling::SimpleRule.new(name: 'sidekiq.heartbeat', sample_rate: 0.05),
-        Datadog::Sampling::SimpleRule.new(name: 'sidekiq.job_fetch', sample_rate: 0.05),
-        Datadog::Sampling::SimpleRule.new(name: 'BRPOP', sample_rate: 0.05)
+        Datadog::Sampling::SimpleRule.new(name: 'sidekiq.scheduled_push', sample_rate: 0.05),
+        Datadog::Sampling::SimpleRule.new(name: 'BRPOP', sample_rate: 0.05),
+        Datadog::Sampling::SimpleRule.new(name: 'SCARD', sample_rate: 0.05),
+        Datadog::Sampling::SimpleRule.new(name: 'EVALSHA', sample_rate: 0.05),
       ]
     )
   )
