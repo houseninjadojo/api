@@ -33,7 +33,6 @@ class DocumentResource < ApplicationResource
 
   attribute :content_type, :string, only: [:readable]
   attribute :filename,     :string, only: [:readable]
-  attribute :key,          :string, only: [:readable]
   attribute :url,          :string, only: [:readable]
 
   attribute :created_at, :datetime, except: [:writeable]

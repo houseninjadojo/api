@@ -42,10 +42,6 @@ class Document < ApplicationRecord
     asset.present? && asset.blob.update!(filename: val)
   end
 
-  def key
-    asset.try(:key)
-  end
-
   def url
     asset.try(:url)
   end
