@@ -35,7 +35,7 @@ class Document < ApplicationRecord
   end
 
   def filename
-    asset.try(:filename)
+    asset.try(:filename).try(:to_s)
   end
 
   def filename=(val)

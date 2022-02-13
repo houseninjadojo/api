@@ -1,5 +1,6 @@
 domains: &domains
   app: api.houseninja.co             # default domain
+  documents: documents.houseninja.co
   landing: www.houseninja.co         # default www domain
   localhost: localhost
 
@@ -17,6 +18,7 @@ development:
     <<: *domains
     app: localhost:3000
     assets: localhost:3000
+    documents: localhost:3000
   protocol: 'http'
 
 test:
@@ -24,13 +26,16 @@ test:
     <<: *domains
     app: localhost:3000
     assets: localhost:3000
+    documents: localhost:3000
 
 sandbox:
   domains:
     <<: *domains
     app: sandbox.api.houseninja.co    # staging app domain
+    documents: sandbox.documents.houseninja.co
 
 production:
   domains:
     <<: *domains
     app: api.houseninja.co            # production app domain
+    documents: documents.houseninja.co
