@@ -28,6 +28,7 @@ class Invoice < ApplicationRecord
   # callbacks
 
   # associations
+  has_one    :document
   has_one    :payment
   belongs_to :promo_code,   required: false
   belongs_to :subscription, required: false

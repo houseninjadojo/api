@@ -54,6 +54,7 @@ class User < ApplicationRecord
 
   # Associations
   has_many :devices
+  has_many :documents
   has_many :invoices
   has_many :payment_methods
   has_many :properties

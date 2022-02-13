@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_12_011814) do
+ActiveRecord::Schema.define(version: 2022_02_13_023552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -74,6 +74,17 @@ ActiveRecord::Schema.define(version: 2022_02_12_011814) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["device_id"], name: "index_devices_on_device_id", unique: true
     t.index ["user_id"], name: "index_devices_on_user_id"
+  end
+
+  create_table "documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "invoice_id"
+    t.uuid "property_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["invoice_id"], name: "index_documents_on_invoice_id"
+    t.index ["property_id"], name: "index_documents_on_property_id"
+    t.index ["user_id"], name: "index_documents_on_user_id"
   end
 
   create_table "home_care_tips", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -277,6 +288,9 @@ ActiveRecord::Schema.define(version: 2022_02_12_011814) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "devices", "users"
+  add_foreign_key "documents", "invoices"
+  add_foreign_key "documents", "properties"
+  add_foreign_key "documents", "users"
   add_foreign_key "invoices", "promo_codes"
   add_foreign_key "invoices", "subscriptions"
   add_foreign_key "invoices", "users"

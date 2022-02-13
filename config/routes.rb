@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   defaults format: :jsonapi do
     resources :common_requests,    path: 'common-requests',    only: [:index, :show]
     resources :devices,            path: 'devices',            only: [:index, :show, :create, :update]
+    resources :documents,          path: 'documents',          only: [:index, :show]
     resources :invoices,           path: 'invoices',           only: [:index, :show]
     resources :home_care_tips,     path: 'home-care-tips',     only: [:index, :show]
     resources :payment_methods,    path: 'payment-methods',    only: [:index, :show, :create, :update, :destroy]
