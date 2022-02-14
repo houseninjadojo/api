@@ -57,6 +57,7 @@ class User < ApplicationRecord
   has_many :documents
   has_many :invoices
   has_many :payment_methods
+  has_many :payments
   has_many :properties
   has_one  :subscription
 
