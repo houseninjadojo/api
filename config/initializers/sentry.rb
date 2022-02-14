@@ -1,6 +1,10 @@
 Sentry.init do |config|
   config.dsn = Rails.secrets.dig(:sentry, :dsn)
-  config.breadcrumbs_logger = [:monotonic_active_support_logger, :http_logger, :http_logger]
+  config.breadcrumbs_logger = [
+    :monotonic_active_support_logger,
+    :http_logger,
+    :redis_logger
+  ]
 
   config.environment = ENV['NAMESPACE_ENV']
   config.release     = ENV['HEROKU_SLUG_COMMIT']
