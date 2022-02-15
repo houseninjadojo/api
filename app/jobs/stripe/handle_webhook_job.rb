@@ -67,6 +67,14 @@ class Stripe::HandleWebhookJob < ApplicationJob
         stripe_object: @payload,
         user: user
       )
+    # `customer.subscription.*`
+    when !!event.match(/^customer\.subscription\.[a-z_]+$/)
+      subscription = Subscription.find_by(stripe_subscription_id: stripe_id)
+      if subscription.present?
+        subscription.update(stripe_object: @payload)
+      else
+        nil
+      end
     end
   end
 
