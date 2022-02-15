@@ -102,6 +102,6 @@ class Stripe::HandleWebhookJob < ApplicationJob
 
   def split_name
     return [] if object["name"].blank?
-    object["name"].split[" "]
+    object["name"].split(" ")
   end
 end
