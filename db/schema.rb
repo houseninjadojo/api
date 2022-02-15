@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_13_023552) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_02_13_023552) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -21,7 +20,7 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "record_type", null: false
     t.uuid "record_id", null: false
     t.uuid "blob_id", null: false
-    t.datetime "created_at", precision: 6, null: false
+    t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -34,7 +33,7 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
-    t.datetime "created_at", precision: 6, null: false
+    t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -48,8 +47,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "caption"
     t.string "img_uri"
     t.string "default_hn_chat_message"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "devices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -70,8 +69,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "real_disk_free"
     t.string "real_disk_total"
     t.string "web_view_version"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["device_id"], name: "index_devices_on_device_id", unique: true
     t.index ["user_id"], name: "index_devices_on_user_id"
   end
@@ -80,8 +79,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.uuid "user_id"
     t.uuid "invoice_id"
     t.uuid "property_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["invoice_id"], name: "index_documents_on_invoice_id"
     t.index ["property_id"], name: "index_documents_on_property_id"
     t.index ["user_id"], name: "index_documents_on_user_id"
@@ -92,8 +91,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "description"
     t.boolean "show_button", default: true, null: false
     t.string "default_hn_chat_message", default: ""
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["label"], name: "index_home_care_tips_on_label"
   end
 
@@ -104,12 +103,12 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "description"
     t.string "status"
     t.string "total"
-    t.datetime "period_start", precision: 6
-    t.datetime "period_end", precision: 6
+    t.datetime "period_start"
+    t.datetime "period_end"
     t.string "stripe_id"
     t.jsonb "stripe_object"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["promo_code_id"], name: "index_invoices_on_promo_code_id"
     t.index ["status"], name: "index_invoices_on_status"
     t.index ["stripe_id"], name: "index_invoices_on_stripe_id", unique: true
@@ -128,8 +127,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "exp_year"
     t.string "card_number"
     t.string "zipcode"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "last_four"
     t.index ["stripe_token"], name: "index_payment_methods_on_stripe_token", unique: true
     t.index ["user_id"], name: "index_payment_methods_on_user_id"
@@ -147,8 +146,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.boolean "paid", default: false, null: false
     t.string "stripe_id"
     t.jsonb "stripe_object"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["invoice_id"], name: "index_payments_on_invoice_id"
     t.index ["payment_method_id"], name: "index_payments_on_payment_method_id"
     t.index ["status"], name: "index_payments_on_status"
@@ -163,8 +162,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "percent_off"
     t.string "stripe_id"
     t.jsonb "stripe_object"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["code"], name: "index_promo_codes_on_code", unique: true
     t.index ["stripe_id"], name: "index_promo_codes_on_stripe_id", unique: true
   end
@@ -179,8 +178,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.float "bedrooms"
     t.float "bathrooms"
     t.float "pools"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.uuid "service_area_id"
     t.boolean "default"
     t.boolean "selected"
@@ -201,8 +200,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
   create_table "service_areas", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "zipcodes", default: [], null: false, array: true
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "calendar_url"
     t.index ["name"], name: "index_service_areas_on_name"
     t.index ["zipcodes"], name: "index_service_areas_on_zipcodes", using: :gin
@@ -214,8 +213,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "price", null: false
     t.string "interval", null: false
     t.string "perk", default: ""
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "stripe_price_id"
     t.index ["interval"], name: "index_subscription_plans_on_interval"
     t.index ["slug"], name: "index_subscription_plans_on_slug"
@@ -228,13 +227,13 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.uuid "user_id", null: false
     t.string "stripe_subscription_id"
     t.string "status"
-    t.datetime "canceled_at", precision: 6
-    t.datetime "trial_start", precision: 6
-    t.datetime "trial_end", precision: 6
-    t.datetime "current_period_start", precision: 6
-    t.datetime "current_period_end", precision: 6
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "canceled_at"
+    t.datetime "trial_start"
+    t.datetime "trial_end"
+    t.datetime "current_period_start"
+    t.datetime "current_period_end"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["payment_method_id"], name: "index_subscriptions_on_payment_method_id"
     t.index ["stripe_subscription_id"], name: "index_subscriptions_on_stripe_subscription_id"
     t.index ["subscription_plan_id"], name: "index_subscriptions_on_subscription_plan_id"
@@ -247,8 +246,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "email", default: "", null: false, comment: "Email Address"
     t.string "phone_number", null: false, comment: "Phone Number (+15555555555)"
     t.string "gender", default: "other", null: false, comment: "Gender"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "requested_zipcode"
     t.boolean "auth_zero_user_created", default: false
     t.string "stripe_customer_id"
@@ -266,9 +265,9 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.bigint "webhookable_id"
     t.string "service", default: "", null: false
     t.json "payload"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "processed_at", precision: 6
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "processed_at", precision: nil
     t.index ["service"], name: "index_webhook_events_on_service"
     t.index ["webhookable_type", "webhookable_id"], name: "index_webhook_events_on_webhookable"
   end
@@ -280,8 +279,8 @@ ActiveRecord::Schema.define(version: 2022_02_13_023552) do
     t.string "vendor"
     t.string "scheduled_date"
     t.string "scheduled_time"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["property_id"], name: "index_work_orders_on_property_id"
   end
 
