@@ -47,6 +47,7 @@ jobs:
       PGPASSWORD: postgres
       PGUSER: postgres
       REDIS_URL: redis://localhost:6379/0
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
 
     steps:
       - uses: actions/checkout@v2
