@@ -80,6 +80,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
       promo_code = PromoCode.find_or_create_by(stripe_id: stripe_id)
       promo_code.update(
         active: object["active"],
+        amount_off: object.dig("coupon", "amount_off"),
         code: object["code"],
         name: object.dig("coupon", "name"),
         percent_off: object.dig("coupon", "percent_off"),

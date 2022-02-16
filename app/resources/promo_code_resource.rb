@@ -11,6 +11,7 @@
 #  stripe_object :jsonb
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  amount_off    :string
 #
 # Indexes
 #
@@ -32,6 +33,7 @@ class PromoCodeResource < ApplicationResource
   attribute :code, :string, except: [:writeable]
 
   attribute :name,        :string, except: [:writeable]
+  attribute :amount_off,  :string, except: [:writeable]
   attribute :percent_off, :string, except: [:writeable]
 
   attribute :active, :boolean, except: [:writeable]
