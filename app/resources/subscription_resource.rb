@@ -15,10 +15,13 @@
 #  current_period_end     :datetime
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  stripe_object          :jsonb
+#  promo_code_id          :uuid
 #
 # Indexes
 #
 #  index_subscriptions_on_payment_method_id       (payment_method_id)
+#  index_subscriptions_on_promo_code_id           (promo_code_id)
 #  index_subscriptions_on_stripe_subscription_id  (stripe_subscription_id)
 #  index_subscriptions_on_subscription_plan_id    (subscription_plan_id)
 #  index_subscriptions_on_user_id                 (user_id)
@@ -29,6 +32,7 @@ class SubscriptionResource < ApplicationResource
 
   primary_endpoint 'subscriptions', [:index, :show, :create]
 
+  belongs_to :promo_code
   belongs_to :payment_method
   belongs_to :subscription_plan
   belongs_to :user

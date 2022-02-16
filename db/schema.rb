@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_15_055739) do
+ActiveRecord::Schema[7.0].define(version: 2022_02_16_000406) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -235,7 +235,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_15_055739) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "stripe_object"
+    t.uuid "promo_code_id"
     t.index ["payment_method_id"], name: "index_subscriptions_on_payment_method_id"
+    t.index ["promo_code_id"], name: "index_subscriptions_on_promo_code_id"
     t.index ["stripe_subscription_id"], name: "index_subscriptions_on_stripe_subscription_id"
     t.index ["subscription_plan_id"], name: "index_subscriptions_on_subscription_plan_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
@@ -300,6 +302,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_15_055739) do
   add_foreign_key "payments", "users"
   add_foreign_key "properties", "users"
   add_foreign_key "subscriptions", "payment_methods"
+  add_foreign_key "subscriptions", "promo_codes"
   add_foreign_key "subscriptions", "subscription_plans"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "work_orders", "properties"

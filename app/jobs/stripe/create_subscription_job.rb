@@ -25,6 +25,7 @@ class Stripe::CreateSubscriptionJob < ApplicationJob
       items: [
         { price: price_id(subscription) },
       ],
+      promotion_code: promo_code(subscription),
     }
   end
 
@@ -77,6 +78,10 @@ class Stripe::CreateSubscriptionJob < ApplicationJob
 
   def payment_method_token(subscription)
     subscription.payment_method.try(:stripe_token)
+  end
+
+  def promo_code(subscription)
+    subscription.promo_code.try(:stripe_id)
   end
 
   def epoch_to_datetime(epoch)

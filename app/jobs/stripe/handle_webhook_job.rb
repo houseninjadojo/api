@@ -75,6 +75,16 @@ class Stripe::HandleWebhookJob < ApplicationJob
       else
         nil
       end
+    # `promotion_code.*`
+    when !!event.match(/^promotion_code\.[a-z]+(?![.a-z]).*$/)
+      promo_code = PromoCode.find_or_create_by(stripe_id: stripe_id)
+      promo_code.update(
+        active: object["active"],
+        code: object["code"],
+        name: object.dig("coupon", "name"),
+        percent_off: object.dig("coupon", "percent_off"),
+        stripe_object: @payload
+      )
     end
   end
 
