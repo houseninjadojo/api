@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_16_002525) do
+ActiveRecord::Schema[7.0].define(version: 2022_02_16_003349) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -165,7 +165,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_16_002525) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "amount_off"
+    t.string "coupon_id"
     t.index ["code"], name: "index_promo_codes_on_code", unique: true
+    t.index ["coupon_id"], name: "index_promo_codes_on_coupon_id", unique: true
     t.index ["stripe_id"], name: "index_promo_codes_on_stripe_id", unique: true
   end
 

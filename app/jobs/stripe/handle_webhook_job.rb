@@ -82,6 +82,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
         active: object["active"],
         amount_off: object.dig("coupon", "amount_off"),
         code: object["code"],
+        coupon_id: object.dig("coupon", "id"),
         name: object.dig("coupon", "name"),
         percent_off: object.dig("coupon", "percent_off"),
         stripe_object: @payload

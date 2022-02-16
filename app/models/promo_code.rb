@@ -12,10 +12,12 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  amount_off    :string
+#  coupon_id     :string
 #
 # Indexes
 #
 #  index_promo_codes_on_code       (code) UNIQUE
+#  index_promo_codes_on_coupon_id  (coupon_id) UNIQUE
 #  index_promo_codes_on_stripe_id  (stripe_id) UNIQUE
 #
 class PromoCode < ApplicationRecord
@@ -27,5 +29,7 @@ class PromoCode < ApplicationRecord
   has_many :users
 
   # validations
+  validates :code,      uniqueness: true, allow_nil: true
+  validates :coupon_id, uniqueness: true, allow_nil: true
   validates :stripe_id, uniqueness: true, allow_nil: true
 end
