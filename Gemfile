@@ -30,7 +30,7 @@ gem 'sentry-ruby'
 gem 'sentry-rails'
 gem 'sentry-sidekiq'
 gem 'sidekiq',            '~> 6.4'
-gem 'stripe',             '~> 5.43.0'
+gem 'stripe',             '~> 5.44.0'
 gem 'strong_migrations',  '~> 0.8.0'
 gem 'valid_email'
 
