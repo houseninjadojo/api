@@ -52,7 +52,7 @@ class UserResource < ApplicationResource
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
 
-  attribute :intercom_hash, :string, only: [:readable] do
+  attribute :intercom_hash, :string, only: [:readable, :writeable] do
     unless @object.devices.empty?
       platform = @object.devices.order(created_at: :desc).first.platform
       OpenSSL::HMAC.hexdigest(
