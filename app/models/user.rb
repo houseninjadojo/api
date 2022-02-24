@@ -106,6 +106,18 @@ class User < ApplicationRecord
     "auth0|#{self.id}"
   end
 
+  # intercom hash
+  def intercom_hash
+    unless self.devices.empty?
+      platform = self.devices.order(created_at: :desc).first.platform
+      OpenSSL::HMAC.hexdigest(
+        'sha256', # hash function
+        Rails.secrets.dig(:intercom, :identity_verification_secret, platform.to_sym), # secret key (keep safe!)
+        self.id.to_s # user's id
+      )
+    end
+  end
+
   # no-op
   # needs to exist, otherwise we get a 400 error
   def intercom_hash=(val)
