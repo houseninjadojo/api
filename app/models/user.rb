@@ -106,6 +106,11 @@ class User < ApplicationRecord
     "auth0|#{self.id}"
   end
 
+  # no-op
+  # needs to exist, otherwise we get a 400 error
+  def intercom_hash=(val)
+  end
+
   # Callbacks
 
   def create_auth_user
