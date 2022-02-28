@@ -9,6 +9,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
     case
     when event == "customer.updated"
       user = User.find_by(stripe_customer_id: stripe_id)
+      return if user.nil?
       user.update_from_service("stripe", user_attributes)
       webhook_job.update(processed_at: Time.now)
     when event == "customer.created"
