@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_16_003349) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_02_025838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -259,10 +259,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_16_003349) do
     t.string "stripe_customer_id"
     t.string "hubspot_id"
     t.jsonb "hubspot_contact_object"
+    t.uuid "promo_code_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["gender"], name: "index_users_on_gender"
     t.index ["hubspot_id"], name: "index_users_on_hubspot_id", unique: true
     t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
+    t.index ["promo_code_id"], name: "index_users_on_promo_code_id"
     t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id", unique: true
   end
 
