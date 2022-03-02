@@ -1,4 +1,4 @@
-if Rails.env.production?
+if Rails.env.production? || Rails.env.sandbox?
   redis_config = {
     url: ENV['REDIS_URL'],
     ssl_params: {
