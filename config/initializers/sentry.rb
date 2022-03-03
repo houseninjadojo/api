@@ -15,8 +15,12 @@ Sentry.init do |config|
   # of transactions for performance monitoring.
   # We recommend adjusting this value in production
   config.traces_sample_rate = 1.0
-  # or
-  # config.traces_sampler = lambda do |context|
-  #   true
-  # end
+
+  # strip unecessary attributes from breadcrumbs
+  config.before_breadcrumb = lambda do |breadcrumb, _|
+    if breadcrumb.data.include?(:datadog_span)
+      breadcrumb.data.delete(:datadog_span)
+    end
+    breadcrumb
+  end
 end
