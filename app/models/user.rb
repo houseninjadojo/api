@@ -115,7 +115,7 @@ class User < ApplicationRecord
       platform = self.devices.order(created_at: :desc).first.platform
       OpenSSL::HMAC.hexdigest(
         'sha256', # hash function
-        Rails.secrets.dig(:intercom, :identity_verification_secret, platform.to_sym), # secret key (keep safe!)
+        Rails.secrets.dig(:intercom, :identity_verification_secret, :ios), # secret key (keep safe!)
         self.id.to_s # user's id
       )
     end
