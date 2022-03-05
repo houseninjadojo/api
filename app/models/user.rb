@@ -111,8 +111,7 @@ class User < ApplicationRecord
 
   # intercom hash
   def intercom_hash
-    unless self.devices.empty?
-      platform = self.devices.order(created_at: :desc).first.platform
+    Rails.cache.fetch("user:#{self.id}:intercom_hash", expires_in: 1.day) do
       OpenSSL::HMAC.hexdigest(
         'sha256', # hash function
         Rails.secrets.dig(:intercom, :identity_verification_secret, :ios), # secret key (keep safe!)
