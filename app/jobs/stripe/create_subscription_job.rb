@@ -15,6 +15,7 @@ class Stripe::CreateSubscriptionJob < ApplicationJob
 
     response_params = response_params(response)
     subscription.update!(response_params)
+    Hubspot::SetContactCurrentJob.perform_later(subscription.user)
   end
 
   def params(subscription)
