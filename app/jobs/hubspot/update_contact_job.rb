@@ -14,6 +14,7 @@ class Hubspot::UpdateContactJob < ApplicationJob
       firstname: user.first_name,
       lastname:  user.last_name,
       phone:     user.phone_number,
+      zip:       user.requested_zipcode,
     }
   end
 end

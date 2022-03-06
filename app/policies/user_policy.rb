@@ -15,6 +15,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
+    allow! if is_setting_password?
     deny! if record.nil?
     if user.present?
       record.id == user.id
@@ -32,5 +33,11 @@ class UserPolicy < ApplicationPolicy
   relation_scope do |relation|
     # next relation if user.admin?
     relation.where(id: user.try(:id))
+  end
+
+  private
+
+  def is_setting_password?
+    params.dig(:data, :attributes, :password).present?
   end
 end
