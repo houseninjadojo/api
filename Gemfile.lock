@@ -130,6 +130,9 @@ GEM
     concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
     crass (1.0.6)
+    credit_card_validations (3.3.0)
+      activemodel (>= 3)
+      activesupport (>= 3)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
@@ -413,6 +416,7 @@ DEPENDENCIES
   auth0
   aws-sdk-s3
   bootsnap (>= 1.9.3)
+  credit_card_validations
   database_cleaner
   ddtrace
   dotenv-rails

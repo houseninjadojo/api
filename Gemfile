@@ -4,34 +4,35 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.0.3"
 
 gem 'auth0'
-gem 'action_policy',      '~> 0.6.0'
-gem 'aws-sdk-s3',                     require: false
-gem 'bootsnap',           '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
-gem 'ddtrace',                        require: 'ddtrace/auto_instrument'  # Datadog Metrics Instrumentation
-gem 'dotenv-rails',                   require: 'dotenv/rails-now'         # ENV file management
-gem 'graphiti', github: 'houseninjadojo/graphiti', branch: 'activerecord-filter-array-eq'
-gem 'graphiti-rails'
-gem 'image_processing',   '~> 1.12'                                        # Use Active Storage variant
+gem 'action_policy',           '~> 0.6.0'
+gem 'aws-sdk-s3',                          require: false
+gem 'bootsnap',                '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
+gem 'credit_card_validations'
+gem 'ddtrace',                             require: 'ddtrace/auto_instrument'  # Datadog Metrics Instrumentation
+gem 'dotenv-rails',                        require: 'dotenv/rails-now'         # ENV file management
+gem 'graphiti',         github: 'houseninjadojo/graphiti', branch: 'activerecord-filter-array-eq'
+gem 'graphiti-rails'    
+gem 'image_processing',        '~> 1.12'                                        # Use Active Storage variant
 gem 'hubspot-api-ruby', github: 'captaincontrat/hubspot-api-ruby'
 gem 'jwt'
 gem 'kaminari'
-gem 'kredis'                                                              # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-gem 'lograge',            '~> 0.11.2'
-gem 'okcomputer'                                                          # Health Check
-gem 'pg',                 '~> 1.3'                                        # Use postgresql as the database for Active Record
+gem 'kredis'                                                                   # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
+gem 'lograge',                 '~> 0.11.2'
+gem 'okcomputer'                                                               # Health Check
+gem 'pg',                      '~> 1.3'                                        # Use postgresql as the database for Active Record
 gem 'phonelib'
-gem 'puma',               '~> 5.6'                                        # Use Puma as the app server
-gem 'rack-cors'                                                           # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rails',              '~> 7.0.2'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'redis',              '~> 4.6'                                        # Use Redis adapter to run Action Cable in production
+gem 'puma',                    '~> 5.6'                                        # Use Puma as the app server
+gem 'rack-cors'                                                                # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+gem 'rails',                   '~> 7.0.2'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
+gem 'redis',                   '~> 4.6'                                        # Use Redis adapter to run Action Cable in production
 gem 'responders'
 gem 'seedbank'
 gem 'sentry-ruby'
 gem 'sentry-rails'
 gem 'sentry-sidekiq'
-gem 'sidekiq',            '~> 6.4'
-gem 'stripe',             '~> 5.45.0'
-gem 'strong_migrations',  '~> 0.8.0'
+gem 'sidekiq',                 '~> 6.4'
+gem 'stripe',                  '~> 5.45.0'
+gem 'strong_migrations',       '~> 0.8.0'
 gem 'valid_email'
 
 group :development, :test do

@@ -5,6 +5,8 @@ AllCops:
     - "vendor/**/*"
     - "platform/**/*"
     - "Dockerfile"
+    - "Gemfile"
+    - "Gemfile.lock"
   DisabledByDefault: true
 
 
