@@ -93,4 +93,11 @@ class Property < ApplicationRecord
     #   update_hubspot_contact
     # end
   end
+
+  private
+
+  # update property in hubspot
+  after_save_commit do |property|
+    Hubspot::UpdateContactPropertyJob.perform_later(property)
+  end
 end
