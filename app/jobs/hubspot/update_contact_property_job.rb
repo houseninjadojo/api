@@ -15,9 +15,13 @@ class Hubspot::UpdateContactPropertyJob < ApplicationJob
       address:   property.street_address1,
       address_2: property.street_address2,
       city:      property.city,
-      state_new: property.state,
+      state_new: state_name(property.state),
       zip:       property.zipcode,
     }
+  end
+
+  def state_name(abbr)
+    StateNames.abbreviations[abbr] if abbr.present?
   end
 
   def has_hubspot_id?(property)
