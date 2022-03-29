@@ -24,6 +24,7 @@
 #
 class CreditCard < PaymentMethod
   before_validation :normalize_year
+  before_validation :normalize_card_number
   after_validation :set_derived_card_values
 
   validates :card_number, credit_card_number: true
@@ -40,6 +41,11 @@ class CreditCard < PaymentMethod
   def set_derived_card_values
     detector = CreditCardValidations::Detector.new(self.card_number)
     self.brand = detector.brand.to_s
+  end
+
+  # "4222-2222-2222-2222" => "4222222222222222"
+  def normalize_card_number
+    self.card_number = self.card_number.gsub(/\D/,'')
   end
 
   # convert from "22" => "2022"
