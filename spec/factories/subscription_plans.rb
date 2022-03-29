@@ -11,9 +11,11 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  stripe_price_id :string
+#  active          :boolean          default(FALSE), not null
 #
 # Indexes
 #
+#  index_subscription_plans_on_active           (active)
 #  index_subscription_plans_on_interval         (interval)
 #  index_subscription_plans_on_slug             (slug)
 #  index_subscription_plans_on_stripe_price_id  (stripe_price_id) UNIQUE
@@ -27,5 +29,6 @@ FactoryBot.define do
     interval { "year" }
     perk { "1 month free" }
     stripe_price_id { Faker::Crypto.md5 }
+    active { true }
   end
 end

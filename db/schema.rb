@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_07_225616) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_29_023926) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -221,6 +221,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_07_225616) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_price_id"
+    t.boolean "active", default: false, null: false
+    t.index ["active"], name: "index_subscription_plans_on_active"
     t.index ["interval"], name: "index_subscription_plans_on_interval"
     t.index ["slug"], name: "index_subscription_plans_on_slug"
     t.index ["stripe_price_id"], name: "index_subscription_plans_on_stripe_price_id", unique: true

@@ -11,9 +11,11 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  stripe_price_id :string
+#  active          :boolean          default(FALSE), not null
 #
 # Indexes
 #
+#  index_subscription_plans_on_active           (active)
 #  index_subscription_plans_on_interval         (interval)
 #  index_subscription_plans_on_slug             (slug)
 #  index_subscription_plans_on_stripe_price_id  (stripe_price_id) UNIQUE
@@ -36,4 +38,8 @@ class SubscriptionPlanResource < ApplicationResource
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
+
+  def base_scope
+    SubscriptionPlan.where(active: true)
+  end
 end

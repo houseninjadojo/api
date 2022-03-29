@@ -5,6 +5,7 @@ SubscriptionPlan.find_or_create_by({
   interval: 'year',
   perk: '1 month free',
   stripe_price_id: 'annual',
+  active: false,
 })
 
 SubscriptionPlan.find_or_create_by({
@@ -14,4 +15,5 @@ SubscriptionPlan.find_or_create_by({
   interval: 'month',
   perk: 'More flexible',
   stripe_price_id: 'monthly',
+  active: true,
 })
