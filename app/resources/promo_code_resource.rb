@@ -17,7 +17,7 @@
 # Indexes
 #
 #  index_promo_codes_on_code       (code) UNIQUE
-#  index_promo_codes_on_coupon_id  (coupon_id) UNIQUE
+#  index_promo_codes_on_coupon_id  (coupon_id)
 #  index_promo_codes_on_stripe_id  (stripe_id) UNIQUE
 #
 class PromoCodeResource < ApplicationResource
