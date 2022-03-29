@@ -88,6 +88,8 @@ class Stripe::HandleWebhookJob < ApplicationJob
     # `promotion_code.*`
     when !!event.match(/^promotion_code\.[a-z]+(?![.a-z]).*$/)
       ActiveRecord::Base.transaction do
+        object = @payload["data"]["object"]
+        puts @payload
         promo_code = PromoCode.find_or_create_by(stripe_id: stripe_id)
         promo_code.update(
           active: object["active"],
