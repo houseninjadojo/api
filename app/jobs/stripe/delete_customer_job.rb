@@ -4,6 +4,6 @@ class Stripe::DeleteCustomerJob < ApplicationJob
   def perform(stripe_customer_id)
     return unless stripe_customer_id.present?
 
-    Stripe::Customer.delete(stripe_customer_id)
+    # Stripe::Customer.delete(stripe_customer_id)
   end
 end
