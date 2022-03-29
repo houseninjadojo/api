@@ -22,6 +22,7 @@
 #
 class PromoCode < ApplicationRecord
   # callbacks
+  before_validation :format_code
 
   # associations
   has_many :invoices
@@ -31,4 +32,9 @@ class PromoCode < ApplicationRecord
   # validations
   validates :code,      uniqueness: true, allow_nil: true
   validates :stripe_id, uniqueness: true, allow_nil: true
+
+  # callbacks
+  def format_code
+    self.code = self.code.upcase if self.code.present?
+  end
 end

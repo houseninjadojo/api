@@ -43,7 +43,7 @@ class CreditCard < PaymentMethod
     self.brand = detector.brand.to_s
   end
 
-  # "4222-2222-2222-2222" => "4222222222222222"
+  # "4242-4242-4242-4242" => "4242424242424242"
   def normalize_card_number
     self.card_number = self.card_number.gsub(/\D/,'')
   end
