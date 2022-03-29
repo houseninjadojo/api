@@ -4,7 +4,8 @@ class Hubspot::SetContactCurrentJob < ApplicationJob
   def perform(user)
     id = user.hubspot_id
     params = {
-      customer_type: "Current"
+      contact_type: "Customer",
+      customer_type: "Current",
     }
 
     Hubspot::Contact.update!(id, params)
