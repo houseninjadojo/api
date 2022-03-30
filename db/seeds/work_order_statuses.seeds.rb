@@ -1,3 +1,5 @@
+return if Rails.env.test?
+
 # fetch hubspot pipeline with list of dealstages
 #
 # @return {Hubspot::DealPipeline}
