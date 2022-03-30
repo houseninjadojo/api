@@ -3,7 +3,7 @@
 # Table name: work_orders
 #
 #  id                     :uuid             not null, primary key
-#  property_id            :uuid             not null
+#  property_id            :uuid
 #  status                 :string
 #  description            :string
 #  vendor                 :string

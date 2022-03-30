@@ -10,6 +10,7 @@ class Hubspot::CreateWorkOrderFromDealJob < ApplicationJob
 
   def mapped_attributes(deal)
     props = deal.properties
+    user = user_from_contact_association(deal)
     {
       description: props["dealname"],
       created_at:  time_from_epoch(props["createdate"]),
@@ -23,8 +24,10 @@ class Hubspot::CreateWorkOrderFromDealJob < ApplicationJob
       scheduled_window_start: time_from_epoch(props["closedate"]),
       scheduled_window_end: time_from_epoch(props["closedate"]),
 
-      hubspot_id:     deal.id,
+      hubspot_id:     deal.deal_id,
       hubspot_object: deal,
+
+      property: user.properties&.first,
     }
   end
 
@@ -58,5 +61,11 @@ class Hubspot::CreateWorkOrderFromDealJob < ApplicationJob
       homeowner_amount: amount_in_cents(props["estimate___for_homeowner"]),
       vendor_amount: amount_in_cents(props["estimate___from_vendor"]),
     }
+  end
+
+  def user_from_contact_association(deal)
+    contacts = Hubspot::Association.all(deal.deal_id, Hubspot::Association::DEAL_TO_CONTACT)
+    contact = contacts.first
+    User.find_by(hubspot_id: c.id)
   end
 end

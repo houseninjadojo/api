@@ -4,11 +4,30 @@ class Hubspot::HandleWebhookJob < ApplicationJob
   queue_as :default
 
   def perform(webhook_event)
+    @webhook_event = webhook_event
     return if webhook_event.processed_at.present?
     @payload = webhook_event.payload
-    case @payload["subscriptionId"]
+    process!
+    webhook_event.update(processed_at: Time.now)
+  end
+
+  def process!
+    if @payload.is_a?(Array)
+      @payload.each do |item|
+        process_payload_item(item)
+      end
+    else
+      process_payload_item(@payload)
+    end
+  end
+
+  def process_payload_item(item)
+    hubspot_id = item["objectId"]
+    attribute_value = item["propertyValue"]
+
+    case item["subscriptionType"]
     when "contact.propertyChange"
-      update_user
+      update_user(item)
       return
     when "contact.creation"
       user = User.find_by(hubspot_id: hubspot_id)
@@ -22,7 +41,7 @@ class Hubspot::HandleWebhookJob < ApplicationJob
     when "contact.deletion"
       #
     when "deal.propertyChange"
-      Hubspot::UpdateWorkOrderFromDealJob.perform_later(webhook_event)
+      Hubspot::UpdateWorkOrderFromDealJob.perform_later(@webhook_event)
     when "deal.creation"
       work_order = WorkOrder.find_by(hubspot_id: hubspot_id)
       if work_order.present?
@@ -33,19 +52,18 @@ class Hubspot::HandleWebhookJob < ApplicationJob
     when "deal.deletion"
       #
     end
-    webhook_event.update(processed_at: Time.now)
   end
 
-  def hubspot_id
-    @payload["objectId"]
-  end
+  # def hubspot_id
+  #   @payload["objectId"]
+  # end
 
-  def attribute_value
-    @payload["propertyValue"]
-  end
+  # def attribute_value
+  #   @payload["propertyValue"]
+  # end
 
-  def model_and_attribute
-    case @payload["propertyName"]
+  def model_and_attribute(item)
+    case item["propertyName"]
     when "email"
       return [User, :email]
     when "phone"
@@ -70,28 +88,16 @@ class Hubspot::HandleWebhookJob < ApplicationJob
     []
   end
 
-  def update_user
-    model, attribute = model_and_attribute
+  def update_user(item)
+    hubspot_id = item["objectId"]
+    attribute_value = item["propertyValue"]
+    model, attribute = model_and_attribute(item)
 
     if model.nil?
-      webhook_event.update(processed_at: Time.now)
       return
     end
 
     resource = model.find_by(hubspot_id: hubspot_id)
     resource.update_from_service("hubspot", { attribute => attribute_value })
-    webhook_event.update(processed_at: Time.now)
   end
-
-  # # "subscriptionType"=>"contact.propertyChange"
-  # #
-  # # @return {User|WorkOrder}
-  # def model_from_payload
-  #   case @payload["subscriptionId"].split(".").first
-  #   when "contact"
-  #     return User
-  #   when "deal"
-  #     return WorkOrder
-  #   end
-  # end
 end

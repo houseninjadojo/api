@@ -3,7 +3,7 @@
 # Table name: work_orders
 #
 #  id                     :uuid             not null, primary key
-#  property_id            :uuid             not null
+#  property_id            :uuid
 #  status                 :string
 #  description            :string
 #  vendor                 :string
@@ -24,7 +24,7 @@
 #  index_work_orders_on_property_id  (property_id)
 #
 class WorkOrder < ApplicationRecord
-  belongs_to :property
+  belongs_to :property, required: false
   belongs_to :status, class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status
 
   # validations
