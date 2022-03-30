@@ -11,7 +11,7 @@ class WorkOrderPolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    false
   end
 
   def update?

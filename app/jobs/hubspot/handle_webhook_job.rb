@@ -3,9 +3,9 @@ class Hubspot::HandleWebhookJob < ApplicationJob
   sidekiq_options retry: 0
   queue_as :default
 
-  def perform(webhook_event, payload)
-    return if webhook_job.processed_at.present?
-    @payload = payload
+  def perform(webhook_event)
+    return if webhook_event.processed_at.present?
+    @payload = webhook_event.payload
     case @payload["subscriptionId"]
     when "contact.propertyChange"
       update_user
@@ -17,12 +17,23 @@ class Hubspot::HandleWebhookJob < ApplicationJob
       else
         Hubspot::CreateUserFromContactJob.perform_later(hubspot_id)
       end
-      webhook_event.update(processed_at: Time.now)
     when "contact.privacyDeletion"
       #
     when "contact.deletion"
       #
+    when "deal.propertyChange"
+      Hubspot::UpdateWorkOrderFromDealJob.perform_later(webhook_event)
+    when "deal.creation"
+      work_order = WorkOrder.find_by(hubspot_id: hubspot_id)
+      if work_order.present?
+        return # no ping pong
+      else
+        Hubspot::CreateWorkOrderFromDealJob.perform_later(hubspot_id)
+      end
+    when "deal.deletion"
+      #
     end
+    webhook_event.update(processed_at: Time.now)
   end
 
   def hubspot_id

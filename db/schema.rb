@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_29_040139) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_30_080642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -284,6 +284,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_29_040139) do
     t.index ["webhookable_type", "webhookable_id"], name: "index_webhook_events_on_webhookable"
   end
 
+  create_table "work_order_statuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "slug", null: false
+    t.string "name"
+    t.string "hubspot_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hubspot_id"], name: "index_work_order_statuses_on_hubspot_id", unique: true
+    t.index ["slug"], name: "index_work_order_statuses_on_slug", unique: true
+  end
+
   create_table "work_orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "property_id", null: false
     t.string "status"
@@ -293,6 +303,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_29_040139) do
     t.string "scheduled_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "hubspot_id"
+    t.jsonb "hubspot_object"
+    t.string "homeowner_amount"
+    t.string "vendor_amount"
+    t.datetime "scheduled_window_start"
+    t.datetime "scheduled_window_end"
+    t.index ["hubspot_id"], name: "index_work_orders_on_hubspot_id", unique: true
     t.index ["property_id"], name: "index_work_orders_on_property_id"
   end
 

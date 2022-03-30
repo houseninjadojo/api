@@ -25,9 +25,9 @@ class WebhooksController < ApplicationController
     event = request.body.read
     begin
       content = JSON.parse(event)
-      event = WebhookEvent.create!(service: 'hubspot', payload: content)
+      webhook_event = WebhookEvent.create!(service: 'hubspot', payload: content)
       content.each do |payload|
-        Hubspot::HandleWebhookJob.perform_later(webhook_event, payload)
+        Hubspot::HandleWebhookJob.perform_later(webhook_event)
       end
     rescue
       WebhookEvent.create!(service: 'hubspot', payload: event)

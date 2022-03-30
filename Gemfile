@@ -13,11 +13,13 @@ gem 'dotenv-rails',                        require: 'dotenv/rails-now'         #
 gem 'graphiti',         github: 'houseninjadojo/graphiti', branch: 'activerecord-filter-array-eq'
 gem 'graphiti-rails'    
 gem 'image_processing',        '~> 1.12'                                        # Use Active Storage variant
-gem 'hubspot-api-ruby', github: 'captaincontrat/hubspot-api-ruby'
+gem 'hubspot-api-ruby', github: 'houseninjadojo/hubspot-api-ruby'
+# gem 'hubspot-api-client'
 gem 'jwt'
 gem 'kaminari'
 gem 'kredis'                                                                   # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 gem 'lograge',                 '~> 0.11.2'
+gem 'money'
 gem 'okcomputer'                                                               # Health Check
 gem 'pg',                      '~> 1.3'                                        # Use postgresql as the database for Active Record
 gem 'phonelib'

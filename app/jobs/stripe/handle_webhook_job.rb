@@ -2,9 +2,9 @@ class Stripe::HandleWebhookJob < ApplicationJob
   sidekiq_options retry: 0
   queue_as :default
 
-  def perform(webhook_job)
-    return if webhook_job.processed_at.present?
-    @payload = webhook_job.payload
+  def perform(webhook_event)
+    return if webhook_event.processed_at.present?
+    @payload = webhook_event.payload
 
     case
     when event == "customer.updated"
@@ -12,13 +12,13 @@ class Stripe::HandleWebhookJob < ApplicationJob
         user = User.find_by(stripe_customer_id: stripe_id)
         return if user.nil?
         user.update_from_service("stripe", user_attributes)
-        webhook_job.update(processed_at: Time.now)
+        webhook_event.update(processed_at: Time.now)
       end
     when event == "customer.created"
       ActiveRecord::Base.transaction do
         user = User.find_by(stripe_customer_id: stripe_id)
         if user.present?
-          webhook_job.update(processed_at: Time.now)
+          webhook_event.update(processed_at: Time.now)
           return
         end
         user = User.new(user_attributes)
@@ -26,7 +26,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
         # @todo
         # enable this when ready
         # user.save!
-        # webhook_job.update(processed_at: Time.now)
+        # webhook_event.update(processed_at: Time.now)
       end
     # `invoice.*` except `invoice.deleted`
     when !!event.match(/^invoice\.(?!deleted).*$/)
