@@ -66,6 +66,6 @@ class Hubspot::CreateWorkOrderFromDealJob < ApplicationJob
   def user_from_contact_association(deal)
     contacts = Hubspot::Association.all(deal.deal_id, Hubspot::Association::DEAL_TO_CONTACT)
     contact = contacts.first
-    User.find_by(hubspot_id: c.id)
+    User.find_by(hubspot_id: contact.id)
   end
 end
