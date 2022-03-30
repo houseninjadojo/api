@@ -13,9 +13,9 @@ class Hubspot::HandleWebhookJob < ApplicationJob
 
   def process!
     if is_deal_batch?
-      item = @payload.find{|i| i["subscriptionType"] == "deal.creation" }
+      item = @payload.find { |i| i["subscriptionType"] == "deal.creation" }
       process_payload_item(item)
-    else 
+    else
       @payload.each do |item|
         process_payload_item(item)
       end
