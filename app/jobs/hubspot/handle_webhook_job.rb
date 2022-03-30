@@ -12,12 +12,13 @@ class Hubspot::HandleWebhookJob < ApplicationJob
   end
 
   def process!
-    if @payload.is_a?(Array)
+    if is_deal_batch?
+      item = @payload.find{|i| i["subscriptionType"] == "deal.creation" }
+      process_payload_item(item)
+    else 
       @payload.each do |item|
         process_payload_item(item)
       end
-    else
-      process_payload_item(@payload)
     end
   end
 
@@ -99,5 +100,12 @@ class Hubspot::HandleWebhookJob < ApplicationJob
 
     resource = model.find_by(hubspot_id: hubspot_id)
     resource.update_from_service("hubspot", { attribute => attribute_value })
+  end
+
+  # when a deal is created, hubspot sends several `propertyChange` events,
+  # one `creation` event, and 0 other events. We can use this particularity
+  # as a kind of "webhook payload signature".
+  def is_deal_batch?
+    @payload.pluck("subscriptionType").uniq == ["deal.propertyChange", "deal.creation"]
   end
 end
