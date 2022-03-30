@@ -40,7 +40,7 @@ def mapped_stages
     {
       name: stage["label"],
       hubspot_id: stage["stageId"],
-      slug: stage["label"].gsub(' ', '').underscore,
+      slug: stage["label"].gsub(' ', '_').downcase,
     }
   end
 end

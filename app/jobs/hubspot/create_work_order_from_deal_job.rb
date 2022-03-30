@@ -27,7 +27,7 @@ class Hubspot::CreateWorkOrderFromDealJob < ApplicationJob
       hubspot_id:     deal.deal_id,
       hubspot_object: deal,
 
-      property: user.properties&.first,
+      property: user&.properties&.first,
     }
   end
 
