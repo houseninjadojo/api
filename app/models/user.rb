@@ -16,12 +16,16 @@
 #  hubspot_id             :string
 #  hubspot_contact_object :jsonb
 #  promo_code_id          :uuid
+#  contact_type           :string
+#  onboarding_step        :string
+#  onboarding_code        :string
 #
 # Indexes
 #
 #  index_users_on_email               (email) UNIQUE
 #  index_users_on_gender              (gender)
 #  index_users_on_hubspot_id          (hubspot_id) UNIQUE
+#  index_users_on_onboarding_code     (onboarding_code) UNIQUE
 #  index_users_on_phone_number        (phone_number) UNIQUE
 #  index_users_on_promo_code_id       (promo_code_id)
 #  index_users_on_stripe_customer_id  (stripe_customer_id) UNIQUE
@@ -29,7 +33,10 @@
 class User < ApplicationRecord
   encrypts :hubspot_contact_object
 
-  # Callbacks
+  # callbacks
+
+  before_create :generate_onboarding_code
+
   after_create_commit :create_stripe_customer,
     unless: :should_not_create_stripe_customer?
 
@@ -39,6 +46,9 @@ class User < ApplicationRecord
   after_save :create_auth_user,
     if:     -> (user) { user.password.present? },
     unless: :should_not_create_auth_user?
+
+  after_save :complete_onboarding,
+    if: -> (user) { user.onboarding_step == OnboardingStep::BOOKING_CONFIRMATION }
 
   # after_update_commit :update_stripe_customer,
   #   if:     -> (user) { user.stripe_customer_id.present? },
@@ -72,6 +82,9 @@ class User < ApplicationRecord
   validates :gender,             inclusion: { in: %w(male female other) }
   validates :stripe_customer_id, uniqueness: true, allow_nil: true
   validates :hubspot_id,         uniqueness: true, allow_nil: true
+  validates :onboarding_code,    uniqueness: true, allow_nil: true
+  validates :contact_type,       inclusion: { in: ContactType::ALL }
+  validates :onboarding_step,    inclusion: { in: OnboardingStep::ALL }, allow_nil: true
 
   # Temporary password token management
   # VGS Volatile tokens expire in 1 hour
@@ -120,12 +133,33 @@ class User < ApplicationRecord
     end
   end
 
+  # onboarding
+  def has_completed_onboarding?
+    onboarding_step == "completed"
+  end
+
+  def is_currently_onboarding?
+    !has_completed_onboarding? && contact_type == ContactType::CUSTOMER
+  end
+
   # no-op
   # needs to exist, otherwise we get a 400 error
   def intercom_hash=(val)
   end
 
-  # Callbacks
+  # callbacks
+
+  def generate_onboarding_code
+    self.onboarding_code = SecureRandom.hex(12)
+  end
+
+  def complete_onboarding
+    self.onboarding_step = "completed"
+    self.onboarding_code = nil
+    self.save
+  end
+
+  # sync Callbacks
 
   def create_auth_user
     Auth::CreateUserJob.perform_later(self)

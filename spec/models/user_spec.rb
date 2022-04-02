@@ -16,12 +16,16 @@
 #  hubspot_id             :string
 #  hubspot_contact_object :jsonb
 #  promo_code_id          :uuid
+#  contact_type           :string
+#  onboarding_step        :string
+#  onboarding_code        :string
 #
 # Indexes
 #
 #  index_users_on_email               (email) UNIQUE
 #  index_users_on_gender              (gender)
 #  index_users_on_hubspot_id          (hubspot_id) UNIQUE
+#  index_users_on_onboarding_code     (onboarding_code) UNIQUE
 #  index_users_on_phone_number        (phone_number) UNIQUE
 #  index_users_on_promo_code_id       (promo_code_id)
 #  index_users_on_stripe_customer_id  (stripe_customer_id) UNIQUE
