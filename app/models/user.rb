@@ -48,7 +48,7 @@ class User < ApplicationRecord
     unless: :should_not_create_auth_user?
 
   after_save :complete_onboarding,
-    if: -> (user) { user.onboarding_step == OnboardingStep::BOOKING_COMPLETE }
+    if: -> (user) { user.onboarding_step == OnboardingStep::BOOKING_CONFIRMATION }
 
   # after_update_commit :update_stripe_customer,
   #   if:     -> (user) { user.stripe_customer_id.present? },
@@ -84,7 +84,7 @@ class User < ApplicationRecord
   validates :hubspot_id,         uniqueness: true, allow_nil: true
   validates :onboarding_code,    uniqueness: true, allow_nil: true
   validates :contact_type,       inclusion: { in: ContactType::ALL }
-  validates :onboarding_step,    inclusion: { in: OnboardingStep::ALL }
+  validates :onboarding_step,    inclusion: { in: OnboardingStep::ALL }, allow_nil: true
 
   # Temporary password token management
   # VGS Volatile tokens expire in 1 hour

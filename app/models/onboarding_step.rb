@@ -9,6 +9,7 @@ class OnboardingStep
   SET_PASSWORD = "set-password"
   WALKTHROUGH_BOOKING = "walkthrough-booking"
   WELCOME = "welcome"
+  COMPLETED = "completed"
 
   ALL = [
     AREA_NOTIFICATION,
@@ -21,5 +22,6 @@ class OnboardingStep
     SET_PASSWORD,
     WALKTHROUGH_BOOKING,
     WELCOME,
+    COMPLETED,
   ]
 end

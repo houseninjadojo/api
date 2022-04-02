@@ -42,5 +42,7 @@ FactoryBot.define do
     stripe_customer_id { Faker::Crypto.md5 }
     hubspot_id { Faker::Crypto.md5 }
     hubspot_contact_object { {} }
+    onboarding_step { OnboardingStep::ALL.sample }
+    onboarding_code { nil }
   end
 end

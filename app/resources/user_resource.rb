@@ -61,6 +61,11 @@ class UserResource < ApplicationResource
 
   attribute :intercom_hash, :string, except: [:writeable]
 
+  attribute :contact_type, :string, except: [:writeable]
+
+  attribute :onboarding_step, :string, except: [:writeable]
+  attribute :onboarding_code, :string, except: [:writeable]
+
   # attribute :intercom_hash, :string, only: [:readable, :writeable] do
   #   unless @object.devices.empty?
   #     platform = @object.devices.order(created_at: :desc).first.platform
@@ -89,7 +94,9 @@ class UserResource < ApplicationResource
   #      - we want to yield the found user model to resume onboarding
   #    - and the user has finished onboarding
   #      - we want to yield the passed-in user model to show correct errors
-  around_save do |model|
+  around_save :do_around_save
+
+  def do_around_save(model)
     if model.new_record?
       existing_user = User.find_by(email: model.email)
       if existing_user.present? && !existing_user&.has_completed_onboarding?
