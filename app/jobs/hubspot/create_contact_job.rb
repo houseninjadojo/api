@@ -14,6 +14,7 @@ class Hubspot::CreateContactJob < ApplicationJob
 
   def params(user)
     {
+      contact_type:   ContactType::CUSTOMER,
       house_ninja_id: user.id,
       email:          user.email,
       firstname:      user.first_name,

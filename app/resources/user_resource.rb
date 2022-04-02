@@ -16,12 +16,16 @@
 #  hubspot_id             :string
 #  hubspot_contact_object :jsonb
 #  promo_code_id          :uuid
+#  contact_type           :string
+#  onboarding_step        :string
+#  onboarding_code        :string
 #
 # Indexes
 #
 #  index_users_on_email               (email) UNIQUE
 #  index_users_on_gender              (gender)
 #  index_users_on_hubspot_id          (hubspot_id) UNIQUE
+#  index_users_on_onboarding_code     (onboarding_code) UNIQUE
 #  index_users_on_phone_number        (phone_number) UNIQUE
 #  index_users_on_promo_code_id       (promo_code_id)
 #  index_users_on_stripe_customer_id  (stripe_customer_id) UNIQUE
@@ -67,4 +71,34 @@ class UserResource < ApplicationResource
   #     )
   #   end
   # end
+
+  # We need to check if a user already exists, and if so, what
+  # stage of onboarding they are at. During sign-up, we want users
+  # to be able to "resume" the stage of onboarding they dropped off at.
+  #
+  # Unfortunately, this is not a rest-like action, so we need to be a little
+  # creative. Let's take advantage of the around_save hook to check
+  #  - is this a new user model instance (built, attributes assigned, but not saved)?
+  #  - does this user exist already?
+  #  - if so, what stage of onboarding is this user at?
+  #
+  #  - If it is a new user model instance, we know: the Resource#build method was used to construct it
+  #    - this is only called in the Controller#create method
+  #  - If the user exists already:
+  #    - and the user has not finished onboarding
+  #      - we want to yield the found user model to resume onboarding
+  #    - and the user has finished onboarding
+  #      - we want to yield the passed-in user model to show correct errors
+  around_save do |model|
+    if model.new_record?
+      existing_user = User.find_by(email: model.email)
+      if existing_user.present? && !existing_user&.has_completed_onboarding?
+        yield existing_user
+      else
+        yield model
+      end
+    else
+      yield model
+    end
+  end
 end

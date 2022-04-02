@@ -10,11 +10,12 @@ class Hubspot::UpdateContactJob < ApplicationJob
 
   def contact_properties(user)
     {
-      email:     user.email,
-      firstname: user.first_name,
-      lastname:  user.last_name,
-      phone:     user.phone_number,
-      zip:       user.requested_zipcode,
+      contact_type: user.contact_type,
+      email:        user.email,
+      firstname:    user.first_name,
+      lastname:     user.last_name,
+      phone:        user.phone_number,
+      zip:          user.requested_zipcode,
     }
   end
 end
