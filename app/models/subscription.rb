@@ -28,16 +28,21 @@
 #
 class Subscription < ApplicationRecord
   # callbacks
+
+  after_create_commit :set_user_onboarding_step
+
   after_create_commit :create_stripe_subscription,
     unless: -> (subscription) { subscription.stripe_subscription_id.present? }
 
   # associations
+
   belongs_to :promo_code, required: false
   belongs_to :payment_method
   belongs_to :subscription_plan
   belongs_to :user
 
   # validations
+
   validates :stripe_subscription_id, uniqueness: true, allow_nil: true
 
   # callbacks
@@ -48,5 +53,10 @@ class Subscription < ApplicationRecord
 
   def cancel_stripe_subscription
     Stripe::CancelSubscriptionJob.perform_later(self)
+  end
+
+  def set_user_onboarding_step
+    # user.update(onboarding_step: OnboardingStep::WELCOME)
+    user.update(onboarding_step: OnboardingStep::SET_PASSWORD)
   end
 end

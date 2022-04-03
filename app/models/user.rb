@@ -37,6 +37,8 @@ class User < ApplicationRecord
 
   before_create :generate_onboarding_code
 
+  before_create :set_onboarding_step
+
   after_create_commit :create_stripe_customer,
     unless: :should_not_create_stripe_customer?
 
@@ -48,7 +50,7 @@ class User < ApplicationRecord
     unless: :should_not_create_auth_user?
 
   after_save :complete_onboarding,
-    if: -> (user) { user.onboarding_step == OnboardingStep::BOOKING_CONFIRMATION }
+    if: -> (user) { user.onboarding_step == OnboardingStep::SET_PASSWORD }
 
   # after_update_commit :update_stripe_customer,
   #   if:     -> (user) { user.stripe_customer_id.present? },
@@ -157,6 +159,12 @@ class User < ApplicationRecord
     self.onboarding_step = "completed"
     self.onboarding_code = nil
     self.save
+  end
+
+  def set_onboarding_step
+    if [self.email, self.phone_number, self.first_name, self.last_name].all?(&:present?)
+      self.onboarding_step = OnboardingStep::CONTACT_INFO
+    end
   end
 
   # sync Callbacks

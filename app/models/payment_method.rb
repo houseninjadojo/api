@@ -28,6 +28,9 @@ class PaymentMethod < ApplicationRecord
   ]
 
   # callbacks
+
+  after_create_commit :set_user_onboarding_step
+
   after_create_commit :create_stripe_payment_method,
     unless: -> (payment_method) { payment_method.stripe_token.present? }
 
@@ -39,11 +42,13 @@ class PaymentMethod < ApplicationRecord
     if: -> (payment_method) { payment_method.stripe_token.present? }
 
   # associations
+
   belongs_to :user
   has_one    :subscription
   has_many   :payments
 
   # validations
+
   validates :stripe_token, uniqueness: true, allow_nil: true
 
   # callbacks
@@ -58,5 +63,9 @@ class PaymentMethod < ApplicationRecord
 
   def detach_from_stripe
     Stripe::DetachPaymentMethodJob.perform_later(self.stripe_token)
+  end
+
+  def set_user_onboarding_step
+    self.user.update(onboarding_step: OnboardingStep::PAYMENT_METHOD)
   end
 end
