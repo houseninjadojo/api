@@ -6,7 +6,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    deny! if record.nil? || user.nil?
+    # no user found
+    deny! if record.nil?
+    # not signed in and not trying to resume logging in
+    deny! if user.nil? && record.has_completed_onboarding?
+    # signed in and checking own user
     record.id == user.id
   end
 
