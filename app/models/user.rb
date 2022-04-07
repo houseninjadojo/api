@@ -36,8 +36,8 @@ class User < ApplicationRecord
   # callbacks
 
   before_create :generate_onboarding_code
-
   before_create :set_onboarding_step
+  before_create :set_contact_type
 
   after_create_commit :create_stripe_customer,
     unless: :should_not_create_stripe_customer?
@@ -165,6 +165,10 @@ class User < ApplicationRecord
     if [self.email, self.phone_number, self.first_name, self.last_name].all?(&:present?)
       self.onboarding_step = OnboardingStep::CONTACT_INFO
     end
+  end
+
+  def set_contact_type
+    self.contact_type ||= ContactType::CUSTOMER
   end
 
   # sync Callbacks
