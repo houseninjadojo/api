@@ -16,7 +16,7 @@
 #  hubspot_id             :string
 #  hubspot_contact_object :jsonb
 #  promo_code_id          :uuid
-#  contact_type           :string
+#  contact_type           :string           default("Customer")
 #  onboarding_step        :string
 #  onboarding_code        :string
 #
