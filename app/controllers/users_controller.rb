@@ -20,7 +20,7 @@ class UsersController < ApplicationController
 
     if user.save
       render jsonapi: user, status: 201
-    elsif existing_user = user_is_onboarding?(user)
+    elsif existing_user = user_if_onboarding(user)
       render jsonapi: existing_user, status: 201
     else
       render jsonapi_errors: user
