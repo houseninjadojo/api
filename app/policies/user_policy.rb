@@ -8,10 +8,10 @@ class UserPolicy < ApplicationPolicy
   def show?
     # no user found
     deny! if record.nil?
-    # not signed in and not trying to resume logging in
-    deny! if user.nil? && record.has_completed_onboarding?
+    # not signed in and trying to resume logging in
+    allow! if user.nil? && record.is_currently_onboarding?
     # signed in and checking own user
-    record.id == user.id
+    record&.id == user&.id
   end
 
   def create?
