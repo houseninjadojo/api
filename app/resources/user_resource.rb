@@ -83,18 +83,18 @@ class UserResource < ApplicationResource
   #      - we want to yield the found user model to resume onboarding
   #    - and the user has finished onboarding
   #      - we want to yield the passed-in user model to show correct errors
-  around_save :do_around_save
+  # around_save :do_around_save
 
-  def do_around_save(model)
-    if model.new_record?
-      existing_user = User.find_by(email: model.email)
-      if existing_user.present? && !existing_user&.has_completed_onboarding?
-        yield existing_user
-      else
-        yield model
-      end
-    else
-      yield model
-    end
-  end
+  # def do_around_save(model)
+  #   if model.new_record?
+  #     existing_user = User.find_by(email: model.email)
+  #     if existing_user.present? && !existing_user&.has_completed_onboarding?
+  #       yield existing_user
+  #     else
+  #       yield model
+  #     end
+  #   else
+  #     yield model
+  #   end
+  # end
 end

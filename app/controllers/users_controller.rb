@@ -20,6 +20,8 @@ class UsersController < ApplicationController
 
     if user.save
       render jsonapi: user, status: 201
+    elsif existing_user = user_is_onboarding?(user)
+      render jsonapi: existing_user, status: 201
     else
       render jsonapi_errors: user
     end
@@ -44,6 +46,19 @@ class UsersController < ApplicationController
       render jsonapi: { meta: {} }, status: 200
     else
       render jsonapi_errors: user
+    end
+  end
+
+  private
+
+  def user_if_onboarding(user)
+    # this might be an onboarding user
+    # return unless user.errors.to_a == ["Email has already been taken", "Phone number has already been taken"]
+    existing_user = User.find_by(email: user.data.email)
+    if !existing_user&.has_completed_onboarding?
+      existing_user
+    else
+      false
     end
   end
 end
