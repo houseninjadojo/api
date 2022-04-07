@@ -55,7 +55,7 @@ class UsersController < ApplicationController
     # this might be an onboarding user
     # return unless user.errors.to_a == ["Email has already been taken", "Phone number has already been taken"]
     existing_user = User.find_by(email: user.data.email)
-    if !existing_user&.has_completed_onboarding?
+    if existing_user&.is_currently_onboarding?
       existing_user
     else
       false
