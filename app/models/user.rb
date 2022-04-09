@@ -69,9 +69,11 @@ class User < ApplicationRecord
   after_destroy_commit :delete_stripe_customer,
     if: -> (user) { user.stripe_customer_id.present? }
 
-  # Associations
+  # associations
+
   has_many   :devices
   has_many   :documents
+  has_many   :document_groups
   has_many   :invoices
   has_many   :payment_methods
   has_many   :payments
@@ -79,7 +81,8 @@ class User < ApplicationRecord
   has_one    :subscription
   belongs_to :promo_code, required: false
 
-  # Validations
+  # validations
+
   validates :first_name,         presence: true
   validates :last_name,          presence: true
   validates :email,              presence: true, uniqueness: true
