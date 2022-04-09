@@ -42,8 +42,11 @@ class User < ApplicationRecord
   after_create_commit :create_stripe_customer,
     unless: :should_not_create_stripe_customer?
 
-  after_create_commit :create_hubspot_contact,
-    unless: :should_not_create_hubspot_contact?
+  # after_create_commit :create_hubspot_contact,
+    # unless: :should_not_create_hubspot_contact?
+
+  after_save_commit :create_hubspot_contact,
+    if: :should_create_hubspot_contact?
 
   after_save :create_auth_user,
     if:     -> (user) { user.password.present? },
@@ -206,6 +209,14 @@ class User < ApplicationRecord
   end
 
   # sync gates
+
+  def should_create_hubspot_contact?
+    self.hubspot_id.nil? && self.onboarding_step == OnboardingStep::WELCOME
+  end
+
+  def should_create_stripe_customer?
+    self.stripe_customer_id.nil? && self.onboarding_step == OnboardingStep::WELCOME
+  end
 
   def should_not_create_auth_user?
     self.auth_zero_user_created == true

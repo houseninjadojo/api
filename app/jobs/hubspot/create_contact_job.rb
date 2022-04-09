@@ -14,13 +14,15 @@ class Hubspot::CreateContactJob < ApplicationJob
 
   def params(user)
     {
-      contact_type:   ContactType::CUSTOMER,
-      house_ninja_id: user.id,
-      email:          user.email,
-      firstname:      user.first_name,
-      lastname:       user.last_name,
-      phone:          user.phone_number,
-      zip:            user.requested_zipcode,
+      contact_type:    ContactType::CUSTOMER,
+      house_ninja_id:  user.id,
+      email:           user.email,
+      firstname:       user.first_name,
+      lastname:        user.last_name,
+      phone:           user.phone_number,
+      zip:             user.requested_zipcode,
+
+      onboarding_code: user.onboarding_code,
     }
   end
 end
