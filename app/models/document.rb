@@ -9,6 +9,8 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  document_group_id :uuid
+#  name              :string
+#  description       :string
 #
 # Indexes
 #
@@ -32,6 +34,10 @@ class Document < ApplicationRecord
   has_one_attached :asset
 
   # helpers
+
+  def name
+    name.presence || filename
+  end
 
   def content_type
     asset.try(:content_type)

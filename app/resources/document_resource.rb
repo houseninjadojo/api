@@ -9,6 +9,8 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  document_group_id :uuid
+#  name              :string
+#  description       :string
 #
 # Indexes
 #
@@ -37,6 +39,9 @@ class DocumentResource < ApplicationResource
   attribute :content_type, :string, only: [:readable]
   attribute :filename,     :string, only: [:readable]
   attribute :url,          :string, only: [:readable]
+
+  attribute :name,        :string
+  attribute :description, :string
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]

@@ -9,6 +9,8 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  document_group_id :uuid
+#  name              :string
+#  description       :string
 #
 # Indexes
 #
