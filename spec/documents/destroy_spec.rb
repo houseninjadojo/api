@@ -6,7 +6,12 @@ RSpec.describe "documents#destroy", type: :request do
   end
 
   describe 'basic destroy' do
-    let!(:document) { create(:document) }
+    let(:user) { create(:user) }
+    let!(:document) { create(:document, user: user) }
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     xit 'updates the resource' do
       expect(DocumentResource).to receive(:find).and_call_original

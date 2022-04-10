@@ -22,5 +22,15 @@
 require 'rails_helper'
 
 RSpec.describe Document, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "#name" do
+    it "returns the filename if no name is set" do
+      document = build(:document, name: nil)
+      expect(document.name).to eq(document.asset.filename.to_s)
+    end
+
+    it "returns the name if set" do
+      document = build(:document, name: "My document")
+      expect(document.name).to eq("My document")
+    end
+  end
 end

@@ -89,6 +89,11 @@ RSpec.configure do |config|
       DatabaseCleaner.clean
     end
   end
+
+  config.before(:each) do
+    allow_any_instance_of(ActiveStorage::Current).to receive(:url_options).and_return({ host: 'test.api.houseninja.co' })
+    ActiveStorage::Current.url_options = { host: 'test.api.houseninja.co' }
+  end
 end
 
 Faker::Config.locale = 'en-US'

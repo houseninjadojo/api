@@ -1,15 +1,19 @@
 class DocumentsController < ApplicationController
   def index
-    documents = DocumentResource.all(params)
+    authorize!
+    scope = authorized_scope(Document.all)
+    documents = DocumentResource.all(params, scope)
     respond_with(documents)
   end
 
   def show
     document = DocumentResource.find(params)
+    authorize! document.data
     respond_with(document)
   end
 
   def create
+    authorize!
     document = DocumentResource.build(params)
 
     if document.save
@@ -21,6 +25,7 @@ class DocumentsController < ApplicationController
 
   def update
     document = DocumentResource.find(params)
+    authorize! document.data
 
     if document.update_attributes
       render jsonapi: document
@@ -31,6 +36,7 @@ class DocumentsController < ApplicationController
 
   def destroy
     document = DocumentResource.find(params)
+    authorize! document.data
 
     if document.destroy
       render jsonapi: { meta: {} }, status: 200

@@ -6,6 +6,7 @@ RSpec.describe "documents#create", type: :request do
   end
 
   describe 'basic create' do
+    let(:user) { create(:user) }
     let(:params) do
       attributes_for(:document)
     end
@@ -13,10 +14,22 @@ RSpec.describe "documents#create", type: :request do
       {
         data: {
           type: 'documents',
-          attributes: params
+          attributes: params,
+          relationships: {
+            user: {
+              data: {
+                type: 'users',
+                id: user.id
+              }
+            }
+          }
         }
       }
     end
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     xit 'works' do
       expect(DocumentResource).to receive(:build).and_call_original

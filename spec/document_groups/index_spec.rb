@@ -8,8 +8,13 @@ RSpec.describe "document_groups#index", type: :request do
   end
 
   describe 'basic fetch' do
-    let!(:document_group1) { create(:document_group) }
-    let!(:document_group2) { create(:document_group) }
+    let!(:user) { create(:user) }
+    let!(:document_group1) { create(:document_group, user: user) }
+    let!(:document_group2) { create(:document_group, user: user) }
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     it 'works' do
       expect(DocumentGroupResource).to receive(:all).and_call_original

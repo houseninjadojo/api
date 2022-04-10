@@ -29,34 +29,34 @@ RSpec.describe DocumentResource, type: :resource do
   end
 
   describe 'sorting' do
-    describe 'by id' do
-      let!(:document1) { create(:document) }
-      let!(:document2) { create(:document) }
+    describe 'by name' do
+      let!(:document1) { create(:document, name: 'a') }
+      let!(:document2) { create(:document, name: 'b') }
 
       context 'when ascending' do
         before do
-          params[:sort] = 'id'
+          params[:sort] = 'name'
         end
 
-        xit 'works' do
+        it 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            document1.id,
-            document2.id
+          expect(d.map(&:name)).to eq([
+            document1.name,
+            document2.name
           ])
         end
       end
 
       context 'when descending' do
         before do
-          params[:sort] = '-id'
+          params[:sort] = '-name'
         end
 
-        xit 'works' do
+        it 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            document2.id,
-            document1.id
+          expect(d.map(&:name)).to eq([
+            document2.name,
+            document1.name
           ])
         end
       end

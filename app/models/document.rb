@@ -36,7 +36,7 @@ class Document < ApplicationRecord
   # helpers
 
   def name
-    name.presence || filename
+    self[:name].presence || filename
   end
 
   def content_type

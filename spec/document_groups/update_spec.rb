@@ -6,7 +6,8 @@ RSpec.describe "document_groups#update", type: :request do
   end
 
   describe 'basic update' do
-    let!(:document_group) { create(:document_group) }
+    let!(:user) { create(:user) }
+    let!(:document_group) { create(:document_group, user: user) }
 
     let(:payload) do
       {
@@ -20,8 +21,11 @@ RSpec.describe "document_groups#update", type: :request do
       }
     end
 
-    # Replace 'xit' with 'it' after adding attributes
-    xit 'updates the resource' do
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
+
+    it 'updates the resource' do
       expect(DocumentGroupResource).to receive(:find).and_call_original
       expect {
         make_request

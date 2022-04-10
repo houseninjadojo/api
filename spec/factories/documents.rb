@@ -22,5 +22,12 @@
 FactoryBot.define do
   factory :document do
     document_group
+
+    name { Faker::Commerce.product_name }
+    description { Faker::Lorem.sentence }
+    asset { Rack::Test::UploadedFile.new(
+      Rails.root.join('spec', 'fixtures', 'files', 'invoice.pdf'),
+      'application/pdf')
+    }
   end
 end

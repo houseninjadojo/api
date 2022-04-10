@@ -6,7 +6,8 @@ RSpec.describe "documents#update", type: :request do
   end
 
   describe 'basic update' do
-    let!(:document) { create(:document) }
+    let!(:user) { create(:user) }
+    let!(:document) { create(:document, user: user) }
 
     let(:payload) do
       {
@@ -19,6 +20,10 @@ RSpec.describe "documents#update", type: :request do
         }
       }
     end
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     # Replace 'xit' with 'it' after adding attributes
     xit 'updates the resource' do
