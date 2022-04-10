@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_09_231052) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_10_072038) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -95,9 +95,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_09_231052) do
     t.uuid "document_group_id"
     t.string "name"
     t.string "description"
+    t.string "tags", default: [], null: false, array: true
     t.index ["document_group_id"], name: "index_documents_on_document_group_id"
     t.index ["invoice_id"], name: "index_documents_on_invoice_id"
     t.index ["property_id"], name: "index_documents_on_property_id"
+    t.index ["tags"], name: "index_documents_on_tags", using: :gin
     t.index ["user_id"], name: "index_documents_on_user_id"
   end
 

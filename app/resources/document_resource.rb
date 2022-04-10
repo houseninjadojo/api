@@ -11,12 +11,14 @@
 #  document_group_id :uuid
 #  name              :string
 #  description       :string
+#  tags              :string           default([]), not null, is an Array
 #
 # Indexes
 #
 #  index_documents_on_document_group_id  (document_group_id)
 #  index_documents_on_invoice_id         (invoice_id)
 #  index_documents_on_property_id        (property_id)
+#  index_documents_on_tags               (tags) USING gin
 #  index_documents_on_user_id            (user_id)
 #
 class DocumentResource < ApplicationResource
@@ -42,6 +44,8 @@ class DocumentResource < ApplicationResource
 
   attribute :name,        :string
   attribute :description, :string
+
+  attribute :tags, :array_of_strings
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]

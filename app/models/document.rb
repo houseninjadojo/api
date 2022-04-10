@@ -11,15 +11,22 @@
 #  document_group_id :uuid
 #  name              :string
 #  description       :string
+#  tags              :string           default([]), not null, is an Array
 #
 # Indexes
 #
 #  index_documents_on_document_group_id  (document_group_id)
 #  index_documents_on_invoice_id         (invoice_id)
 #  index_documents_on_property_id        (property_id)
+#  index_documents_on_tags               (tags) USING gin
 #  index_documents_on_user_id            (user_id)
 #
 class Document < ApplicationRecord
+  module SystemTags
+    PMP = 'system:preventative-maintenance-plan'
+    WALKTHROUGH_REPORT = 'system:walkthrough-report'
+  end
+
   # callbacks
 
   # associations
@@ -53,5 +60,13 @@ class Document < ApplicationRecord
 
   def url
     asset.try(:url)
+  end
+
+  def is_pmp?
+    tags.include?(SystemTags::PMP)
+  end
+
+  def is_walkthrough_report?
+    tags.include?(SystemTags::WALKTHROUGH_REPORT)
   end
 end
