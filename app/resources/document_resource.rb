@@ -45,7 +45,7 @@ class DocumentResource < ApplicationResource
   attribute :name,        :string
   attribute :description, :string
 
-  attribute :tags, :array_of_strings
+  attribute :tags, :array
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
