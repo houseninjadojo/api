@@ -34,9 +34,10 @@ class DocumentResource < ApplicationResource
 
   attribute :id, :uuid
 
-  attribute :invoice_id,  :uuid, only: [:filterable]
-  attribute :property_id, :uuid, only: [:filterable]
-  attribute :user_id,     :uuid, only: [:filterable]
+  attribute :invoice_id,        :uuid, only: [:filterable]
+  attribute :property_id,       :uuid, only: [:filterable]
+  attribute :user_id,           :uuid, only: [:filterable]
+  attribute :document_group_id, :uuid, only: [:filterable]
 
   attribute :content_type, :string, only: [:readable]
   attribute :filename,     :string, only: [:readable]
