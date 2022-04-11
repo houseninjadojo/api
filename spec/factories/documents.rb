@@ -11,7 +11,7 @@
 #  document_group_id :uuid
 #  name              :string
 #  description       :string
-#  tags              :string           default([]), not null, is an Array
+#  tags              :text             default([]), not null, is an Array
 #
 # Indexes
 #
