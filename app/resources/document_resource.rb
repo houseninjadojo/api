@@ -25,7 +25,7 @@ class DocumentResource < ApplicationResource
   self.model = Document
   self.type = :documents
 
-  primary_endpoint 'documents', [:index, :show]
+  primary_endpoint 'documents', [:index, :show, :update]
 
   belongs_to :document_group
   belongs_to :invoice
