@@ -15,7 +15,8 @@ class DocumentPolicy < ApplicationPolicy
   end
 
   def update?
-    false
+    deny! if record.nil? || user.nil?
+    record.user_id == user.id
   end
 
   def destroy?
