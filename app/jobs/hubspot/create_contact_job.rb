@@ -14,7 +14,7 @@ class Hubspot::CreateContactJob < ApplicationJob
 
   def params(user)
     {
-      contact_type:    ContactType::CUSTOMER,
+      contact_type:    contact_type(user),
       house_ninja_id:  user.id,
       email:           user.email,
       firstname:       user.first_name,
@@ -24,5 +24,13 @@ class Hubspot::CreateContactJob < ApplicationJob
 
       onboarding_code: user.onboarding_code,
     }
+  end
+
+  def contact_type(user)
+    if user.requested_zipcode.present?
+      ContactType::SERVICE_AREA_REQUESTED
+    else
+      ContactType::CUSTOMER
+    end
   end
 end
