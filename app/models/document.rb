@@ -55,7 +55,7 @@ class Document < ApplicationRecord
   end
 
   def filename=(val)
-    asset.present? && asset.blob.update!(filename: val)
+    # asset.present? && asset.blob.update!(filename: val)
   end
 
   def url
@@ -68,5 +68,14 @@ class Document < ApplicationRecord
 
   def is_walkthrough_report?
     tags.include?(SystemTags::WALKTHROUGH_REPORT)
+  end
+
+  # no-op
+  # needed for resource parity
+
+  def content_type=(val)
+  end
+
+  def url=(val)
   end
 end
