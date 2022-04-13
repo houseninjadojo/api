@@ -1,5 +1,5 @@
 after 'development:users' do
-  miles = User.find('01ce0d37-cf98-4f3d-9810-2f5781085d5f')
+  miles = User.find_by(email: 'miles@houseninja.co')
   miles_property = miles.properties.find_or_create_by!(
     lot_size: 11325.6,
     home_size: 1954,

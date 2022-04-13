@@ -1,4 +1,10 @@
 class DocumentsController < ApplicationController
+  # before_action do
+  #   if Rails.env.development?
+  #     ActiveStorage::Current.host = request.base_url
+  #   end
+  # end
+
   def index
     authorize!
     scope = authorized_scope(Document.all)

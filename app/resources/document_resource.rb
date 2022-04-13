@@ -25,7 +25,7 @@ class DocumentResource < ApplicationResource
   self.model = Document
   self.type = :documents
 
-  primary_endpoint 'documents', [:index, :show, :update]
+  primary_endpoint 'documents', [:index, :show, :create, :update, :destroy]
 
   belongs_to :document_group
   belongs_to :invoice
@@ -50,4 +50,6 @@ class DocumentResource < ApplicationResource
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
+
+  attribute :asset, :string, except: [:readable, :sortable, :filterable]
 end

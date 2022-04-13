@@ -70,6 +70,15 @@ class Document < ApplicationRecord
     tags.include?(SystemTags::WALKTHROUGH_REPORT)
   end
 
+  # def signed_asset=(val)
+  #   puts val
+  #   self.asset = ActiveStorage::Blob.find_signed(val)
+  # end
+
+  # def signed_asset
+  #   nil
+  # end
+
   # no-op
   # needed for resource parity
 
