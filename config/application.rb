@@ -55,7 +55,7 @@ module HouseNinja
 
     # ActiveStorage
     # use proxy for ActiveStorage
-    config.active_storage.resolve_model_to_route = :rails_storage_proxy
+    # config.active_storage.resolve_model_to_route = :rails_storage_proxy
 
     # Set Redis as the cache store
     # @see https://guides.rubyonrails.org/caching_with_rails.html#activesupport-cache-rediscachestore

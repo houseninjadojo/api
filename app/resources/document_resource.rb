@@ -41,9 +41,7 @@ class DocumentResource < ApplicationResource
 
   attribute :content_type, :string, only: [:readable]
   attribute :filename,     :string, only: [:readable]
-  attribute :url,          :string, only: [:readable] do
-    Rails.application.routes.url_helpers.cdn_asset_url(@object.asset)
-  end
+  attribute :url,          :string, only: [:readable]
 
   attribute :name,        :string
   attribute :description, :string
