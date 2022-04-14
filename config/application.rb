@@ -53,6 +53,10 @@ module HouseNinja
     # @see https://edgeguides.rubyonrails.org/active_record_encryption.html#storing-key-references
     config.active_record.encryption.store_key_references = true
 
+    # ActiveStorage
+    # use proxy for ActiveStorage
+    config.active_storage.resolve_model_to_route = :rails_storage_proxy
+
     # Set Redis as the cache store
     # @see https://guides.rubyonrails.org/caching_with_rails.html#activesupport-cache-rediscachestore
     config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
