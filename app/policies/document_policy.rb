@@ -20,7 +20,8 @@ class DocumentPolicy < ApplicationPolicy
   end
 
   def destroy?
-    false
+    deny! if record.nil? || user.nil?
+    record.user_id == user.id
   end
 
   # Scoping
