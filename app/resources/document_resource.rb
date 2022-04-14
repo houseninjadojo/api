@@ -37,7 +37,7 @@ class DocumentResource < ApplicationResource
   attribute :invoice_id,        :uuid, only: [:filterable]
   attribute :property_id,       :uuid, only: [:filterable]
   attribute :user_id,           :uuid, only: [:filterable]
-  attribute :document_group_id, :uuid, only: [:filterable]
+  attribute :document_group_id, :uuid, only: [:filterable], allow_nil: true
 
   attribute :content_type, :string, only: [:readable]
   attribute :filename,     :string, only: [:readable]
@@ -52,4 +52,22 @@ class DocumentResource < ApplicationResource
   attribute :updated_at, :datetime, except: [:writeable]
 
   attribute :asset, :string, except: [:readable, :sortable, :filterable]
+
+  # treat 'uncategorized' as 'all documents without a document group'
+  filter :document_group_id, :uuid do
+    eq do |scope, value|
+      if value == ['uncategorized']
+        scope.where(document_group_id: nil)
+      else
+        scope.where(document_group_id: value)
+      end
+    end
+  end
+
+  # we need to call this out explicitly
+  before_attributes do |attributes|
+    if attributes[:document_group_id].nil?
+      attributes[:document_group_id] = nil
+    end
+  end
 end

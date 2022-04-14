@@ -7,9 +7,11 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    # origins 'co.houseninja.application://' 'app.houseninja.co', 'co.houseninja.app', 'co.houseninja.application',
-    # origins "*"
-    origins /co\.houseninja\.application\:\/\//, /[a-z0-9]+\.houseninja\.pages\.dev/, "app.houseninja.co" #, "localhost:4200"
+    if Rails.env.development?
+      origins "localhost:4200", "co.houseninja.application"
+    else
+      origins /co\.houseninja\.application\:\/\//, /[a-z0-9]+\.houseninja\.pages\.dev/, "app.houseninja.co"
+    end
 
     resource "*",
       headers: :any,
