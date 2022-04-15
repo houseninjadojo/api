@@ -18,7 +18,7 @@ class DocumentGroup < ApplicationRecord
   # associations
 
   belongs_to :user
-  has_many :documents
+  has_many :documents, dependent: :nullify
 
   # attributes
 
@@ -29,7 +29,4 @@ class DocumentGroup < ApplicationRecord
   def owner
     # no-op
   end
-
-  # helpers
-
 end
