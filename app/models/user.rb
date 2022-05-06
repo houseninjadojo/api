@@ -42,7 +42,7 @@ class User < ApplicationRecord
 
   after_create_commit :create_stripe_customer,
     unless: :should_not_create_stripe_customer?
-  
+
   after_create_commit :generate_onboarding_link
 
   # after_create_commit :create_hubspot_contact,
