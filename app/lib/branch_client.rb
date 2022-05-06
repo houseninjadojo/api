@@ -25,4 +25,20 @@ class BranchClient
   def self.client
     BranchClient.current
   end
+
+  def self.link(*args)
+    client.link(*args)
+  end
+
+  def self.link_info(*args)
+    client.link_info(*args)
+  end
+
+  def self.update_link(*args)
+    client.update_link(*args)
+  end
+
+  def self.delete_link(*args)
+    client.delete_link(*args)
+  end
 end

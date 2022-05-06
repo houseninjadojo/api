@@ -19,6 +19,7 @@
 #  contact_type           :string           default("Customer")
 #  onboarding_step        :string
 #  onboarding_code        :string
+#  onboarding_link        :string
 #
 # Indexes
 #
@@ -41,6 +42,8 @@ class User < ApplicationRecord
 
   after_create_commit :create_stripe_customer,
     unless: :should_not_create_stripe_customer?
+  
+  after_create_commit :generate_onboarding_link
 
   # after_create_commit :create_hubspot_contact,
     # unless: :should_not_create_hubspot_contact?
@@ -161,9 +164,15 @@ class User < ApplicationRecord
     self.onboarding_code = SecureRandom.hex(12)
   end
 
+  def generate_onboarding_link
+    return if onboarding_link.present?
+    Users::GenerateOnboardingLinkJob.perform_later(self)
+  end
+
   def complete_onboarding
     self.onboarding_step = "completed"
     self.onboarding_code = nil
+    self.onboarding_link = nil
     self.save
   end
 
