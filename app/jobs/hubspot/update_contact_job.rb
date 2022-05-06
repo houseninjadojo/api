@@ -18,6 +18,7 @@ class Hubspot::UpdateContactJob < ApplicationJob
       zip:          user.requested_zipcode,
 
       onboarding_code: user.onboarding_code,
+      onboarding_link: user.onboarding_link,
     }
   end
 end

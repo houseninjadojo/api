@@ -19,6 +19,7 @@
 #  contact_type           :string           default("Customer")
 #  onboarding_step        :string
 #  onboarding_code        :string
+#  onboarding_link        :string
 #
 # Indexes
 #
