@@ -221,7 +221,7 @@ GEM
     kredis (1.2.0)
       activesupport (>= 6.0.0)
       redis (~> 4.2)
-    lograge (0.11.2)
+    lograge (0.12.0)
       actionpack (>= 4)
       activesupport (>= 4)
       railties (>= 4)
@@ -259,9 +259,9 @@ GEM
       timeout
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.13.4-arm64-darwin)
+    nokogiri (1.13.5-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.4-x86_64-linux)
+    nokogiri (1.13.5-x86_64-linux)
       racc (~> 1.4)
     okcomputer (1.18.4)
     parallel (1.21.0)
@@ -431,7 +431,7 @@ DEPENDENCIES
   jwt
   kaminari
   kredis
-  lograge (~> 0.11.2)
+  lograge (~> 0.12.0)
   money
   okcomputer
   pg (~> 1.3)
