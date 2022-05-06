@@ -18,7 +18,7 @@ gem 'hubspot-api-ruby', github: 'houseninjadojo/hubspot-api-ruby'
 gem 'jwt'
 gem 'kaminari'
 gem 'kredis'                                                                   # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-gem 'lograge',                 '~> 0.11.2'
+gem 'lograge',                 '~> 0.12.0'
 gem 'money'
 gem 'okcomputer'                                                               # Health Check
 gem 'pg',                      '~> 1.3'                                        # Use postgresql as the database for Active Record
