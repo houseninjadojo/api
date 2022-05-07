@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/dabit/annotate_models.git
-  revision: f38741d005052045e4d4c2c26b009d3ade0864f3
-  branch: rails-7
-  specs:
-    annotate (3.1.1)
-      activerecord (>= 3.2, < 7.1)
-      rake (>= 10.4, < 14.0)
-
-GIT
   remote: https://github.com/houseninjadojo/graphiti.git
   revision: a596a58e0114b8fa8815bd76334857bef5334522
   branch: activerecord-filter-array-eq
@@ -100,6 +91,9 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    annotate (3.2.0)
+      activerecord (>= 3.2, < 8.0)
+      rake (>= 10.4, < 14.0)
     ast (2.4.2)
     auth0 (5.8.0)
       addressable (~> 2.8)
@@ -414,7 +408,7 @@ PLATFORMS
 
 DEPENDENCIES
   action_policy (~> 0.6.0)
-  annotate!
+  annotate
   auth0
   aws-sdk-s3
   bootsnap (>= 1.9.3)

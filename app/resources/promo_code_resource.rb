@@ -4,15 +4,15 @@
 #
 #  id            :uuid             not null, primary key
 #  active        :boolean          default(FALSE), not null
+#  amount_off    :string
 #  code          :string           not null
 #  name          :string
 #  percent_off   :string
-#  stripe_id     :string
 #  stripe_object :jsonb
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  amount_off    :string
 #  coupon_id     :string
+#  stripe_id     :string
 #
 # Indexes
 #

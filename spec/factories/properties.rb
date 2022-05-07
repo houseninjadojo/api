@@ -3,25 +3,25 @@
 # Table name: properties
 #
 #  id              :uuid             not null, primary key
-#  user_id         :uuid
-#  lot_size        :float
-#  home_size       :float
-#  garage_size     :float
-#  year_built      :integer
-#  estimated_value :string
-#  bedrooms        :float
 #  bathrooms       :float
+#  bedrooms        :float
+#  city            :string
+#  default         :boolean
+#  estimated_value :string
+#  garage_size     :float
+#  home_size       :float
+#  lot_size        :float
 #  pools           :float
+#  selected        :boolean
+#  state           :string
+#  street_address1 :string
+#  street_address2 :string
+#  year_built      :integer
+#  zipcode         :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  service_area_id :uuid
-#  default         :boolean
-#  selected        :boolean
-#  street_address1 :string
-#  street_address2 :string
-#  city            :string
-#  zipcode         :string
-#  state           :string
+#  user_id         :uuid
 #
 # Indexes
 #
@@ -32,6 +32,10 @@
 #  index_properties_on_user_id_and_default   (user_id,default) UNIQUE
 #  index_properties_on_user_id_and_selected  (user_id,selected)
 #  index_properties_on_zipcode               (zipcode)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
 #
 
 FactoryBot.define do

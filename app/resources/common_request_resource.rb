@@ -4,11 +4,11 @@
 #
 #  id                      :uuid             not null, primary key
 #  caption                 :string
-#  img_uri                 :string
 #  default_hn_chat_message :string
+#  img_uri                 :string
+#  order_index             :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  order_index             :integer
 #
 # Indexes
 #

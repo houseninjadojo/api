@@ -2,24 +2,24 @@
 #
 # Table name: users
 #
-#  id                     :uuid             not null, primary key
-#  first_name             :string           not null
-#  last_name              :string           not null
-#  email                  :string           default(""), not null
-#  phone_number           :string           not null
-#  gender                 :string           default("other"), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  requested_zipcode      :string
-#  auth_zero_user_created :boolean          default(FALSE)
-#  stripe_customer_id     :string
-#  hubspot_id             :string
-#  hubspot_contact_object :jsonb
-#  promo_code_id          :uuid
-#  contact_type           :string           default("Customer")
-#  onboarding_step        :string
-#  onboarding_code        :string
-#  onboarding_link        :string
+#  id                                        :uuid             not null, primary key
+#  auth_zero_user_created                    :boolean          default(FALSE)
+#  contact_type                              :string           default("Customer")
+#  email(Email Address)                      :string           default(""), not null
+#  first_name(First Name)                    :string           not null
+#  gender(Gender)                            :string           default("other"), not null
+#  hubspot_contact_object                    :jsonb
+#  last_name(Last Name)                      :string           not null
+#  onboarding_code                           :string
+#  onboarding_link                           :string
+#  onboarding_step                           :string
+#  phone_number(Phone Number (+15555555555)) :string           not null
+#  requested_zipcode                         :string
+#  created_at                                :datetime         not null
+#  updated_at                                :datetime         not null
+#  hubspot_id                                :string
+#  promo_code_id                             :uuid
+#  stripe_customer_id                        :string
 #
 # Indexes
 #
@@ -118,6 +118,13 @@ class User < ApplicationRecord
     self.properties.first
   end
 
+  # Get the user's default payment method
+  #
+  # @return {PaymentMethod}
+  def default_payment_method
+    self.payment_methods.first
+  end
+
   # User Full Name (first_name + last_name)
   #
   # @return {string} full name
@@ -131,6 +138,11 @@ class User < ApplicationRecord
   # @return {string} auth id
   def auth_id
     "auth0|#{self.id}"
+  end
+
+  # @todo remove this after consolidation of column names
+  def stripe_id
+    self.stripe_customer_id
   end
 
   # intercom hash

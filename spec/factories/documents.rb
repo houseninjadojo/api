@@ -3,15 +3,15 @@
 # Table name: documents
 #
 #  id                :uuid             not null, primary key
-#  user_id           :uuid
-#  invoice_id        :uuid
-#  property_id       :uuid
+#  description       :string
+#  name              :string
+#  tags              :text             default([]), not null, is an Array
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  document_group_id :uuid
-#  name              :string
-#  description       :string
-#  tags              :text             default([]), not null, is an Array
+#  invoice_id        :uuid
+#  property_id       :uuid
+#  user_id           :uuid
 #
 # Indexes
 #
@@ -20,6 +20,12 @@
 #  index_documents_on_property_id        (property_id)
 #  index_documents_on_tags               (tags) USING gin
 #  index_documents_on_user_id            (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (invoice_id => invoices.id)
+#  fk_rails_...  (property_id => properties.id)
+#  fk_rails_...  (user_id => users.id)
 #
 FactoryBot.define do
   factory :document do
