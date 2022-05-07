@@ -31,8 +31,8 @@ class Subscription < ApplicationRecord
 
   after_create_commit :set_user_onboarding_step
 
-  after_create_commit :create_stripe_subscription,
-    unless: -> (subscription) { subscription.stripe_subscription_id.present? }
+  # after_create_commit :create_stripe_subscription,
+  #   unless: -> (subscription) { subscription.stripe_subscription_id.present? }
 
   # associations
 
@@ -48,7 +48,13 @@ class Subscription < ApplicationRecord
   # callbacks
 
   def create_stripe_subscription
+    return if stripe_subscription_id.present?
     Stripe::CreateSubscriptionJob.perform_later(self)
+  end
+
+  def charge_and_subscribe!
+    return if stripe_subscription_id.present?
+    Stripe::CreateSubscriptionJob.perform_now(self)
   end
 
   def cancel_stripe_subscription
