@@ -37,6 +37,7 @@ class Invoice < ApplicationRecord
 
   # associations
 
+  has_many   :line_items,   dependent: :destroy
   has_one    :document
   has_one    :payment
   belongs_to :promo_code,   required: false
