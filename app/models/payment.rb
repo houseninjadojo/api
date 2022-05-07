@@ -59,8 +59,12 @@ class Payment < ApplicationRecord
 
   # actions
 
-  def charge_payment_method!
+  def charge_payment_method!(now: true)
     return if has_charge?
-    Stripe::CreateChargeJob.perform_now(self)
+    if now == true
+      Stripe::CreateChargeJob.perform_now(self)
+    else
+      Stripe::CreateChargeJob.perform_later(self)
+    end
   end
 end
