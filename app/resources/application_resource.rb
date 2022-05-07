@@ -1,19 +1,6 @@
-# == Schema Information
-#
-# Table name: work_order_statuses
-#
-#  id         :uuid             not null, primary key
-#  name       :string
-#  slug       :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  hubspot_id :string
-#
-# Indexes
-#
-#  index_work_order_statuses_on_hubspot_id  (hubspot_id) UNIQUE
-#  index_work_order_statuses_on_slug        (slug) UNIQUE
-#
+# ApplicationResource is similar to ApplicationRecord - a base class that
+# holds configuration/methods for subclasses.
+# All Resources should inherit from ApplicationResource.
 class ApplicationResource < Graphiti::Resource
   # Use the ActiveRecord Adapter for all subclasses.
   # Subclasses can still override this default.
