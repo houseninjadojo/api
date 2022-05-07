@@ -29,10 +29,38 @@ class Payment < ApplicationRecord
   # callbacks
 
   # associations
+
   belongs_to :invoice
   belongs_to :payment_method, required: false
   belongs_to :user,           required: false
 
   # validations
+
   validates :stripe_id, uniqueness: true, allow_nil: true
+
+  # helpers
+
+  def paid?
+    status == 'succeeded'
+  end
+
+  def pending?
+    status == 'pending'
+  end
+
+  def failed?
+    status == 'failed'
+  end
+
+  def has_charge?
+    stripe_object.present?
+  end
+  alias was_charged? has_charge?
+
+  # actions
+
+  def charge_payment_method!
+    return if has_charge?
+    Stripe::CreateChargeJob.perform_now(self)
+  end
 end
