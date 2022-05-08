@@ -4,6 +4,11 @@ class Hubspot::HandleWebhookJob < ApplicationJob
   queue_as :default
 
   def perform(webhook_event)
+    ActiveSupport::Deprecation.warn(
+      "`Hubspot::HandleWebhookJob` is deprecated. " \
+      "Use `Hubspot::Webhook::IngestJob` instead."
+    )
+
     @webhook_event = webhook_event
     return if webhook_event.processed_at.present?
     @payload = webhook_event.payload
