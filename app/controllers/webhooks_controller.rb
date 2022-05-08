@@ -27,10 +27,11 @@ class WebhooksController < ApplicationController
       content = JSON.parse(event)
       webhook_event = WebhookEvent.create!(service: 'hubspot', payload: content)
       content.each do |payload|
-        Hubspot::HandleWebhookJob.perform_later(webhook_event)
+        Hubspot::Webhook::IngestJob.perform_later(webhook_event)
       end
     rescue
-      WebhookEvent.create!(service: 'hubspot', payload: event)
+      webhook_event = WebhookEvent.create!(service: 'hubspot', payload: event)
+      Rails.logger.warn("Could not parse event=#{webhook_event.id}")
     end
     render status: :ok
   end

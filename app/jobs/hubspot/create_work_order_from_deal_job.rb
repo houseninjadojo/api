@@ -2,6 +2,11 @@ class Hubspot::CreateWorkOrderFromDealJob < ApplicationJob
   queue_as :default
 
   def perform(hubspot_id)
+    ActiveSupport::Deprecation.warn(
+      "`Hubspot::CreateWorkOrderFromDealJob` is deprecated. " \
+      "Use `Hubspot::Webhook::Handler::Deal::CreationJob` instead."
+    )
+
     deal = Hubspot::Deal.find(hubspot_id)
     attributes = mapped_attributes(deal)
 

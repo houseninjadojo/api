@@ -2,6 +2,11 @@ class Hubspot::CreateUserFromContactJob < ApplicationJob
   queue_as :default
 
   def perform(hubspot_id)
+    ActiveSupport::Deprecation.warn(
+      "`Hubspot::CreateUserFromContactJob` is deprecated. " \
+      "Use `Hubspot::Webhook::Handler::Contact::CreationJob` instead."
+    )
+
     contact = Hubspot::Contact.find_by_vid(hubspot_id)
     attributes = map_contact_attributes(contact)
 
