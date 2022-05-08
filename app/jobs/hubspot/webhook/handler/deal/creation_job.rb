@@ -1,8 +1,8 @@
 class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
   queue_as :default
 
-  def perform(hubspot_id, webhook_event)
-    @hubspot_id = hubspot_id
+  def perform(webhook_entry, webhook_event)
+    @entry = webhook_entry
     return unless conditions_met?
 
     WorkOrder.create!(work_order_attributes_from_deal)
@@ -43,7 +43,7 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
   end
 
   def hubspot_id
-    hubspot_id
+    @hubspot_id ||= @entry["objectId"]
   end
 
   def deal

@@ -8,7 +8,7 @@ class Hubspot::HandleWebhookJob < ApplicationJob
     return if webhook_event.processed_at.present?
     @payload = webhook_event.payload
     process!
-    webhook_event.update(processed_at: Time.now)
+    # webhook_event.update(processed_at: Time.now)
   end
 
   def process!

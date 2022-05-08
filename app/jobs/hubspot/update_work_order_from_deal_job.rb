@@ -4,6 +4,11 @@ class Hubspot::UpdateWorkOrderFromDealJob < ApplicationJob
   queue_as :default
 
   def perform(webhook_event)
+    ActiveSupport::Deprecation.warn(
+      "`Hubspot::UpdateWorkOrderFromDealJob` is deprecated. " \
+      "Use `Hubspot::Webhook::Handler::Deal::PropertyChangeJob` instead."
+    )
+
     @webhook_event = webhook_event
     return if webhook_event.processed_at.present?
 
