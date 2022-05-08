@@ -91,7 +91,7 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
   end
 
   def user_from_contact_association
-    @user ||= do
+    @user ||= begin
       contacts = Hubspot::Association.all(hubspot_id, Hubspot::Association::DEAL_TO_CONTACT)
       contact = contacts.first
       User.find_by(hubspot_id: contact.id)
