@@ -5,7 +5,7 @@ RSpec.describe Stripe::Invoices::CreateJob, type: :job do
     let(:user) { create(:user, :with_payment_method) }
     let(:invoice) { create(:invoice, user: user, stripe_id: nil) }
     let(:job) { Stripe::Invoices::CreateJob }
-    let(:params) { 
+    let(:params) {
       {
         auto_advance: false,
         collection_method: "charge_automatically",

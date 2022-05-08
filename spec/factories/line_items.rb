@@ -24,6 +24,13 @@
 #
 FactoryBot.define do
   factory :line_item do
-    
+    amount { Faker::Number.number(digits: 3) }
+    description { Faker::Lorem.sentence }
+
+    trait :with_invoice do
+      after(:create) do |line_item|
+        line_item.invoice = create(:invoice)
+      end
+    end
   end
 end
