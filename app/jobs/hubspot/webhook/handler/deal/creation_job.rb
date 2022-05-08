@@ -97,7 +97,7 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
       User.find_by(hubspot_id: contact.id)
     end
   end
-  alias user_from_contact_association user
+  alias user user_from_contact_association
 
   def property
     @property ||= user_from_contact_association.try(:properties).try(:first)
