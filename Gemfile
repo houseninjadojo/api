@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.3"
 
+gem 'amazing_print'
 gem 'auth0'
 gem 'action_policy',           '~> 0.6.0'
 gem 'aws-sdk-s3',                          require: false
@@ -19,7 +20,6 @@ gem 'hubspot-api-ruby', github: 'houseninjadojo/hubspot-api-ruby'
 gem 'jwt'
 gem 'kaminari'
 gem 'kredis'                                                                   # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-gem 'lograge',                 '~> 0.12.0'
 gem 'money'
 gem 'okcomputer'                                                               # Health Check
 gem 'pg',                      '~> 1.3'                                        # Use postgresql as the database for Active Record
@@ -27,6 +27,7 @@ gem 'phonelib'
 gem 'puma',                    '~> 5.6'                                        # Use Puma as the app server
 gem 'rack-cors'                                                                # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails',                   '~> 7.0.2'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
+gem 'rails_semantic_logger'
 gem 'redis',                   '~> 4.6'                                        # Use Redis adapter to run Action Cable in production
 gem 'responders'
 gem 'seedbank'
