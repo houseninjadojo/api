@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_07_043434) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_09_054339) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -128,11 +128,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_07_043434) do
     t.datetime "updated_at", null: false
     t.datetime "finalized_at", precision: nil
     t.datetime "payment_attempted_at", precision: nil
+    t.uuid "work_order_id"
     t.index ["promo_code_id"], name: "index_invoices_on_promo_code_id"
     t.index ["status"], name: "index_invoices_on_status"
     t.index ["stripe_id"], name: "index_invoices_on_stripe_id", unique: true
     t.index ["subscription_id"], name: "index_invoices_on_subscription_id"
     t.index ["user_id"], name: "index_invoices_on_user_id"
+    t.index ["work_order_id"], name: "index_invoices_on_work_order_id"
   end
 
   create_table "line_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -144,6 +146,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_07_043434) do
     t.jsonb "stripe_object"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "price"
+    t.integer "quantity"
     t.index ["hubspot_id"], name: "index_line_items_on_hubspot_id"
     t.index ["invoice_id"], name: "index_line_items_on_invoice_id"
     t.index ["stripe_id"], name: "index_line_items_on_stripe_id"

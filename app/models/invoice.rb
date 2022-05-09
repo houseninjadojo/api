@@ -17,6 +17,7 @@
 #  stripe_id            :string
 #  subscription_id      :uuid
 #  user_id              :uuid
+#  work_order_id        :uuid
 #
 # Indexes
 #
@@ -25,6 +26,7 @@
 #  index_invoices_on_stripe_id        (stripe_id) UNIQUE
 #  index_invoices_on_subscription_id  (subscription_id)
 #  index_invoices_on_user_id          (user_id)
+#  index_invoices_on_work_order_id    (work_order_id)
 #
 # Foreign Keys
 #
@@ -33,6 +35,16 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Invoice < ApplicationRecord
+  # statuses
+  # @see https://stripe.com/docs/invoicing/integration/workflow-transitions
+
+  STATUS_DELETED = "deleted"
+  STATUS_DRAFT = "draft"
+  STATUS_OPEN = "open"
+  STATUS_UNCOLLECTIBLE = "uncollectible"
+  STATUS_PAID = "paid"
+  STATUS_VOIDED = "void"
+
   # callbacks
 
   # associations
@@ -43,6 +55,7 @@ class Invoice < ApplicationRecord
   belongs_to :promo_code,   required: false
   belongs_to :subscription, required: false
   belongs_to :user,         required: false
+  belongs_to :work_order,   required: false
 
   # validations
 

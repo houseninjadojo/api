@@ -28,9 +28,13 @@
 #  fk_rails_...  (property_id => properties.id)
 #
 class WorkOrder < ApplicationRecord
+  # associations
+
   belongs_to :property, required: false
-  belongs_to :status, class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status
+  belongs_to :status,   class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status
+  has_one    :invoice,  dependent: :destroy
 
   # validations
+
   validates :hubspot_id, uniqueness: true, allow_nil: true
 end

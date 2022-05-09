@@ -17,6 +17,7 @@
 #  stripe_id            :string
 #  subscription_id      :uuid
 #  user_id              :uuid
+#  work_order_id        :uuid
 #
 # Indexes
 #
@@ -25,6 +26,7 @@
 #  index_invoices_on_stripe_id        (stripe_id) UNIQUE
 #  index_invoices_on_subscription_id  (subscription_id)
 #  index_invoices_on_user_id          (user_id)
+#  index_invoices_on_work_order_id    (work_order_id)
 #
 # Foreign Keys
 #
@@ -43,6 +45,7 @@ class InvoiceResource < ApplicationResource
   belongs_to :promo_code
   belongs_to :subscription
   belongs_to :user
+  belongs_to :work_order
 
   attribute :id, :uuid
 
@@ -50,6 +53,7 @@ class InvoiceResource < ApplicationResource
   attribute :promo_code,      :uuid, only: [:filterable]
   attribute :subscription_id, :uuid, only: [:filterable]
   attribute :user_id,         :uuid, only: [:filterable]
+  attribute :work_order_id,   :uuid, only: [:filterable]
 
   attribute :status,      :string, except: [:writeable]
   attribute :description, :string, except: [:writeable]
