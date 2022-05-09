@@ -3,9 +3,9 @@ Datadog.configure do |c|
   c.service = 'api'
 
   # Enable in production only
-  c.tracer.enabled = ['production', 'sandbox'].include?(Rails.env)
+  c.tracing.enabled = ['production', 'sandbox'].include?(Rails.env)
 
-  c.tracer sampler: Datadog::PrioritySampler.new(
+  c.tracing.sampler: Datadog::PrioritySampler.new(
     post_sampler: Datadog::Sampling::RuleSampler.new(
       [
         Datadog::Sampling::SimpleRule.new(service: 'o1061437.ingest.sentry.io', sample_rate: 0.0),
@@ -30,55 +30,59 @@ Datadog.configure do |c|
   }
   c.version = ENV['HEROKU_SLUG_COMMIT']
 
+  # Logging
+  c.tracing.log_injection = true
+
   # Integrations
 
-  # c.use :active_job,    service_name: 'worker'
+  # c.tracing.instrument :action_pack,
+  #   service_name: 'controllers'
 
-  c.use :active_record,
+  c.tracing.instrument :active_job,
+    service_name: 'workers'
+
+  c.tracing.instrument :active_record,
     orm_service_name: 'orm',     # Service name used for the mapping portion of query results to ActiveRecord objects. Inherits service name from parent by default.
     service_name:     'database' # Service name used for database portion of active_record instrumentation.
 
-  # c.use :aws,           service_name: 'aws'
+  c.tracing.instrument :active_support,
+    service_name: 'cache'
 
-  c.use :http, describes: /api\.stripe\.com/ do |http|
+  c.tracing.instrument :aws,
+    service_name: 'aws'
+
+  c.tracing.instrument :http, describes: /api\.stripe\.com/ do |http|
     http.service_name    = 'api.stripe.com'
     http.split_by_domain = false
   end
-
-  c.use :http, describes: /(sandbox\.)?auth\.houseninja\.co/ do |http|
+  c.tracing.instrument :http, describes: /(sandbox\.)?auth\.houseninja\.co/ do |http|
     http.service_name    = 'auth'
     http.split_by_domain = false
   end
-
-  c.use :http, describes: /api\.hubapi\.com/ do |http|
+  c.tracing.instrument :http, describes: /api\.hubapi\.com/ do |http|
     http.service_name    = 'api.hubapi.com'
     http.split_by_domain = false
   end
+  c.tracing.instrument :http, split_by_domain: true
 
-  c.use :http, split_by_domain: true
-
-  c.use :rails,
-    cache_service:       'cache',
-    database_service:    'database',
+  c.tracing.instrument :rails
     distributed_tracing: true,
-    job_service:         'workers',
-    service_name:        'api',
-    log_injection:       true
+    service_name:        'api'
 
-  c.use :redis,
+  c.tracing.instrument :redis,
     service_name: 'redis'
 
-  c.use :sidekiq,
+  c.tracing.instrument :sidekiq,
     service_name: 'sidekiq',
     tag_args:     true
 end
 
-Datadog::Pipeline.before_flush(
+Datadog::Tracing.before_flush(
   # Remove spans that are trafficked to sentry
-  Datadog::Pipeline::SpanFilter.new { |span| span.get_tag('sevice') =~ /\.sentry\.io/ },
-  Datadog::Pipeline::SpanFilter.new { |span| span.service =~ /\.sentry\.io/ }
+  Datadog::Tracing::Pipeline::SpanFilter.new { |span| span.get_tag('sevice') =~ /\.sentry\.io/ },
+  Datadog::Tracing::Pipeline::SpanFilter.new { |span| span.service =~ /\.sentry\.io/ }
 )
 
-Datadog::Pipeline.before_flush do |trace|
+Datadog::Tracing.before_flush do |trace|
   trace.delete_if { |span| span.service =~ /\.sentry\.io/ }
 end
