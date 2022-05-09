@@ -5,6 +5,9 @@
 #  id            :uuid             not null, primary key
 #  amount        :string           default("0"), not null
 #  description   :string
+#  name          :string
+#  price         :string
+#  quantity      :integer
 #  stripe_object :jsonb
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

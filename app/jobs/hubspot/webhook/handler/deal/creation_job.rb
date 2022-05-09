@@ -5,7 +5,10 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
     @entry = webhook_entry
     return unless conditions_met?
 
-    WorkOrder.create!(work_order_attributes_from_deal)
+    work_order = WorkOrder.create!(work_order_attributes_from_deal)
+
+    invoice = Invoice.find_or_create_by(work_order: work_order)
+    Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
 
     webhook_event.update!(processed_at: Time.now)
   end

@@ -17,6 +17,7 @@
 #  stripe_id            :string
 #  subscription_id      :uuid
 #  user_id              :uuid
+#  work_order_id        :uuid
 #
 # Indexes
 #
@@ -25,6 +26,7 @@
 #  index_invoices_on_stripe_id        (stripe_id) UNIQUE
 #  index_invoices_on_subscription_id  (subscription_id)
 #  index_invoices_on_user_id          (user_id)
+#  index_invoices_on_work_order_id    (work_order_id)
 #
 # Foreign Keys
 #

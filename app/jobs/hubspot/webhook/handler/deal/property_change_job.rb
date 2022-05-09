@@ -7,14 +7,12 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
     @entry = webhook_entry
 
     unless conditions_met?
-      # create a work order if this one does not exist yet
-      if work_order.nil?
-        Hubspot::Webhook::Handler::Deal::CreationJob.perform_later(webhook_entry, webhook_event)
-      end
+      # create a work order, this one does not exist yet
+      create_work_order if work_order.nil?
       return
     end
 
-    work_order.update!(attribute => attribute_value)
+    update_attribute!
 
     webhook_event.update!(processed_at: Time.now)
   end
@@ -45,5 +43,56 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
 
   def work_order
     @work_order ||= WorkOrder.find_by(hubspot_id: hubspot_id)
+  end
+
+  def invoice
+    @invoice ||= Invoice.find_or_create_by(work_order: work_order)
+  end
+
+  def create_work_order
+    Hubspot::Webhook::Handler::Deal::CreationJob.perform_later(
+      webhook_entry,
+      webhook_event
+    )
+  end
+
+  def amount_in_cents
+    return "0" if attribute_value.blank?
+    Money.from_amount(attribute_value.to_f).fractional.to_s
+  end
+
+  def update_attribute!
+    case attribute
+    when "amount"
+      invoice.update!(total: amount_in_cents)
+      Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
+    when "closedate"
+      #
+    when "closed_lost_reason"
+      #
+    when "closed_won_reason"
+      #
+    when "createdate"
+      work_order.update!(created_at: attribute_value)
+    when "dealname"
+      work_order.update!(description: attribute_value)
+    when "dealstage"
+      status = WorkOrderStatus.find_by(hubspot_id: attribute_value)
+      work_order.update!(status: status)
+      Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
+    when "dealtype"
+      #
+    when "description"
+      #
+    when "invoice_for_homeowner"
+      invoice.update!(total: amount_in_cents)
+      work_order.update!(homeowner_amount: amount_in_cents)
+      Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
+    when "invoice_from_vendor"
+      work_order.update!(vendor_amount: amount_in_cents)
+      Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
+    else
+      Rails.logger.info("Unknown deal property: #{attribute}")
+    end
   end
 end
