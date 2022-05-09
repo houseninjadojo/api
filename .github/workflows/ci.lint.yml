@@ -1,4 +1,4 @@
-name: CI / Linters
+name: ci / linters
 
 on:
   pull_request:
