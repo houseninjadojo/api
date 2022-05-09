@@ -84,6 +84,6 @@ Datadog::Tracing.before_flush(
   Datadog::Tracing::Pipeline::SpanFilter.new { |span| span.service =~ /\.sentry\.io/ }
 )
 
-Datadog::Tracing.before_flush do |trace|
-  trace.delete_if { |span| span.service =~ /\.sentry\.io/ }
-end
+# Datadog::Tracing.before_flush do |trace|
+#   trace.delete_if { |span| span.service =~ /\.sentry\.io/ }
+# end
