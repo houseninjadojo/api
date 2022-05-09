@@ -32,6 +32,7 @@ Datadog.configure do |c|
 
   # Logging
   c.tracing.log_injection = true
+  c.diagnostics.startup_logs.enabled = true
 
   # Integrations
 
