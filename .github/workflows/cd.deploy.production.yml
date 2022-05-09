@@ -1,9 +1,11 @@
 name: cd / deploy / production
 
+# trigger this workflow after tests pass
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: [ci / tests]
+    types: [completed]
+    branches: [main]
 
 # only run one of these at a time
 concurrency: cd-deploy-production
@@ -15,6 +17,7 @@ env:
 
 jobs:
   build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
