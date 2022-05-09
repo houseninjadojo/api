@@ -5,16 +5,16 @@ Datadog.configure do |c|
   # Enable in production only
   c.tracing.enabled = ['production', 'sandbox'].include?(Rails.env)
 
-  c.tracing.sampler: Datadog::PrioritySampler.new(
-    post_sampler: Datadog::Sampling::RuleSampler.new(
+  c.tracing.sampler = Datadog::Tracing::Sampling::PrioritySampler.new(
+    post_sampler: Datadog::Tracing::Sampling::RuleSampler.new(
       [
-        Datadog::Sampling::SimpleRule.new(service: 'o1061437.ingest.sentry.io', sample_rate: 0.0),
-        Datadog::Sampling::SimpleRule.new(name: 'sidekiq.job_fetch', sample_rate: 0.05),
-        Datadog::Sampling::SimpleRule.new(name: 'sidekiq.heartbeat', sample_rate: 0.05),
-        Datadog::Sampling::SimpleRule.new(name: 'sidekiq.scheduled_push', sample_rate: 0.05),
-        Datadog::Sampling::SimpleRule.new(name: 'BRPOP', sample_rate: 0.05),
-        Datadog::Sampling::SimpleRule.new(name: 'SCARD', sample_rate: 0.05),
-        Datadog::Sampling::SimpleRule.new(name: 'EVALSHA', sample_rate: 0.05),
+        Datadog::Tracing::Sampling::SimpleRule.new(service: 'o1061437.ingest.sentry.io', sample_rate: 0.0),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.job_fetch', sample_rate: 0.05),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.heartbeat', sample_rate: 0.05),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.scheduled_push', sample_rate: 0.05),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'BRPOP', sample_rate: 0.05),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'SCARD', sample_rate: 0.05),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'EVALSHA', sample_rate: 0.05),
       ]
     )
   )
@@ -65,7 +65,7 @@ Datadog.configure do |c|
   end
   c.tracing.instrument :http, split_by_domain: true
 
-  c.tracing.instrument :rails
+  c.tracing.instrument :rails,
     distributed_tracing: true,
     service_name:        'api'
 
