@@ -58,7 +58,7 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
 
   def amount_in_cents
     return "0" if attribute_value.blank?
-    Money.from_amount(amount.to_f).fractional.to_s
+    Money.from_amount(attribute_value.to_f).fractional.to_s
   end
 
   def update_attribute!
@@ -84,6 +84,15 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
       #
     when "description"
       #
+    when "invoice_for_homeowner"
+      invoice.update!(total: amount_in_cents)
+      work_order.update!(homeowner_amount: amount_in_cents)
+      Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
+    when "invoice_from_vendor"
+      work_order.update!(vendor_amount: amount_in_cents)
+      Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
+    else
+      Rails.logger.info("Unknown deal property: #{attribute}")
     end
   end
 end
