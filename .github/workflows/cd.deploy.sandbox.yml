@@ -1,9 +1,14 @@
 name: cd / deploy / sandbox
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: [ci / test]
+    types:
+      - completed
+    branches: [main]
+
+# only run one of these at a time
+concurrency: cd-deploy-sandbox
 
 env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}

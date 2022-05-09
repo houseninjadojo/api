@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+# only run one of these at a time
+concurrency: cd-deploy-production
+
 env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   HEROKU_APP_NAME: houseninja-api-production
