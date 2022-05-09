@@ -9,7 +9,7 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
     unless conditions_met?
       # create a work order if this one does not exist yet
       if work_order.nil?
-        Hubspot::CreateWorkOrderFromDealJob.perform_later(hubspot_id)
+        Hubspot::Webhook::Handler::Deal::CreationJob.perform_later(webhook_entry, webhook_event)
       end
       return
     end
