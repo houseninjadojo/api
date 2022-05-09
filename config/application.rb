@@ -64,31 +64,38 @@ module HouseNinja
     # I18n Configuration
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
 
-    # lograge
-    config.lograge.enabled = ['production', 'sandbox'].include?(Rails.env)
-    config.lograge.base_controller_class = 'ActionController::API'
-    config.lograge.formatter = Lograge::Formatters::Json.new
-    config.lograge.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new($stdout))
-    config.lograge.custom_options = lambda do |event|
-      # Retrieves trace information for current thread
-      correlation = Datadog::Tracing.correlation
-      {
-        # Adds IDs as tags to log output
-        :dd => {
-          # To preserve precision during JSON serialization, use strings for large numbers
-          :trace_id => correlation.trace_id.to_s,
-          :span_id => correlation.span_id.to_s,
-          :env => correlation.env.to_s,
-          :service => correlation.service.to_s,
-          :version => correlation.version.to_s
-        },
-        :ddsource => ["ruby"],
-        :params => event.payload[:params].reject { |k| %w(controller action).include? k }
-      }
-    end
+    # semantic logger
+    config.semantic_logger.backtrace_level = :debug
+    # config.rails_semantic_logger.quiet_assets = true
+    config.colorize_logging = true
 
     # config.debug_exception_response_format = :api
     # config.action_dispatch.show_exceptions = false
+
+    config.log_tags = {
+      request_id: :request_id,
+      ip: :remote_ip,
+      # user_id: -> { current_user&.id },
+      headers: -> request {
+        headers = {}
+        request.headers.each do |key, value|
+          if key.is_a?(String) && key.start_with?("HTTP_")
+            headers[key] = value
+          end
+        end
+        headers.except(
+          "HTTP_COOKIE",
+          "HTTP_AUTHORIZATION",
+          "X-HTTP_AUTHORIZATION",
+          "X_HTTP_AUTHORIZATION",
+          "HTTP_X_CSRF_TOKEN",
+          "REDIRECT_X_HTTP_AUTHORIZATION"
+        )
+      },
+      params: -> request {
+        request.params.except(:controller, :action, :format)
+      }
+    }
   end
 end
 
