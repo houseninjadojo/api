@@ -26,7 +26,7 @@ gem 'pg',                      '~> 1.3'                                        #
 gem 'phonelib'
 gem 'puma',                    '~> 5.6'                                        # Use Puma as the app server
 gem 'rack-cors'                                                                # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rails',                   '~> 7.0.2'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
+gem 'rails',                   '~> 7.0.3'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails_semantic_logger'
 gem 'redis',                   '~> 4.6'                                        # Use Redis adapter to run Action Cable in production
 gem 'responders'
