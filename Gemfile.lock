@@ -385,7 +385,7 @@ GEM
       redis (>= 4.2.0)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    stripe (5.55.0)
+    stripe (6.0.0)
     strong_migrations (1.0.0)
       activerecord (>= 5.2)
     strscan (3.0.1)
@@ -452,7 +452,7 @@ DEPENDENCIES
   sentry-ruby
   sentry-sidekiq
   sidekiq (~> 6.4)
-  stripe (~> 5.55.0)
+  stripe (~> 6.0.0)
   strong_migrations (~> 1.0.0)
   valid_email
 
