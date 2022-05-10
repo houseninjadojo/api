@@ -3,6 +3,7 @@
 # Table name: invoices
 #
 #  id                   :uuid             not null, primary key
+#  access_token         :string
 #  description          :string
 #  finalized_at         :datetime
 #  payment_attempted_at :datetime
@@ -21,6 +22,7 @@
 #
 # Indexes
 #
+#  index_invoices_on_access_token     (access_token) UNIQUE
 #  index_invoices_on_promo_code_id    (promo_code_id)
 #  index_invoices_on_status           (status)
 #  index_invoices_on_stripe_id        (stripe_id) UNIQUE
@@ -50,6 +52,7 @@ class Invoice < ApplicationRecord
   # associations
 
   has_many   :line_items,   dependent: :destroy
+  has_one    :deep_link,    dependent: :destroy, as: :linkable
   has_one    :document
   has_one    :payment
   belongs_to :promo_code,   required: false
@@ -59,7 +62,8 @@ class Invoice < ApplicationRecord
 
   # validations
 
-  validates :stripe_id, uniqueness: true, allow_nil: true
+  validates :access_token, uniqueness: true, allow_nil: true
+  validates :stripe_id,    uniqueness: true, allow_nil: true
 
   # helpers
 
@@ -93,5 +97,46 @@ class Invoice < ApplicationRecord
 
   def create_stripe_invoice
     Stripe::Invoices::CreateJob.perform_later(self) unless stripe_id.present?
+  end
+
+  # external access / payment approval
+
+  def generate_access_token!
+    return if access_token.present?
+    update!(access_token: SecureRandom.hex(32))
+  end
+
+  def encrypted_access_token
+    @encrypted_access_token ||= Invoice::EncryptedAccessToken.new(self).to_s
+  end
+
+  def self.find_by_encrypted_access_token(token)
+    payload = EncryptionService.decrypt(token)&.with_indifferent_access
+    return unless payload.present?
+    find_by(access_token: payload[:access_token])
+  end
+
+  def generate_external_access_deep_link!
+    return deep_link if deep_link.present?
+    generate_access_token!
+    DeepLink.create!(
+      linkable: self,
+      feature: "invoice_external_access",
+      stage: status,
+      data: {
+        access_token: encrypted_access_token,
+        "$canonical_url" => "https://app.houseninja.co/p/approve-payment?access_token=#{encrypted_access_token}",
+        "$deeplink_path" => "p/approve-payment?access_token=#{encrypted_access_token}",
+        "$web_only" => false,
+      },
+    )
+  end
+
+  def expire_external_access!
+    deep_link.expire! if deep_link.present?
+  end
+
+  def has_external_access_expired?
+    deep_link.present? && deep_link.is_expired?
   end
 end

@@ -28,6 +28,8 @@
 #  fk_rails_...  (property_id => properties.id)
 #
 class WorkOrder < ApplicationRecord
+  after_save_commit :handle_status_change, if: :status_changed?
+
   # associations
 
   belongs_to :property, required: false
@@ -37,4 +39,16 @@ class WorkOrder < ApplicationRecord
   # validations
 
   validates :hubspot_id, uniqueness: true, allow_nil: true
+
+  # callbacks
+
+  def handle_status_change
+    case status.slug
+    # create external access
+    when "invoice_sent_to_customer"
+      invoice&.generate_external_access_deep_link!
+    when "invoice_paid_by_customer"
+      invoice&.expire_external_access!
+    end
+  end    
 end
