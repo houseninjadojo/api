@@ -72,9 +72,15 @@ class DeepLink < ApplicationRecord
     update!(expired_at: Time.now)
   end
 
+  def self.create_and_generate!(params)
+    deep_link = create!(params)
+    deep_link.generate!
+    deep_link.reload
+  end
+
   private
 
   def delete_branch_link
-    BranchLink.find(url).destroy
+    BranchLink.find(url)&.destroy
   end
 end

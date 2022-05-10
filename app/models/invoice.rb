@@ -116,22 +116,6 @@ class Invoice < ApplicationRecord
     find_by(access_token: payload[:access_token])
   end
 
-  def generate_external_access_deep_link!
-    return deep_link if deep_link.present?
-    generate_access_token!
-    DeepLink.create!(
-      linkable: self,
-      feature: "invoice_external_access",
-      stage: status,
-      data: {
-        access_token: encrypted_access_token,
-        "$canonical_url" => "https://app.houseninja.co/p/approve-payment?access_token=#{encrypted_access_token}",
-        "$deeplink_path" => "p/approve-payment?access_token=#{encrypted_access_token}",
-        "$web_only" => false,
-      },
-    )
-  end
-
   def expire_external_access!
     deep_link.expire! if deep_link.present?
   end

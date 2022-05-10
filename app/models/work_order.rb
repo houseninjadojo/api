@@ -46,9 +46,9 @@ class WorkOrder < ApplicationRecord
     case status.slug
     # create external access
     when "invoice_sent_to_customer"
-      invoice&.generate_external_access_deep_link!
+      Invoice::ExternalAccess::GenerateDeepLinkJob.perform_later(invoice)
     when "invoice_paid_by_customer"
-      invoice&.expire_external_access!
+      Invoice::ExternalAccess::ExpireJob.perform_later(invoice)
     end
   end    
 end
