@@ -49,6 +49,8 @@ class Invoice < ApplicationRecord
 
   # callbacks
 
+  after_save_commit :mark_hubspot_invoice_paid, if: :paid?
+
   # associations
 
   has_many   :line_items,   dependent: :destroy
@@ -97,6 +99,10 @@ class Invoice < ApplicationRecord
 
   def create_stripe_invoice
     Stripe::Invoices::CreateJob.perform_later(self) unless stripe_id.present?
+  end
+
+  def mark_hubspot_invoice_paid
+    Hubspot::Invoice::MarkInvoicePaidJob.perform_later(self)
   end
 
   # external access / payment approval

@@ -1,4 +1,4 @@
-class Invoice::ExternalAccess::ExpireJob < ApplicationJob
+class Hubspot::Deal::MarkInvoicePaidJob < ApplicationJob
   queue_as :default
 
   attr_accessor :invoice
@@ -7,8 +7,7 @@ class Invoice::ExternalAccess::ExpireJob < ApplicationJob
     @invoice = invoice
     return unless conditions_met?
 
-    invoice.expire_external_access!
-    expire_hubspot_access!
+    mark_deal_paid!
   end
 
   def conditions_met?
@@ -19,11 +18,11 @@ class Invoice::ExternalAccess::ExpireJob < ApplicationJob
     ].all?
   end
 
-  def expire_hubspot_access!
+  def mark_deal_paid!
     Hubspot::Deal.update!(
-      invoice.work_order.hubpot_id,
+      invoice.work_order.hubspot_id,
       {
-        "branch_payment_link" => nil,
+        "invoice_paid" => "Yes",
       }
     )
   end
