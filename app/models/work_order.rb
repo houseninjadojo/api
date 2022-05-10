@@ -50,5 +50,5 @@ class WorkOrder < ApplicationRecord
     when "invoice_paid_by_customer"
       Invoice::ExternalAccess::ExpireJob.perform_later(invoice)
     end
-  end    
+  end
 end
