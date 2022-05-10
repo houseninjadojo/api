@@ -3,6 +3,7 @@
 # Table name: invoices
 #
 #  id                   :uuid             not null, primary key
+#  access_token         :string
 #  description          :string
 #  finalized_at         :datetime
 #  payment_attempted_at :datetime
@@ -21,6 +22,7 @@
 #
 # Indexes
 #
+#  index_invoices_on_access_token     (access_token) UNIQUE
 #  index_invoices_on_promo_code_id    (promo_code_id)
 #  index_invoices_on_status           (status)
 #  index_invoices_on_stripe_id        (stripe_id) UNIQUE

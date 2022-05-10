@@ -1,115 +1,86 @@
-# Manage Deep Linking
-# Currently using Branch.io for this
-class DeepLink
-  attr_reader :url
-  attr_reader :feature
-  attr_reader :campaign
-  attr_reader :stage
-  attr_reader :tags
-  attr_reader :data
+# == Schema Information
+#
+# Table name: deep_links
+#
+#  id            :uuid             not null, primary key
+#  campaign      :string
+#  canonical_url :string
+#  data          :jsonb
+#  expired_at    :datetime
+#  feature       :string
+#  linkable_type :string
+#  path          :string
+#  stage         :string
+#  tags          :string           default([]), is an Array
+#  url           :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  linkable_id   :uuid
+#
+# Indexes
+#
+#  index_deep_links_on_linkable  (linkable_type,linkable_id)
+#
+class DeepLink < ApplicationRecord
+  belongs_to :linkable, polymorphic: true, required: false
 
-  @channel = ""
-  @feature = ""
-  @campaign = ""
-  @stage = ""
-  @tags = []
-  @data = {}
+  # callbacks
 
-  # @see https://github.com/ushu/branch_io#clientlink-and-clientlink-registers-a-new-deep-linking-url
-  def initialize(params)
-    @params = params
-    @channel = params[:channel]
-    @feature = params[:feature]
-    @campaign = params[:campaign]
-    @stage = params[:stage]
-    @tags = params[:tags]
-    @data = params[:data]
-    @url = params.dig(:data, "url")
+  before_destroy :delete_branch_link
+
+  def generate!
+    return if is_generated?
+    update!(url: BranchLink.create(branch_link_params).url)
   end
 
-  # operations
-
-  def destroy!
-    delete_url = "https://api2.branch.io/v1/url?url=#{@url}&app_id=#{Rails.secrets.branch[:app_id]}"
-    headers = { "Access-Token" => Rails.secrets.branch[:access_token] }
-    res = HTTParty.delete(delete_url, headers: headers)
-    if res.code == 401
-      raise res.message
-    else
-      return true
-    end
+  def branch_link_params
+    attributes.slice(
+      :campaign,
+      :channel,
+      :data,
+      :feature,
+      :stage,
+      :tags
+    )
   end
 
-  def destroy
-    begin
-      destroy!
-      return true
-    rescue => e
-      Sentry.capture_exception(e)
-      return false
-    end
+  def is_generated?
+    url.present?
   end
 
-  def save
-    if !created?
-      create_link
-    else
-      update_link
-    end
+  def is_expired?
+    expired_at.present? && expired_at < Time.now
   end
 
-  # class methods
-
-  # find by deep link uri
-  #
-  # @example
-  #   DeepLink.find("https://w.hnja.io/fTARWYwFOpb") => #<DeepLink:0x000000013f472b20
-  #   DeepLink.find("malformed")                     => nil
-  def self.find(uri)
-    begin
-      res = BranchClient.current.link_info!(uri)
-      return DeepLink.new(res.link_properties.as_json)
-    rescue => e
-      puts e
-      Sentry.capture_exception(e)
-      return nil
-    end
+  def to_s
+    url
   end
 
-  def self.create(params)
-    deep_link = new(params)
-    deep_link.save
-    deep_link
+  def deeplink_path
+    path
   end
 
-  # helpers
+  def data
+    (super.presence || {}).merge({
+      "$canonical_url" => canonical_url,
+      "$deeplink_path" => deeplink_path,
+    })
+  end
 
-  def created?
-    @url.present?
+  def expire!
+    delete_branch_link
+    update!(expired_at: Time.now)
+  end
+
+  def self.create_and_generate!(params)
+    deep_link = create!(params)
+    deep_link.generate!
+    deep_link.reload
   end
 
   private
 
-  def branch_client
-    BranchClient.current
-  end
-
-  def create_link!
-    return if created?
-    res = branch_client.link!(@params)
-    @url = res.url
-  end
-
-  def create_link
-    return if created?
-    begin
-      create_link!
-    rescue => e
-      Sentry.capture_exception(e)
-    end
-  end
-
-  def update_link
-    # @todo
+  def delete_branch_link
+    BranchLink.find(url)&.destroy
   end
 end
