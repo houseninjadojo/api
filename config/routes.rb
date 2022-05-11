@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     resources :document_groups,    path: 'document-groups',    only: [:index, :show, :create, :update, :destroy]
     resources :invoices,           path: 'invoices',           only: [:index, :show]
     resources :home_care_tips,     path: 'home-care-tips',     only: [:index, :show]
+    resources :line_items,         path: 'line-items',         only: [:index, :show]
     resources :payment_methods,    path: 'payment-methods',    only: [:index, :show, :create, :update, :destroy]
     resources :payments,           path: 'payments',           only: [:index, :show]
     resources :promo_codes,        path: 'promo-codes',        only: [:index, :show]

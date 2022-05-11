@@ -79,10 +79,9 @@ module Hubspot
         props = line_item["properties"]
         {
           hubspot_id: line_item["id"] || props["hs_object_id"],
-          amount: props["amount"],
+          amount: props["amount"].present? && Money.from_amount(props["amount"]&.to_f).cents,
           description: props["description"],
           name: props["name"],
-          price: props["price"],
           quantity: props["quantity"],
           created_at: props["createdate"],
           updated_at: props["hs_lastmodifieddate"],

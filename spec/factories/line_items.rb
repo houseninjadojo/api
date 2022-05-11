@@ -6,7 +6,6 @@
 #  amount        :string           default("0"), not null
 #  description   :string
 #  name          :string
-#  price         :string
 #  quantity      :integer
 #  stripe_object :jsonb
 #  created_at    :datetime         not null
@@ -27,13 +26,11 @@
 #
 FactoryBot.define do
   factory :line_item do
+    invoice
+
     amount { Faker::Number.number(digits: 3) }
     description { Faker::Lorem.sentence }
-
-    trait :with_invoice do
-      after(:create) do |line_item|
-        line_item.invoice = create(:invoice)
-      end
-    end
+    name { Faker::Lorem.sentence }
+    quantity { Faker::Number.number(digits: 1) }
   end
 end

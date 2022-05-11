@@ -24,26 +24,23 @@
 #
 #  fk_rails_...  (invoice_id => invoices.id)
 #
-class LineItem < ApplicationRecord
-  # callbacks
+class LineItemResource < ApplicationResource
+  self.model = LineItem
+  self.type = 'line-items'
 
-  # associations
+  primary_endpoint 'line-items', [:index, :show]
 
   belongs_to :invoice
 
-  # validations
+  attribute :id, :uuid
 
-  validates :amount,     presence: true
-  validates :hubspot_id, uniqueness: true, allow_nil: true
-  validates :stripe_id,  uniqueness: true, allow_nil: true
+  attribute :invoice_id, :uuid, only: [:filterable]
 
-  # helpers
+  attribute :amount,      :string,  except: [:writeable]
+  attribute :description, :string,  except: [:writeable]
+  attribute :name,        :string,  except: [:writeable]
+  attribute :quantity,    :integer, except: [:writeable]
 
-  def price
-    Money.from_cents(amount).format
-  end
-
-  def price=(val)
-    # no-op
-  end
+  attribute :created_at, :datetime, except: [:writeable]
+  attribute :updated_at, :datetime, except: [:writeable]
 end
