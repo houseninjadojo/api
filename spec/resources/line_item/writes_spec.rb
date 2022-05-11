@@ -30,7 +30,7 @@ RSpec.describe LineItemResource, type: :resource do
         data: {
           id: line_item.id.to_s,
           type: 'line-items',
-          attributes: { } # Todo!
+          attributes: {} # Todo!
         }
       }
     end
