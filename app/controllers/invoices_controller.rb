@@ -1,4 +1,6 @@
 class InvoicesController < ApplicationController
+  before_action :authenticate_request!, except: [:show]
+
   def index
     authorize!
     scope = authorized_scope(Invoice.all)
@@ -7,8 +9,18 @@ class InvoicesController < ApplicationController
   end
 
   def show
+    # if access token is present, use it to find the invoice
+    # as well, bypass authorization context
+    # otherwise, use the id as usual
+    if access_token.present?
+      invoice_record = Invoice.find_by(access_token: access_token)
+      params[:id] = invoice_record.id
+      user = access_token_user
+    else
+      user = current_user
+    end
     invoice = InvoiceResource.find(params)
-    authorize! invoice.data
+    authorize!(invoice.data, context: { user: user })
     respond_with(invoice)
   end
 
@@ -42,6 +54,30 @@ class InvoicesController < ApplicationController
       render jsonapi: { meta: {} }, status: 200
     else
       render jsonapi_errors: invoice
+    end
+  end
+
+  private
+
+  # decrypt and reveal access token, or nil
+  # access token is derived from id
+  def access_token_payload
+    @access_token_payload ||= begin
+      payload = params.fetch(:id, nil)
+      EncryptionService.decrypt(payload)&.with_indifferent_access
+    rescue => e
+      nil
+    end
+  end
+
+  def access_token
+    @access_token ||= access_token_payload&.fetch(:access_token, nil)
+  end
+
+  def access_token_user
+    @access_token_user ||= begin
+      user_id = access_token_payload&.fetch(:user_id, nil)
+      User.find_by(id: user_id)
     end
   end
 end
