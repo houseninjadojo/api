@@ -5,6 +5,7 @@ class ResourceVerification
   attr_accessor :record_id
   attr_accessor :attribute
   attr_accessor :value
+  attr_accessor :vgs_value
   attr_reader   :result
 
   validate :verification_validation
@@ -13,11 +14,12 @@ class ResourceVerification
     @resource_name = params[:resource_name]
     @record_id = params[:record_id]
     @attribute = params[:attribute]
-    @value = params[:value]
+    @vgs_value = params[:vgs_value]
+    @value = params[:value].presence || params[:vgs_value]
   end
 
-  def self.create(resource_name, record_id, attribute, value)
-    ResourceVerification.new(resource_name, record_id, attribute, value)
+  def self.create(**params)
+    ResourceVerification.new(**params)
   end
 
   def id
@@ -45,7 +47,7 @@ class ResourceVerification
   end
 
   def verification_validation
-    errors.add(:base, 'Resource verification failed') unless verified?
+    errors.add(:base, 'resource verification failed') unless verified?
   end
 
   #
