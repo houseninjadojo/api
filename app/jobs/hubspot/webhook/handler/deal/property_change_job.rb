@@ -91,6 +91,9 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
     when "invoice_from_vendor"
       work_order.update!(vendor_amount: amount_in_cents)
       Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
+    when "invoice_notes"
+      work_order.update!(description: attribute_value)
+      Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
     else
       Rails.logger.info("Unknown deal property: #{attribute}")
     end

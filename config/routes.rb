@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     resources :users,              path: 'users',              only: [:index, :show, :create, :update]
     resources :work_orders,        path: 'work-orders',        only: [:index, :show, :create, :update]
 
+    resources :resource_verifications, path: 'resource-verifications', only: [:create]
+
     root to: 'home#index'
   end
 

@@ -49,6 +49,7 @@ class Invoice < ApplicationRecord
 
   # callbacks
 
+  # after_create_commit :create_stripe_invoice
   after_save_commit :mark_hubspot_invoice_paid, if: :paid?
 
   # associations

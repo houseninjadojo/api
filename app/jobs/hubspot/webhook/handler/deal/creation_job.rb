@@ -26,7 +26,7 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
 
   def work_order_attributes_from_deal
     {
-      description: props["dealname"],
+      description: props["invoice_notes"],
       created_at:  time_from_epoch(props["createdate"]),
       updated_at:  time_from_epoch(props["hs_lastmodifieddate"]),
       status:      work_order_status,
