@@ -9,6 +9,7 @@ class ResourceVerificationResource < ApplicationResource
   attribute :record_id,     :uuid
   attribute :attribute,     :string
   attribute :value,         :string
+  attribute :vgs_value,     :string
   attribute :result,        :boolean, only: [:readable]
 
   def base_scope

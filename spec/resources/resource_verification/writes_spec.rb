@@ -51,6 +51,56 @@ RSpec.describe ResourceVerificationResource, type: :resource do
     end
   end
 
+  describe 'creating vgs valid' do
+    let(:user) { create(:user) }
+    let(:payload) do
+      {
+        data: {
+          type: 'resource_verifications',
+          attributes: {
+            resource_name: 'users',
+            record_id: user.id,
+            attribute: 'email',
+            vgs_value: user.email,
+          }
+        }
+      }
+    end
+
+    let(:instance) do
+      ResourceVerificationResource.build(payload)
+    end
+
+    it 'works' do
+      expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
+    end
+  end
+
+  describe 'creating vgs invalid' do
+    let(:user) { create(:user) }
+    let(:payload) do
+      {
+        data: {
+          type: 'resource_verifications',
+          attributes: {
+            resource_name: 'users',
+            record_id: user.id,
+            attribute: 'email',
+            vgs_value: 'bad email',
+          }
+        }
+      }
+    end
+
+    let(:instance) do
+      ResourceVerificationResource.build(payload)
+    end
+
+    it 'works' do
+      expect(instance.save).to eq(false), instance.errors.full_messages.to_sentence
+    end
+  end
+
   # describe 'updating' do
   #   let!(:verification) { create(:verification) }
 
