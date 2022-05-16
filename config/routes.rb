@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     resources :home_care_tips,     path: 'home-care-tips',     only: [:index, :show]
     resources :line_items,         path: 'line-items',         only: [:index, :show]
     resources :payment_methods,    path: 'payment-methods',    only: [:index, :show, :create, :update, :destroy]
-    resources :payments,           path: 'payments',           only: [:index, :show]
+    resources :payments,           path: 'payments',           only: [:index, :show, :create]
     resources :promo_codes,        path: 'promo-codes',        only: [:index, :show]
     resources :properties,         path: 'properties',         only: [:index, :show, :create, :update]
     resources :service_areas,      path: 'service-areas',      only: [:index, :show]

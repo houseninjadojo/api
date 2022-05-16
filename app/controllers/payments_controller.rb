@@ -17,6 +17,7 @@ class PaymentsController < ApplicationController
     payment = PaymentResource.build(params)
 
     if payment.save
+      payment.charge_payment_method!(now: true)
       render jsonapi: payment, status: 201
     else
       render jsonapi_errors: payment

@@ -18,7 +18,7 @@ RSpec.describe "payments#create", type: :request do
       }
     end
 
-    xit 'works' do
+    it 'works' do
       expect(PaymentResource).to receive(:build).and_call_original
       expect {
         make_request

@@ -15,7 +15,7 @@ RSpec.describe PaymentResource, type: :resource do
       PaymentResource.build(payload)
     end
 
-    xit 'works' do
+    it 'works' do
       expect {
         expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
       }.to change { Payment.count }.by(1)

@@ -52,6 +52,11 @@ class Invoice < ApplicationRecord
   # after_create_commit :create_stripe_invoice
   after_save_commit :mark_hubspot_invoice_paid, if: :paid?
 
+  # we are attempting payment
+  # before_save :run_payment!, if: -> (invoice) {
+  #   invoice.will_save_change_to_payment_attempted_at?(from: nil)
+  # }
+
   # associations
 
   has_many   :line_items,   dependent: :destroy
@@ -85,7 +90,27 @@ class Invoice < ApplicationRecord
   # actions
 
   def pay!
-    Stripe::Invoices::PayJob.perform_now(self)
+    # Stripe::Invoices::PayJob.perform_now(self)
+    update!(payment_attempted_at: Time.current)
+
+    begin
+      paid_invoice = Stripe::Invoice.pay(stripe_id, {
+        payment_method: user.default_payment_method&.stripe_token,
+      })
+      update!(
+        status: paid_invoice.status,
+        stripe_object: paid_invoice
+      )
+      if paid_invoice.status == "payment_failed"
+        return nil
+      else
+        return paid_invoice
+      end
+    rescue => e
+      Rails.logger.error "Stripe::Invoice.pay(#{stripe_id}) failed: #{e.message}"
+      Sentry.capture_exception(e)
+      return nil
+    end
   end
 
   def fetch_pdf!

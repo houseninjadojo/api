@@ -5,7 +5,7 @@ class Stripe::Invoices::PayJob < ApplicationJob
     @invoice = invoice
     return unless conditions_met?
 
-    paid_invoice = Stripe::Invoice.pay(@invoice.stripe_id, params)
+    Stripe::Invoice.pay(@invoice.stripe_id, params)
   end
 
   private
