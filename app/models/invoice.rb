@@ -75,6 +75,15 @@ class Invoice < ApplicationRecord
 
   # helpers
 
+  def formatted_total
+    format = I18n.t(:format, scope: 'number.currency.format')
+    Money.from_cents(total)&.format(format: format)
+  end
+
+  def formatted_total=(val)
+    # no-op
+  end
+
   def finalized?
     finalized_at.present?
   end

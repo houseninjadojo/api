@@ -66,4 +66,6 @@ class InvoiceResource < ApplicationResource
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
+
+  attribute :formatted_total, :string, only: [:readable]
 end
