@@ -19,7 +19,7 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
 
   def conditions_met?
     [
-      webhook_event.processed_at.blank?,
+      # webhook_event.processed_at.blank?,
       hubspot_id.present?,
       deal.present?,
       work_order.nil?,
