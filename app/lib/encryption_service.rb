@@ -18,6 +18,20 @@ class EncryptionService
     new.decrypt_and_verify(value, **options)
   end
 
+  def self.safe_decrypt(value, **options)
+    new.safe_decrypt(value, **options)
+  end
+
+  def safe_decrypt(value, **options)
+    begin
+      return value unless value.present?
+      decrypt_and_verify(value, **options)
+    rescue => e
+      Rails.logger.error "EncryptionService.safe_decrypt(#{value}) failed: #{e.message}"
+      nil
+    end
+  end
+
   private
 
   def encryptor

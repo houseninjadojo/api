@@ -5,7 +5,9 @@
 #  id                   :uuid             not null, primary key
 #  amount               :string
 #  description          :string
+#  originator           :string
 #  paid                 :boolean          default(FALSE), not null
+#  purpose              :string
 #  refunded             :boolean          default(FALSE), not null
 #  statement_descriptor :string
 #  status               :string
@@ -63,9 +65,71 @@ class Payment < ApplicationRecord
   end
   alias was_charged? has_charge?
 
+  def should_charge?
+    return false if !has_charge? || status.blank?
+    # return true if originator == 'app' && purpose == 'invoice'
+    return true
+  end
+
+  def self.from_stripe_charge!(object)
+    ActiveRecord::Base.transaction do
+      invoice = Invoice.find_by(stripe_id: object["invoice"])
+      payment_method = PaymentMethod.find_by(stripe_token: object["payment_method"])
+      user = User.find_by(stripe_customer_id: object["customer"])
+      payment = Payment.find_or_intialize_by(stripe_id: stripe_id)
+      payment.assign_attributes(
+        amount: object["amount"],
+        description: object["description"],
+        invoice: invoice,
+        paid: object["paid"],
+        payment_method: payment_method,
+        refunded: object["refunded"],
+        statement_descriptor: object["statement_descriptor"],
+        status: object["status"],
+        stripe_object: @payload,
+        user: user
+      )
+      payment.save!
+      payment
+    end
+  end
+
   # actions
 
   def charge_payment_method!(now: true)
+    if invoice.present?
+      pay_invoice!
+    else
+      # pay_with_charge!(now: now)
+    end
+  end
+
+  def pay_invoice!
+    return if paid? || has_charge? || invoice.nil?
+    paid_invoice = invoice.pay!
+    update!(stripe_id: paid_invoice&.charge)
+    # wait for webhook
+    begin
+      payment = self
+      Wait.until(sleep_time: 1, max_time: 15) do |counter, time|
+        Rails.logger.info "Waiting for invoice to be paid... #{counter} seconds"
+        payment.reload.status.present?
+      end
+      return payment.reload
+    rescue Wait::TimeoutError => e
+      Rails.logger.info "Invoice payment timed out"
+      Sentry.capture_exception(e)
+    rescue Wait::LimitError => e
+      Rails.logger.info "Invoice payment time limit reached (15"
+      Sentry.capture_exception(e)
+    rescue StandardError => e
+      Rails.logger.info "Invoice payment failed: #{e.message}"
+      Sentry.capture_exception(e)
+    end
+    return nil
+  end
+
+  def pay_with_charge!(now: true)
     return if has_charge?
     if now == true
       Stripe::CreateChargeJob.perform_now(self)

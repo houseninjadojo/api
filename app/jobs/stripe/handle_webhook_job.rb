@@ -57,24 +57,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
       end
     # `charge.*` except `charge.dispute.*` or `charge.refund.*`
     when !!event.match(/^charge\.[a-z]+(?![.a-z]).*$/)
-      ActiveRecord::Base.transaction do
-        invoice = Invoice.find_by(stripe_id: object["invoice"])
-        payment_method = PaymentMethod.find_by(stripe_token: object["payment_method"])
-        user = User.find_by(stripe_customer_id: object["customer"])
-        payment = Payment.find_or_create_by(stripe_id: stripe_id)
-        payment.update(
-          amount: object["amount"],
-          description: object["description"],
-          invoice: invoice,
-          paid: object["paid"],
-          payment_method: payment_method,
-          refunded: object["refunded"],
-          statement_descriptor: object["statement_descriptor"],
-          status: object["status"],
-          stripe_object: @payload,
-          user: user
-        )
-      end
+      Payment.from_stripe_charge!(object)
     # `customer.subscription.*`
     when !!event.match(/^customer\.subscription\.[a-z_]+$/)
       ActiveRecord::Base.transaction do

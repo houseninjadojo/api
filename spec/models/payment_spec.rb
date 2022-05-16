@@ -5,7 +5,9 @@
 #  id                   :uuid             not null, primary key
 #  amount               :string
 #  description          :string
+#  originator           :string
 #  paid                 :boolean          default(FALSE), not null
+#  purpose              :string
 #  refunded             :boolean          default(FALSE), not null
 #  statement_descriptor :string
 #  status               :string

@@ -5,7 +5,9 @@
 #  id                   :uuid             not null, primary key
 #  amount               :string
 #  description          :string
+#  originator           :string
 #  paid                 :boolean          default(FALSE), not null
+#  purpose              :string
 #  refunded             :boolean          default(FALSE), not null
 #  statement_descriptor :string
 #  status               :string
@@ -35,7 +37,7 @@ class PaymentResource < ApplicationResource
   self.model = Payment
   self.type = :payments
 
-  primary_endpoint 'payments', [:index, :show]
+  primary_endpoint 'payments', [:index, :show, :create]
 
   belongs_to :invoice
   belongs_to :payment_method
@@ -51,6 +53,8 @@ class PaymentResource < ApplicationResource
 
   attribute :amount,               :string, except: [:writeable]
   attribute :description,          :string, except: [:writeable]
+  attribute :originator,           :string
+  attribute :purpose,              :string
   attribute :statement_descriptor, :string, except: [:writeable]
 
   attribute :refunded, :boolean, except: [:writeable]
