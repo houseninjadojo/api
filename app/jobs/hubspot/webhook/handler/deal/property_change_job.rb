@@ -3,10 +3,10 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
   sidekiq_options retry: 0
   queue_as :default
 
-  attr_accessor :webhook_event
+  attr_accessor :webhook_event, :webhook_entry
 
   def perform(webhook_entry, webhook_event)
-    @entry = webhook_entry
+    @webhook_entry = webhook_entry
     @webhook_event = webhook_event
 
     unless conditions_met?
@@ -22,6 +22,10 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
 
   private
 
+  def entry
+    webhook_entry
+  end
+
   def conditions_met?
     [
       webhook_event.processed_at.blank?,
@@ -33,15 +37,15 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
   end
 
   def hubspot_id
-    @entry["objectId"]
+    entry["objectId"]
   end
 
   def attribute
-    @entry["propertyName"]
+    entry["propertyName"]
   end
 
   def attribute_value
-    @entry["propertyValue"]
+    entry["propertyValue"]
   end
 
   def work_order
