@@ -10,7 +10,6 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
 
     work_order = WorkOrder.create!(work_order_attributes_from_deal)
 
-    invoice = Invoice.find_or_create_by(work_order: work_order)
     Hubspot::Deal::SyncLineItemsJob.perform_later(hubspot_id, invoice)
 
     webhook_event.update!(processed_at: Time.now)
@@ -29,7 +28,7 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
 
   def work_order_attributes_from_deal
     {
-      description: props["invoice_notes"],
+      description: props["dealname"],
       created_at:  time_from_epoch(props["createdate"]),
       updated_at:  time_from_epoch(props["hs_lastmodifieddate"]),
       status:      work_order_status,
@@ -46,6 +45,15 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
 
       property: property,
     }
+  end
+
+  def invoice
+    @invoice ||= begin
+      invoice = Invoice.find_or_initialize_by(work_order: work_order)
+      invoice.description = props["invoice_notes"]
+      invoice.save
+      invoice
+    end
   end
 
   def entry
