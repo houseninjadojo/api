@@ -37,7 +37,7 @@ class PaymentResource < ApplicationResource
   self.model = Payment
   self.type = :payments
 
-  primary_endpoint 'payments', [:index, :show]
+  primary_endpoint 'payments', [:index, :show, :create]
 
   belongs_to :invoice
   belongs_to :payment_method

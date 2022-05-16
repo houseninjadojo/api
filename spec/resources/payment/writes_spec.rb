@@ -2,11 +2,21 @@ require 'rails_helper'
 
 RSpec.describe PaymentResource, type: :resource do
   describe 'creating' do
+    let(:user) { create(:user) }
+    let(:invoice) { create(:invoice, user: user) }
     let(:payload) do
       {
         data: {
           type: 'payments',
-          attributes: attributes_for(:payment)
+          attributes: attributes_for(:payment),
+          relationships: {
+            invoice: {
+              data: {
+                type: 'invoices',
+                id: invoice.id.to_s,
+              }
+            }
+          }
         }
       }
     end

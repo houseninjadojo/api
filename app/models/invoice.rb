@@ -128,7 +128,7 @@ class Invoice < ApplicationRecord
   end
 
   def mark_hubspot_invoice_paid
-    Hubspot::Invoice::MarkInvoicePaidJob.perform_later(self)
+    Hubspot::Deal::MarkInvoicePaidJob.perform_later(self)
   end
 
   # external access / payment approval

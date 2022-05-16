@@ -67,8 +67,8 @@ class Payment < ApplicationRecord
 
   def should_charge?
     return false if !has_charge? || status.blank?
-    return true if originator == 'app' && purpose == 'invoice'
-    return false
+    # return true if originator == 'app' && purpose == 'invoice'
+    return true
   end
 
   def self.from_stripe_charge!(object)
@@ -105,9 +105,9 @@ class Payment < ApplicationRecord
   end
 
   def pay_invoice!
-    return if has_charge? || invoice.nil?
+    return if paid? || has_charge? || invoice.nil?
     paid_invoice = invoice.pay!
-    update!(stripe_id: paid_invoice.charge)
+    update!(stripe_id: paid_invoice&.charge)
     # wait for webhook
     begin
       payment = self
