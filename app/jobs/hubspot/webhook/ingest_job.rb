@@ -24,7 +24,7 @@ class Hubspot::Webhook::IngestJob < ApplicationJob
 
   def ingest!
     if payload.is_deal_batch?
-      payload.handler.perform_later(payload.deal_batch_entry, @webhook_event)
+      payload.deal_batch_entry.handler.perform_later(payload.deal_batch_entry, @webhook_event)
     else
       payload.entries.each do |entry|
         payload.handler.perform_later(entry.payload, @webhook_event)
