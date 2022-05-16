@@ -15,20 +15,15 @@ module Hubspot
         when "contact.creation"
           return Hubspot::Webhook::Handler::Contact::CreationJob
         when "contact.privacyDeletion"
-          # Hubspot::Webhook::Handler::Contact::PrivacyDeletionJob
-          return
+          # return Hubspot::Webhook::Handler::Contact::PrivacyDeletionJob
         when "contact.deletion"
-          # Hubspot::Webhook::Handler::Contact::DeletionJob
-          return
+          # return Hubspot::Webhook::Handler::Contact::DeletionJob
         when "deal.propertyChange"
-          Hubspot::Webhook::Handler::Deal::PropertyChangeJob
-          return
+          return Hubspot::Webhook::Handler::Deal::PropertyChangeJob
         when "deal.creation"
-          Hubspot::Webhook::Handler::Deal::CreationJob
-          return
+          return Hubspot::Webhook::Handler::Deal::CreationJob
         when "deal.deletion"
-          # Hubspot::Webhook::Handler::Deal::DeletionJob
-          return
+          # return Hubspot::Webhook::Handler::Deal::DeletionJob
         end
       end
     end
