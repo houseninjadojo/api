@@ -3,8 +3,11 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
   sidekiq_options retry: 0
   queue_as :default
 
+  attr_accessor :webhook_event
+
   def perform(webhook_entry, webhook_event)
     @entry = webhook_entry
+    @webhook_event = webhook_event
 
     unless conditions_met?
       # create a work order, this one does not exist yet
