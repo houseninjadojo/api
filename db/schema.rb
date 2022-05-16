@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_15_231537) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_16_233258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -384,6 +384,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_15_231537) do
   add_foreign_key "invoices", "promo_codes"
   add_foreign_key "invoices", "subscriptions"
   add_foreign_key "invoices", "users"
+  add_foreign_key "invoices", "work_orders", on_delete: :cascade
   add_foreign_key "line_items", "invoices"
   add_foreign_key "payment_methods", "users"
   add_foreign_key "payments", "invoices"

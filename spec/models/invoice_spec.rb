@@ -35,6 +35,7 @@
 #  fk_rails_...  (promo_code_id => promo_codes.id)
 #  fk_rails_...  (subscription_id => subscriptions.id)
 #  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (work_order_id => work_orders.id) ON DELETE => cascade
 #
 require 'rails_helper'
 
