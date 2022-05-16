@@ -1,8 +1,11 @@
 class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
   queue_as :default
 
+  attr_accessor :webhook_entry, :webhook_event
+
   def perform(webhook_entry, webhook_event)
-    @entry = webhook_entry
+    @webhook_entry = webhook_entry
+    @webhook_event = webhook_event
     return unless conditions_met?
 
     work_order = WorkOrder.create!(work_order_attributes_from_deal)
@@ -45,8 +48,12 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
     }
   end
 
+  def entry
+    webhook_entry
+  end
+
   def hubspot_id
-    @hubspot_id ||= @entry["objectId"]
+    @hubspot_id ||= entry["objectId"]
   end
 
   def deal
@@ -81,7 +88,7 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
   # end
 
   def work_order_status
-    work_order_status ||= WorkOrderStatus.find_by(hubspot_id: @props["dealstage"])
+    work_order_status ||= WorkOrderStatus.find_by(hubspot_id: props["dealstage"])
   end
 
   def estimate_attributes
