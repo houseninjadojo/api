@@ -15,6 +15,15 @@
 #  index_work_order_statuses_on_slug        (slug) UNIQUE
 #
 class WorkOrderStatus < ApplicationRecord
+  PAYMENT_FAILED = {
+    SLUG: "payment_failed",
+    NAME: "Payment Failed"
+  }
+  INVOICE_PAID_BY_CUSTOMER = {
+    SLUG: "invoice_paid_by_customer",
+    NAME: "Invoice Paid by Customer"
+  }
+
   # associations
   has_many :work_orders, class_name: "WorkOrder", primary_key: :status, foreign_key: :slug
 
