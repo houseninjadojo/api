@@ -122,8 +122,9 @@ class Invoice < ApplicationRecord
         Hubspot::Deal::UpdateStatusJob.perform_later(work_order)
         return nil
       else
-        work_order.update!(status: WorkOrderStatus.find_by(slug: "inboice_paid_by_customer"))
+        work_order.update!(status: WorkOrderStatus.find_by(slug: "invoice_paid_by_customer"))
         Hubspot::Deal::UpdateStatusJob.perform_later(work_order)
+        refresh_pdf!
         return paid_invoice
       end
     rescue => e
@@ -135,6 +136,11 @@ class Invoice < ApplicationRecord
 
   def fetch_pdf!
     Stripe::Invoices::FetchPdfJob.perform_later(self) unless document.present?
+  end
+
+  def refresh_pdf!
+    document.destroy! if document.present?
+    fetch_pdf!
   end
 
   def finalize!
