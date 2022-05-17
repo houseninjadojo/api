@@ -21,7 +21,7 @@ class Invoice::ExternalAccess::ExpireJob < ApplicationJob
 
   def expire_hubspot_access!
     Hubspot::Deal.update!(
-      invoice.work_order.hubpot_id,
+      invoice.work_order.hubspot_id,
       {
         "branch_payment_link" => nil,
       }
