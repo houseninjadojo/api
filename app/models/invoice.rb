@@ -90,11 +90,13 @@ class Invoice < ApplicationRecord
   end
 
   def finalized?
-    finalized_at.present?
+    # finalized_at.present?
+    status == STATUS_OPEN
   end
 
   def paid?
-    payment_attempted_at.present? && payment.present?
+    # payment_attempted_at.present? && payment.present?
+    status == STATUS_PAID
   end
 
   def payment_succeeded_at

@@ -5,7 +5,9 @@ class Stripe::Invoices::FinalizeJob < ApplicationJob
     @invoice = invoice
     return unless conditions_met?
 
-    Stripe::Invoice.finalize_invoice(invoice.stripe_id)
+    finalized_invoice = Stripe::Invoice.finalize_invoice(invoice.stripe_id)
+    # payment_intent = Stripe::PaymentIntent.retrieve(finalized_invoice.payment_intent)
+    # payment = Payment.create_from_payment_intent(payment_intent)
     # we should be handling this via webhooks
     # invoice.update!(finalized_at: Time.now)
   end

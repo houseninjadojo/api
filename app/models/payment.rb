@@ -60,23 +60,27 @@ class Payment < ApplicationRecord
     status == 'failed'
   end
 
+  def requires_confirmation?
+    status == 'requires_confirmation'
+  end
+
   def has_charge?
     stripe_object.present?
   end
   alias was_charged? has_charge?
 
   def should_charge?
-    return false if !has_charge? || status.blank?
+    return false if !has_charge? || requires_confirmation? || status.blank?
     # return true if originator == 'app' && purpose == 'invoice'
     return true
   end
 
   def self.from_stripe_charge!(object)
     ActiveRecord::Base.transaction do
-      invoice = Invoice.find_by(stripe_id: object["invoice"])
-      payment_method = PaymentMethod.find_by(stripe_token: object["payment_method"])
-      user = User.find_by(stripe_customer_id: object["customer"])
-      payment = Payment.find_or_intialize_by(stripe_id: stripe_id)
+      invoice = Invoice.find_by(stripe_id: object["invoice"]) if object["invoice"].present?
+      payment_method = PaymentMethod.find_by(stripe_token: object["payment_method"]) if object["payment_method"].present?
+      user = User.find_by(stripe_customer_id: object["customer"]) if object["customer"].present?
+      payment = Payment.find_or_intialize_by(stripe_id: object["id"])
       payment.assign_attributes(
         amount: object["amount"],
         description: object["description"],
@@ -84,6 +88,28 @@ class Payment < ApplicationRecord
         paid: object["paid"],
         payment_method: payment_method,
         refunded: object["refunded"],
+        statement_descriptor: object["statement_descriptor"],
+        status: object["status"],
+        stripe_object: @payload,
+        user: user
+      )
+      payment.save!
+      payment
+    end
+  end
+
+  def self.create_from_payment_intent(object)
+    ActiveRecord::Base.transaction do
+      invoice = Invoice.find_by(stripe_id: object["invoice"]) if object["invoice"].present?
+      payment_method = PaymentMethod.find_by(stripe_token: object["payment_method"]) if object["payment_method"].present?
+      user = User.find_by(stripe_customer_id: object["customer"]) if object["customer"].present?
+      payment = Payment.find_or_intialize_by(stripe_id: object["id"])
+      payment.assign_attributes(
+        amount: object["amount"],
+        description: object["description"],
+        invoice: invoice,
+        paid: object["paid"],
+        payment_method: payment_method,
         statement_descriptor: object["statement_descriptor"],
         status: object["status"],
         stripe_object: @payload,
