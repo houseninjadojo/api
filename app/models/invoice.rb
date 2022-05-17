@@ -50,7 +50,7 @@ class Invoice < ApplicationRecord
 
   # callbacks
 
-  # after_create_commit :create_stripe_invoice
+  after_create_commit :create_stripe_invoice
   after_save_commit :mark_hubspot_invoice_paid, if: :paid?
 
   # we are attempting payment
@@ -75,6 +75,10 @@ class Invoice < ApplicationRecord
   validates :stripe_id,    uniqueness: true, allow_nil: true
 
   # helpers
+
+  def user
+    super.presence || work_order&.property&.user
+  end
 
   def formatted_total
     format = I18n.t(:format, scope: 'number.currency.format')
@@ -112,11 +116,11 @@ class Invoice < ApplicationRecord
         stripe_object: paid_invoice
       )
       if paid_invoice.status == "payment_failed"
-        work_order.update!(status: WorkOrderStatus::PAYMENT_FAILED::SLUG)
+        work_order.update!(status: WorkOrderStatus::PAYMENT_FAILED.SLUG)
         Hubspot::Deal::UpdateStatusJob.perform_later(work_order)
         return nil
       else
-        work_order.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER::SLUG)
+        work_order.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER.SLUG)
         Hubspot::Deal::UpdateStatusJob.perform_later(work_order)
         return paid_invoice
       end

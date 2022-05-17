@@ -28,7 +28,7 @@
 #  fk_rails_...  (property_id => properties.id)
 #
 class WorkOrder < ApplicationRecord
-  after_save_commit :handle_status_change, if: :status_changed?
+  after_save_commit :handle_status_change, if: :saved_change_to_status?
 
   # associations
 

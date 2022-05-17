@@ -15,8 +15,16 @@ RSpec.describe Stripe::Invoices::CreateJob, type: :job do
         subscription: @invoice.try(:subscription).try(:stripe_id),
       }
     }
+    let(:line_item_params) {
+      {
+        amount: invoice.total,
+        currency: 'usd',
+        customer: user.stripe_id,
+      }
+    }
 
     it "calls Stripe::Invoice.create" do
+      expect(Stripe::InvoiceItem).to receive(:create).with(line_item_params).and_return(double(id: "stripe_id", as_json: {}))
       expect(Stripe::Invoice).to receive(:create).with(params).and_return(double(id: "stripe_id", as_json: {}))
       job.perform_now(invoice)
     end
