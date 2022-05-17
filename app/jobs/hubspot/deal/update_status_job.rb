@@ -22,7 +22,7 @@ class Hubspot::Deal::UpdateStatusJob < ApplicationJob
     Hubspot::Deal.update!(
       work_order.hubspot_id,
       {
-        dealstage: work_order.status.name,
+        dealstage: work_order.status.hubspot_id,
       }
     )
   end
