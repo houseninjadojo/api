@@ -5,7 +5,7 @@ RSpec.describe Hubspot::Deal::UpdateStatusJob, type: :job do
     let(:work_order) { create(:work_order, hubspot_id: '12345') }
     let(:job) { Hubspot::Deal::UpdateStatusJob }
     let(:params) {
-      { status: work_order.status.name }
+      { dealstage: work_order.status.name }
     }
 
     it "calls Hubspot::Deal.update!" do
