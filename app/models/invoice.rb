@@ -118,11 +118,11 @@ class Invoice < ApplicationRecord
         stripe_object: paid_invoice
       )
       if paid_invoice.status == "payment_failed"
-        work_order.update!(status: WorkOrderStatus::PAYMENT_FAILED.SLUG)
+        work_order.update!(status: WorkOrderStatus.find_by(slug: "payment_failed"))
         Hubspot::Deal::UpdateStatusJob.perform_later(work_order)
         return nil
       else
-        work_order.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER.SLUG)
+        work_order.update!(status: WorkOrderStatus.find_by(slug: "inboice_paid_by_customer"))
         Hubspot::Deal::UpdateStatusJob.perform_later(work_order)
         return paid_invoice
       end
