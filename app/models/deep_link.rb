@@ -66,6 +66,7 @@ class DeepLink < ApplicationRecord
     (super.presence || {}).merge({
       "$canonical_url" => canonical_url,
       "$deeplink_path" => deeplink_path,
+      "$desktop_url" => canonical_url,
     })
   end
 
