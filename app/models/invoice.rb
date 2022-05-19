@@ -51,6 +51,7 @@ class Invoice < ApplicationRecord
   # callbacks
 
   after_create_commit :create_stripe_invoice
+  # after_save_commit :update_stripe_invoice, if: :saved_change_to_total?
   after_save_commit :mark_hubspot_invoice_paid, if: :paid?
 
   # we are attempting payment
@@ -151,6 +152,10 @@ class Invoice < ApplicationRecord
 
   def create_stripe_invoice
     Stripe::Invoices::CreateJob.perform_later(self) unless stripe_id.present?
+  end
+
+  def update_stripe_invoice
+    Stripe::Invoices::UpdateJob.perform_later(self) unless stripe_id.nil?
   end
 
   def mark_hubspot_invoice_paid

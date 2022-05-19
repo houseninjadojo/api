@@ -28,14 +28,15 @@ class Invoice::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
   end
 
   def generate_deep_link!
+    escaped_token = CGI.escape(invoice.access_token)
     @deep_link = DeepLink.create_and_generate!(
       linkable: invoice,
       feature: "invoice_external_access",
       stage: invoice.status,
       data: {
         access_token: invoice.encrypted_access_token,
-        "$canonical_url" => "https://app.houseninja.co/p/approve-payment?access_token=#{invoice.encrypted_access_token}",
-        "$deeplink_path" => "p/approve-payment?access_token=#{invoice.encrypted_access_token}",
+        "$canonical_url" => "https://app.houseninja.co/p/approve-payment?access_token=#{escaped_token}",
+        "$deeplink_path" => "p/approve-payment?access_token=#{escaped_token}",
         "$web_only" => false,
       },
     )

@@ -34,7 +34,7 @@ class DeepLink < ApplicationRecord
   end
 
   def branch_link_params
-    attributes.slice(
+    attributes.with_indifferent_access.slice(
       :campaign,
       :channel,
       :data,
