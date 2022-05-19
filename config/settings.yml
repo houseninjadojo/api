@@ -35,7 +35,7 @@ sandbox:
   domains:
     <<: *domains
     api: sandbox.api.houseninja.co    # staging app domain
-    app: payment-approval.app.houseninja.co
+    app: payment-approval.houseninja.pages.dev
     documents: sandbox.documents.houseninja.co
 
 production:
