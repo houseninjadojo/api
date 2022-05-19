@@ -7,8 +7,15 @@ class WorkOrdersController < ApplicationController
   end
 
   def show
+    if access_token.present?
+      invoice_record = Invoice.includes(:work_order).find_by(access_token: access_token)
+      params[:id] = invoice_record.work_order.id
+      user = access_token_user
+    else
+      user = current_user
+    end
     work_order = WorkOrderResource.find(params)
-    authorize! work_order.data
+    authorize!(work_order.data, context: { user: user })
     respond_with(work_order)
   end
 
