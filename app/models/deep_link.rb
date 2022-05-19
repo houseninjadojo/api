@@ -6,6 +6,7 @@
 #  campaign      :string
 #  canonical_url :string
 #  data          :jsonb
+#  deeplink_path :string
 #  expired_at    :datetime
 #  feature       :string
 #  linkable_type :string
