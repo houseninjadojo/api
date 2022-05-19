@@ -38,11 +38,12 @@ class DeepLink < ApplicationRecord
     attributes.with_indifferent_access.slice(
       :campaign,
       :channel,
-      :data,
       :feature,
       :stage,
       :tags
-    )
+    ).merge({
+      data: data,
+    })
   end
 
   def is_generated?
@@ -58,7 +59,7 @@ class DeepLink < ApplicationRecord
   end
 
   def deeplink_path
-    path
+    super || path
   end
 
   def data

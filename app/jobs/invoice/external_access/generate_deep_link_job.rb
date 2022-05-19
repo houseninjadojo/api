@@ -32,7 +32,7 @@ class Invoice::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
   end
 
   def canonical_url
-    "https://app.houseninja.co/p/approve-payment/#{escaped_access_token}"
+    "https://#{Rails.settings.domains[:app]}/p/approve-payment/#{escaped_access_token}"
   end
 
   def deeplink_path
@@ -43,8 +43,9 @@ class Invoice::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
     @deep_link = DeepLink.create_and_generate!(
       canonical_url: canonical_url,
       deeplink_path: deeplink_path,
-      linkable: invoice,
       feature: "invoice_external_access",
+      linkable: invoice,
+      path: canonical_url,
       stage: invoice.status,
       data: {
         access_token: invoice.encrypted_access_token,

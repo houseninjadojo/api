@@ -2,7 +2,7 @@ class HomeController < ApplicationController
   skip_before_action :authenticate_request!
 
   def index
-    root_url = "https://#{Rails.settings.domains[:app]}"
+    root_url = "https://#{Rails.settings.domains[:api]}"
 
     link_self = { self: "#{root_url}/" }
     link_resources = {

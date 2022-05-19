@@ -6,7 +6,7 @@ class ApplicationResource < Graphiti::Resource
   # Subclasses can still override this default.
   self.abstract_class = true
   self.adapter = Graphiti::Adapters::ActiveRecord
-  self.base_url = "#{Rails.settings.protocol}://#{Rails.settings.domains[:app]}"
+  self.base_url = "#{Rails.settings.protocol}://#{Rails.settings.domains[:api]}"
   self.endpoint_namespace = '/'
 
   # Automatically generate JSONAPI links

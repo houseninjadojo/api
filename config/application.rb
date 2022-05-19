@@ -22,7 +22,7 @@ module HouseNinja
     # Reflect the current app url options for use inside rails
     # @see https://edgeguides.rubyonrails.org/action_controller_overview.html#default-url-options
     config.action_controller.default_url_options = {
-      host: Rails.settings.domains[:app],
+      host: Rails.settings.domains[:api],
       port: ENV.fetch("PORT") { 3000 }
     }
 
@@ -30,7 +30,7 @@ module HouseNinja
     # Reflect the current app url options for use inside rails
     # @see https://guides.rubyonrails.org/action_mailer_basics.html#generating-urls-in-action-mailer-views
     config.action_mailer.default_url_options = {
-      host: Rails.settings.domains[:app],
+      host: Rails.settings.domains[:api],
       port: ENV.fetch("PORT") { 3000 }
     }
 
