@@ -1,4 +1,6 @@
 class WorkOrdersController < ApplicationController
+  before_action :authenticate_request!, except: [:show]
+
   def index
     authorize!
     scope = authorized_scope(WorkOrder.all)
