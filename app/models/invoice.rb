@@ -175,11 +175,12 @@ class Invoice < ApplicationRecord
 
   def self.find_by_encrypted_access_token(token)
     payload = EncryptionService.decrypt(token)&.with_indifferent_access
-    return unless payload.present?
+    return if payload.nil? || has_external_access_expired?
     find_by(access_token: payload[:access_token])
   end
 
   def expire_external_access!
+    update!(access_token: nil)
     deep_link.expire! if deep_link.present?
   end
 
