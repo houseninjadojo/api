@@ -14,6 +14,7 @@ class Hubspot::Webhook::Handler::Contact::PropertyChangeJob < ApplicationJob
 
   def conditions_met?
     [
+      enabled?,
       webhook_event.processed_at.blank?,
       hubspot_id.present?,
       attribute_value.present?,
@@ -67,5 +68,9 @@ class Hubspot::Webhook::Handler::Contact::PropertyChangeJob < ApplicationJob
       #
     end
     []
+  end
+
+  def enabled?
+    ENV["HUBSPOT_WEBHOOK_DISABLED"] != "true"
   end
 end

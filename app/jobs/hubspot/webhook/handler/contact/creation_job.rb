@@ -17,6 +17,7 @@ class Hubspot::Webhook::Handler::Contact::CreationJob < ApplicationJob
 
   def conditions_met?
     [
+      enabled?,
       webhook_event.processed_at.blank?,
       hubspot_id.present?,
       user.nil?,
@@ -46,5 +47,9 @@ class Hubspot::Webhook::Handler::Contact::CreationJob < ApplicationJob
       hubspot_id:             contact.id,
       hubspot_contact_object: contact,
     }
+  end
+
+  def enabled?
+    ENV["HUBSPOT_WEBHOOK_DISABLED"] != "true"
   end
 end

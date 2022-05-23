@@ -28,6 +28,7 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
 
   def conditions_met?
     [
+      enabled?,
       # webhook_event.processed_at.blank?,
       hubspot_id.present?,
       attribute.present?,
@@ -104,5 +105,9 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
     else
       Rails.logger.info("Unknown deal property: #{attribute}")
     end
+  end
+
+  def enabled?
+    ENV["HUBSPOT_WEBHOOK_DISABLED"] != "true"
   end
 end

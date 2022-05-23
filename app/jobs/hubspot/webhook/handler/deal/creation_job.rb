@@ -19,6 +19,7 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
 
   def conditions_met?
     [
+      enabled?,
       # webhook_event.processed_at.blank?,
       hubspot_id.present?,
       deal.present?,
@@ -119,5 +120,9 @@ class Hubspot::Webhook::Handler::Deal::CreationJob < ApplicationJob
 
   def property
     @property ||= user_from_contact_association.try(:properties).try(:first)
+  end
+
+  def enabled?
+    ENV["HUBSPOT_WEBHOOK_DISABLED"] != "true"
   end
 end

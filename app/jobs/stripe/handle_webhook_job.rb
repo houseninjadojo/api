@@ -4,6 +4,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
 
   def perform(webhook_event)
     return if webhook_event.processed_at.present?
+    return unless enabled?
     @payload = webhook_event.payload
 
     case
@@ -112,5 +113,9 @@ class Stripe::HandleWebhookJob < ApplicationJob
   def split_name
     return [] if object["name"].blank?
     object["name"].split(" ")
+  end
+
+  def enabled?
+    ENV["STRIPE_WEBHOOK_DISABLED"] != "true"
   end
 end
