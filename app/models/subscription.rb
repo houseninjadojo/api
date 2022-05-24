@@ -37,6 +37,7 @@ class Subscription < ApplicationRecord
   # callbacks
 
   after_create_commit :set_user_onboarding_step
+  after_create_commit :save_contact_promo_code
 
   # after_create_commit :create_stripe_subscription,
   #   unless: -> (subscription) { subscription.stripe_subscription_id.present? }
@@ -71,5 +72,9 @@ class Subscription < ApplicationRecord
   def set_user_onboarding_step
     # user.update(onboarding_step: OnboardingStep::WELCOME)
     user.update(onboarding_step: OnboardingStep::SET_PASSWORD)
+  end
+
+  def save_contact_promo_code
+    Hubspot::Contact::SavePromoCodeJob.perform_later(user, promo_code)
   end
 end

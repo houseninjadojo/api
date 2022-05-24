@@ -36,6 +36,7 @@
 FactoryBot.define do
   factory :subscription do
     payment_method
+    promo_code
     subscription_plan
     user
     stripe_subscription_id { Faker::Crypto.md5 }
