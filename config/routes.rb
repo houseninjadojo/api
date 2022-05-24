@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   # mount VandalUi::Engine,   at: '/vandal' if Rails.env.development?
 
   # webhooks
+  post '/webhooks/arrivy',  to: 'webhooks#arrivy'
   post '/webhooks/hubspot', to: 'webhooks#hubspot'
   post '/webhooks/stripe',  to: 'webhooks#stripe'
 

@@ -36,6 +36,23 @@ class WebhooksController < ApplicationController
     render status: :ok
   end
 
+  def arrivy
+    if arrivy_webhook_header == arrivy_webhook_secret
+      event = request.body.read
+      begin
+        content = JSON.parse(event)
+        webhook_event = WebhookEvent.create!(service: 'arrivy', payload: content)
+        Arrivy::Webhook::IngestJob.perform_later(webhook_event)
+      rescue
+        webhook_event = WebhookEvent.create!(service: 'arrivy', payload: event)
+        Rails.logger.warn("Could not parse event=#{webhook_event.id}")
+      end
+      render status: :ok
+    else
+      render status: :unauthorized
+    end
+  end
+
   private
 
   def build_stripe_webhook_event
@@ -53,5 +70,13 @@ class WebhooksController < ApplicationController
 
   def stripe_webhook_secret
     Rails.application.credentials.stripe.dig(:webhook_secret)
+  end
+
+  def arrivy_webhook_secret
+    Rails.application.credentials.arrivy.dig(:webhook_secret)
+  end
+
+  def arrivy_webhook_header
+    request.headers['ARRIVY_SECRET']
   end
 end
