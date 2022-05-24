@@ -69,6 +69,21 @@ class Stripe::HandleWebhookJob < ApplicationJob
           nil
         end
       end
+    # `payment_method.attached`
+    when !!event.match(/^payment_method\.attached$/)
+      ActiveRecord::Base.transaction do
+        user = User.find_by(stripe_customer_id: object["customer"]) if object["customer"].present?
+        payment_method = PaymentMethod.find_by(stripe_id: stripe_id) if stripe_id.present?
+        if payment_method.present?
+          payment_method.update(
+            brand: object["card"]["brand"],
+            last_four: object["card"]["last4"],
+            stripe_object: @payload
+          )
+        else
+          nil
+        end
+      end
     # `promotion_code.*`
     when !!event.match(/^promotion_code\.[a-z]+(?![.a-z]).*$/)
       ActiveRecord::Base.transaction do
