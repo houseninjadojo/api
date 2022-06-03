@@ -213,7 +213,7 @@ class User < ApplicationRecord
   end
 
   def update_stripe_customer
-    should_sync_stripe? && Stripe::UpdateCustomerJob.perform_later(self)
+    Stripe::UpdateCustomerJob.perform_later(self, self.saved_changes)
   end
 
   def delete_stripe_customer
@@ -257,17 +257,6 @@ class User < ApplicationRecord
     self.saved_changes.keys != ['updated_at'] &&  # do not sync if no attributes actually changed
     self.previously_new_record? == false &&       # do not sync if this is a new record
     self.new_record? == false                     # do not sync if it is not persisted
-  end
-
-  def should_sync_stripe?
-    self.should_sync? &&
-    self.stripe_customer_id.present? &&
-    (self.saved_changes.keys & [
-      'first_name',
-      'last_name',
-      'email',
-      'phone_number',
-    ]).any?
   end
 
   def should_sync_hubspot?

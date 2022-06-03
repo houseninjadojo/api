@@ -1,4 +1,4 @@
-class Stripe::UpdateCustomerJob < ApplicationJob
+class Sync::User::StripeJob < ApplicationJob
   queue_as :default
 
   attr_accessor :user, :changed_attributes
