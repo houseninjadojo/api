@@ -58,13 +58,9 @@ class User < ApplicationRecord
   after_save :complete_onboarding,
     if: -> (user) { user.onboarding_step == OnboardingStep::SET_PASSWORD }
 
-  # after_update_commit :update_stripe_customer,
-  #   if:     -> (user) { user.stripe_customer_id.present? },
-  #   unless: :should_not_sync_user?
-
-  # after_update_commit :update_auth_user,
-  #   if:     -> (user) { user.auth_zero_user_created == true },
-  #   unless: :should_not_sync_user?
+  after_update_commit :update_auth_user
+  after_update_commit :update_hubspot_contact
+  after_update_commit :update_stripe_customer
 
   after_destroy_commit :delete_auth_user,
     if: -> (user) { user.auth_zero_user_created == true }
@@ -182,7 +178,7 @@ class User < ApplicationRecord
   end
 
   def complete_onboarding
-    self.onboarding_step = "completed"
+    self.onboarding_step = 'completed'
     self.onboarding_code = nil
     self.onboarding_link = nil
     self.save
@@ -205,7 +201,7 @@ class User < ApplicationRecord
   end
 
   def update_auth_user
-    Auth::UpdateUserJob.perform_later(self)
+    should_sync_auth0? && Auth::UpdateUserJob.perform_later(self)
   end
 
   def delete_auth_user
@@ -217,7 +213,7 @@ class User < ApplicationRecord
   end
 
   def update_stripe_customer
-    Stripe::UpdateCustomerJob.perform_later(self)
+    should_sync_stripe? && Stripe::UpdateCustomerJob.perform_later(self)
   end
 
   def delete_stripe_customer
@@ -229,7 +225,7 @@ class User < ApplicationRecord
   end
 
   def update_hubspot_contact
-    Hubspot::UpdateContactJob.perform_later(self)
+    should_sync_hubspot? && Hubspot::UpdateContactJob.perform_later(self)
   end
 
   # sync gates
@@ -255,6 +251,50 @@ class User < ApplicationRecord
   end
 
   # sync
+
+  def should_sync?
+    self.saved_changes? &&                        # only sync if there are changes
+    self.saved_changes.keys != ['updated_at'] &&  # do not sync if no attributes actually changed
+    self.previously_new_record? == false &&       # do not sync if this is a new record
+    self.new_record? == false                     # do not sync if it is not persisted
+  end
+
+  def should_sync_stripe?
+    self.should_sync? &&
+    self.stripe_customer_id.present? &&
+    (self.saved_changes.keys & [
+      'first_name',
+      'last_name',
+      'email',
+      'phone_number',
+    ]).any?
+  end
+
+  def should_sync_hubspot?
+    self.should_sync? &&
+    self.hubspot_id.present? &&
+    (self.saved_changes.keys & [
+      'first_name',
+      'last_name',
+      'email',
+      'phone_number',
+      'contact_type',
+      'onboarding_code',
+      'onboarding_step',
+      'onboarding_link',
+      'requested_zipcode',
+    ]).any?
+  end
+
+  def should_sync_auth0?
+    self.should_sync? &&
+    self.auth_zero_user_created == true &&
+    (self.saved_changes.keys & [
+        'first_name',
+        'last_name',
+        'email',
+      ]).any?
+  end
 
   def sync_flag
     Kredis.flag("user:sync:#{self.id}")
