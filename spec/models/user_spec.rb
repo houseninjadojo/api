@@ -17,12 +17,14 @@
 #  requested_zipcode                         :string
 #  created_at                                :datetime         not null
 #  updated_at                                :datetime         not null
+#  arrivy_id                                 :string
 #  hubspot_id                                :string
 #  promo_code_id                             :uuid
 #  stripe_customer_id                        :string
 #
 # Indexes
 #
+#  index_users_on_arrivy_id           (arrivy_id) UNIQUE
 #  index_users_on_email               (email) UNIQUE
 #  index_users_on_gender              (gender)
 #  index_users_on_hubspot_id          (hubspot_id) UNIQUE

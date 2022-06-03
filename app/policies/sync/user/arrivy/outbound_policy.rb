@@ -1,5 +1,4 @@
-
-class Sync::User::StripePolicy < ActionPolicy::Base
+class Sync::User::Arrivy::OutboundPolicy < ApplicationPolicy
   authorize :user, optional: true
   authorize :changed_attributes
 
@@ -14,7 +13,7 @@ class Sync::User::StripePolicy < ActionPolicy::Base
   end
 
   def has_external_id?
-    record.stripe_customer_id.present?
+    record.arrivy_id.present?
   end
 
   def has_changed_attributes?

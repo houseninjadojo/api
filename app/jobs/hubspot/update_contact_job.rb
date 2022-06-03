@@ -2,6 +2,8 @@ class Hubspot::UpdateContactJob < ApplicationJob
   queue_as :default
 
   def perform(user)
+    ActiveSupport::Deprecation.warn('use Sync::User::Hubspot::OutboundJob instead')
+
     id = user.hubspot_id
     params = contact_properties(user)
 

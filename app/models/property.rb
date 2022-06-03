@@ -72,32 +72,6 @@ class Property < ApplicationRecord
     end
   end
 
-  def update_from_service(service, payload)
-    # if sync_flag.marked?
-    #   return # we already updated
-    # else
-    #   mark_sync_flag!
-    # end
-
-    # User.transaction do
-    #   payload.each do |k, v|
-    #     update_attribute(k, v)
-    #   end
-    # end
-
-    # case service
-    # when "hubspot"
-    #   update_auth_user
-    #   update_stripe_customer
-    # when "stripe"
-    #   update_auth_user
-    #   update_hubspot_contact
-    # when "auth0"
-    #   update_stripe_customer
-    #   update_hubspot_contact
-    # end
-  end
-
   private
 
   # update property in hubspot

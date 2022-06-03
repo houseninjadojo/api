@@ -1,11 +1,9 @@
-class Stripe::UpdateCustomerJob < ApplicationJob
+class Sync::User::Stripe::OutboundJob < ApplicationJob
   queue_as :default
 
   attr_accessor :user, :changed_attributes
 
   def perform(user, changed_attributes)
-    ActiveSupport::Deprecation.warn('use Sync::User::Hubspot::OutboundJob instead')
-
     @changed_attributes = changed_attributes
     @user = user
     return unless policy.can_sync?

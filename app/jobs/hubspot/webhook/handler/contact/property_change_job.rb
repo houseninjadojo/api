@@ -5,7 +5,7 @@ class Hubspot::Webhook::Handler::Contact::PropertyChangeJob < ApplicationJob
     @entry = webhook_entry
     return unless conditions_met?
 
-    resource.update_from_service("hubspot", { attribute => attribute_value })
+    resource.update!(attribute => attribute_value)
 
     webhook_event.update!(processed_at: Time.now)
   end

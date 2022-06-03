@@ -1,4 +1,4 @@
-class Sync::User::StripeJob < ApplicationJob
+class Sync::User::Arrivy::OutboundJob < ApplicationJob
   queue_as :default
 
   attr_accessor :user, :changed_attributes
@@ -8,20 +8,23 @@ class Sync::User::StripeJob < ApplicationJob
     @user = user
     return unless policy.can_sync?
 
-    Stripe::Customer.update(user.stripe_customer_id, params)
+    Arrivy::Customer.new(params).update
   end
 
   def params
     {
-      description: user.full_name,
+      id: user.arrivy_id,
+      first_name: user.first_name,
+      last_name: user.last_name,
       email: user.email,
-      name: user.full_name,
       phone: user.phone_number,
+      mobile_number: user.phone_number,
+      external_id: user.id,
     }
   end
 
   def policy
-    Sync::User::StripePolicy.new(
+    Sync::User::Arrivy::OutboundPolicy.new(
       user: user,
       changed_attributes: changed_attributes
     )
