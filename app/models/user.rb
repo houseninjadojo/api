@@ -254,7 +254,7 @@ class User < ApplicationRecord
 
   def sync_jobs
     [
-      # Sync::User::Arrivy::OutboundJob,
+      Sync::User::Arrivy::OutboundJob,
       Sync::User::Auth0::OutboundJob,
       Sync::User::Stripe::OutboundJob,
       Sync::User::Hubspot::OutboundJob,

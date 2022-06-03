@@ -28,7 +28,7 @@ class Sync::User::Hubspot::OutboundJob < ApplicationJob
 
   def policy
     Sync::User::Hubspot::OutboundPolicy.new(
-      user: user,
+      user,
       changed_attributes: changed_attributes
     )
   end

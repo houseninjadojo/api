@@ -9,7 +9,12 @@ RSpec.describe UserResource, type: :resource do
       {
         data: {
           type: 'users',
-          attributes: attributes_for(:user).except(:stripe_customer_id, :hubspot_id, :hubspot_contact_object),
+          attributes: attributes_for(:user).except(
+            :stripe_customer_id,
+            :hubspot_id,
+            :hubspot_contact_object,
+            :arrivy_id
+          ),
           # relationships: {
           #   properties: {
           #     data: [{

@@ -22,7 +22,7 @@ class Sync::User::Stripe::OutboundJob < ApplicationJob
 
   def policy
     Sync::User::Stripe::OutboundPolicy.new(
-      user: user,
+      user,
       changed_attributes: changed_attributes
     )
   end

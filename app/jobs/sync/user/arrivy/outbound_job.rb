@@ -25,7 +25,7 @@ class Sync::User::Arrivy::OutboundJob < ApplicationJob
 
   def policy
     Sync::User::Arrivy::OutboundPolicy.new(
-      user: user,
+      user,
       changed_attributes: changed_attributes
     )
   end

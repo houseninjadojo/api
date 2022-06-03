@@ -10,10 +10,6 @@ RSpec.describe Sync::User::Arrivy::OutboundJob, type: :job do
   }
   let(:job) { Sync::User::Arrivy::OutboundJob }
 
-  # before(:each) do
-  #   allow(AuthZero).to(receive(:client).and_return(double(patch_user: true)))
-  # end
-
   describe "#perform" do
     it "will not sync if policy declines" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: false))

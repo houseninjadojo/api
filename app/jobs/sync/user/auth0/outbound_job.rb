@@ -17,7 +17,7 @@ class Sync::User::Auth0::OutboundJob < ApplicationJob
 
   def policy
     Sync::User::Auth0::OutboundPolicy.new(
-      user: user,
+      user,
       changed_attributes: changed_attributes
     )
   end
