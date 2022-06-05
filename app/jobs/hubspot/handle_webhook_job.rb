@@ -97,7 +97,7 @@ class Hubspot::HandleWebhookJob < ApplicationJob
   #   end
 
   #   resource = model.find_by(hubspot_id: hubspot_id)
-  #   resource.update_from_service("hubspot", { attribute => attribute_value })
+  #   resource.update!(attribute => attribute_value)
   # end
 
   # when a deal is created, hubspot sends several `propertyChange` events,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_19_204854) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_03_204646) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -325,6 +325,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_204854) do
     t.string "onboarding_step"
     t.string "onboarding_code"
     t.string "onboarding_link"
+    t.string "arrivy_id"
+    t.index ["arrivy_id"], name: "index_users_on_arrivy_id", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["gender"], name: "index_users_on_gender"
     t.index ["hubspot_id"], name: "index_users_on_hubspot_id", unique: true

@@ -29,6 +29,7 @@
 #
 class WorkOrder < ApplicationRecord
   after_save_commit :handle_status_change, if: :saved_change_to_status?
+  after_update_commit :sync!
 
   # associations
 
@@ -50,6 +51,28 @@ class WorkOrder < ApplicationRecord
       Invoice::ExternalAccess::GenerateDeepLinkJob.perform_later(invoice)
     when "invoice_paid_by_customer"
       Invoice::ExternalAccess::ExpireJob.perform_later(invoice)
+    end
+  end
+
+  # sync
+
+  def should_sync?
+    self.saved_changes? &&                        # only sync if there are changes
+    self.saved_changes.keys != ['updated_at'] &&  # do not sync if no attributes actually changed
+    self.previously_new_record? == false &&       # do not sync if this is a new record
+    self.new_record? == false                     # do not sync if it is not persisted
+  end
+
+  def sync_jobs
+    [
+      Sync::WorkOrder::Hubspot::OutboundJob,
+    ]
+  end
+
+  def sync!
+    return unless should_sync?
+    sync_jobs.each do |job|
+      job.perform_later(self, self.saved_changes)
     end
   end
 end

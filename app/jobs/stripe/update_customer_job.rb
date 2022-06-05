@@ -1,19 +1,31 @@
 class Stripe::UpdateCustomerJob < ApplicationJob
   queue_as :default
 
-  def perform(user)
-    return unless user.stripe_customer_id.present?
+  attr_accessor :user, :changed_attributes
 
-    params = params(user)
+  def perform(user, changed_attributes)
+    ActiveSupport::Deprecation.warn('use Sync::User::Hubspot::OutboundJob instead')
+
+    @changed_attributes = changed_attributes
+    @user = user
+    return unless policy.can_sync?
+
     Stripe::Customer.update(user.stripe_customer_id, params)
   end
 
-  def params(user)
+  def params
     {
       description: user.full_name,
       email: user.email,
       name: user.full_name,
       phone: user.phone_number,
     }
+  end
+
+  def policy
+    Sync::User::Stripe::OutboundPolicy.new(
+      user: user,
+      changed_attributes: changed_attributes
+    )
   end
 end

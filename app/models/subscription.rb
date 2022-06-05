@@ -34,6 +34,26 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Subscription < ApplicationRecord
+  module STATUS
+    INCOMPLETE = 'incomplete'
+    INCOMPLETE_EXPIRED = 'incomplete_expired'
+    TRIALING = 'trialing'
+    ACTIVE = 'active'
+    PAST_DUE = 'past_due'
+    CANCELED = 'canceled'
+    UNPAID = 'unpaid'
+
+    ALL = [
+      INCOMPLETE,
+      INCOMPLETE_EXPIRED,
+      TRIALING,
+      ACTIVE,
+      PAST_DUE,
+      CANCELED,
+      UNPAID,
+    ]
+  end
+
   # callbacks
 
   after_create_commit :set_user_onboarding_step
@@ -52,6 +72,12 @@ class Subscription < ApplicationRecord
   # validations
 
   validates :stripe_subscription_id, uniqueness: true, allow_nil: true
+
+  # gates
+
+  def active?
+    status == STATUS::ACTIVE
+  end
 
   # callbacks
 

@@ -17,12 +17,14 @@
 #  requested_zipcode                         :string
 #  created_at                                :datetime         not null
 #  updated_at                                :datetime         not null
+#  arrivy_id                                 :string
 #  hubspot_id                                :string
 #  promo_code_id                             :uuid
 #  stripe_customer_id                        :string
 #
 # Indexes
 #
+#  index_users_on_arrivy_id           (arrivy_id) UNIQUE
 #  index_users_on_email               (email) UNIQUE
 #  index_users_on_gender              (gender)
 #  index_users_on_hubspot_id          (hubspot_id) UNIQUE
@@ -58,9 +60,7 @@ class User < ApplicationRecord
   after_save :complete_onboarding,
     if: -> (user) { user.onboarding_step == OnboardingStep::SET_PASSWORD }
 
-  after_update_commit :update_auth_user
-  after_update_commit :update_hubspot_contact
-  after_update_commit :update_stripe_customer
+  after_update_commit :sync!
 
   after_destroy_commit :delete_auth_user,
     if: -> (user) { user.auth_zero_user_created == true }
@@ -152,13 +152,18 @@ class User < ApplicationRecord
     end
   end
 
-  # onboarding
+  # gates
+
   def has_completed_onboarding?
     onboarding_step == "completed"
   end
 
   def is_currently_onboarding?
     !has_completed_onboarding? && contact_type == ContactType::CUSTOMER
+  end
+
+  def is_subscribed?
+    self.subscription.present? && self.subscription.is_subscribed?
   end
 
   # no-op
@@ -200,10 +205,6 @@ class User < ApplicationRecord
     Auth::CreateUserJob.perform_later(self)
   end
 
-  def update_auth_user
-    should_sync_auth0? && Auth::UpdateUserJob.perform_later(self)
-  end
-
   def delete_auth_user
     Auth::DeleteUserJob.perform_later(auth_id)
   end
@@ -212,20 +213,12 @@ class User < ApplicationRecord
     Stripe::CreateCustomerJob.perform_later(self)
   end
 
-  def update_stripe_customer
-    should_sync_stripe? && Stripe::UpdateCustomerJob.perform_later(self)
-  end
-
   def delete_stripe_customer
     Stripe::DeleteCustomerJob.perform_later(stripe_customer_id)
   end
 
   def create_hubspot_contact
     Hubspot::CreateContactJob.perform_later(self)
-  end
-
-  def update_hubspot_contact
-    should_sync_hubspot? && Hubspot::UpdateContactJob.perform_later(self)
   end
 
   # sync gates
@@ -259,74 +252,19 @@ class User < ApplicationRecord
     self.new_record? == false                     # do not sync if it is not persisted
   end
 
-  def should_sync_stripe?
-    self.should_sync? &&
-    self.stripe_customer_id.present? &&
-    (self.saved_changes.keys & [
-      'first_name',
-      'last_name',
-      'email',
-      'phone_number',
-    ]).any?
+  def sync_jobs
+    [
+      Sync::User::Arrivy::OutboundJob,
+      Sync::User::Auth0::OutboundJob,
+      Sync::User::Stripe::OutboundJob,
+      Sync::User::Hubspot::OutboundJob,
+    ]
   end
 
-  def should_sync_hubspot?
-    self.should_sync? &&
-    self.hubspot_id.present? &&
-    (self.saved_changes.keys & [
-      'first_name',
-      'last_name',
-      'email',
-      'phone_number',
-      'contact_type',
-      'onboarding_code',
-      'onboarding_step',
-      'onboarding_link',
-      'requested_zipcode',
-    ]).any?
-  end
-
-  def should_sync_auth0?
-    self.should_sync? &&
-    self.auth_zero_user_created == true &&
-    (self.saved_changes.keys & [
-        'first_name',
-        'last_name',
-        'email',
-      ]).any?
-  end
-
-  def sync_flag
-    Kredis.flag("user:sync:#{self.id}")
-  end
-
-  def mark_sync_flag!
-    sync_flag.mark(expires_in: 1.minute)
-  end
-
-  def update_from_service(service, payload)
-    if sync_flag.marked?
-      return # we already updated
-    else
-      mark_sync_flag!
-    end
-
-    User.transaction do
-      payload.each do |k, v|
-        update_attribute(k, v)
-      end
-    end
-
-    case service
-    when "hubspot"
-      update_auth_user
-      update_stripe_customer
-    when "stripe"
-      update_auth_user
-      update_hubspot_contact
-    when "auth0"
-      update_stripe_customer
-      update_hubspot_contact
+  def sync!
+    return unless should_sync?
+    sync_jobs.each do |job|
+      job.perform_later(self, self.saved_changes)
     end
   end
 end

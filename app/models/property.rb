@@ -39,10 +39,18 @@
 #
 
 class Property < ApplicationRecord
+  # associations
+
   has_many :documents
   has_many :work_orders
   belongs_to :service_area, required: false
   belongs_to :user
+
+  # callbacks
+
+  after_update_commit :sync!
+
+  # validations
 
   # validates :lot_size,        numericality: { greater_than_or_equal_to: 0 }
   # validates :home_size,       numericality: { greater_than_or_equal_to: 0 }
@@ -72,36 +80,27 @@ class Property < ApplicationRecord
     end
   end
 
-  def update_from_service(service, payload)
-    # if sync_flag.marked?
-    #   return # we already updated
-    # else
-    #   mark_sync_flag!
-    # end
+  # sync
 
-    # User.transaction do
-    #   payload.each do |k, v|
-    #     update_attribute(k, v)
-    #   end
-    # end
-
-    # case service
-    # when "hubspot"
-    #   update_auth_user
-    #   update_stripe_customer
-    # when "stripe"
-    #   update_auth_user
-    #   update_hubspot_contact
-    # when "auth0"
-    #   update_stripe_customer
-    #   update_hubspot_contact
-    # end
+  def should_sync?
+    self.saved_changes? &&                        # only sync if there are changes
+    self.saved_changes.keys != ['updated_at'] &&  # do not sync if no attributes actually changed
+    self.previously_new_record? == false &&       # do not sync if this is a new record
+    self.new_record? == false                     # do not sync if it is not persisted
   end
 
-  private
+  def sync_jobs
+    [
+      Sync::Property::Arrivy::OutboundJob,
+      Sync::Property::Hubspot::OutboundJob,
+      Sync::Property::Stripe::OutboundJob,
+    ]
+  end
 
-  # update property in hubspot
-  after_save_commit do |property|
-    Hubspot::UpdateContactPropertyJob.perform_later(property)
+  def sync!
+    return unless should_sync?
+    sync_jobs.each do |job|
+      job.perform_later(self, self.saved_changes)
+    end
   end
 end

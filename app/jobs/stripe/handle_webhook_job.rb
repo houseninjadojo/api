@@ -12,7 +12,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
       ActiveRecord::Base.transaction do
         user = User.find_by(stripe_customer_id: stripe_id) if stripe_id.present?
         return if user.nil?
-        user.update_from_service("stripe", user_attributes)
+        user.update!(user_attributes)
         webhook_event.update(processed_at: Time.now)
       end
     when event == "customer.created"
