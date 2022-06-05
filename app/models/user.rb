@@ -60,7 +60,7 @@ class User < ApplicationRecord
   after_save :complete_onboarding,
     if: -> (user) { user.onboarding_step == OnboardingStep::SET_PASSWORD }
 
-  after_update_commit :sync_user
+  after_update_commit :sync!
 
   after_destroy_commit :delete_auth_user,
     if: -> (user) { user.auth_zero_user_created == true }
@@ -261,7 +261,7 @@ class User < ApplicationRecord
     ]
   end
 
-  def sync_user
+  def sync!
     return unless should_sync?
     sync_jobs.each do |job|
       job.perform_later(self, self.saved_changes)

@@ -29,6 +29,7 @@
 #
 class WorkOrder < ApplicationRecord
   after_save_commit :handle_status_change, if: :saved_change_to_status?
+  after_update_commit :sync!
 
   # associations
 
