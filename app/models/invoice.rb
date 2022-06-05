@@ -52,7 +52,7 @@ class Invoice < ApplicationRecord
 
   after_create_commit :create_stripe_invoice
   # after_save_commit :update_stripe_invoice, if: :saved_change_to_total?
-  after_save_commit :mark_hubspot_invoice_paid, if: :paid?
+  # after_save_commit :mark_hubspot_invoice_paid, if: :paid?
 
   # we are attempting payment
   # before_save :run_payment!, if: -> (invoice) {
