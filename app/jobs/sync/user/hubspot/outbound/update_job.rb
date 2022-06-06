@@ -48,4 +48,5 @@ class Sync::User::Hubspot::Outbound::UpdateJob < ApplicationJob
     when ContactType::CUSTOMER
       user&.default_property&.zipcode
     end
+  end
 end
