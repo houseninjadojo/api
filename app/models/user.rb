@@ -131,6 +131,15 @@ class User < ApplicationRecord
     end
   end
 
+  # used specifically for hubspot to mark as subscribed
+  def customer_type
+    if is_subscribed?
+      "Current"
+    else
+      nil
+    end
+  end
+
   # gates
 
   def has_completed_onboarding?
@@ -159,6 +168,11 @@ class User < ApplicationRecord
   def generate_onboarding_link
     return if onboarding_link.present?
     Users::GenerateOnboardingLinkJob.perform_later(self)
+  end
+
+  def generate_referral_promo_code
+    return if promo_code.present?
+    Users::GenerateReferralPromoCodeJob.perform_later(self)
   end
 
   def complete_onboarding

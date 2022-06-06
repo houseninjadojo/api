@@ -52,6 +52,10 @@ class PaymentMethod < ApplicationRecord
     stripe_token
   end
 
+  def stripe_id=(val)
+    self.stripe_token = val
+  end
+
   # callbacks
 
   def set_user_onboarding_step
