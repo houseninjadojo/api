@@ -186,34 +186,44 @@ class User < ApplicationRecord
 
   def sync_services
     [
-      'Hubspot',
-      'Stripe',
-      'Auth0',
-      # 'Arrivy',
+      # :arrivy,
+      :auth0,
+      :hubspot,
+      :stripe,
     ]
   end
 
   def sync_create!
-    sync_services.each do |service|
-      policy = "Sync::User::#{service}::Outbound::CreatePolicy".constantize
-      job = "Sync::User::#{service}::Outbound::CreateJob".constantize
-      next unless policy.new(self).can_sync?
-      job.perform_later(self)
-    end
+    sync_services.each { |service| sync!(service: service, action: :create) }
   end
 
   def sync_update!
-    sync_services.each do |service|
-      policy = "Sync::User::#{service}::Outbound::UpdatePolicy".constantize
-      job = "Sync::User::#{service}::Outbound::UpdateJob".constantize
-      next unless policy.new(self, changed_attributes: self.changed_attributes).can_sync?
-      job.perform_later(self, self.saved_changes)
-    end
+    sync_services.each { |service| sync!(service: service, action: :update) }
   end
 
   def sync_delete!
+    # sync_services.each { |service| sync!(service: service, action: :delete) }
     Auth::DeleteUserJob.perform_later(auth_id)
     Stripe::DeleteCustomerJob.perform_later(stripe_id)
+  end
+
+  def should_sync_service?(service:, action:)
+    policy = "Sync::User::#{service.capitalize}::Outbound::#{action.capitalize}Policy".constantize
+    if action == :update
+      policy.new(self, changed_attributes: self.changed_attributes).can_sync?
+    else
+      policy.new(self).can_sync?
+    end
+  end
+
+  def sync!(service:, action:)
+    job = "Sync::User::#{service.capitalize}::Outbound::#{action.capitalize}Job".constantize
+    return unless should_sync_service?(service: service, action: action)
+    if service == :update
+      job.perform_later(self, self.saved_changes)
+    else
+      job.perform_later(self)
+    end
   end
 
   def should_update_sync?
