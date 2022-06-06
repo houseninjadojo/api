@@ -35,16 +35,6 @@ class PaymentMethod < ApplicationRecord
 
   after_create_commit :set_user_onboarding_step
 
-  after_create_commit :create_stripe_payment_method,
-    unless: -> (payment_method) { payment_method.stripe_token.present? }
-
-  after_save_commit :attach_to_stripe_customer,
-    if:     -> (payment_method) { payment_method.saved_change_to_attribute?(:stripe_token, from: nil) },
-    unless: -> (payment_method) { payment_method.user_id.empty? }
-
-  after_destroy_commit :detach_from_stripe,
-    if: -> (payment_method) { payment_method.stripe_token.present? }
-
   # associations
 
   belongs_to :user
@@ -64,19 +54,31 @@ class PaymentMethod < ApplicationRecord
 
   # callbacks
 
-  def create_stripe_payment_method
-    Stripe::CreatePaymentMethodJob.perform_later(self)
-  end
-
-  def attach_to_stripe_customer
-    Stripe::AttachPaymentMethodJob.perform_later(self, self.user)
-  end
-
-  def detach_from_stripe
-    Stripe::DetachPaymentMethodJob.perform_later(self.stripe_token)
-  end
-
   def set_user_onboarding_step
     self.user.update(onboarding_step: OnboardingStep::PAYMENT_METHOD)
+  end
+
+  # sync
+
+  include Syncable
+
+  after_create_commit  :sync_create!
+  after_destroy_commit :sync_delete!
+
+  def sync_services
+    [
+      # :arrivy,
+      # :auth0,
+      # :hubspot,
+      :stripe,
+    ]
+  end
+
+  def sync_actions
+    [
+      :create,
+      # :update,
+      :delete,
+    ]
   end
 end
