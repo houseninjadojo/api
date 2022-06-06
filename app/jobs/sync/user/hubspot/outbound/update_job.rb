@@ -1,4 +1,4 @@
-class Sync::User::Hubspot::OutboundJob < ApplicationJob
+class Sync::User::Hubspot::Outbound::UpdateJob < ApplicationJob
   queue_as :default
 
   attr_accessor :user, :changed_attributes
@@ -27,7 +27,7 @@ class Sync::User::Hubspot::OutboundJob < ApplicationJob
   end
 
   def policy
-    Sync::User::Hubspot::OutboundPolicy.new(
+    Sync::User::Hubspot::Outbound::UpdatePolicy.new(
       user,
       changed_attributes: changed_attributes
     )

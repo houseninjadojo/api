@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Sync::User::Stripe::OutboundPolicy, type: :policy do
+RSpec.describe Sync::User::Auth0::Outbound::UpdatePolicy, type: :policy do
   # See https://actionpolicy.evilmartians.io/#/testing?id=rspec-dsl
   #
   let(:user) { create(:user) }
@@ -43,13 +43,15 @@ RSpec.describe Sync::User::Stripe::OutboundPolicy, type: :policy do
   end
 
   describe_rule :has_external_id? do
-    it "returns true if user has stripe customer id" do
-      user.stripe_id = "cus_123"
+    it "returns true if user has auth id" do
+      user.auth_zero_user_created = true
+      expect(user.auth_id).to eq("auth0|#{user.id}")
       expect(policy.has_external_id?).to be_truthy
     end
 
     it "returns false if user does not have stripe customer id" do
-      user.stripe_id = nil
+      user.auth_zero_user_created = nil
+      expect(user.auth_id).to eq("auth0|#{user.id}")
       expect(policy.has_external_id?).to be_falsey
     end
   end

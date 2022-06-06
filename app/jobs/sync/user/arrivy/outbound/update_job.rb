@@ -1,4 +1,4 @@
-class Sync::User::Arrivy::OutboundJob < ApplicationJob
+class Sync::User::Arrivy::Outbound::UpdateJob < ApplicationJob
   queue_as :default
 
   attr_accessor :user, :changed_attributes
@@ -24,7 +24,7 @@ class Sync::User::Arrivy::OutboundJob < ApplicationJob
   end
 
   def policy
-    Sync::User::Arrivy::OutboundPolicy.new(
+    Sync::User::Arrivy::Outbound::UpdatePolicy.new(
       user,
       changed_attributes: changed_attributes
     )

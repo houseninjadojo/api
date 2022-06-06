@@ -1,5 +1,5 @@
 
-class Sync::User::Stripe::OutboundPolicy < ActionPolicy::Base
+class Sync::User::Stripe::Outbound::UpdatePolicy < ActionPolicy::Base
   authorize :user, optional: true
   authorize :changed_attributes
 

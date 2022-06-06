@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Sync::User::Hubspot::OutboundPolicy, type: :policy do
+RSpec.describe Sync::User::Hubspot::Outbound::UpdatePolicy, type: :policy do
   # See https://actionpolicy.evilmartians.io/#/testing?id=rspec-dsl
   #
   let(:user) { create(:user) }

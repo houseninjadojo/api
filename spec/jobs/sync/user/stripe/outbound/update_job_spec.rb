@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Sync::User::Stripe::OutboundJob, type: :job do
+RSpec.describe Sync::User::Stripe::Outbound::UpdateJob, type: :job do
   let(:user) { create(:user) }
   let(:changed_attributes) {
     {
@@ -8,7 +8,7 @@ RSpec.describe Sync::User::Stripe::OutboundJob, type: :job do
       "updated_at": [user.updated_at, Time.zone.now],
     }
   }
-  let(:job) { Sync::User::Stripe::OutboundJob }
+  let(:job) { Sync::User::Stripe::Outbound::UpdateJob }
 
   describe "#perform" do
     it "will not sync if policy declines" do
@@ -27,10 +27,10 @@ RSpec.describe Sync::User::Stripe::OutboundJob, type: :job do
   end
 
   describe "#policy" do
-    it "returns a Sync::User::Stripe::OutboundPolicy" do
+    it "returns a Sync::User::Stripe::Outbound::UpdatePolicy" do
       expect_any_instance_of(job).to(receive(:user).at_least(:once).and_return(user))
       expect_any_instance_of(job).to(receive(:changed_attributes).at_least(:once).and_return(changed_attributes))
-      expect(job.new(user, changed_attributes).policy).to be_a(Sync::User::Stripe::OutboundPolicy)
+      expect(job.new(user, changed_attributes).policy).to be_a(Sync::User::Stripe::Outbound::UpdatePolicy)
     end
   end
 

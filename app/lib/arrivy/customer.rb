@@ -34,7 +34,7 @@ class Arrivy::Customer
     if response.code == 200
       response_body = JSON.parse(response.body)
       @id = response_body["id"]
-      return true
+      return Arrivy::Customer.new(response_body)
     end
     return false
   end
@@ -43,7 +43,7 @@ class Arrivy::Customer
     response = Arrivy::Request.put("customers/#{customer_id}", params)
     if response.code == 200
       response_body = JSON.parse(response.body)
-      return true
+      return Arrivy::Customer.new(response_body)
     end
     return false
   end

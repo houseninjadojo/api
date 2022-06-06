@@ -1,4 +1,4 @@
-class Sync::User::Hubspot::OutboundPolicy < ApplicationPolicy
+class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   authorize :user, optional: true
   authorize :changed_attributes
 
