@@ -29,7 +29,8 @@
 #
 class WorkOrder < ApplicationRecord
   after_save_commit :handle_status_change, if: :saved_change_to_status?
-  after_update_commit :sync!
+
+  after_update_commit :sync_update!
 
   # associations
 
@@ -56,23 +57,22 @@ class WorkOrder < ApplicationRecord
 
   # sync
 
-  def should_sync?
-    self.saved_changes? &&                        # only sync if there are changes
-    self.saved_changes.keys != ['updated_at'] &&  # do not sync if no attributes actually changed
-    self.previously_new_record? == false &&       # do not sync if this is a new record
-    self.new_record? == false                     # do not sync if it is not persisted
-  end
+  include Syncable
 
-  def sync_jobs
+  def sync_services
     [
-      Sync::WorkOrder::Hubspot::OutboundJob,
+      # :arrivy,
+      # :auth0,
+      :hubspot,
+      # :stripe,
     ]
   end
 
-  def sync!
-    return unless should_sync?
-    sync_jobs.each do |job|
-      job.perform_later(self, self.saved_changes)
-    end
+  def sync_actions
+    [
+      # :create,
+      :update,
+      # :delete,
+    ]
   end
 end

@@ -37,5 +37,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "syncable" do
+    it "should be syncable" do
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        user = create(:user, onboarding_step: OnboardingStep::WELCOME, hubspot_id: nil)
+      }.to have_enqueued_job(Sync::User::Hubspot::Outbound::CreateJob)
+    end
+  end
 end

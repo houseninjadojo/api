@@ -51,8 +51,6 @@ class Invoice < ApplicationRecord
   # callbacks
 
   after_create_commit :create_stripe_invoice
-  # after_save_commit :update_stripe_invoice, if: :saved_change_to_total?
-  # after_save_commit :mark_hubspot_invoice_paid, if: :paid?
 
   # we are attempting payment
   # before_save :run_payment!, if: -> (invoice) {
@@ -120,11 +118,9 @@ class Invoice < ApplicationRecord
       )
       if paid_invoice.status == "payment_failed"
         work_order.update!(status: WorkOrderStatus.find_by(slug: "payment_failed"))
-        Hubspot::Deal::UpdateStatusJob.perform_later(work_order)
         return nil
       else
         work_order.update!(status: WorkOrderStatus.find_by(slug: "invoice_paid_by_customer"))
-        Hubspot::Deal::UpdateStatusJob.perform_later(work_order)
         refresh_pdf!
         return paid_invoice
       end
@@ -156,10 +152,6 @@ class Invoice < ApplicationRecord
 
   def update_stripe_invoice
     Stripe::Invoices::UpdateJob.perform_later(self) unless stripe_id.nil?
-  end
-
-  def mark_hubspot_invoice_paid
-    Hubspot::Deal::MarkInvoicePaidJob.perform_later(self)
   end
 
   # external access / payment approval

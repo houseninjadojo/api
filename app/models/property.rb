@@ -84,6 +84,8 @@ class Property < ApplicationRecord
 
   # sync
 
+  include Syncable
+
   def sync_services
     [
       # :arrivy,
@@ -92,48 +94,11 @@ class Property < ApplicationRecord
     ]
   end
 
-  def sync_create!
-    sync_services.each { |service| sync!(service: service, action: :create) }
+  def sync_actions
+    [
+      :create,
+      :update,
+      # :delete,
+    ]
   end
-
-  def sync_update!
-    sync_services.each { |service| sync!(service: service, action: :update) }
-  end
-
-  def sync_delete!
-    # sync_services.each { |service| sync!(service: service, action: :delete) }
-  end
-
-  def should_sync_service?(service:, action:)
-    policy = "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Policy".constantize
-    case action
-    when :create
-      policy.new(self).can_sync?
-    when :update
-      policy.new(self, changed_attributes: self.changed_attributes).can_sync?
-    when :delete
-      # policy.new(self).can_sync?
-    end
-  end
-
-  def sync!(service:, action:)
-    job = "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Job".constantize
-    return unless should_sync_service?(service: service, action: action)
-    case action
-    when :create
-      job.perform_later(self)
-    when :update
-      job.perform_later(self, self.saved_changes)
-    when :delete
-      # job.perform_later(self)
-    end
-  end
-
-  def should_update_sync?
-    self.saved_changes? &&                        # only sync if there are changes
-    self.saved_changes.keys != ['updated_at'] &&  # do not sync if no attributes actually changed
-    self.previously_new_record? == false &&       # do not sync if this is a new record
-    self.new_record? == false                     # do not sync if it is not persisted
-  end
-  alias should_sync? should_update_sync?
 end
