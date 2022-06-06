@@ -50,7 +50,7 @@ class User < ApplicationRecord
 
   after_save_commit    :sync_create!
   after_update_commit  :sync_update!
-  after_destroy_commit :sync_destroy!
+  # after_destroy_commit :sync_delete!
 
   # associations
 
@@ -208,21 +208,27 @@ class User < ApplicationRecord
   end
 
   def should_sync_service?(service:, action:)
-    policy = "Sync::User::#{service.capitalize}::Outbound::#{action.capitalize}Policy".constantize
-    if action == :update
-      policy.new(self, changed_attributes: self.changed_attributes).can_sync?
-    else
+    policy = "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Policy".constantize
+    case action
+    when :create
       policy.new(self).can_sync?
+    when :update
+      policy.new(self, changed_attributes: self.changed_attributes).can_sync?
+    when :delete
+      # policy.new(self).can_sync?
     end
   end
 
   def sync!(service:, action:)
-    job = "Sync::User::#{service.capitalize}::Outbound::#{action.capitalize}Job".constantize
+    job = "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Job".constantize
     return unless should_sync_service?(service: service, action: action)
-    if service == :update
-      job.perform_later(self, self.saved_changes)
-    else
+    case action
+    when :create
       job.perform_later(self)
+    when :update
+      job.perform_later(self, self.saved_changes)
+    when :delete
+      # job.perform_later(self)
     end
   end
 

@@ -1,10 +1,9 @@
-class Sync::Property::Hubspot::OutboundJob < ApplicationJob
+class Sync::Property::Hubspot::Outbound::CreateJob < ApplicationJob
   queue_as :default
 
-  attr_accessor :property, :changed_attributes
+  attr_accessor :property
 
-  def perform(property, changed_attributes)
-    @changed_attributes = changed_attributes
+  def perform(property)
     @property = property
     return unless policy.can_sync?
 
@@ -22,9 +21,8 @@ class Sync::Property::Hubspot::OutboundJob < ApplicationJob
   end
 
   def policy
-    Sync::Property::Hubspot::OutboundPolicy.new(
-      property,
-      changed_attributes: changed_attributes
+    Sync::Property::Hubspot::Outbound::CreatePolicy.new(
+      property
     )
   end
 

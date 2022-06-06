@@ -1,4 +1,4 @@
-class Sync::Property::Stripe::OutboundPolicy < ApplicationPolicy
+class Sync::Property::Stripe::Outbound::UpdatePolicy < ApplicationPolicy
   authorize :user, optional: true
   authorize :changed_attributes
 

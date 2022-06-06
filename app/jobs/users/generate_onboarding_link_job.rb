@@ -5,7 +5,6 @@ class Users::GenerateOnboardingLinkJob < ApplicationJob
     @user = user
     link = DeepLink.create(payload)
     @user.update(onboarding_link: link.url)
-    Hubspot::UpdateContactJob.perform_later(@user)
   end
 
   private

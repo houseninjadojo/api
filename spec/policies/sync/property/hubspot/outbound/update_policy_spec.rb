@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Sync::Property::Stripe::OutboundPolicy, type: :policy do
+RSpec.describe Sync::Property::Hubspot::Outbound::UpdatePolicy, type: :policy do
   # See https://actionpolicy.evilmartians.io/#/testing?id=rspec-dsl
   #
   let(:property) { create(:property) }
@@ -43,13 +43,13 @@ RSpec.describe Sync::Property::Stripe::OutboundPolicy, type: :policy do
   end
 
   describe_rule :has_external_id? do
-    it "returns true if user has stripe_id" do
-      property.user.stripe_id = "asdf"
+    it "returns true if user has hubspot_id" do
+      property.user.hubspot_id = "asdf"
       expect(policy.has_external_id?).to be_truthy
     end
 
-    it "returns false if property.user does not have stripe_id" do
-      property.user.stripe_id = nil
+    it "returns false if property.user does not have hubspot_id" do
+      property.user.hubspot_id = nil
       expect(policy.has_external_id?).to be_falsey
     end
   end
