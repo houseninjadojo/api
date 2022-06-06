@@ -8,7 +8,7 @@ class Sync::User::Stripe::OutboundJob < ApplicationJob
     @user = user
     return unless policy.can_sync?
 
-    Stripe::Customer.update(user.stripe_customer_id, params)
+    Stripe::Customer.update(user.stripe_id, params)
   end
 
   def params

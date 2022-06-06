@@ -24,7 +24,7 @@ class UserPolicy < ApplicationPolicy
     if user.present?
       record.id == user.id
     else
-      record.try(:hubspot_id).nil? && record.try(:auth_zero_user_created).nil? && record.try(:stripe_customer_id).nil?
+      record.try(:hubspot_id).nil? && record.try(:auth_zero_user_created).nil? && record.try(:stripe_id).nil?
     end
   end
 

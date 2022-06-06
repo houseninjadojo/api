@@ -44,12 +44,12 @@ RSpec.describe Sync::User::Stripe::OutboundPolicy, type: :policy do
 
   describe_rule :has_external_id? do
     it "returns true if user has stripe customer id" do
-      user.stripe_customer_id = "cus_123"
+      user.stripe_id = "cus_123"
       expect(policy.has_external_id?).to be_truthy
     end
 
     it "returns false if user does not have stripe customer id" do
-      user.stripe_customer_id = nil
+      user.stripe_id = nil
       expect(policy.has_external_id?).to be_falsey
     end
   end

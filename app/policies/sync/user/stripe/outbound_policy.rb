@@ -14,7 +14,7 @@ class Sync::User::Stripe::OutboundPolicy < ActionPolicy::Base
   end
 
   def has_external_id?
-    record.stripe_customer_id.present?
+    record.stripe_id.present?
   end
 
   def has_changed_attributes?

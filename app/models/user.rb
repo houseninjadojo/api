@@ -20,18 +20,18 @@
 #  arrivy_id                                 :string
 #  hubspot_id                                :string
 #  promo_code_id                             :uuid
-#  stripe_customer_id                        :string
+#  stripe_id                                 :string
 #
 # Indexes
 #
-#  index_users_on_arrivy_id           (arrivy_id) UNIQUE
-#  index_users_on_email               (email) UNIQUE
-#  index_users_on_gender              (gender)
-#  index_users_on_hubspot_id          (hubspot_id) UNIQUE
-#  index_users_on_onboarding_code     (onboarding_code) UNIQUE
-#  index_users_on_phone_number        (phone_number) UNIQUE
-#  index_users_on_promo_code_id       (promo_code_id)
-#  index_users_on_stripe_customer_id  (stripe_customer_id) UNIQUE
+#  index_users_on_arrivy_id        (arrivy_id) UNIQUE
+#  index_users_on_email            (email) UNIQUE
+#  index_users_on_gender           (gender)
+#  index_users_on_hubspot_id       (hubspot_id) UNIQUE
+#  index_users_on_onboarding_code  (onboarding_code) UNIQUE
+#  index_users_on_phone_number     (phone_number) UNIQUE
+#  index_users_on_promo_code_id    (promo_code_id)
+#  index_users_on_stripe_id        (stripe_id) UNIQUE
 #
 class User < ApplicationRecord
   encrypts :hubspot_contact_object
@@ -66,7 +66,7 @@ class User < ApplicationRecord
     if: -> (user) { user.auth_zero_user_created == true }
 
   after_destroy_commit :delete_stripe_customer,
-    if: -> (user) { user.stripe_customer_id.present? }
+    if: -> (user) { user.stripe_id.present? }
 
   # associations
 
@@ -82,16 +82,16 @@ class User < ApplicationRecord
 
   # validations
 
-  validates :first_name,         presence: true
-  validates :last_name,          presence: true
-  validates :email,              presence: true, uniqueness: true
-  validates :phone_number,       presence: true, uniqueness: true, phone: true
-  validates :gender,             inclusion: { in: %w(male female other) }
-  validates :stripe_customer_id, uniqueness: true, allow_nil: true
-  validates :hubspot_id,         uniqueness: true, allow_nil: true
-  validates :onboarding_code,    uniqueness: true, allow_nil: true
-  validates :contact_type,       inclusion: { in: ContactType::ALL }
-  validates :onboarding_step,    inclusion: { in: OnboardingStep::ALL }, allow_nil: true
+  validates :first_name,      presence: true
+  validates :last_name,       presence: true
+  validates :email,           presence: true, uniqueness: true
+  validates :phone_number,    presence: true, uniqueness: true, phone: true
+  validates :gender,          inclusion: { in: %w(male female other) }
+  validates :stripe_id,       uniqueness: true, allow_nil: true
+  validates :hubspot_id,      uniqueness: true, allow_nil: true
+  validates :onboarding_code, uniqueness: true, allow_nil: true
+  validates :contact_type,    inclusion: { in: ContactType::ALL }
+  validates :onboarding_step, inclusion: { in: OnboardingStep::ALL }, allow_nil: true
 
   # Temporary password token management
   # VGS Volatile tokens expire in 1 hour
@@ -134,11 +134,6 @@ class User < ApplicationRecord
   # @return {string} auth id
   def auth_id
     "auth0|#{self.id}"
-  end
-
-  # @todo remove this after consolidation of column names
-  def stripe_id
-    self.stripe_customer_id
   end
 
   # intercom hash
@@ -214,7 +209,7 @@ class User < ApplicationRecord
   end
 
   def delete_stripe_customer
-    Stripe::DeleteCustomerJob.perform_later(stripe_customer_id)
+    Stripe::DeleteCustomerJob.perform_later(stripe_id)
   end
 
   def create_hubspot_contact
@@ -228,7 +223,7 @@ class User < ApplicationRecord
   end
 
   def should_create_stripe_customer?
-    self.stripe_customer_id.nil? && self.onboarding_step == OnboardingStep::WELCOME
+    self.stripe_id.nil? && self.onboarding_step == OnboardingStep::WELCOME
   end
 
   def should_not_create_auth_user?
@@ -236,7 +231,7 @@ class User < ApplicationRecord
   end
 
   def should_not_create_stripe_customer?
-    self.stripe_customer_id.present?
+    self.stripe_id.present?
   end
 
   def should_not_create_hubspot_contact?

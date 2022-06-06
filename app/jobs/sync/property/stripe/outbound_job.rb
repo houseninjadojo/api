@@ -8,7 +8,7 @@ class Sync::Property::Stripe::OutboundJob < ApplicationJob
     @property = property
     return unless policy.can_sync?
 
-    Stripe::Customer.update(property.user.stripe_customer_id, params)
+    Stripe::Customer.update(property.user.stripe_id, params)
   end
 
   def params

@@ -79,7 +79,7 @@ class Payment < ApplicationRecord
     ActiveRecord::Base.transaction do
       invoice = Invoice.find_by(stripe_id: object["invoice"]) if object["invoice"].present?
       payment_method = PaymentMethod.find_by(stripe_token: object["payment_method"]) if object["payment_method"].present?
-      user = User.find_by(stripe_customer_id: object["customer"]) if object["customer"].present?
+      user = User.find_by(stripe_id: object["customer"]) if object["customer"].present?
       payment = Payment.find_or_initialize_by(stripe_id: object["id"])
       payment.assign_attributes(
         amount: object["amount"],
@@ -102,7 +102,7 @@ class Payment < ApplicationRecord
     ActiveRecord::Base.transaction do
       invoice = Invoice.find_by(stripe_id: object["invoice"]) if object["invoice"].present?
       payment_method = PaymentMethod.find_by(stripe_token: object["payment_method"]) if object["payment_method"].present?
-      user = User.find_by(stripe_customer_id: object["customer"]) if object["customer"].present?
+      user = User.find_by(stripe_id: object["customer"]) if object["customer"].present?
       payment = Payment.find_or_initialize_by(stripe_id: object["id"])
       payment.assign_attributes(
         amount: object["amount"],

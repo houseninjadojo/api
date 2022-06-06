@@ -8,7 +8,7 @@ RSpec.describe "users#create", type: :request do
   describe 'basic create' do
     let(:params) do
       attributes_for(:user).except(
-        :stripe_customer_id,
+        :stripe_id,
         :hubspot_id,
         :hubspot_contact_object,
         :arrivy_id

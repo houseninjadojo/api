@@ -13,7 +13,7 @@ class Sync::Property::Stripe::OutboundPolicy < ApplicationPolicy
   end
 
   def has_external_id?
-    record.user&.stripe_customer_id.present?
+    record.user&.stripe_id.present?
   end
 
   def has_changed_attributes?

@@ -21,7 +21,7 @@ RSpec.describe Sync::Property::Stripe::OutboundJob, type: :job do
       allow_any_instance_of(job).to(receive(:property).and_return(property))
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       params = job.new(property, changed_attributes).params
-      expect(Stripe::Customer).to receive(:update).with(property.user.stripe_customer_id, params)
+      expect(Stripe::Customer).to receive(:update).with(property.user.stripe_id, params)
       job.perform_now(property, changed_attributes)
     end
   end
