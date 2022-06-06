@@ -12,7 +12,7 @@
 #  updated_at             :datetime         not null
 #  requested_zipcode      :string
 #  auth_zero_user_created :boolean          default(FALSE)
-#  stripe_customer_id     :string
+#  stripe_id              :string
 #  hubspot_id             :string
 #  hubspot_contact_object :jsonb
 #  promo_code_id          :uuid
@@ -29,7 +29,7 @@
 #  index_users_on_onboarding_code     (onboarding_code) UNIQUE
 #  index_users_on_phone_number        (phone_number) UNIQUE
 #  index_users_on_promo_code_id       (promo_code_id)
-#  index_users_on_stripe_customer_id  (stripe_customer_id) UNIQUE
+#  index_users_on_stripe_id           (stripe_id) UNIQUE
 #
 require 'rails_helper'
 

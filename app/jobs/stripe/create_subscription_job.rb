@@ -53,7 +53,7 @@ class Stripe::CreateSubscriptionJob < ApplicationJob
     end
 
     if customer_id(subscription).blank?
-      raise InvalidSubscriptionParamsException.new "user.id=#{subscription.user.try(:id)} has no stripe_customer_id"
+      raise InvalidSubscriptionParamsException.new "user.id=#{subscription.user.try(:id)} has no stripe_id"
       return false
     end
 
@@ -74,7 +74,7 @@ class Stripe::CreateSubscriptionJob < ApplicationJob
   end
 
   def customer_id(subscription)
-    subscription.user.try(:stripe_customer_id)
+    subscription.user.try(:stripe_id)
   end
 
   def payment_method_token(subscription)

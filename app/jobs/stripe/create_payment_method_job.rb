@@ -10,7 +10,7 @@ class Stripe::CreatePaymentMethodJob < ApplicationJob
     })
     payment_method.update!(stripe_token: response.id)
 
-    if payment_method.user && payment_method.user.stripe_customer_id.present?
+    if payment_method.user && payment_method.user.stripe_id.present?
       Stripe::AttachPaymentMethodJob.perform_later(payment_method, payment_method.user)
     end
   end

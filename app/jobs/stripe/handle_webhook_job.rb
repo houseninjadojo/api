@@ -10,20 +10,20 @@ class Stripe::HandleWebhookJob < ApplicationJob
     case
     when event == "customer.updated"
       ActiveRecord::Base.transaction do
-        user = User.find_by(stripe_customer_id: stripe_id) if stripe_id.present?
+        user = User.find_by(stripe_id: stripe_id) if stripe_id.present?
         return if user.nil?
         user.update!(user_attributes)
         webhook_event.update(processed_at: Time.now)
       end
     when event == "customer.created"
       ActiveRecord::Base.transaction do
-        user = User.find_by(stripe_customer_id: stripe_id) if stripe_id.present?
+        user = User.find_by(stripe_id: stripe_id) if stripe_id.present?
         if user.present?
           webhook_event.update(processed_at: Time.now)
           return
         end
         user = User.new(user_attributes)
-        user.stripe_customer_id = stripe_id
+        user.stripe_id = stripe_id
         # @todo
         # enable this when ready
         # user.save!
@@ -32,7 +32,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
     # `invoice.*` except `invoice.deleted`
     when !!event.match(/^invoice\.(?!deleted).*$/)
       ActiveRecord::Base.transaction do
-        user = User.find_by(stripe_customer_id: object["customer"]) if object["customer"].present?
+        user = User.find_by(stripe_id: object["customer"]) if object["customer"].present?
         subscription = Subscription.find_by(stripe_subscription_id: object["subscription"]) if object["subscription"].present?
         payment = Payment.find_by(stripe_id: object["charge"]) if object["charge"].present?
         invoice = Invoice.find_or_create_by(stripe_id: stripe_id) if stripe_id.present?
@@ -72,7 +72,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
     # `payment_method.attached`
     when !!event.match(/^payment_method\.attached$/)
       ActiveRecord::Base.transaction do
-        user = User.find_by(stripe_customer_id: object["customer"]) if object["customer"].present?
+        user = User.find_by(stripe_id: object["customer"]) if object["customer"].present?
         payment_method = PaymentMethod.find_by(stripe_id: stripe_id) if stripe_id.present?
         if payment_method.present?
           payment_method.update(

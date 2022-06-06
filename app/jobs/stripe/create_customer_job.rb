@@ -2,11 +2,13 @@ class Stripe::CreateCustomerJob < ApplicationJob
   queue_as :critical
 
   def perform(user)
-    return if user.stripe_customer_id.present?
+    ActiveSupport::Deprecation.warn('use Sync::User::Stripe::Outbound::CreateJob instead')
+
+    return if user.stripe_id.present?
 
     params = params(user)
     customer = Stripe::Customer.create(params)
-    user.update!(stripe_customer_id: customer.id)
+    user.update!(stripe_id: customer.id)
   end
 
   def params(user)
