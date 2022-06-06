@@ -60,11 +60,11 @@ module Syncable
     end
   end
 
-  def should_sync?
+  def should_update_sync?
     self.saved_changes? &&                        # only sync if there are changes
     self.saved_changes.keys != ['updated_at'] &&  # do not sync if no attributes actually changed
     self.previously_new_record? == false &&       # do not sync if this is a new record
     self.new_record? == false                     # do not sync if it is not persisted
   end
-  alias :should_sync_outbound? :should_sync?
+  alias should_sync? should_update_sync?
 end
