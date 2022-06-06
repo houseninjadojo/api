@@ -28,8 +28,6 @@
 #  fk_rails_...  (property_id => properties.id)
 #
 class WorkOrder < ApplicationRecord
-  include Syncable
-
   after_save_commit :handle_status_change, if: :saved_change_to_status?
 
   after_update_commit :sync_update!
@@ -58,6 +56,8 @@ class WorkOrder < ApplicationRecord
   end
 
   # sync
+
+  include Syncable
 
   def sync_services
     [
