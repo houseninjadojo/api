@@ -1,4 +1,4 @@
-class Sync::Property::Stripe::OutboundJob < ApplicationJob
+class Sync::Property::Stripe::Outbound::UpdateJob < ApplicationJob
   queue_as :default
 
   attr_accessor :property, :changed_attributes
@@ -24,7 +24,7 @@ class Sync::Property::Stripe::OutboundJob < ApplicationJob
   end
 
   def policy
-    Sync::Property::Stripe::OutboundPolicy.new(
+    Sync::Property::Stripe::Outbound::UpdatePolicy.new(
       property,
       changed_attributes: changed_attributes
     )
