@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Sync::WorkOrder::Hubspot::OutboundJob, type: :job do
+RSpec.describe Sync::WorkOrder::Hubspot::Outbound::UpdateJob, type: :job do
   let(:work_order) { create(:work_order) }
   let(:new_work_order_status) {
     create(
@@ -16,7 +16,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::OutboundJob, type: :job do
       "updated_at": [work_order.updated_at, Time.zone.now],
     }
   }
-  let(:job) { Sync::WorkOrder::Hubspot::OutboundJob }
+  let(:job) { Sync::WorkOrder::Hubspot::Outbound::UpdateJob }
 
   describe "#perform" do
     it "will not sync if policy declines" do
@@ -38,7 +38,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::OutboundJob, type: :job do
     it "returns a policy" do
       expect_any_instance_of(job).to(receive(:work_order).at_least(:once).and_return(work_order))
       expect_any_instance_of(job).to(receive(:changed_attributes).at_least(:once).and_return(changed_attributes))
-      expect(job.new(work_order, changed_attributes).policy).to be_a(Sync::WorkOrder::Hubspot::OutboundPolicy)
+      expect(job.new(work_order, changed_attributes).policy).to be_a(Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy)
     end
   end
 

@@ -1,4 +1,4 @@
-class Sync::WorkOrder::Hubspot::OutboundJob < ApplicationJob
+class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < ApplicationJob
   queue_as :default
 
   attr_accessor :work_order, :changed_attributes
@@ -19,7 +19,7 @@ class Sync::WorkOrder::Hubspot::OutboundJob < ApplicationJob
   end
 
   def policy
-    Sync::WorkOrder::Hubspot::OutboundPolicy.new(
+    Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy.new(
       work_order,
       changed_attributes: changed_attributes
     )

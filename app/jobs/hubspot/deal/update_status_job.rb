@@ -4,7 +4,7 @@ class Hubspot::Deal::UpdateStatusJob < ApplicationJob
   attr_accessor :work_order
 
   def perform(work_order)
-    ActiveSupport::Deprecation.warn('use Sync::WorkOrder::Hubspot::OutboundJob instead')
+    ActiveSupport::Deprecation.warn('use Sync::WorkOrder::Hubspot::Outbound::UpdateJob instead')
     @work_order = work_order
     return unless conditions_met?
 

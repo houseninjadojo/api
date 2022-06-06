@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Sync::WorkOrder::Hubspot::OutboundPolicy, type: :policy do
+RSpec.describe Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy, type: :policy do
   # See https://actionpolicy.evilmartians.io/#/testing?id=rspec-dsl
   #
   let(:work_order) { create(:work_order) }

@@ -4,7 +4,7 @@ class Hubspot::Deal::MarkInvoicePaidJob < ApplicationJob
   attr_accessor :invoice
 
   def perform(invoice)
-    ActiveSupport::Deprecation.warn('use Sync::WorkOrder::Hubspot::OutboundJob instead')
+    ActiveSupport::Deprecation.warn('use Sync::WorkOrder::Hubspot::Outbound::UpdateJob instead')
 
     @invoice = invoice
     return unless conditions_met?
