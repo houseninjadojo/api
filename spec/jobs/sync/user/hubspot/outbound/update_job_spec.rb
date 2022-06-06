@@ -48,7 +48,7 @@ RSpec.describe Sync::User::Hubspot::Outbound::UpdateJob, type: :job do
         onboarding_code: user.onboarding_code,
         onboarding_link: user.onboarding_link,
         onboarding_step: user.onboarding_step,
-      })
+      }.compact)
     end
   end
 end

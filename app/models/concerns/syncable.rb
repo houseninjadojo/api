@@ -34,9 +34,17 @@ module Syncable
     sync_services.each { |service| sync!(service: service, action: :delete) }
   end
 
+  def sync_policy(service:, action:)
+    "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Policy".constantize
+  end
+
+  def sync_job(service:, action:)
+    "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Job".constantize
+  end
+
   def should_sync_service?(service:, action:)
     return false unless sync_actions.include?(action)
-    policy = "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Policy".constantize
+    policy = sync_policy(service: service, action: action)
     case action
     when :create
       policy.new(self).can_sync?
@@ -47,17 +55,22 @@ module Syncable
     end
   end
 
-  def sync!(service:, action:)
+  def sync!(service:, action:, perform_now: false)
     return unless should_sync_service?(service: service, action: action)
-    job = "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Job".constantize
+    job = sync_job(service: service, action: action)
+    method = perform_now ? :perform_now : :perform_later
     case action
     when :create
-      job.perform_later(self)
+      job.send(method, self)
     when :update
-      job.perform_later(self, self.saved_changes)
+      job.send(method, self, self.saved_changes)
     when :delete
-      job.perform_later(self)
+      job.send(method, self)
     end
+  end
+
+  def sync_now!(service:, action:)
+    sync!(service: service, action: action, perform_now: true)
   end
 
   def should_update_sync?

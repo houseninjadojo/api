@@ -19,9 +19,6 @@ class SubscriptionsController < ApplicationController
     subscription = SubscriptionResource.build(params)
 
     if subscription.save
-      # charge the card
-      subscription.data.charge_and_subscribe!
-      # render
       render jsonapi: subscription, status: 201
     else
       render jsonapi_errors: subscription

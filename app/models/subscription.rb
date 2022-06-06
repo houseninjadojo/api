@@ -57,10 +57,12 @@ class Subscription < ApplicationRecord
   # callbacks
 
   after_create_commit :set_user_onboarding_step
-  after_create_commit :save_contact_promo_code
 
-  # after_create_commit :create_stripe_subscription,
-  #   unless: -> (subscription) { subscription.stripe_id.present? }
+  after_create :sync_create!
+  # after_update_commit :sync_update!
+  after_destroy_commit :sync_delete!
+
+  after_create_commit :resync_user!
 
   # associations
 
@@ -81,26 +83,43 @@ class Subscription < ApplicationRecord
 
   # callbacks
 
-  def create_stripe_subscription
-    return if stripe_id.present?
-    Stripe::CreateSubscriptionJob.perform_later(self)
-  end
-
-  def charge_and_subscribe!
-    return if stripe_id.present?
-    Stripe::CreateSubscriptionJob.perform_now(self)
-  end
-
-  def cancel_stripe_subscription
-    Stripe::CancelSubscriptionJob.perform_later(self)
-  end
-
   def set_user_onboarding_step
     # user.update(onboarding_step: OnboardingStep::WELCOME)
     user.update(onboarding_step: OnboardingStep::SET_PASSWORD)
   end
 
-  def save_contact_promo_code
-    Hubspot::Contact::SavePromoCodeJob.perform_later(user, promo_code)
+  # sync
+
+  include Syncable
+
+  def sync_services
+    [
+      # :arrivy,
+      # :auth0,
+      # :hubspot,
+      :stripe,
+    ]
+  end
+
+  def sync_actions
+    [
+      :create,
+      # :update,
+      :delete,
+    ]
+  end
+
+  def sync_create!
+    # we want to ensure we are charging the card BEFORE returning the http request to the user
+    # furthermore we are invoking this with `after_create` instead of `after_create_commit`, so that
+    # the result of the charge attempt fails the transaction and the subscription is not created on our end either
+    response = Sync::Subscription::Stripe::Outbound::CreateJob.perform_now(self)
+    if response.is_a?(Stripe::StripeError)
+      raise ActiveRecord::RecordNotSaved.new(response.message, self)
+    end
+  end
+
+  def resync_user!
+    user&.sync_update!
   end
 end

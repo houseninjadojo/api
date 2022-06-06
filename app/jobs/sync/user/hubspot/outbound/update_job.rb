@@ -13,17 +13,25 @@ class Sync::User::Hubspot::Outbound::UpdateJob < ApplicationJob
 
   def params
     {
-      contact_type: user.contact_type,
-      email:        user.email,
-      firstname:    user.first_name,
-      lastname:     user.last_name,
-      phone:        user.phone_number,
-      zip:          user.requested_zipcode,
+      email:         user.email,
+      firstname:     user.first_name,
+      lastname:      user.last_name,
+      phone:         user.phone_number,
+      zip:           user.requested_zipcode,
 
       onboarding_code: user.onboarding_code,
       onboarding_link: user.onboarding_link,
       onboarding_step: user.onboarding_step,
-    }
+
+      contact_type:  user.contact_type,
+      customer_type: user.customer_type,
+
+      # promo code used in signup, NOT the customer's referrral promo code
+      'promo_code_used_': user&.subscription&.promo_code&.code,
+
+      # customer's referral promo code
+      personal_referral_code: user&.promo_code&.code,
+    }.compact
   end
 
   def policy
