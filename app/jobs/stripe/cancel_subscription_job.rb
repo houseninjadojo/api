@@ -2,9 +2,9 @@ class Stripe::CancelSubscriptionJob < ApplicationJob
   queue_as :default
 
   def perform(subscription)
-    return if subscription.stripe_subscription_id.blank?
+    return if subscription.stripe_id.blank?
 
-    response = Stripe::Subscription.delete(subscription.stripe_subscription_id)
+    response = Stripe::Subscription.delete(subscription.stripe_id)
 
     response_params = response_params(response)
     subscription.update!(response_params)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_06_042609) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_06_093653) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -289,7 +289,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_06_042609) do
     t.uuid "payment_method_id", null: false
     t.uuid "subscription_plan_id", null: false
     t.uuid "user_id", null: false
-    t.string "stripe_subscription_id"
+    t.string "stripe_id"
     t.string "status"
     t.datetime "canceled_at"
     t.datetime "trial_start"
@@ -302,7 +302,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_06_042609) do
     t.uuid "promo_code_id"
     t.index ["payment_method_id"], name: "index_subscriptions_on_payment_method_id"
     t.index ["promo_code_id"], name: "index_subscriptions_on_promo_code_id"
-    t.index ["stripe_subscription_id"], name: "index_subscriptions_on_stripe_subscription_id"
+    t.index ["stripe_id"], name: "index_subscriptions_on_stripe_id"
     t.index ["subscription_plan_id"], name: "index_subscriptions_on_subscription_plan_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
