@@ -34,8 +34,6 @@
 #  index_users_on_stripe_id        (stripe_id) UNIQUE
 #
 class User < ApplicationRecord
-  include Syncable
-
   encrypts :hubspot_contact_object
 
   # callbacks
@@ -187,6 +185,8 @@ class User < ApplicationRecord
   end
 
   # sync
+
+  include Syncable
 
   def sync_services
     [
