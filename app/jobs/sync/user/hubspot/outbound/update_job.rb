@@ -17,7 +17,7 @@ class Sync::User::Hubspot::Outbound::UpdateJob < ApplicationJob
       firstname:     user.first_name,
       lastname:      user.last_name,
       phone:         user.phone_number,
-      zip:           user.requested_zipcode,
+      zip:           zip,
 
       onboarding_code: user.onboarding_code,
       onboarding_link: user.onboarding_link,
@@ -40,4 +40,12 @@ class Sync::User::Hubspot::Outbound::UpdateJob < ApplicationJob
       changed_attributes: changed_attributes
     )
   end
+
+  def zip
+    case user.contact_type
+    when ContactType::SERVICE_AREA_REQUESTED
+      user.requested_zipcode
+    when ContactType::CUSTOMER
+      user&.default_property&.zipcode
+    end
 end
