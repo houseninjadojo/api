@@ -28,6 +28,7 @@ class PromoCode < ApplicationRecord
   before_validation :generate_code, on: :create
   before_validation :format_code
 
+  after_create_commit :sync_create!
   after_create_commit :resync_users! # sync the promo code with hubspot if its a referral
 
   # associations
@@ -49,6 +50,27 @@ class PromoCode < ApplicationRecord
 
   def format_code
     self.code = self.code.upcase if self.code.present?
+  end
+
+  # sync
+
+  include Syncable
+
+  def sync_services
+    [
+      # :arrivy,
+      # :auth0,
+      # :hubspot,
+      :stripe,
+    ]
+  end
+
+  def sync_actions
+    [
+      :create,
+      # :update,
+      :delete,
+    ]
   end
 
   def resync_users!
