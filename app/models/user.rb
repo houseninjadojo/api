@@ -172,7 +172,8 @@ class User < ApplicationRecord
 
   def generate_referral_promo_code
     return if promo_code.present?
-    Users::GenerateReferralPromoCodeJob.perform_later(self)
+    promo_code = PromoCode.create!(coupon_id: PromoCode::REFERRAL_COUPON_ID)
+    user.update!(promo_code: promo_code)
   end
 
   def complete_onboarding
