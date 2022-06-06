@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Sync::User::Arrivy::OutboundPolicy, type: :policy do
+RSpec.describe Sync::User::Arrivy::Outbound::UpdatePolicy, type: :policy do
   # See https://actionpolicy.evilmartians.io/#/testing?id=rspec-dsl
   #
   let(:user) { create(:user) }

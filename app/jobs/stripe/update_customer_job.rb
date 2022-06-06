@@ -4,7 +4,7 @@ class Stripe::UpdateCustomerJob < ApplicationJob
   attr_accessor :user, :changed_attributes
 
   def perform(user, changed_attributes)
-    ActiveSupport::Deprecation.warn('use Sync::User::Hubspot::OutboundJob instead')
+    ActiveSupport::Deprecation.warn('use Sync::User::Hubspot::Outbound::UpdateJob instead')
 
     @changed_attributes = changed_attributes
     @user = user
@@ -23,7 +23,7 @@ class Stripe::UpdateCustomerJob < ApplicationJob
   end
 
   def policy
-    Sync::User::Stripe::OutboundPolicy.new(
+    Sync::User::Stripe::Outbound::UpdatePolicy.new(
       user: user,
       changed_attributes: changed_attributes
     )

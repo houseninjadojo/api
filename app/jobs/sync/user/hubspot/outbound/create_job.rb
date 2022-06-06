@@ -1,12 +1,12 @@
-class Hubspot::CreateContactJob < ApplicationJob
-  queue_as :critical
+class Sync::User::Hubspot::Outbound::CreateJob < ApplicationJob
+  queue_as :default
+
+  attr_accessor :user
 
   def perform(user)
-    ActiveSupport::Deprecation.warn('use Sync::User::Hubspot::Outbound::CreateJob instead')
+    @user = user
+    return unless policy.can_sync?
 
-    return if user.hubspot_id.present?
-
-    params = params(user)
     contact = Hubspot::Contact.create_or_update(user.email, params)
     user.update!(
       hubspot_id:             contact.id,
@@ -14,9 +14,9 @@ class Hubspot::CreateContactJob < ApplicationJob
     )
   end
 
-  def params(user)
+  def params
     {
-      contact_type:    contact_type(user),
+      contact_type:    user.contact_type,
       house_ninja_id:  user.id,
       email:           user.email,
       firstname:       user.first_name,
@@ -29,11 +29,9 @@ class Hubspot::CreateContactJob < ApplicationJob
     }
   end
 
-  def contact_type(user)
-    if user.requested_zipcode.present?
-      ContactType::SERVICE_AREA_REQUESTED
-    else
-      ContactType::CUSTOMER
-    end
+  def policy
+    Sync::User::Hubspot::Outbound::CreatePolicy.new(
+      user
+    )
   end
 end

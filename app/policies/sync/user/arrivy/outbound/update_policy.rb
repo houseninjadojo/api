@@ -1,4 +1,4 @@
-class Sync::User::Auth0::OutboundPolicy < ApplicationPolicy
+class Sync::User::Arrivy::Outbound::UpdatePolicy < ApplicationPolicy
   authorize :user, optional: true
   authorize :changed_attributes
 
@@ -13,8 +13,7 @@ class Sync::User::Auth0::OutboundPolicy < ApplicationPolicy
   end
 
   def has_external_id?
-    record.auth_zero_user_created == true &&
-    record.auth_id.present?
+    record.arrivy_id.present?
   end
 
   def has_changed_attributes?
@@ -28,6 +27,7 @@ class Sync::User::Auth0::OutboundPolicy < ApplicationPolicy
       'first_name',
       'last_name',
       'email',
+      'phone_number',
     ]
   end
 end

@@ -91,7 +91,7 @@ class Property < ApplicationRecord
 
   def sync_jobs
     [
-      Sync::Property::Arrivy::OutboundJob,
+      # Sync::Property::Arrivy::OutboundJob,
       Sync::Property::Hubspot::OutboundJob,
       Sync::Property::Stripe::OutboundJob,
     ]
