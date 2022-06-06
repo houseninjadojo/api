@@ -50,12 +50,7 @@ class Invoice < ApplicationRecord
 
   # callbacks
 
-  after_create_commit :create_stripe_invoice
-
-  # we are attempting payment
-  # before_save :run_payment!, if: -> (invoice) {
-  #   invoice.will_save_change_to_payment_attempted_at?(from: nil)
-  # }
+  after_create_commit :sync_create!
 
   # associations
 
@@ -144,16 +139,6 @@ class Invoice < ApplicationRecord
     Stripe::Invoices::FinalizeJob.perform_now(self) unless finalized?
   end
 
-  # sync
-
-  def create_stripe_invoice
-    Stripe::Invoices::CreateJob.perform_later(self) unless stripe_id.present?
-  end
-
-  def update_stripe_invoice
-    Stripe::Invoices::UpdateJob.perform_later(self) unless stripe_id.nil?
-  end
-
   # external access / payment approval
 
   def generate_access_token!
@@ -178,5 +163,26 @@ class Invoice < ApplicationRecord
 
   def has_external_access_expired?
     deep_link.present? && deep_link.is_expired?
+  end
+
+  # sync
+
+  include Syncable
+
+  def sync_services
+    [
+      # :arrivy,
+      # :auth0,
+      # :hubspot,
+      :stripe,
+    ]
+  end
+
+  def sync_actions
+    [
+      :create,
+      # :update,
+      # :delete,
+    ]
   end
 end
