@@ -33,7 +33,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
     when !!event.match(/^invoice\.(?!deleted).*$/)
       ActiveRecord::Base.transaction do
         user = User.find_by(stripe_id: object["customer"]) if object["customer"].present?
-        subscription = Subscription.find_by(stripe_subscription_id: object["subscription"]) if object["subscription"].present?
+        subscription = Subscription.find_by(stripe_id: object["subscription"]) if object["subscription"].present?
         payment = Payment.find_by(stripe_id: object["charge"]) if object["charge"].present?
         invoice = Invoice.find_or_create_by(stripe_id: stripe_id) if stripe_id.present?
         invoice.update(
@@ -62,7 +62,7 @@ class Stripe::HandleWebhookJob < ApplicationJob
     # `customer.subscription.*`
     when !!event.match(/^customer\.subscription\.[a-z_]+$/)
       ActiveRecord::Base.transaction do
-        subscription = Subscription.find_by(stripe_subscription_id: stripe_id) if stripe_id.present?
+        subscription = Subscription.find_by(stripe_id: stripe_id) if stripe_id.present?
         if subscription.present?
           subscription.update(stripe_object: @payload)
         else

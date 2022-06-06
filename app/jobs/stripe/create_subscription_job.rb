@@ -32,7 +32,7 @@ class Stripe::CreateSubscriptionJob < ApplicationJob
 
   def response_params(response)
     {
-      stripe_subscription_id: response .id,
+      stripe_id: response .id,
       current_period_start: epoch_to_datetime(response.current_period_start),
       current_period_end: epoch_to_datetime(response.current_period_end),
       trial_start: epoch_to_datetime(response.trial_start),
@@ -43,7 +43,7 @@ class Stripe::CreateSubscriptionJob < ApplicationJob
 
   def can_run_this_job?(subscription)
     unless subscription_id(subscription).blank?
-      raise InvalidSubscriptionParamsException.new "subscription id=#{subscription.id} already has a stripe_subscription_id=#{subscription_id(subscription)}"
+      raise InvalidSubscriptionParamsException.new "subscription id=#{subscription.id} already has a stripe_id=#{subscription_id(subscription)}"
       return false
     end
 
@@ -66,7 +66,7 @@ class Stripe::CreateSubscriptionJob < ApplicationJob
   end
 
   def subscription_id(subscription)
-    subscription.stripe_subscription_id
+    subscription.stripe_id
   end
 
   def price_id(subscription)
