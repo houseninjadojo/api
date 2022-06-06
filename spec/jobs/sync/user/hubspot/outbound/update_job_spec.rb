@@ -38,16 +38,22 @@ RSpec.describe Sync::User::Hubspot::Outbound::UpdateJob, type: :job do
     it "returns params for Hubspot::Contact.update!" do
       allow_any_instance_of(job).to(receive(:user).and_return(user))
       expect(job.new(user, changed_attributes).params).to eq({
-        contact_type: user.contact_type,
-        email:        user.email,
-        firstname:    user.first_name,
-        lastname:     user.last_name,
-        phone:        user.phone_number,
-        zip:          user.requested_zipcode,
+        email:         user.email,
+        firstname:     user.first_name,
+        lastname:      user.last_name,
+        phone:         user.phone_number,
+        zip:           user.requested_zipcode,
 
         onboarding_code: user.onboarding_code,
         onboarding_link: user.onboarding_link,
         onboarding_step: user.onboarding_step,
+
+        contact_type:  user.contact_type,
+        customer_type: user.customer_type,
+
+        'promo_code_used_': user&.subscription&.promo_code&.code,
+
+        personal_referral_code: user&.promo_code&.code,
       }.compact)
     end
   end
