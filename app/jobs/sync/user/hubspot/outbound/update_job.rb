@@ -1,10 +1,10 @@
 class Sync::User::Hubspot::Outbound::UpdateJob < ApplicationJob
   queue_as :default
 
-  attr_accessor :user, :changed_attributes
+  attr_accessor :user, :changeset
 
-  def perform(user, changed_attributes)
-    @changed_attributes = changed_attributes
+  def perform(user, changeset)
+    @changeset = changeset
     @user = user
     return unless policy.can_sync?
 
@@ -37,7 +37,7 @@ class Sync::User::Hubspot::Outbound::UpdateJob < ApplicationJob
   def policy
     Sync::User::Hubspot::Outbound::UpdatePolicy.new(
       user,
-      changed_attributes: changed_attributes
+      changeset: changeset
     )
   end
 

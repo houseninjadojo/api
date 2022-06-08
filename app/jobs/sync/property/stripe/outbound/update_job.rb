@@ -1,10 +1,10 @@
 class Sync::Property::Stripe::Outbound::UpdateJob < ApplicationJob
   queue_as :default
 
-  attr_accessor :property, :changed_attributes
+  attr_accessor :property, :changeset
 
-  def perform(property, changed_attributes)
-    @changed_attributes = changed_attributes
+  def perform(property, changeset)
+    @changeset = changeset
     @property = property
     return unless policy.can_sync?
 
@@ -26,7 +26,7 @@ class Sync::Property::Stripe::Outbound::UpdateJob < ApplicationJob
   def policy
     Sync::Property::Stripe::Outbound::UpdatePolicy.new(
       property,
-      changed_attributes: changed_attributes
+      changeset: changeset
     )
   end
 end

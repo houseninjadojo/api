@@ -112,10 +112,10 @@ class Invoice < ApplicationRecord
         stripe_object: paid_invoice
       )
       if paid_invoice.status == "payment_failed"
-        work_order.update!(status: WorkOrderStatus.find_by(slug: "payment_failed"))
+        work_order.update!(status: WorkOrderStatus::PAYMENT_FAILED)
         return nil
       else
-        work_order.update!(status: WorkOrderStatus.find_by(slug: "invoice_paid_by_customer"))
+        work_order.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER)
         refresh_pdf!
         return paid_invoice
       end
@@ -183,6 +183,12 @@ class Invoice < ApplicationRecord
       :create,
       # :update,
       # :delete,
+    ]
+  end
+
+  def sync_associations
+    [
+      :work_order,
     ]
   end
 end

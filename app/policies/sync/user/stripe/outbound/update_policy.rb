@@ -1,7 +1,14 @@
 
 class Sync::User::Stripe::Outbound::UpdatePolicy < ActionPolicy::Base
+  class Changeset < TreeDiff
+    observe :email,
+            :first_name,
+            :last_name,
+            :phone_number
+  end
+
   authorize :user, optional: true
-  authorize :changed_attributes
+  authorize :changeset
 
   def can_sync?
     should_sync? &&
@@ -18,17 +25,17 @@ class Sync::User::Stripe::Outbound::UpdatePolicy < ActionPolicy::Base
   end
 
   def has_changed_attributes?
-    (changed_attributes.keys & attributes).any?
+    !changeset.blank?
   end
 
-  private
+  # private
 
-  def attributes
-    [
-      'first_name',
-      'last_name',
-      'email',
-      'phone_number',
-    ]
-  end
+  # def attributes
+  #   [
+  #     'first_name',
+  #     'last_name',
+  #     'email',
+  #     'phone_number',
+  #   ]
+  # end
 end

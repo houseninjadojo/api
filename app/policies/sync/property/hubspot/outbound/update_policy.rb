@@ -1,6 +1,14 @@
 class Sync::Property::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
+  class Changeset < TreeDiff
+    observe :street_address1,
+            :street_address2,
+            :city,
+            :state,
+            :zipcode
+  end
+
   authorize :user, optional: true
-  authorize :changed_attributes
+  authorize :changeset
 
   def can_sync?
     should_sync? &&
@@ -17,18 +25,18 @@ class Sync::Property::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   end
 
   def has_changed_attributes?
-    (changed_attributes.keys & attributes).any?
+    !changeset.blank?
   end
 
-  private
+  # private
 
-  def attributes
-    [
-      'street_address1',
-      'street_address2',
-      'city',
-      'state',
-      'zipcode',
-    ]
-  end
+  # def attributes
+  #   [
+  #     'street_address1',
+  #     'street_address2',
+  #     'city',
+  #     'state',
+  #     'zipcode',
+  #   ]
+  # end
 end

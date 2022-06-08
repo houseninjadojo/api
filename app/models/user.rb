@@ -220,6 +220,13 @@ class User < ApplicationRecord
     ]
   end
 
+  def sync_associations
+    [
+      :subscription,
+      :properties,
+    ]
+  end
+
   # @todo clean this up
   def sync_delete!
     Auth::DeleteUserJob.perform_later(auth_id)
