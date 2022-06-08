@@ -1,10 +1,10 @@
 class Sync::Property::Arrivy::OutboundJob < ApplicationJob
   queue_as :default
 
-  attr_accessor :property, :changed_attributes
+  attr_accessor :property, :changeset
 
-  def perform(property, changed_attributes)
-    @changed_attributes = changed_attributes
+  def perform(property, changeset)
+    @changeset = changeset
     @property = property
     return unless policy.can_sync?
 
@@ -29,7 +29,7 @@ class Sync::Property::Arrivy::OutboundJob < ApplicationJob
   def policy
     Sync::Property::Arrivy::OutboundPolicy.new(
       property,
-      changed_attributes: changed_attributes
+      changeset: changeset
     )
   end
 end

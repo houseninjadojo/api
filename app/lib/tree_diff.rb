@@ -1,4 +1,5 @@
 # @see https://gitlab.com/mcnelson/tree_diff/-/blob/master/lib/tree_diff.rb
+# @see https://gitlab.com/mcnelson/tree_diff
 
 class TreeDiff
   # A container for each copied attribute from the source object by each path.
@@ -221,7 +222,7 @@ class TreeDiff
       old_value = call_method_on_object(old_obj_and_method, path)
       new_value = call_method_on_object(new_obj_and_method, path)
 
-      changes << {path: path, old: old_value, new: new_value} if old_value != new_value
+      changes << { path: path, old: old_value, new: new_value } if old_value != new_value
     end
   end
 
@@ -277,7 +278,7 @@ class TreeDiff
         try_path(o, path[1..-1], ref)
       end
     else
-      {receiver: result, method_name: path.last}
+      { receiver: result, method_name: path.last }
     end
   end
 

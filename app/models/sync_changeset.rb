@@ -8,23 +8,36 @@ class SyncChangeset < ActiveSupport::CurrentAttributes
     self.changesets = {}
   end
 
-  def changeset(record:, service:, action:, direction: :outbound)
-    id = changeset_thread_id(record: record, service: service, action: action, direction: direction)
-    self.changesets[id]
+  def changeset(record:, service:, action:, direction: :outbound, resource_klass: nil)
+    default_id = changeset_thread_id(
+      resource_klass: resource_klass.presence || record.class,
+      record: nil,
+      service: service,
+      action: action,
+      direction: direction
+    )
+    record_id = changeset_thread_id(
+      resource_klass: resource_klass.presence || record.class,
+      record: record,
+      service: service,
+      action: action,
+      direction: direction
+    )
+    self.changesets[record_id].presence || self.changesets[default_id]
   end
 
   def initialize_changeset(record:, service:, action:, direction: :outbound)
-    klass = changeset_klass(record: record, service: service, action: action, direction: direction)
-    id = changeset_thread_id(record: record, service: service, action: action, direction: direction)
+    klass = changeset_klass(resource_klass: record.class, record: record, service: service, action: action, direction: direction)
+    id = changeset_thread_id(resource_klass: record.class, record: record, service: service, action: action, direction: direction)
     return if klass.nil?
     self.changesets ||= {}
     self.changesets[id] = klass.new(record)
   end
 
-  def changeset_klass(record:, service:, action:, direction: :outbound)
+  def changeset_klass(resource_klass: nil, record:, service:, action:, direction: :outbound)
     [
       "Sync",
-      record.class.name,
+      resource_klass&.name.presence || record.class.name,
       service.capitalize,
       direction.capitalize,
       "#{action.capitalize}Policy",
@@ -32,14 +45,14 @@ class SyncChangeset < ActiveSupport::CurrentAttributes
     ].join("::").safe_constantize
   end
 
-  def changeset_thread_id(record:, service:, action:, direction: :outbound)
+  def changeset_thread_id(resource_klass: nil, record:, service:, action:, direction: :outbound)
     [
       "changeset",
-      record.class.name.downcase,
+      resource_klass.name.downcase,
       service.downcase.to_s,
       direction.downcase.to_s,
       action.downcase.to_s,
-      record.id,
+      record&.id.presence || "default_id",
     ].join(":")
   end
 end

@@ -2,11 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Sync::User::Stripe::Outbound::UpdateJob, type: :job do
   let(:user) { create(:user) }
-  let(:changed_attributes) {
-    {
-      "first_name": [user.first_name, "New First Name"],
-      "updated_at": [user.updated_at, Time.zone.now],
-    }
+  let(:changeset) {
+    [
+      {
+        path: [:first_name],
+        old: user.first_name,
+        new: 'new first name',
+      }
+    ]
   }
   let(:job) { Sync::User::Stripe::Outbound::UpdateJob }
 
@@ -14,30 +17,30 @@ RSpec.describe Sync::User::Stripe::Outbound::UpdateJob, type: :job do
     it "will not sync if policy declines" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: false))
       expect(Stripe::Customer).not_to receive(:update)
-      job.perform_now(user, changed_attributes)
+      job.perform_now(user, changeset)
     end
 
     it "will sync if policy approves" do
       allow_any_instance_of(job).to(receive(:user).and_return(user))
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
-      params = job.new(user, changed_attributes).params
+      params = job.new(user, changeset).params
       expect(Stripe::Customer).to receive(:update).with(user.stripe_id, params)
-      job.perform_now(user, changed_attributes)
+      job.perform_now(user, changeset)
     end
   end
 
   describe "#policy" do
     it "returns a Sync::User::Stripe::Outbound::UpdatePolicy" do
       expect_any_instance_of(job).to(receive(:user).at_least(:once).and_return(user))
-      expect_any_instance_of(job).to(receive(:changed_attributes).at_least(:once).and_return(changed_attributes))
-      expect(job.new(user, changed_attributes).policy).to be_a(Sync::User::Stripe::Outbound::UpdatePolicy)
+      expect_any_instance_of(job).to(receive(:changeset).at_least(:once).and_return(changeset))
+      expect(job.new(user, changeset).policy).to be_a(Sync::User::Stripe::Outbound::UpdatePolicy)
     end
   end
 
   describe "#params" do
     it "returns params for Stripe::Customer.update" do
       allow_any_instance_of(job).to(receive(:user).and_return(user))
-      expect(job.new(user, changed_attributes).params).to eq({
+      expect(job.new(user, changeset).params).to eq({
         description: user.full_name,
         email: user.email,
         name: user.name,

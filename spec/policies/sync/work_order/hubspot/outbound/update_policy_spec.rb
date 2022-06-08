@@ -4,49 +4,36 @@ RSpec.describe Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy, type: :policy d
   # See https://actionpolicy.evilmartians.io/#/testing?id=rspec-dsl
   #
   let(:work_order) { create(:work_order) }
-  let(:new_work_order_status) {
-    create(
-      :work_order_status,
-      name: "Invoice Paid By Customer",
-      slug: "invoice_paid_by_customer",
-      hubspot_id: "12345"
-    )
+  # let(:new_work_order_status) {
+  #   create(
+  #     :work_order_status,
+  #     name: "Invoice Paid By Customer",
+  #     slug: "invoice_paid_by_customer",
+  #     hubspot_id: "12345"
+  #   )
+  # }
+  let(:changeset) {
+    [
+      {
+        path: [:status],
+        old: work_order.status.slug,
+        new: 'invoice_paid_by_customere',
+      }
+    ]
   }
-  let(:changed_attributes) {
-    {
-      "status": [work_order.status.slug, new_work_order_status.slug],
-      "updated_at": [work_order.updated_at, Time.zone.now],
-    }
-  }
-
-  let(:policy) { described_class.new(work_order, changed_attributes: changed_attributes) }
+  let(:policy) { described_class.new(work_order, changeset: changeset) }
 
   describe_rule :can_sync? do
     it "returns true if all conditions true" do
-      expect(policy).to receive(:should_sync?).and_return(true)
       expect(policy).to receive(:has_external_id?).and_return(true)
       expect(policy).to receive(:has_changed_attributes?).and_return(true)
       expect(policy.can_sync?).to be_truthy
     end
 
     it "returns false if any conditions false" do
-      expect(policy).to receive(:should_sync?).and_return(true)
       expect(policy).to receive(:has_external_id?).and_return(true)
       expect(policy).to receive(:has_changed_attributes?).and_return(false)
       expect(policy.can_sync?).to be_falsey
-    end
-  end
-
-  describe_rule :should_sync? do
-    it "returns true if there are changes" do
-      work_order.update(status: new_work_order_status)
-      policy = described_class.new(work_order, changed_attributes: changed_attributes)
-      expect(policy.should_sync?).to eq(true)
-    end
-
-    it "returns false if there are no changes" do
-      policy = described_class.new(work_order, changed_attributes: changed_attributes)
-      expect(policy.should_sync?).to eq(false)
     end
   end
 
@@ -64,14 +51,14 @@ RSpec.describe Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy, type: :policy d
 
   describe_rule :has_changed_attributes? do
     it "returns true if work_order has changed attributes" do
-      work_order.update(status: new_work_order_status)
-      policy = described_class.new(work_order, changed_attributes: work_order.saved_changes)
+      work_order.update(status: WorkOrderStatus.find_by(slug: 'canceled'))
+      policy = described_class.new(work_order, changeset: changeset)
       expect(policy.has_changed_attributes?).to be_truthy
     end
 
     it "returns false if work_order does not have changed attributes" do
       work_order.update(status: work_order.status) # no-op
-      policy = described_class.new(work_order, changed_attributes: work_order.saved_changes)
+      policy = described_class.new(work_order, changeset: [])
       expect(policy.has_changed_attributes?).to be_falsey
     end
   end

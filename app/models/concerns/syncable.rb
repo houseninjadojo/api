@@ -82,8 +82,8 @@ module Syncable
     when :create
       policy.new(self).can_sync?
     when :update
-      changeset = SyncChangeset.changeset(record: self, service: service, action: :update)
-      policy.new(self, changeset: changeset&.changes).can_sync?
+      changeset = SyncChangeset.changeset(resource_klass: self.class, record: self, service: service, action: :update)
+      policy.new(self, changeset: changeset.changes).can_sync?
     when :delete
       policy.new(self).can_sync?
     end
@@ -97,8 +97,8 @@ module Syncable
     when :create
       job.send(method, self)
     when :update
-      changeset = SyncChangeset.changeset(record: self, service: service, action: :update)
-      job.send(method, self, changeset: changeset&.changes)
+      changeset = SyncChangeset.changeset(resource_klass: self.class, record: self, service: service, action: :update)
+      job.send(method, self, changeset: changeset.changes)
       sync_update_associations!
     when :delete
       job.send(method, self)
@@ -108,10 +108,6 @@ module Syncable
   def sync_now!(service:, action:)
     sync!(service: service, action: action, perform_now: true)
   end
-
-  # REmAINING
-  # 1. the above changeset adoption
-  # 2. 
 
   def should_sync?
     true # @TODO remove this

@@ -49,7 +49,7 @@ class WorkOrderStatus < ApplicationRecord
   #     #=> #<WorkOrderStatus:0x000000011782d2b0 id: "12345-ASDF-....", slug: "payment_failed", name: "Payment Failed", ...>
   #
   # @return [WorkOrderStatus, nil] the status object, or nil if not synced with hubspot
-  SLUGS.each {|slug| const_set(slug.upcase, find_by(slug: slug)) }
+  SLUGS.each { |slug| const_set(slug.upcase, find_by(slug: slug)) }
 
   # associations
 

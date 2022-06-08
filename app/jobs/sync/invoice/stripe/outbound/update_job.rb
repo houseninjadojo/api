@@ -13,6 +13,22 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < ApplicationJob
     # Finalize?
     # try_finalizing!
 
+    # changeset.each do |change|
+    #   case change.path
+    #   when [:work_order, :status]
+    #     if change[:new] == WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
+    #       finalize_invoice!
+    #       break
+    #     end
+
+    #     if change[:new] == WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER
+    #       pay_invoice!
+    #       break
+    #     end
+    #   when [:description]
+    #     # Stripe::Invoice.update(resource.stripe_id, params)
+    #   end
+    # end
   end
 
   def params
@@ -26,6 +42,14 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < ApplicationJob
       resource,
       changeset: changeset
     )
+  end
+
+  def finalize_invoice!
+    Stripe::Invoices.FinalizeJob.perform_now(resource)
+  end
+
+  def pay_invoice!
+    Stripe::Invoices::PayJob.perform_now(resource)
   end
 
   # def try_finalizing!
