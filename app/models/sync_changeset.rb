@@ -1,31 +1,27 @@
 class SyncChangeset < ActiveSupport::CurrentAttributes
   attribute :changesets
 
-  reset { @changesets = {} }
+  reset { self.changesets = {} }
 
   def initialize
     super
-    @changesets = {}
-  end
-
-  def changesets=(val)
-    @changesets # no-op
+    self.changesets = {}
   end
 
   def changeset(record:, service:, action:, direction: :outbound)
     id = changeset_thread_id(record: record, service: service, action: action, direction: direction)
-    @changesets[id]
+    self.changesets[id]
   end
 
   def initialize_changeset(record:, service:, action:, direction: :outbound)
-    klass = changeset_class(record: record, service: service, action: action, direction: direction)
+    klass = changeset_klass(record: record, service: service, action: action, direction: direction)
     id = changeset_thread_id(record: record, service: service, action: action, direction: direction)
     return if klass.nil?
-    @changesets ||= {}
-    @changesets[id] = klass.new(record)
+    self.changesets ||= {}
+    self.changesets[id] = klass.new(record)
   end
 
-  def changeset_class(record:, service:, action:, direction: :outbound)
+  def changeset_klass(record:, service:, action:, direction: :outbound)
     [
       "Sync",
       record.class.name,

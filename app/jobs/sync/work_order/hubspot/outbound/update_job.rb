@@ -1,10 +1,10 @@
 class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < ApplicationJob
   queue_as :default
 
-  attr_accessor :work_order, :changed_attributes
+  attr_accessor :work_order, :changeset
 
-  def perform(work_order, changed_attributes)
-    @changed_attributes = changed_attributes
+  def perform(work_order, changeset)
+    @changeset = changeset
     @work_order = work_order
     return unless policy.can_sync?
 
@@ -21,7 +21,7 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < ApplicationJob
   def policy
     Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy.new(
       work_order,
-      changed_attributes: changed_attributes
+      changeset: changeset
     )
   end
 

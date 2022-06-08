@@ -1,15 +1,17 @@
 class Sync::Invoice::Stripe::Outbound::UpdatePolicy < ApplicationPolicy
-  authorize :user, optional: true
-  authorize :changed_attributes
-
-  def can_sync?
-    should_sync? &&
-    has_external_id? &&
-    (has_changed_attributes? || is_actionable?)
+  class Changeset < TreeDiff
+    observe :description,
+            work_order: [
+              :status,
+            ]
   end
 
-  def should_sync?
-    record.should_sync?
+  authorize :user, optional: true
+  authorize :changeset
+
+  def can_sync?
+    has_external_id? &&
+    has_changed_attributes?
   end
 
   def has_external_id?
@@ -17,22 +19,13 @@ class Sync::Invoice::Stripe::Outbound::UpdatePolicy < ApplicationPolicy
   end
 
   def has_changed_attributes?
-    (changed_attributes.keys & attributes).any?
-  end
-
-  def has_changed_associations?
+    !changeset.blank?
   end
 
   def is_actionable?
-    record&.work_order&.status == WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER ||
-    record&.work_order&.status == WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER
-  end
-
-  private
-
-  def attributes
     [
-      'description',
-    ]
+      WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER,
+      WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER,
+    ].include?(record&.work_order&.status)
   end
 end

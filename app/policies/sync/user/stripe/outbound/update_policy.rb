@@ -11,13 +11,8 @@ class Sync::User::Stripe::Outbound::UpdatePolicy < ActionPolicy::Base
   authorize :changeset
 
   def can_sync?
-    should_sync? &&
     has_external_id? &&
     has_changed_attributes?
-  end
-
-  def should_sync?
-    record.should_sync?
   end
 
   def has_external_id?
@@ -27,15 +22,4 @@ class Sync::User::Stripe::Outbound::UpdatePolicy < ActionPolicy::Base
   def has_changed_attributes?
     !changeset.blank?
   end
-
-  # private
-
-  # def attributes
-  #   [
-  #     'first_name',
-  #     'last_name',
-  #     'email',
-  #     'phone_number',
-  #   ]
-  # end
 end
