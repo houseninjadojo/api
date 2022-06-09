@@ -42,7 +42,8 @@ RSpec.describe Sync::WorkOrder::Hubspot::Outbound::UpdateJob, type: :job do
       allow_any_instance_of(job).to(receive(:work_order).and_return(work_order))
       expect(job.new(work_order, changeset).params).to eq({
         dealstage: work_order.status.slug,
-        invoice_paid: "No"
+        invoice_paid: "No",
+        branch_payment_link: nil,
       })
     end
   end

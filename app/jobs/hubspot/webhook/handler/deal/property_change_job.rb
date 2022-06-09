@@ -6,6 +6,8 @@ class Hubspot::Webhook::Handler::Deal::PropertyChangeJob < ApplicationJob
   attr_accessor :webhook_event, :webhook_entry
 
   def perform(webhook_entry, webhook_event)
+    ActiveSupport::Deprecation.warn("Please use Sync::WorkOrder::Hubspot::Inbound::UpdateJob instead.")
+
     @webhook_entry = webhook_entry
     @webhook_event = webhook_event
 

@@ -20,8 +20,16 @@ class WebhookEvent < ApplicationRecord
   encrypts :payload
 
   # associations
+
   belongs_to :webhookable, polymorphic: true, required: false
 
   # validations
+
   validates :service, presence: true
+
+  # helpers
+
+  def processed?
+    processed_at.present?
+  end
 end

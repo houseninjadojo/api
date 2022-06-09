@@ -34,9 +34,10 @@ class WorkOrder < ApplicationRecord
 
   # associations
 
-  belongs_to :property, required: false
-  belongs_to :status,   class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status
-  has_one    :invoice,  dependent: :destroy
+  belongs_to :property,  required: false
+  belongs_to :status,    class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status
+  has_one    :invoice,   dependent: :destroy
+  has_one    :deep_link, through: :invoice
 
   # validations
 
@@ -73,6 +74,12 @@ class WorkOrder < ApplicationRecord
       # :create,
       :update,
       # :delete,
+    ]
+  end
+
+  def sync_associations
+    [
+      :invoice,
     ]
   end
 end

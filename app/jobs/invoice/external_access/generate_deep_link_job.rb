@@ -9,7 +9,7 @@ class Invoice::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
 
     invoice.generate_access_token!
     generate_deep_link!
-    set_hubspot_branch_payment_link!
+    # set_hubspot_branch_payment_link!
   end
 
   def conditions_met?
@@ -20,12 +20,12 @@ class Invoice::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
     ].all?
   end
 
-  def set_hubspot_branch_payment_link!
-    res = Hubspot::Deal.update!(
-      invoice.work_order.hubspot_id,
-      { "branch_payment_link" => deep_link.url }
-    )
-  end
+  # def set_hubspot_branch_payment_link!
+  #   res = Hubspot::Deal.update!(
+  #     invoice.work_order.hubspot_id,
+  #     { "branch_payment_link" => deep_link.url }
+  #   )
+  # end
 
   def escaped_access_token
     CGI.escape(invoice.encrypted_access_token)
