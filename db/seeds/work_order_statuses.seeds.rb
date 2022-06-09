@@ -47,5 +47,8 @@ end
 
 # load into database
 mapped_stages.each do |status|
-  WorkOrderStatus.find_or_create_by(status)
+  WorkOrderStatus.find_or_create_by(hubspot_id: status[:hubspot_id]) do |work_order_status|
+    work_order_status.name = status[:name]
+    work_order_status.slug = status[:slug]
+  end
 end

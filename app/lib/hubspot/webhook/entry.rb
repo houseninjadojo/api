@@ -32,7 +32,7 @@ module Hubspot
           "#{resource_klass}",
           "Hubspot",
           "Inbound",
-          "#{handler_action}Job"
+          "#{handler_action.capitalize}Job"
         ].join("::").safe_constantize
       end
 
@@ -40,11 +40,11 @@ module Hubspot
         action = payload["subscriptionType"].split(".").last #=> "creation"
         case action
         when "creation"
-          "Create"
+          :create
         when "deletion"
-          "Delete"
+          :delete
         when "propertyChange"
-          "Update"
+          :update
         when "privacyDeletion"
           # nothing for now
         end
@@ -78,7 +78,11 @@ module Hubspot
       end
 
       def property_value
-        payload["propertyValue"]
+        if payload["propertyValue"].is_a?(String)
+          payload["propertyValue"].strip
+        else
+          payload["propertyValue"]
+        end
       end
 
       def attribute_name
@@ -109,6 +113,8 @@ module Hubspot
           #
         when "estimate___from_vendor"
           #
+        when "homeowner_name"
+          #
         when "hs_lastmodifieddate"
           :updated_at
         when "invoice_for_homeowner"
@@ -118,6 +124,8 @@ module Hubspot
           :vendor_amount
         when "invoice_notes"
           :description
+        when "pipeline"
+          #
         when "vendor_name"
           :vendor
         end
@@ -151,6 +159,8 @@ module Hubspot
           attribute_as_amount_in_cents
         when "estimate___from_vendor"
           attribute_as_amount_in_cents
+        when "homeowner_name"
+          property_value
         when "hs_lastmodifieddate"
           attribute_as_epoch_time
         when "invoice_for_homeowner"
@@ -160,6 +170,8 @@ module Hubspot
           attribute_as_amount_in_cents
         when "invoice_notes"
           property_value
+        when "pipeline"
+          #
         when "vendor_name"
           property_value
         else
@@ -183,7 +195,7 @@ module Hubspot
 
       # "closed" #=> WorkOrderStatus::CLOSED
       def attribute_as_status
-        WorkOrderStatus.find_by(slug: property_value)
+        WorkOrderStatus.find_by(hubspot_id: property_value)
       end
 
       # "Yes" #=> true
