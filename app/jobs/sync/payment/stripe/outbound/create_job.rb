@@ -6,7 +6,7 @@ class Sync::Payment::Stripe::Outbound::CreateJob < ApplicationJob
   def perform(resource)
     @resource = resource
     return unless policy.can_sync?
-  
+
     # We are hijacking this action to instead create a
     # payment through paying a stripe invoice
     pay_invoice!

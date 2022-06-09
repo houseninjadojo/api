@@ -20,7 +20,7 @@ class Sync::Payment::Stripe::Outbound::CreatePolicy < ApplicationPolicy
   def payment_method_has_external_id?
     record&.payment_method&.stripe_id.present?
   end
-  
+
   def invoice_has_external_id?
     record&.invoice&.stripe_id.present?
   end
