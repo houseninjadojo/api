@@ -1,12 +1,12 @@
 class Sync::User::Auth0::Outbound::UpdateJob < ApplicationJob
   queue_as :default
 
-  attr_accessor :user, :changed_attributes
+  attr_accessor :user, :changeset
 
   # @see https://auth0.com/docs/api/management/v2#!/Users/patch_users_by_id
   # @see https://www.rubydoc.info/gems/auth0/Auth0/Api/V2/Users#patch_user-instance_method
-  def perform(user, changed_attributes)
-    @changed_attributes = changed_attributes
+  def perform(user, changeset)
+    @changeset = changeset
     @user = user
     return unless policy.can_sync?
 
@@ -20,7 +20,7 @@ class Sync::User::Auth0::Outbound::UpdateJob < ApplicationJob
   def policy
     Sync::User::Auth0::Outbound::UpdatePolicy.new(
       user,
-      changed_attributes: changed_attributes
+      changeset: changeset
     )
   end
 end

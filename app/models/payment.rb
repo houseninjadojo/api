@@ -60,8 +60,8 @@ class Payment < ApplicationRecord
     status == 'failed'
   end
 
-  def requires_confirmation?
-    status == 'requires_confirmation'
+  def requires_action?
+    status == 'requires_action'
   end
 
   def has_charge?
@@ -70,9 +70,7 @@ class Payment < ApplicationRecord
   alias was_charged? has_charge?
 
   def should_charge?
-    return false if !has_charge? || requires_confirmation? || status.blank?
-    # return true if originator == 'app' && purpose == 'invoice'
-    return true
+    has_charge? && ['requires_payment_method', 'requires_confirmation'].include?(status)
   end
 
   def self.from_stripe_charge!(object)

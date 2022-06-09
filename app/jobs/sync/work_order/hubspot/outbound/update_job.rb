@@ -1,10 +1,10 @@
 class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < ApplicationJob
   queue_as :default
 
-  attr_accessor :work_order, :changed_attributes
+  attr_accessor :work_order, :changeset
 
-  def perform(work_order, changed_attributes)
-    @changed_attributes = changed_attributes
+  def perform(work_order, changeset)
+    @changeset = changeset
     @work_order = work_order
     return unless policy.can_sync?
 
@@ -15,13 +15,14 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < ApplicationJob
     {
       dealstage: work_order.status.slug,
       invoice_paid: invoice_paid,
+      branch_payment_link: branch_link,
     }
   end
 
   def policy
     Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy.new(
       work_order,
-      changed_attributes: changed_attributes
+      changeset: changeset
     )
   end
 
@@ -31,5 +32,9 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < ApplicationJob
     else
       "No"
     end
+  end
+
+  def branch_link
+    work_order.invoice&.deep_link&.url
   end
 end

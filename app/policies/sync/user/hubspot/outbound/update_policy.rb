@@ -1,15 +1,36 @@
 class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
-  authorize :user, optional: true
-  authorize :changed_attributes
-
-  def can_sync?
-    should_sync? &&
-    has_external_id? &&
-    has_changed_attributes?
+  class Changeset < TreeDiff
+    observe :contact_type,
+            :email,
+            :first_name,
+            :last_name,
+            :phone_number,
+            :requested_zipcode,
+            :onboarding_code,
+            :onboarding_link,
+            :onboarding_step,
+            subscription: [
+              :id,
+              :updated_at,
+              :promo_code_id,
+            ],
+            properties: [
+              :id,
+              :updated_at,
+              :zipcode,
+            ],
+            promo_code: [
+              :id,
+              :updated_at,
+            ]
   end
 
-  def should_sync?
-    record.should_sync?
+  authorize :user, optional: true
+  authorize :changeset
+
+  def can_sync?
+    has_external_id? &&
+    has_changed_attributes?
   end
 
   def has_external_id?
@@ -17,22 +38,6 @@ class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   end
 
   def has_changed_attributes?
-    (changed_attributes.keys & attributes).any?
-  end
-
-  private
-
-  def attributes
-    [
-      'contact_type',
-      'email',
-      'first_name',
-      'last_name',
-      'phone_number',
-      'requested_zipcode',
-      'onboarding_code',
-      'onboarding_link',
-      'onboarding_step',
-    ]
+    !changeset.blank?
   end
 end

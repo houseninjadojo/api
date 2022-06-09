@@ -1,5 +1,23 @@
 module Syncable
-  include ActiveSupport::Concern
+  extend ActiveSupport::Concern
+
+  included do
+    after_initialize :track_update_changes
+  end
+
+  # sets a thread-local change tracking object for each service on the syncable resource
+  # we will use this change tracking object to detect when attributes or association attributes are modified during the request cycle.
+  # this is used to determine if we should sync the resource to the service during :update actions
+  def track_update_changes
+    sync_services.each do |service|
+      SyncChangeset.initialize_changeset(record: self, service: service, action: :update)
+    end
+    sync_associations.each do |association|
+      [self.send(association)].flatten.each do |association_record|
+        association_record&.track_update_changes
+      end
+    end
+  end
 
   def sync_services
     # OVERRIDE THIS
@@ -19,6 +37,12 @@ module Syncable
     ]
   end
 
+  def sync_associations
+    [
+      # OVERRIDE THIS
+    ]
+  end
+
   def sync_create!
     return unless sync_actions.include?(:create)
     sync_services.each { |service| sync!(service: service, action: :create) }
@@ -29,17 +53,26 @@ module Syncable
     sync_services.each { |service| sync!(service: service, action: :update) }
   end
 
+  def sync_update_associations!
+    return unless sync_associations.any?
+    sync_associations.each do |association|
+      [self.send(association)].flatten.each do |association_record|
+        association_record&.sync_update!
+      end
+    end
+  end
+
   def sync_delete!
     return unless sync_actions.include?(:delete)
     sync_services.each { |service| sync!(service: service, action: :delete) }
   end
 
   def sync_policy(service:, action:)
-    "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Policy".constantize
+    "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Policy".safe_constantize
   end
 
   def sync_job(service:, action:)
-    "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Job".constantize
+    "Sync::#{self.class.name}::#{service.capitalize}::Outbound::#{action.capitalize}Job".safe_constantize
   end
 
   def should_sync_service?(service:, action:)
@@ -49,7 +82,8 @@ module Syncable
     when :create
       policy.new(self).can_sync?
     when :update
-      policy.new(self, changed_attributes: self.changed_attributes).can_sync?
+      changeset = SyncChangeset.changeset(resource_klass: self.class, record: self, service: service, action: :update)
+      policy.new(self, changeset: changeset.changes).can_sync?
     when :delete
       policy.new(self).can_sync?
     end
@@ -63,7 +97,9 @@ module Syncable
     when :create
       job.send(method, self)
     when :update
-      job.send(method, self, self.saved_changes)
+      changeset = SyncChangeset.changeset(resource_klass: self.class, record: self, service: service, action: :update)
+      job.send(method, self, changeset: changeset.changes)
+      sync_update_associations!
     when :delete
       job.send(method, self)
     end
@@ -73,11 +109,8 @@ module Syncable
     sync!(service: service, action: action, perform_now: true)
   end
 
-  def should_update_sync?
-    self.saved_changes? &&                        # only sync if there are changes
-    self.saved_changes.keys != ['updated_at'] &&  # do not sync if no attributes actually changed
-    self.previously_new_record? == false &&       # do not sync if this is a new record
-    self.new_record? == false                     # do not sync if it is not persisted
+  def should_sync?
+    true # @TODO remove this
   end
-  alias should_sync? should_update_sync?
+  alias_method :should_sync, :should_sync?
 end

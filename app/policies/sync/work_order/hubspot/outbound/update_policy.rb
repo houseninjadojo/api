@@ -1,15 +1,15 @@
 class Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
-  authorize :user, optional: true
-  authorize :changed_attributes
-
-  def can_sync?
-    should_sync? &&
-    has_external_id? &&
-    has_changed_attributes?
+  class Changeset < TreeDiff
+    observe :status,
+            :deep_link
   end
 
-  def should_sync?
-    record.should_sync?
+  authorize :user, optional: true
+  authorize :changeset
+
+  def can_sync?
+    has_external_id? &&
+    has_changed_attributes?
   end
 
   def has_external_id?
@@ -17,14 +17,6 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   end
 
   def has_changed_attributes?
-    (changed_attributes.keys & attributes).any?
-  end
-
-  private
-
-  def attributes
-    [
-      'status',
-    ]
+    !changeset.blank?
   end
 end
