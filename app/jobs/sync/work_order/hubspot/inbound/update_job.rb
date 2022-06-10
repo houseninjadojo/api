@@ -10,6 +10,7 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdateJob < ApplicationJob
     @webhook_event = webhook_event
 
     return unless policy.can_sync?
+    binding.pry
 
     resource.update!(attribute_name => attribute_value)
 
@@ -24,7 +25,7 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdateJob < ApplicationJob
   end
 
   def entry
-    Hubspot::Webhook::Entry.new(webhook_entry)
+    Hubspot::Webhook::Entry.new(webhook_entry, webhook_event)
   end
 
   # def sync_line_items!
