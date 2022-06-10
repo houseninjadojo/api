@@ -7,8 +7,9 @@ require_relative '../../../../app/lib/hubspot/webhook/entry'
 RSpec.describe Hubspot::Webhook::Entry do
   let(:work_order_status) {
     create(:work_order_status,
-      slug: "invoice_sent_to_customer",
-      name: "Invoice Sent to Customer"
+      slug: "work_order_initiated",
+      name: "Work Order Initiated",
+      hubspot_id: "15611951",
     )
   }
   let(:work_order) { create(:work_order,
@@ -27,7 +28,7 @@ RSpec.describe Hubspot::Webhook::Entry do
       "attemptNumber"=>0,
       "objectId"=>123456789,
       "propertyName"=>"dealstage",
-      "propertyValue"=>"invoice_sent_to_customer",
+      "propertyValue"=>"15611951",
       "changeSource"=>"FORM"
     }
   }
@@ -59,11 +60,11 @@ RSpec.describe Hubspot::Webhook::Entry do
   describe '#handler_action' do
     it 'returns handler action when exists' do
       entry.payload["subscriptionType"] = "deal.creation"
-      expect(entry.handler_action).to eq("Create")
+      expect(entry.handler_action).to eq(:create)
       entry.payload["subscriptionType"] = "deal.propertyChange"
-      expect(entry.handler_action).to eq("Update")
+      expect(entry.handler_action).to eq(:update)
       entry.payload["subscriptionType"] = "contact.deletion"
-      expect(entry.handler_action).to eq("Delete")
+      expect(entry.handler_action).to eq(:delete)
     end
 
     it 'returns nil if it does not exist' do
@@ -265,8 +266,8 @@ RSpec.describe Hubspot::Webhook::Entry do
 
     it 'dealstage => WorkOrderStatus' do
       entry.payload["propertyName"] = "dealstage"
-      entry.payload["propertyValue"] = "invoice_sent_to_customer"
-      expect(entry.attribute_value).to eq(WorkOrderStatus.find_by(slug: "invoice_sent_to_customer"))
+      entry.payload["propertyValue"] = "15611951"
+      expect(entry.attribute_value).to eq(WorkOrderStatus.find_by(slug: "work_order_initiated"))
     end
 
     it 'dealtype => nil' do
