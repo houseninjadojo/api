@@ -32,6 +32,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::UpdateJob, type: :job do
 
   before do
     WorkOrderStatus.find_by(slug: 'work_request_received').update(hubspot_id: '15611951')
+    allow(WorkOrder).to(receive(:find_by).and_return(work_order))
   end
 
   describe "#perform" do
