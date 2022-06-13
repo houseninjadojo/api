@@ -10,6 +10,7 @@ class Sync::PaymentMethod::Stripe::Outbound::CreateJob < ApplicationJob
     # Create Payment Method
     # @see https://stripe.com/docs/api/payment_methods/create
     payment_method = Stripe::PaymentMethod.create(params, {
+      idempotency_key: idempotency_key,
       proxy: Rails.secrets.dig(:vgs, :outbound, :proxy_url)
     })
     resource.update!(stripe_token: payment_method.id)
@@ -31,7 +32,10 @@ class Sync::PaymentMethod::Stripe::Outbound::CreateJob < ApplicationJob
         exp_month: resource.exp_month,
         exp_year: resource.exp_year,
         cvc: resource.cvv,
-      }
+      },
+      metadata: {
+        house_ninja_id: resource.id,
+      },
     }
   end
 
@@ -39,5 +43,9 @@ class Sync::PaymentMethod::Stripe::Outbound::CreateJob < ApplicationJob
     Sync::PaymentMethod::Stripe::Outbound::CreatePolicy.new(
       resource
     )
+  end
+
+  def idempotency_key
+    Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")
   end
 end
