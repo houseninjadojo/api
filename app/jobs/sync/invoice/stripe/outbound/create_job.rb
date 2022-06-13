@@ -11,7 +11,7 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < ApplicationJob
     line_item = Stripe::InvoiceItem.create(line_item_params)
 
     # create the invoice
-    invoice = Stripe::Invoice.create(params)
+    invoice = Stripe::Invoice.create(params, { idempotency_key: idempotency_key })
 
     # save to db
     resource.update!(

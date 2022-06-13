@@ -30,6 +30,6 @@ class Sync::User::Stripe::Outbound::CreateJob < ApplicationJob
   end
 
   def idempotency_key
-    Digest::SHA256.hexdigest("#{user.id}_#{user.updated_at.to_i}")
+    Digest::SHA256.hexdigest("#{user.id}#{user.updated_at.to_i}")
   end
 end
