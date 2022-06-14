@@ -5,7 +5,7 @@ class Sync::User::Hubspot::Inbound::UpdateJob < ApplicationJob
 
   delegate :resource, :attribute_name, :attribute_value, to: :entry
 
-  def perform(webhook_entry, webhook_event)
+  def perform(webhook_event, webhook_entry)
     @webhook_entry = webhook_entry
     @webhook_event = webhook_event
 
