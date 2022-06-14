@@ -5,7 +5,7 @@ class WebhooksController < ApplicationController
     begin
       event = build_stripe_webhook_event.to_hash
       webhook_event = WebhookEvent.create!(service: 'stripe', payload: event)
-      Stripe::HandleWebhookJob.perform_later(webhook_event)
+      Sync::Webhook::StripeJob.perform_later(webhook_event)
     rescue JSON::ParserError => e
       Rails.logger.error(e)
       render status: 400
