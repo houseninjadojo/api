@@ -7,7 +7,7 @@ class Sync::User::Stripe::Outbound::CreateJob < ApplicationJob
     @user = user
     return unless policy.can_sync?
 
-    customer = Stripe::Customer.create(params)
+    customer = Stripe::Customer.create(params, { idempotency_key: idempotency_key })
     user.update!(stripe_id: customer.id)
   end
 
@@ -17,6 +17,9 @@ class Sync::User::Stripe::Outbound::CreateJob < ApplicationJob
       email: user.email,
       name: user.full_name,
       phone: user.phone_number,
+      metadata: {
+        house_ninja_id: user.id,
+      }
     }
   end
 
@@ -24,5 +27,9 @@ class Sync::User::Stripe::Outbound::CreateJob < ApplicationJob
     Sync::User::Stripe::Outbound::CreatePolicy.new(
       user
     )
+  end
+
+  def idempotency_key
+    Digest::SHA256.hexdigest("#{user.id}#{user.updated_at.to_i}")
   end
 end

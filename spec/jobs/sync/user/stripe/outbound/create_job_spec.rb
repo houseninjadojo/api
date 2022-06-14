@@ -16,7 +16,10 @@ RSpec.describe Sync::User::Stripe::Outbound::CreateJob, type: :job do
       allow_any_instance_of(job).to(receive(:user).and_return(user))
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       params = job.new(user).params
-      expect(Stripe::Customer).to receive(:create).with(params).and_return(double(id: "customer_id"))
+      idempotency_key = job.new(user).idempotency_key
+      expect(Stripe::Customer).to receive(:create).with(params, {
+        idempotency_key: idempotency_key
+      }).and_return(double(id: "customer_id"))
       job.perform_now(user)
       expect(user.stripe_id).to eq("customer_id")
     end
@@ -36,8 +39,19 @@ RSpec.describe Sync::User::Stripe::Outbound::CreateJob, type: :job do
         description: user.full_name,
         email: user.email,
         name: user.name,
-        phone: user.phone_number
+        phone: user.phone_number,
+        metadata: {
+          house_ninja_id: user.id,
+        },
       })
+    end
+  end
+
+  describe "#idempotency_key" do
+    it "returns idempotency key" do
+      key = Digest::SHA256.hexdigest("#{user.id}#{user.updated_at.to_i}")
+      allow_any_instance_of(job).to(receive(:user).and_return(user))
+      expect(job.new(user).idempotency_key).to eq(key)
     end
   end
 end

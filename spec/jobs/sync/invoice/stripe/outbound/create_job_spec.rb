@@ -25,7 +25,9 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreateJob, type: :job do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       job_instance = job.new(resource)
       expect(Stripe::InvoiceItem).to receive(:create).with(job_instance.line_item_params)
-      expect(Stripe::Invoice).to receive(:create).with(job_instance.params).and_return(double(id: "stripe_token",))
+      expect(Stripe::Invoice).to receive(:create).with(job_instance.params, {
+        idempotency_key: job_instance.idempotency_key
+      }).and_return(double(id: "stripe_token"))
       job.perform_now(resource)
       expect(resource.stripe_id).to eq("stripe_token")
     end
@@ -49,6 +51,9 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreateJob, type: :job do
           default_payment_method: resource.user.default_payment_method.stripe_id,
           description:            resource.description,
           subscription:           resource.subscription.stripe_id,
+          metadata: {
+            house_ninja_id: resource.id,
+          }
         }
       )
     end
@@ -64,6 +69,14 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreateJob, type: :job do
           customer: resource.user.stripe_id,
         }
       )
+    end
+  end
+
+  describe "#idempotency_key" do
+    it "returns idempotency key" do
+      key = Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")
+      allow_any_instance_of(job).to(receive(:resource).and_return(resource))
+      expect(job.new(resource).idempotency_key).to eq(key)
     end
   end
 end

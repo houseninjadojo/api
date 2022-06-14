@@ -61,4 +61,8 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < ApplicationJob
 
   # def try_paying!
   # end
+
+  def idempotency_key
+    Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")
+  end
 end

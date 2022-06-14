@@ -16,7 +16,10 @@ RSpec.describe Sync::PromoCode::Stripe::Outbound::CreateJob, type: :job do
       allow_any_instance_of(job).to(receive(:resource).and_return(resource))
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       params = job.new(resource).params
-      expect(Stripe::PromotionCode).to receive(:create).with(params).and_return(double(id: "stripe_token"))
+      idempotency_key = job.new(resource).idempotency_key
+      expect(Stripe::PromotionCode).to receive(:create).with(params, {
+        idempotency_key: idempotency_key
+      }).and_return(double(id: "stripe_token"))
       job.perform_now(resource)
       expect(resource.stripe_id).to eq("stripe_token")
     end
@@ -36,8 +39,19 @@ RSpec.describe Sync::PromoCode::Stripe::Outbound::CreateJob, type: :job do
         {
           coupon: resource.coupon_id,
           code: resource.code,
+          metadata: {
+            house_ninja_id: resource.id,
+          },
         }
       )
+    end
+  end
+
+  describe "#idempotency_key" do
+    it "returns idempotency key" do
+      key = Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")
+      allow_any_instance_of(job).to(receive(:resource).and_return(resource))
+      expect(job.new(resource).idempotency_key).to eq(key)
     end
   end
 end

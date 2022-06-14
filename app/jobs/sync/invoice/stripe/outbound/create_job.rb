@@ -11,7 +11,7 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < ApplicationJob
     line_item = Stripe::InvoiceItem.create(line_item_params)
 
     # create the invoice
-    invoice = Stripe::Invoice.create(params)
+    invoice = Stripe::Invoice.create(params, { idempotency_key: idempotency_key })
 
     # save to db
     resource.update!(
@@ -28,6 +28,9 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < ApplicationJob
       default_payment_method: resource.user.default_payment_method.stripe_id,
       description:            resource.description,
       subscription:           resource.subscription.stripe_id,
+      metadata:               {
+        house_ninja_id: resource.id,
+      },
     }
   end
 
@@ -43,5 +46,9 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < ApplicationJob
     Sync::Invoice::Stripe::Outbound::CreatePolicy.new(
       resource
     )
+  end
+
+  def idempotency_key
+    Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")
   end
 end
