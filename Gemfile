@@ -5,7 +5,7 @@ ruby "3.0.3"
 
 gem 'amazing_print'
 gem 'auth0'
-gem 'action_policy',           '~> 0.6.0'
+gem 'action_policy',           '~> 0.6.1'
 gem 'aws-sdk-s3',                          require: false
 gem 'bootsnap',                '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
 gem 'branch_io'
