@@ -9,7 +9,7 @@ class Sync::PromoCode::Stripe::Outbound::CreateJob < ApplicationJob
 
     # Create Promo Code
     # @see https://stripe.com/docs/api/promotion_codes/create
-    promo_code = Stripe::PromotionCode.create(params)
+    promo_code = Stripe::PromotionCode.create(params, { idempotency_key: idempotency_key })
     resource.update!(
       stripe_id: promo_code.id,
       stripe_object: promo_code,
@@ -20,6 +20,9 @@ class Sync::PromoCode::Stripe::Outbound::CreateJob < ApplicationJob
     {
       coupon: resource.coupon_id,
       code: resource.code,
+      metadata: {
+        house_ninja_id: resource.id,
+      }
     }
   end
 
@@ -27,5 +30,9 @@ class Sync::PromoCode::Stripe::Outbound::CreateJob < ApplicationJob
     Sync::PromoCode::Stripe::Outbound::CreatePolicy.new(
       resource
     )
+  end
+
+  def idempotency_key
+    Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")
   end
 end

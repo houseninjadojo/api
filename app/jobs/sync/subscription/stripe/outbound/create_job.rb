@@ -8,7 +8,7 @@ class Sync::Subscription::Stripe::Outbound::CreateJob < ApplicationJob
     return unless policy.can_sync?
 
     begin
-      subscription = Stripe::Subscription.create(params)
+      subscription = Stripe::Subscription.create(params, { idempotency_key: idempotency_key })
     rescue Stripe::StripeError => e
       Rails.logger.error("Stripe::Subscription.create failed: #{e.message}")
       return e # don't try updating a non-existent subscription
@@ -37,6 +37,10 @@ class Sync::Subscription::Stripe::Outbound::CreateJob < ApplicationJob
       # ensure we get an error on payment failure
       # @see https://stripe.com/docs/api/subscriptions/create#create_subscription-payment_behavior
       payment_behavior: 'error_if_incomplete',
+
+      metadata: {
+        house_ninja_id: resource.id,
+      }
     }
   end
 
@@ -52,5 +56,9 @@ class Sync::Subscription::Stripe::Outbound::CreateJob < ApplicationJob
     else
       nil
     end
+  end
+
+  def idempotency_key
+    Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")
   end
 end
