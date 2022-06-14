@@ -3,7 +3,7 @@ class WebhooksController < ApplicationController
 
   def stripe
     begin
-      event = build_stripe_webhook_event.to_hash
+      event = stripe_webhook_event.to_hash
       webhook_event = WebhookEvent.create!(service: 'stripe', payload: event)
       Sync::Webhook::StripeJob.perform_later(webhook_event)
     rescue JSON::ParserError => e
@@ -55,21 +55,13 @@ class WebhooksController < ApplicationController
 
   private
 
-  def build_stripe_webhook_event
+  def stripe_webhook_event
     payload = request.body.read
     Stripe::Webhook.construct_event(
       payload,
-      stripe_signature_header,
-      stripe_webhook_secret
+      request.headers['HTTP_STRIPE_SIGNATURE'],
+      Rails.application.credentials.stripe.dig(:webhook_secret)
     )
-  end
-
-  def stripe_signature_header
-    request.headers['HTTP_STRIPE_SIGNATURE']
-  end
-
-  def stripe_webhook_secret
-    Rails.application.credentials.stripe.dig(:webhook_secret)
   end
 
   def arrivy_webhook_secret

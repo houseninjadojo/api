@@ -2,16 +2,13 @@ class Sync::Webhook::StripeJob < ApplicationJob
   sidekiq_options retry: 0
   queue_as :default
 
-  attr_reader :webhook_event
+  attr_accessor :webhook_event
 
   def perform(webhook_event)
-    return if webhook_event.processed_at.present?
-    return unless enabled?
-    return unless handler.present?
-
     @webhook_event = webhook_event
+    return unless policy.can_sync?
 
-    handler.perform_now(webhook_event)
+    handler&.perform_now(webhook_event)
   end
 
   def payload
@@ -23,16 +20,16 @@ class Sync::Webhook::StripeJob < ApplicationJob
   end
 
   def event_resource_type
-    type = event_type.split(".")&.first
+    type = event_type.split(".")
     if type.length == 3
       type[1]
     else
-      type
+      type[0]
     end
   end
 
   def event_action
-    type = event_type.split(".")&.second
+    type = event_type.split(".")
     if type.length == 3
       type[2]
     else
@@ -41,7 +38,7 @@ class Sync::Webhook::StripeJob < ApplicationJob
   end
 
   def resource_klass
-    case event_type
+    case event_resource_type
     when "charge"
       Payment
     when "customer"
@@ -82,5 +79,9 @@ class Sync::Webhook::StripeJob < ApplicationJob
 
   def enabled?
     ENV["STRIPE_WEBHOOK_DISABLED"] != "true"
+  end
+
+  def policy
+    Sync::Webhook::StripePolicy.new(webhook_event)
   end
 end
