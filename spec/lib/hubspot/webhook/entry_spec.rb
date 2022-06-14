@@ -52,7 +52,7 @@ RSpec.describe Hubspot::Webhook::Entry do
     end
 
     it 'returns nil if it does not exist' do
-      entry.payload['subscriptionType'] = 'contact.creation'
+      entry.payload['subscriptionType'] = 'asdf.creation'
       expect(entry.handler).to eq(nil)
     end
   end

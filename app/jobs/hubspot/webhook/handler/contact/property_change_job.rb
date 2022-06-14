@@ -46,22 +46,22 @@ class Hubspot::Webhook::Handler::Contact::PropertyChangeJob < ApplicationJob
 
   def model_and_attribute
     case @entry["propertyName"]
-    when "email"
-      return [User, :email]
-    when "phone"
-      return [User, attribute: :phone_number]
-    when "address"
-      return [Property, attribute: :street_address1]
-    when "city"
-      return [Property, attribute: :city]
-    when "state"
-      return [Property, attribute: :state]
-    when "zip"
-      return [Property, attribute: :zipcode]
-    when "firstname"
-      return [User, attribute: :first_name]
-    when "lastname"
-      return [User, attribute: :last_name]
+    # when "email"
+      # return [User, :email]
+    # when "phone"
+      # return [User, attribute: :phone_number]
+    # when "address"
+      # return [Property, attribute: :street_address1]
+    # when "city"
+      # return [Property, attribute: :city]
+    # when "state"
+      # return [Property, attribute: :state]
+    # when "zip"
+      # return [Property, attribute: :zipcode]
+    # when "firstname"
+      # return [User, attribute: :first_name]
+    # when "lastname"
+      # return [User, attribute: :last_name]
     when "mobilephone"
       #
     when "lifecyclestage"

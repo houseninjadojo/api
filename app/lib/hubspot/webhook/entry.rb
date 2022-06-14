@@ -54,14 +54,22 @@ module Hubspot
         resource_type = payload["subscriptionType"].split(".").first #=> "contact"
         case resource_type
         when "contact"
-          User
+          if ["address", "city", "state", "zip"].include?(payload["propertyName"])
+            Property
+          else
+            User
+          end
         when "deal"
           WorkOrder
         end
       end
 
       def resource
-        @resource ||= resource_klass&.find_by(hubspot_id: hubspot_id)
+        if resource_klass == Property
+          @resource ||= User.find_by(hubspot_id: hubspot_id)&.default_property
+        else
+          @resource ||= resource_klass&.find_by(hubspot_id: hubspot_id)
+        end
       end
 
       def occured_at
@@ -87,8 +95,12 @@ module Hubspot
 
       def attribute_name
         case property_name
+        when "address"
+          :street_address1
         when "amount"
           :total
+        when "city"
+          :city
         when "closedate"
           # :scheduled_window_start
         when "closed_lost_reason"
@@ -107,12 +119,16 @@ module Hubspot
           #
         when "description"
           #
+        when "email"
+          :email
         when "estimate_approved"
           :approved
         when "estimate___for_homeowner"
           #
         when "estimate___from_vendor"
           #
+        when "firstname"
+          :first_name
         when "homeowner_name"
           #
         when "hs_lastmodifieddate"
@@ -124,17 +140,29 @@ module Hubspot
           :vendor_amount
         when "invoice_notes"
           :description
+        when "lastname"
+          :last_name
+        when "phone"
+          :phone_number
         when "pipeline"
           #
+        when "state"
+          :state
         when "vendor_name"
           :vendor
+        when "zip"
+          :zipcode
         end
       end
 
       def attribute_value
         case property_name
+        when "address"
+          property_value
         when "amount"
           attribute_as_amount_in_cents
+        when "city"
+          property_value
         when "closedate"
           attribute_as_epoch_time
         when "closed_lost_reason"
@@ -153,12 +181,16 @@ module Hubspot
           #
         when "description"
           property_value
+        when "email"
+          property_value
         when "estimate_approved"
           attribute_as_boolean
         when "estimate___for_homeowner"
           attribute_as_amount_in_cents
         when "estimate___from_vendor"
           attribute_as_amount_in_cents
+        when "firstname"
+          property_value
         when "homeowner_name"
           property_value
         when "hs_lastmodifieddate"
@@ -170,9 +202,17 @@ module Hubspot
           attribute_as_amount_in_cents
         when "invoice_notes"
           property_value
+        when "lastname"
+          property_value
+        when "phone"
+          property_value
         when "pipeline"
           #
+        when "state"
+          property_value
         when "vendor_name"
+          property_value
+        when "zip"
           property_value
         else
           property_value

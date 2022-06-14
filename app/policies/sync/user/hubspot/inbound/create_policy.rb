@@ -15,11 +15,11 @@ class Sync::User::Hubspot::Inbound::CreatePolicy < ApplicationPolicy
   end
 
   def is_create_event?
-    payload.is_deal_batch?
+    payload.is_create_batch?
   end
 
   def is_new_record?
-    !WorkOrder.exists?(hubspot_id: record.first["objectId"]&.to_s)
+    !User.exists?(hubspot_id: record.first["objectId"]&.to_s)
   end
 
   def webhook_is_unprocessed?

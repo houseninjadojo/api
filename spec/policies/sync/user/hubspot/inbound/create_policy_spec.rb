@@ -123,19 +123,18 @@ RSpec.describe Sync::User::Hubspot::Inbound::CreatePolicy, type: :policy do
     end
 
     it "returns false if attribute name not valid" do
-      webhook_event.payload = payload.select { |p| p["subscriptionType"] == "deal.propertyChange" }
+      webhook_event.payload = payload.select { |p| p["subscriptionType"] == "contact.propertyChange" }
       expect(policy.is_create_event?).to be_falsey
     end
   end
 
   describe_rule :is_new_record? do
     it "returns true if resource does not exist" do
-      work_order.update(hubspot_id: nil)
       expect(policy.is_new_record?).to be_truthy
     end
 
-    it "returns true if resource already exits" do
-      work_order.update(hubspot_id: '123456789')
+    it "returns false if resource already exits" do
+      user = create(:user, hubspot_id: '123456789')
       expect(policy.is_new_record?).to be_falsey
     end
   end
