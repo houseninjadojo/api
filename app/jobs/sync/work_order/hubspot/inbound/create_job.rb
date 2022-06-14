@@ -28,7 +28,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < ApplicationJob
   end
 
   def entry
-    Hubspot::Webhook::Entry.new(webhook_entry, webhook_event)
+    Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
   end
 
   def params

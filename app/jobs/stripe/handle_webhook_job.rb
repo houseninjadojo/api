@@ -90,7 +90,6 @@ class Stripe::HandleWebhookJob < ApplicationJob
     when !!event.match(/^promotion_code\.created/)
       Sync::PromoCode::Stripe::Inbound::CreateJob.perform_now(webhook_event)
     when !!event.match(/^promotion_code\.[a-z]+(?![.a-z]).*$/)
-      if event == 
       Sync::PromoCode::Stripe::Inbound::UpdateJob.perform_now(webhook_event)
     end
   end

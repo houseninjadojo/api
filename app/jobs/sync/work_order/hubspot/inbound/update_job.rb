@@ -24,7 +24,7 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdateJob < ApplicationJob
   end
 
   def entry
-    Hubspot::Webhook::Entry.new(webhook_entry, webhook_event)
+    Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
   end
 
   # def sync_line_items!

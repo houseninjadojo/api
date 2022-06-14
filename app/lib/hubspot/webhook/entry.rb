@@ -17,7 +17,7 @@ module Hubspot
     class Entry
       attr_accessor :payload
 
-      def initialize(payload, webhook_event)
+      def initialize(webhook_event, payload)
         @payload = payload
         @webhook_event = webhook_event
       end

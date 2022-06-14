@@ -38,7 +38,7 @@ RSpec.describe Hubspot::Webhook::Entry do
       payload: [payload]
     )
   }
-  let(:entry) { Hubspot::Webhook::Entry.new(payload, webhook_event) }
+  let(:entry) { Hubspot::Webhook::Entry.new(webhook_event, payload) }
 
   describe '.initialize' do
     it 'accepts webhook payload and event' do
