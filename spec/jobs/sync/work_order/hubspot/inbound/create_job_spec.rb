@@ -91,9 +91,9 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
   describe "#perform" do
     it "will not sync if policy declines" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: false))
-      # entry = Hubspot::Webhook::Entry.new(webhook_entry, webhook_event)
+      # entry = Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
       expect(WorkOrder).not_to receive(:create!)
-      job.perform_now(webhook_entry, webhook_event)
+      job.perform_now(webhook_event, webhook_entry)
     end
 
     it "will sync if policy approves" do
@@ -101,7 +101,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
       payload = Hubspot::Webhook::Payload.new(webhook_event)
       expect(WorkOrder).to receive(:create!).with(payload.as_params)
       expect(webhook_event).to receive(:update!)
-      job.perform_now(webhook_entry, webhook_event)
+      job.perform_now(webhook_event, webhook_entry)
     end
   end
 
@@ -109,7 +109,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
     it "returns a policy" do
       expect_any_instance_of(job).to(receive(:webhook_entry).at_least(:once).and_return(webhook_entry))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
-      expect(job.new(webhook_entry, webhook_event).policy).to be_a(Sync::WorkOrder::Hubspot::Inbound::CreatePolicy)
+      expect(job.new(webhook_event, webhook_entry).policy).to be_a(Sync::WorkOrder::Hubspot::Inbound::CreatePolicy)
     end
   end
 
@@ -117,13 +117,13 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
     it "returns Hubspot::Webhook::Entry" do
       expect_any_instance_of(job).to(receive(:webhook_entry).at_least(:once).and_return(webhook_entry))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
-      expect(job.new(webhook_entry, webhook_event).entry).to be_a(Hubspot::Webhook::Entry)
+      expect(job.new(webhook_event, webhook_entry).entry).to be_a(Hubspot::Webhook::Entry)
     end
 
     it "returns Hubspot::Webhook::Entry#resource_klass" do
       expect_any_instance_of(job).to(receive(:webhook_entry).at_least(:once).and_return(webhook_entry))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
-      expect(job.new(webhook_entry, webhook_event).entry.resource_klass).to eq(WorkOrder)
+      expect(job.new(webhook_event, webhook_entry).entry.resource_klass).to eq(WorkOrder)
     end
   end
 
@@ -131,13 +131,13 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
     it "returns Hubspot::Webhook::Payload" do
       # expect_any_instance_of(job).to(receive(:webhook_entry).at_least(:once).and_return(webhook_entry))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
-      expect(job.new(webhook_entry, webhook_event).payload).to be_a(Hubspot::Webhook::Payload)
+      expect(job.new(webhook_event, webhook_entry).payload).to be_a(Hubspot::Webhook::Payload)
     end
 
     it "returns Hubspot::Webhook::Payload#as_params" do
       # expect_any_instance_of(job).to(receive(:webhook_entry).at_least(:once).and_return(webhook_entry))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
-      expect(job.new(webhook_entry, webhook_event).payload.as_params).to include(
+      expect(job.new(webhook_event, webhook_entry).payload.as_params).to include(
         description: "Water Line Leak",
         status: WorkOrderStatus.find_by(slug: "work_order_initiated"),
         hubspot_id: "123456789"

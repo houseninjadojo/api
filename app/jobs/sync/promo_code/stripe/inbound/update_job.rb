@@ -1,0 +1,47 @@
+class Sync::PromoCode::Stripe::Inbound::UpdateJob < ApplicationJob
+  queue_as :default
+
+  attr_accessor :webhook_event
+
+  def perform(webhook_event)
+    @webhook_event = webhook_event
+
+    return unless policy.can_sync?
+
+    promo_code.update!(params)
+
+    webhook_event.update!(processed_at: Time.now)
+  end
+
+  def policy
+    Sync::PromoCode::Stripe::Inbound::UpdatePolicy.new(
+      stripe_event,
+      webhook_event: webhook_event
+    )
+  end
+
+  def stripe_event
+    @resource ||= Stripe::Event.construct_from(webhook_event.payload)
+  end
+
+  def stripe_object
+    stripe_event.data.object
+  end
+
+  def promo_code
+    @promo_code ||= PromoCode.find_by(stripe_id: stripe_object.id)
+  end
+
+  def params
+    {
+      active: stripe_object.active,
+      code: stripe_object.code,
+      name: stripe_object.coupon.name,
+      percent_off: stripe_object.coupon.percent_off,
+      amount_off: stripe_object.coupon.amount_off,
+      coupon_id: stripe_object.coupon.id,
+
+      stripe_object: stripe_object.to_json,
+    }
+  end
+end

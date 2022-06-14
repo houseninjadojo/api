@@ -11,7 +11,7 @@ module Hubspot
 
       def entries
         @entries ||= webhook_payload.map do |entry_payload|
-          Hubspot::Webhook::Entry.new(entry_payload, @webhook_event)
+          Hubspot::Webhook::Entry.new(@webhook_event, entry_payload)
         end
       end
 

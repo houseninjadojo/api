@@ -3,6 +3,8 @@ class Stripe::HandleWebhookJob < ApplicationJob
   queue_as :default
 
   def perform(webhook_event)
+    ActiveSupport::Deprecation.warn("Stripe::HandleWebhookJob is deprecated. Please use Sync::Webhook::StripeJob instead.")
+
     return if webhook_event.processed_at.present?
     return unless enabled?
     @payload = webhook_event.payload
@@ -85,21 +87,10 @@ class Stripe::HandleWebhookJob < ApplicationJob
         end
       end
     # `promotion_code.*`
+    when !!event.match(/^promotion_code\.created/)
+      Sync::PromoCode::Stripe::Inbound::CreateJob.perform_now(webhook_event)
     when !!event.match(/^promotion_code\.[a-z]+(?![.a-z]).*$/)
-      ActiveRecord::Base.transaction do
-        promo_code = PromoCode.find_or_create_by(
-          stripe_id: stripe_id,
-          code: object["code"],
-        )
-        promo_code.update(
-          active: object["active"],
-          amount_off: object.dig("coupon", "amount_off"),
-          coupon_id: object.dig("coupon", "id"),
-          name: object.dig("coupon", "name"),
-          percent_off: object.dig("coupon", "percent_off"),
-          stripe_object: @payload
-        )
-      end
+      Sync::PromoCode::Stripe::Inbound::UpdateJob.perform_now(webhook_event)
     end
   end
 

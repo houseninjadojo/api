@@ -38,19 +38,19 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::UpdateJob, type: :job do
   describe "#perform" do
     it "will not sync if policy declines" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: false))
-      entry = Hubspot::Webhook::Entry.new(webhook_entry, webhook_event)
+      entry = Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
       expect(work_order).not_to receive(:update!)
-      job.perform_now(webhook_entry, webhook_event)
+      job.perform_now(webhook_event, webhook_entry)
     end
 
     it "will sync if policy approves" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
-      entry = Hubspot::Webhook::Entry.new(webhook_entry, webhook_event)
+      entry = Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
       expect(work_order).to receive(:update!).with(
         entry.attribute_name => entry.attribute_value
       )
       expect(webhook_event).to receive(:update!)
-      job.perform_now(webhook_entry, webhook_event)
+      job.perform_now(webhook_event, webhook_entry)
     end
   end
 
@@ -58,7 +58,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::UpdateJob, type: :job do
     it "returns a policy" do
       expect_any_instance_of(job).to(receive(:webhook_entry).at_least(:once).and_return(webhook_entry))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
-      expect(job.new(webhook_entry, webhook_event).policy).to be_a(Sync::WorkOrder::Hubspot::Inbound::UpdatePolicy)
+      expect(job.new(webhook_event, webhook_entry).policy).to be_a(Sync::WorkOrder::Hubspot::Inbound::UpdatePolicy)
     end
   end
 
@@ -66,19 +66,19 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::UpdateJob, type: :job do
     it "returns Hubspot::Webhook::Entry" do
       expect_any_instance_of(job).to(receive(:webhook_entry).at_least(:once).and_return(webhook_entry))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
-      expect(job.new(webhook_entry, webhook_event).entry).to be_a(Hubspot::Webhook::Entry)
+      expect(job.new(webhook_event, webhook_entry).entry).to be_a(Hubspot::Webhook::Entry)
     end
 
     it "returns Hubspot::Webhook::Entry#attribute_name" do
       expect_any_instance_of(job).to(receive(:webhook_entry).at_least(:once).and_return(webhook_entry))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
-      expect(job.new(webhook_entry, webhook_event).entry.attribute_name).to eq(:status)
+      expect(job.new(webhook_event, webhook_entry).entry.attribute_name).to eq(:status)
     end
 
     it "returns Hubspot::Webhook::Entry#attribute_value" do
       expect_any_instance_of(job).to(receive(:webhook_entry).at_least(:once).and_return(webhook_entry))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
-      expect(job.new(webhook_entry, webhook_event).entry.attribute_value).to eq(WorkOrderStatus.find_by(hubspot_id: "15611951"))
+      expect(job.new(webhook_event, webhook_entry).entry.attribute_value).to eq(WorkOrderStatus.find_by(hubspot_id: "15611951"))
     end
   end
 end

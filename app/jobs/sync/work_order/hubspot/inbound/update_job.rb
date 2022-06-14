@@ -5,7 +5,7 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdateJob < ApplicationJob
 
   delegate :resource, :attribute_name, :attribute_value, to: :entry
 
-  def perform(webhook_entry, webhook_event)
+  def perform(webhook_event, webhook_entry)
     @webhook_entry = webhook_entry
     @webhook_event = webhook_event
 
@@ -24,7 +24,7 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdateJob < ApplicationJob
   end
 
   def entry
-    Hubspot::Webhook::Entry.new(webhook_entry, webhook_event)
+    Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
   end
 
   # def sync_line_items!
