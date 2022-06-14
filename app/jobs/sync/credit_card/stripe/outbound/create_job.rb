@@ -13,7 +13,10 @@ class Sync::CreditCard::Stripe::Outbound::CreateJob < ApplicationJob
       idempotency_key: idempotency_key,
       proxy: Rails.secrets.dig(:vgs, :outbound, :proxy_url)
     })
-    resource.update!(stripe_token: payment_method.id)
+    resource.update!(
+      stripe_token: payment_method.id,
+      last_four: payment_method.card.last4,
+    )
 
     # Attach Payment Method to Customer
     # @see https://stripe.com/docs/api/payment_methods/attach

@@ -19,7 +19,7 @@ RSpec.describe Sync::CreditCard::Stripe::Outbound::CreateJob, type: :job do
       idempotency_key = job.new(resource).idempotency_key
       expect(Stripe::PaymentMethod).to receive(:create).with(params, {
         idempotency_key: idempotency_key, proxy: nil
-      }).and_return(double(id: "stripe_token"))
+      }).and_return(double(id: "stripe_token", card: double(last4: "1234")))
       expect(Stripe::PaymentMethod).to receive(:attach).with("stripe_token", { customer: resource.user.stripe_id })
       job.perform_now(resource)
       expect(resource.stripe_id).to eq("stripe_token")
