@@ -10,6 +10,15 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < ApplicationJob
 
     invoice.update!(params)
 
+    case stripe_object.status
+    when Invoice::STATUS_OPEN
+      Invoice::ExternalAccess::GenerateDeepLinkJob.perform_now(invoice)
+      break
+    when Invoice::STATUS_PAID
+      Invoice::ExternalAccess::ExpireJob.perform_now(invoice)
+      break
+    end
+
     webhook_event.update!(processed_at: Time.now)
   end
 

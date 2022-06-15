@@ -127,16 +127,17 @@ class Invoice < ApplicationRecord
   end
 
   def fetch_pdf!
-    Stripe::Invoices::FetchPdfJob.perform_later(self) unless document.present?
+    return if document.present?
+    stripe_invoice = Stripe::Invoice.retrieve(self.stripe_id)
+    document = Document.create!(invoice: self, user: user)
+    asset = URI.open(stripe_invoice.invoice_pdf)
+    document.asset.attach(io: asset, filename: "invoice.pdf")
+    document.save
   end
 
   def refresh_pdf!
     document.destroy! if document.present?
     fetch_pdf!
-  end
-
-  def finalize!
-    Stripe::Invoices::FinalizeJob.perform_now(self) unless finalized?
   end
 
   # external access / payment approval
