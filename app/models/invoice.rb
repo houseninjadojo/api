@@ -181,7 +181,7 @@ class Invoice < ApplicationRecord
   def sync_actions
     [
       :create,
-      # :update,
+      :update,
       # :delete,
     ]
   end

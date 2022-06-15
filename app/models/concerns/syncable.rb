@@ -8,9 +8,10 @@ module Syncable
   # sets a thread-local change tracking object for each service on the syncable resource
   # we will use this change tracking object to detect when attributes or association attributes are modified during the request cycle.
   # this is used to determine if we should sync the resource to the service during :update actions
-  def track_update_changes(include_associations: false)
+  def track_update_changes(include_associations: true)
+    @changesets = {}
     sync_services.each do |service|
-      SyncChangeset.initialize_changeset(record: self, service: service, action: :update)
+      @changesets[service] = SyncChangeset.initialize_changeset(record: self, service: service, action: :update)
     end
     if include_associations == true
       sync_associations.each do |association|
@@ -50,16 +51,17 @@ module Syncable
     sync_services.each { |service| sync!(service: service, action: :create) }
   end
 
-  def sync_update!
+  def sync_update!(include_associations: true)
     return unless sync_actions.include?(:update)
     sync_services.each { |service| sync!(service: service, action: :update) }
+    sync_update_associations! if include_associations == true
   end
 
   def sync_update_associations!
     return unless sync_associations.any?
     sync_associations.each do |association|
       [self.send(association)].flatten.each do |association_record|
-        association_record&.sync_update!
+        association_record&.sync_update!(include_associations: false)
       end
     end
   end
@@ -84,7 +86,7 @@ module Syncable
     when :create
       policy.new(self).can_sync?
     when :update
-      changeset = SyncChangeset.changeset(resource_klass: self.class, record: self, service: service, action: :update)
+      changeset = @changesets[service]
       policy.new(self, changeset: changeset.changes).can_sync?
     when :delete
       policy.new(self).can_sync?
@@ -99,9 +101,9 @@ module Syncable
     when :create
       job.send(method, self)
     when :update
-      changeset = SyncChangeset.changeset(resource_klass: self.class, record: self, service: service, action: :update)
+      # changeset = SyncChangeset.changeset(resource_klass: self.class, record: self, service: service, action: :update)
+      changeset = @changesets[service]
       job.send(method, self, changeset.changes)
-      sync_update_associations!
     when :delete
       job.send(method, self)
     end
