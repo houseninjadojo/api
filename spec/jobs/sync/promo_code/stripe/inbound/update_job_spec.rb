@@ -88,7 +88,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::UpdateJob, type: :job do
         code: "test",
         name: "TEST CODE",
         percent_off: 100,
-        amount_off: nil,
+        # amount_off: nil,
         coupon_id: "VeNkKlf7",
         stripe_object: payload[:data][:object].to_json,
       })
@@ -126,7 +126,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::UpdateJob, type: :job do
         code: "test",
         name: "TEST CODE",
         percent_off: 100,
-        amount_off: nil,
+        # amount_off: nil,
         coupon_id: "VeNkKlf7",
         stripe_object: payload[:data][:object].to_json,
       )

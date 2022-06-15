@@ -42,6 +42,6 @@ class Sync::PromoCode::Stripe::Inbound::UpdateJob < ApplicationJob
       coupon_id: stripe_object.coupon.id,
 
       stripe_object: stripe_object.to_json,
-    }
+    }.compact
   end
 end
