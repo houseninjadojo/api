@@ -98,7 +98,7 @@ module Syncable
       job.send(method, self)
     when :update
       changeset = SyncChangeset.changeset(resource_klass: self.class, record: self, service: service, action: :update)
-      job.send(method, self, changeset: changeset.changes)
+      job.send(method, self, changeset.changes)
       sync_update_associations!
     when :delete
       job.send(method, self)

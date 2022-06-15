@@ -40,6 +40,6 @@ class Sync::PromoCode::Stripe::Inbound::CreateJob < ApplicationJob
 
       stripe_id: stripe_object.id,
       stripe_object: stripe_object.to_json,
-    }
+    }.compact
   end
 end
