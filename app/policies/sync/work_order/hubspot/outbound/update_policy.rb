@@ -1,7 +1,9 @@
 class Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   class Changeset < TreeDiff
     observe :status,
-            :deep_link
+            deep_link: [
+              :url,
+            ]
   end
 
   authorize :user, optional: true

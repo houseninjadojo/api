@@ -1,6 +1,4 @@
-class Sync::Invoice::Stripe::Outbound::CreateJob < ApplicationJob
-  queue_as :default
-
+class Sync::Invoice::Stripe::Outbound::CreateJob < Sync::BaseJob
   attr_accessor :resource
 
   def perform(resource)

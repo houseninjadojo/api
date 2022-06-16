@@ -1,5 +1,5 @@
-class Sync::Payment::Stripe::Outbound::CreateJob < ApplicationJob
-  queue_as :default
+class Sync::Payment::Stripe::Outbound::CreateJob < Sync::BaseJob
+  attr_accessor :resource
 
   attr_accessor :resource
 
@@ -12,46 +12,37 @@ class Sync::Payment::Stripe::Outbound::CreateJob < ApplicationJob
     pay_invoice!
   end
 
-  # def params
-  #   {
-  #     coupon: resource.coupon_id,
-  #     code: resource.code,
-  #   }
-  # end
-
   def policy
     Sync::Payment::Stripe::Outbound::CreatePolicy.new(
       resource
     )
   end
 
+  def idempotency_key
+    Digest::SHA256.hexdigest(resource.id)
+  end
+
   def pay_invoice!
     invoice = resource.invoice
-    user = resource.property&.user
+    user = resource.user
     return if invoice.nil?
 
-    invoice.update!(payment_attempted_at: Time.current)
+    payment_method = user.default_payment_method&.stripe_token
 
-    begin
-      paid_invoice = Stripe::Invoice.pay(invoice.stripe_id, {
-        payment_method: user.default_payment_method&.stripe_token,
-      })
-      update!(
+    paid_invoice = Stripe::Invoice.pay(
+      invoice.stripe_id,
+      { payment_method: payment_method },
+      { idempotency_key: idempotency_key }
+    )
+
+    ActiveRecord::Base.transaction do
+      resource.update!(
+        stripe_id: paid_invoice.charge
+      )
+      invoice.update!(
+        payment_attempted_at: Time.current,
         status: paid_invoice.status,
         stripe_object: paid_invoice
       )
-      if paid_invoice.status == "payment_failed"
-        work_order.update!(status: WorkOrderStatus::PAYMENT_FAILED)
-        return nil
-      else
-        work_order.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER)
-        # refresh_pdf!
-        return paid_invoice
-      end
-    rescue => e
-      Rails.logger.error "Stripe::Invoice.pay(#{stripe_id}) failed: #{e.message}"
-      Sentry.capture_exception(e)
-      return nil
-    end
   end
 end

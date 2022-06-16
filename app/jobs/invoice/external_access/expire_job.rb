@@ -7,24 +7,16 @@ class Invoice::ExternalAccess::ExpireJob < ApplicationJob
     @invoice = invoice
     return unless conditions_met?
 
-    invoice.expire_external_access!
-    expire_hubspot_access!
+    ActiveRecord::Base.transaction do
+      invoice.update(access_token: nil)
+      invoice.deep_link.expire! if deep_link.present?
+    end
   end
 
   def conditions_met?
     [
       invoice.present?,
-      invoice.work_order.present?,
-      invoice.work_order.hubspot_id.present?,
+      invoice.deep_link.present?,
     ].all?
-  end
-
-  def expire_hubspot_access!
-    Hubspot::Deal.update!(
-      invoice.work_order.hubspot_id,
-      {
-        "branch_payment_link" => nil,
-      }
-    )
   end
 end

@@ -120,19 +120,20 @@ class Payment < ApplicationRecord
 
   # actions
 
-  def charge_payment_method!(now: true)
-    if invoice.present?
-      pay_invoice!
-    else
-      # pay_with_charge!(now: now)
-    end
+  def pay_now!
+    return if paid? || has_charge? || invoice.nil?
+    Sync::Payment::Stripe::Outbound::CreateJob.perform_now(self)
   end
 
-  def pay_invoice!
+  def charge_payment_method!(now: true)
     return if paid? || has_charge? || invoice.nil?
-    paid_invoice = invoice.pay!
-    update!(stripe_id: paid_invoice&.charge)
-    # wait for webhook
+
+    if now == false
+      Sync::Payment::Stripe::Outbound::CreateJob.perform_later(self)
+      return
+    end
+
+    Sync::Payment::Stripe::Outbound::CreateJob.perform_now(self)
     begin
       payment = self
       Wait.until(sleep_time: 1, max_time: 15) do |counter, time|

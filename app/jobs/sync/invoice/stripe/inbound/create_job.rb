@@ -1,6 +1,4 @@
-class Sync::Invoice::Stripe::Inbound::CreateJob < ApplicationJob
-  queue_as :default
-
+class Sync::Invoice::Stripe::Inbound::CreateJob < Sync::BaseJob
   attr_accessor :webhook_event
 
   def perform(webhook_event)

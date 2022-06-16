@@ -2,10 +2,11 @@ class Stripe::Invoices::PayJob < ApplicationJob
   queue_as :default
 
   def perform(invoice)
+    ActiveSupport::Deprecation.warn("Stripe::Invoices::PayJob is deprecated.")
     @invoice = invoice
     return unless conditions_met?
 
-    Stripe::Invoice.pay(@invoice.stripe_id, params)
+    # Stripe::Invoice.pay(@invoice.stripe_id, params)
   end
 
   private
