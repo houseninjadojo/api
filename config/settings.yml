@@ -10,9 +10,10 @@ shared:
   lang: en_US.UTF-8
   port: 3000
   email:
-    default: noreply@houseninja.co   # default email
-    reply_to: hello@houseninja.co    # reply to email
+    default: House Ninja <noreply@houseninja.co>   # default email
+    reply_to: House Ninja <hello@houseninja.co>    # reply to email
   protocol: 'https'
+  app_store_url: 'https://www.houseninja.co/app'
 
 development:
   domains:
