@@ -6,7 +6,7 @@ RSpec.describe Stripe::Invoices::PayJob, type: :job do
     let(:job) { Stripe::Invoices::PayJob }
     let(:params) { { payment_method: invoice.user.default_payment_method.stripe_token } }
 
-    it "calls Stripe::Invoice.pay" do
+    xit "calls Stripe::Invoice.pay" do
       expect(Stripe::Invoice).to receive(:pay).with(invoice.stripe_id, params)
       Stripe::Invoices::PayJob.perform_now(invoice)
     end

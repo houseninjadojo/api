@@ -44,5 +44,6 @@ class Sync::Payment::Stripe::Outbound::CreateJob < Sync::BaseJob
         status: paid_invoice.status,
         stripe_object: paid_invoice
       )
+    end
   end
 end
