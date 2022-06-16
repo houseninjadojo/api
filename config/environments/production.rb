@@ -102,6 +102,6 @@ Rails.application.configure do
   config.action_mailer.sendgrid_actionmailer_settings = {
     api_key: Rails.secrets.sendgrid[:api_key],
     raise_delivery_errors: true,
-    mail_settings: { sandbox_mode: { enable: false }}
+    mail_settings: { sandbox_mode: { enable: false } }
   }
 end
