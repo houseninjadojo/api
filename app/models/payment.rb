@@ -69,9 +69,9 @@ class Payment < ApplicationRecord
   end
   alias was_charged? has_charge?
 
-  def should_charge?
-    has_charge? && ['requires_payment_method', 'requires_confirmation'].include?(status)
-  end
+  # def should_charge?
+  #   has_charge? && ['requires_payment_method', 'requires_confirmation'].include?(status)
+  # end
 
   def self.from_stripe_charge!(object)
     ActiveRecord::Base.transaction do
@@ -119,11 +119,6 @@ class Payment < ApplicationRecord
   end
 
   # actions
-
-  def pay_now!
-    return if paid? || has_charge? || invoice.nil?
-    Sync::Payment::Stripe::Outbound::CreateJob.perform_now(self)
-  end
 
   def charge_payment_method!(now: true)
     return if paid? || has_charge? || invoice.nil?

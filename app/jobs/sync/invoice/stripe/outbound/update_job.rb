@@ -15,15 +15,12 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
       case resource.work_order&.status
       when WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
         Stripe::Invoice.finalize_invoice(resource.stripe_id, { auto_advance: false })
-      when WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER
+      # when WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER
         # Stripe::Invoice.pay(resource.stripe_id, {
         #   payment_method: resource.user&.default_payment_method&.stripe_token,
         # })
       end
     end
-
-    # refresh pdf
-    # resource.refresh_pdf!
   end
 
   def params
