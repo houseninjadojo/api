@@ -101,6 +101,15 @@ class Invoice < ApplicationRecord
 
   # actions
 
+  def send_payment_approval_email!
+    InvoiceMailer.payment_approval(
+      email: user.email,
+      first_name: user.first_name,
+      invoice_amount: formatted_total,
+      payment_link: deep_link&.to_s
+    ).deliver_later
+  end
+
   # external access / payment approval
 
   def generate_access_token!

@@ -1,7 +1,7 @@
 class MarketingMailer < ApplicationMailer
   default from: Rails.settings.email[:reply_to]
 
-  def app_announcement(email:, url:)
+  def app_announcement(email:, url: Rails.settings.app_store_url)
     mail(
       to: email,
       body: '',

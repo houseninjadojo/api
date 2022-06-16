@@ -10,6 +10,8 @@ class Invoice::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
     invoice.generate_access_token!
     generate_deep_link!
     # set_hubspot_branch_payment_link!
+
+    invoice.send_payment_approval_email!
   end
 
   def conditions_met?

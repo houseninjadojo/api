@@ -1,7 +1,13 @@
 class InvoiceMailer < ApplicationMailer
   default from: Rails.settings.email[:reply_to]
 
-  def payment_approval(email:, first_name:, invoice_amount:, payment_link:, app_store_url:)
+  def payment_approval(
+    email:,
+    first_name:,
+    invoice_amount:,
+    payment_link:,
+    app_store_url: Rails.settings.app_store_url
+  )
     mail(
       to: email,
       body: '',
