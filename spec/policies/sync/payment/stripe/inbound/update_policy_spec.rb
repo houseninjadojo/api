@@ -90,8 +90,7 @@ RSpec.describe Sync::Payment::Stripe::Inbound::UpdatePolicy, type: :policy do
           "refunded": false,
           "refunds": {
             "object": "list",
-            "data": [
-            ],
+            "data": [],
             "has_more": false,
             "total_count": 0,
             "url": "/v1/charges/ch_3LB9CoAWN1SYQ0Ct0hwvoo6Z/refunds"
