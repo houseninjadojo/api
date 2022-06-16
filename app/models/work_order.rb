@@ -28,7 +28,7 @@
 #  fk_rails_...  (property_id => properties.id)
 #
 class WorkOrder < ApplicationRecord
-  after_save_commit :handle_status_change, if: :saved_change_to_status?
+  # after_save_commit :handle_status_change, if: :saved_change_to_status?
 
   after_update_commit :sync_update!
 
@@ -45,16 +45,16 @@ class WorkOrder < ApplicationRecord
 
   # callbacks
 
-  def handle_status_change
-    case status.slug
-    # create external access
-    when "invoice_sent_to_customer"
-      invoice.finalize!
-      Invoice::ExternalAccess::GenerateDeepLinkJob.perform_later(invoice)
-    when "invoice_paid_by_customer"
-      Invoice::ExternalAccess::ExpireJob.perform_later(invoice)
-    end
-  end
+  # def handle_status_change
+  #   case status.slug
+  #   # create external access
+  #   when "invoice_sent_to_customer"
+  #     invoice.finalize!
+  #     Invoice::ExternalAccess::GenerateDeepLinkJob.perform_later(invoice)
+  #   when "invoice_paid_by_customer"
+  #     Invoice::ExternalAccess::ExpireJob.perform_later(invoice)
+  #   end
+  # end
 
   # sync
 

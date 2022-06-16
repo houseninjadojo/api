@@ -6,7 +6,7 @@ class Sync::Payment::Stripe::Outbound::CreatePolicy < ApplicationPolicy
     user_has_external_id? &&
     invoice_has_external_id? &&
     payment_method_has_external_id? &&
-    !already_paid?
+    !invoice_already_paid?
   end
 
   def has_external_id?
@@ -25,7 +25,7 @@ class Sync::Payment::Stripe::Outbound::CreatePolicy < ApplicationPolicy
     record&.invoice&.stripe_id.present?
   end
 
-  def already_paid?
+  def invoice_already_paid?
     record&.invoice&.paid?
   end
 end

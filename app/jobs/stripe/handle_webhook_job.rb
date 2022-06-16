@@ -33,34 +33,10 @@ class Stripe::HandleWebhookJob < ApplicationJob
       end
     # `invoice.*` except `invoice.deleted`
     when !!event.match(/^invoice\.(?!deleted).*$/)
-      ActiveRecord::Base.transaction do
-        user = User.find_by(stripe_id: object["customer"]) if object["customer"].present?
-        subscription = Subscription.find_by(stripe_id: object["subscription"]) if object["subscription"].present?
-        payment = Payment.find_by(stripe_id: object["charge"]) if object["charge"].present?
-        invoice = Invoice.find_or_create_by(stripe_id: stripe_id) if stripe_id.present?
-        invoice.update(
-          description: object["description"],
-          payment: payment,
-          period_end: Time.at(object["period_end"]),
-          period_start: Time.at(object["period_start"]),
-          status: object["status"],
-          stripe_object: @payload,
-          subscription: subscription,
-          total: object["total"],
-          user: user
-        )
-        if invoice.document.nil? && object["invoice_pdf"].present?
-          asset = URI.open(object["invoice_pdf"])
-          document = Document.create(
-            invoice: invoice,
-            user: user
-          )
-          document.asset.attach(io: asset, filename: "invoice.pdf")
-        end
-      end
+      Sync::Invoice::Stripe::Inbound::UpdateJob.perform_now(webhook_event)
     # `charge.*` except `charge.dispute.*` or `charge.refund.*`
     when !!event.match(/^charge\.[a-z]+(?![.a-z]).*$/)
-      Payment.from_stripe_charge!(object)
+      Sync::Payment::Stripe::Inbound::UpdateJob.perform_now(webhook_event)
     # `customer.subscription.*`
     when !!event.match(/^customer\.subscription\.[a-z_]+$/)
       ActiveRecord::Base.transaction do

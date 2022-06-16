@@ -55,7 +55,7 @@ class DeepLink < ApplicationRecord
   end
 
   def to_s
-    url
+    is_expired? ? nil : url
   end
 
   def deeplink_path
@@ -84,6 +84,11 @@ class DeepLink < ApplicationRecord
   private
 
   def delete_branch_link
-    BranchLink.find(url)&.destroy
+    begin
+      BranchLink.find(url)&.destroy
+    rescue => e
+      Rails.logger.error "Error deleting branch link: #{e.message}"
+      Sentry.capture_exception(e)
+    end
   end
 end

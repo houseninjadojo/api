@@ -69,9 +69,9 @@ class Payment < ApplicationRecord
   end
   alias was_charged? has_charge?
 
-  def should_charge?
-    has_charge? && ['requires_payment_method', 'requires_confirmation'].include?(status)
-  end
+  # def should_charge?
+  #   has_charge? && ['requires_payment_method', 'requires_confirmation'].include?(status)
+  # end
 
   def self.from_stripe_charge!(object)
     ActiveRecord::Base.transaction do
@@ -121,18 +121,14 @@ class Payment < ApplicationRecord
   # actions
 
   def charge_payment_method!(now: true)
-    if invoice.present?
-      pay_invoice!
-    else
-      # pay_with_charge!(now: now)
-    end
-  end
-
-  def pay_invoice!
     return if paid? || has_charge? || invoice.nil?
-    paid_invoice = invoice.pay!
-    update!(stripe_id: paid_invoice&.charge)
-    # wait for webhook
+
+    if now == false
+      Sync::Payment::Stripe::Outbound::CreateJob.perform_later(self)
+      return
+    end
+
+    Sync::Payment::Stripe::Outbound::CreateJob.perform_now(self)
     begin
       payment = self
       Wait.until(sleep_time: 1, max_time: 15) do |counter, time|

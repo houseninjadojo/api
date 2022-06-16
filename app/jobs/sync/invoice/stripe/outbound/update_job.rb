@@ -1,6 +1,4 @@
-class Sync::Invoice::Stripe::Outbound::UpdateJob < ApplicationJob
-  queue_as :default
-
+class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
   attr_accessor :resource, :changeset
 
   def perform(resource, changeset)
@@ -8,27 +6,21 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < ApplicationJob
     @resource = resource
     return unless policy.can_sync?
 
-    # Stripe::Invoice.update(property.user.stripe_id, params)
+    # update invoice
+    if description_changed?
+      Stripe::Invoice.update(resource.stripe_id, params)
+    end
 
-    # Finalize?
-    # try_finalizing!
-
-    # changeset.each do |change|
-    #   case change.path
-    #   when [:work_order, :status]
-    #     if change[:new] == WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
-    #       finalize_invoice!
-    #       break
-    #     end
-
-    #     if change[:new] == WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER
-    #       pay_invoice!
-    #       break
-    #     end
-    #   when [:description]
-    #     # Stripe::Invoice.update(resource.stripe_id, params)
-    #   end
-    # end
+    if work_order_status_changed?
+      case resource.work_order&.status
+      when WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
+        Stripe::Invoice.finalize_invoice(resource.stripe_id, { auto_advance: false })
+      # when WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER
+        # Stripe::Invoice.pay(resource.stripe_id, {
+        #   payment_method: resource.user&.default_payment_method&.stripe_token,
+        # })
+      end
+    end
   end
 
   def params
@@ -44,23 +36,13 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < ApplicationJob
     )
   end
 
-  def finalize_invoice!
-    Stripe::Invoices.FinalizeJob.perform_now(resource)
+  def work_order_status_changed?
+    changeset.find { |change| change.path == [:work_order, :status] }.present?
   end
 
-  def pay_invoice!
-    Stripe::Invoices::PayJob.perform_now(resource)
+  def description_changed?
+    changeset.find { |change| change.path == [:description] }.present?
   end
-
-  # def try_finalizing!
-  #   change = changeset.select{ |c| c.path == [:work_order, :status] }
-  #   if change.present? && change[:new] == WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
-  #     Stripe::Invoice.finalize_invoice(invoice.stripe_id, { auto_advance: false })
-  #   end
-  # end
-
-  # def try_paying!
-  # end
 
   def idempotency_key
     Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")

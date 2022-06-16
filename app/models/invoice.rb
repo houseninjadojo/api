@@ -46,11 +46,13 @@ class Invoice < ApplicationRecord
   STATUS_OPEN = "open"
   STATUS_UNCOLLECTIBLE = "uncollectible"
   STATUS_PAID = "paid"
+  STATUS_PAYMENT_FAILED = "payment_failed"
   STATUS_VOIDED = "void"
 
   # callbacks
 
   after_create_commit :sync_create!
+  after_update_commit :handle_status_change, if: :saved_change_to_status?
 
   # associations
 
@@ -98,46 +100,6 @@ class Invoice < ApplicationRecord
   end
 
   # actions
-
-  def pay!
-    # Stripe::Invoices::PayJob.perform_now(self)
-    update!(payment_attempted_at: Time.current)
-
-    begin
-      paid_invoice = Stripe::Invoice.pay(stripe_id, {
-        payment_method: user.default_payment_method&.stripe_token,
-      })
-      update!(
-        status: paid_invoice.status,
-        stripe_object: paid_invoice
-      )
-      if paid_invoice.status == "payment_failed"
-        work_order.update!(status: WorkOrderStatus::PAYMENT_FAILED)
-        return nil
-      else
-        work_order.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER)
-        refresh_pdf!
-        return paid_invoice
-      end
-    rescue => e
-      Rails.logger.error "Stripe::Invoice.pay(#{stripe_id}) failed: #{e.message}"
-      Sentry.capture_exception(e)
-      return nil
-    end
-  end
-
-  def fetch_pdf!
-    Stripe::Invoices::FetchPdfJob.perform_later(self) unless document.present?
-  end
-
-  def refresh_pdf!
-    document.destroy! if document.present?
-    fetch_pdf!
-  end
-
-  def finalize!
-    Stripe::Invoices::FinalizeJob.perform_now(self) unless finalized?
-  end
 
   # external access / payment approval
 
@@ -190,5 +152,20 @@ class Invoice < ApplicationRecord
     [
       :work_order,
     ]
+  end
+
+  # callbacks
+
+  def handle_status_change
+    case status
+    when STATUS_OPEN
+      Invoice::ExternalAccess::GenerateDeepLinkJob.perform_later(self)
+    when STATUS_PAID
+      Invoice::ExternalAccess::ExpireJob.perform_later(self)
+    when PAYMENT_FAILED
+      work_order.update!(status: WorkOrderStatus::PAYMENT_FAILED)
+    when PAID
+      work_order.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER)
+    end
   end
 end

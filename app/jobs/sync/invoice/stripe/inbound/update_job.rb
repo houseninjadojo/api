@@ -1,6 +1,4 @@
-class Sync::Invoice::Stripe::Inbound::UpdateJob < ApplicationJob
-  queue_as :default
-
+class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
   attr_accessor :webhook_event
 
   def perform(webhook_event)
@@ -9,6 +7,7 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < ApplicationJob
     return unless policy.can_sync?
 
     invoice.update!(params)
+    refresh_pdf
 
     webhook_event.update!(processed_at: Time.now)
   end
@@ -69,5 +68,13 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < ApplicationJob
   # We need to expand discounts so we have to retrieve the invoice
   def invoice_object
     @invoice_object ||= Stripe::Invoice.retrieve(stripe_object.id, expand: [:discounts])
+  end
+
+  def refresh_pdf
+    invoice&.document&.destroy! if invoice&.document.present?
+    document = Document.create!(invoice: invoice, user: user)
+    asset = URI.open(stripe_object.invoice_pdf)
+    document.asset.attach(io: asset, filename: "invoice.pdf")
+    document.save
   end
 end
