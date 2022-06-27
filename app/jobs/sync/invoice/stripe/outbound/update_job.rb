@@ -15,10 +15,13 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
       case resource.work_order&.status
       when WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
         Stripe::Invoice.finalize_invoice(resource.stripe_id, { auto_advance: false })
-      # when WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER
-        # Stripe::Invoice.pay(resource.stripe_id, {
-        #   payment_method: resource.user&.default_payment_method&.stripe_token,
-        # })
+      end
+    end
+
+    if amount_changed?
+      line_item_id = invoice.lines&.first&.id
+      if line_item_id.present?
+        Stripe::InvoiceItem.update(line_item_id, line_item_params)
       end
     end
   end
@@ -26,6 +29,12 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
   def params
     {
       description: resource.description,
+    }
+  end
+
+  def line_item_params
+    {
+      amount: resource.total,
     }
   end
 
@@ -42,6 +51,18 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
 
   def description_changed?
     changeset.find { |change| change.path == [:description] }.present?
+  end
+
+  def amount_changed?
+    paths = [
+      [:work_order, :homeowner_amount],
+      [:work_order, :homeowner_amount_actual],
+    ]
+    changeset.find { |change| paths.include?(change.path) }.present?
+  end
+
+  def invoice
+    invoice ||= Stripe::Invoice.retrieve(resource.stripe_id)
   end
 
   def idempotency_key

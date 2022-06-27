@@ -95,6 +95,10 @@ module Hubspot
 
       def attribute_name
         case property_name
+        when "revised_estimate___for_homeowner"
+          #
+        when "actual_invoice___for_homeowner"
+          :homeowner_amount_actual
         when "address"
           :street_address1
         when "amount"
@@ -109,8 +113,14 @@ module Hubspot
           #
         when "createdate"
           :created_at
+        when "customer_approved_work_"
+          :customer_approved_work
         when "date_estimate_sent"
           :sent_at
+        when "date___time_of_the_walkthrough"
+          :walkthrough_date
+        when "date_work_completed"
+          :completed_at
         when "dealname"
           :description
         when "dealstage"
@@ -140,16 +150,30 @@ module Hubspot
           :vendor_amount
         when "invoice_notes"
           :description
+        when "job_referred_"
+          # :referred
         when "lastname"
           :last_name
         when "phone"
           :phone_number
         when "pipeline"
           #
+        when "refund___make_good____"
+          :refund_amount
+        when "refund___make_good_reason"
+          :refund_reason
         when "state"
           :state
+        when "time_of_scheduled_work"
+          :scheduled_time
+        when "time_of_the_walkthrough"
+          :walkthrough_time
         when "vendor_name"
           :vendor
+        when "vendor_paid"
+          #
+        when "walkthrough_time"
+          #
         when "zip"
           :zipcode
         end
@@ -157,6 +181,10 @@ module Hubspot
 
       def attribute_value
         case property_name
+        when "revised_estimate___for_homeowner"
+          # attribute_as_amount_in_cents
+        when "actual_invoice___for_homeowner"
+          attribute_as_amount_in_cents
         when "address"
           property_value
         when "amount"
@@ -171,7 +199,13 @@ module Hubspot
           property_value
         when "createdate"
           attribute_as_epoch_time
+        when "customer_approved_work_"
+          attribute_as_boolean
         when "date_estimate_sent"
+          attribute_as_epoch_time
+        when "date___time_of_the_walkthrough"
+          attribute_as_epoch_time
+        when "date_work_completed"
           attribute_as_epoch_time
         when "dealname"
           property_value
@@ -202,16 +236,30 @@ module Hubspot
           attribute_as_amount_in_cents
         when "invoice_notes"
           property_value
+        when "job_referred_"
+          # attribute_as_boolean
         when "lastname"
           property_value
         when "phone"
           property_value
         when "pipeline"
           #
+        when "refund___make_good____"
+          attribute_as_amount_in_cents
+        when "refund___make_good_reason"
+          property_value
         when "state"
+          property_value
+        when "time_of_scheduled_work"
+          property_value
+        when "time_of_the_walkthrough"
           property_value
         when "vendor_name"
           property_value
+        when "vendor_paid"
+          #
+        when "walkthrough_time"
+          #
         when "zip"
           property_value
         else

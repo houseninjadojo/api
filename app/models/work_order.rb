@@ -2,21 +2,28 @@
 #
 # Table name: work_orders
 #
-#  id                     :uuid             not null, primary key
-#  description            :string
-#  homeowner_amount       :string
-#  hubspot_object         :jsonb
-#  scheduled_date         :string
-#  scheduled_time         :string
-#  scheduled_window_end   :datetime
-#  scheduled_window_start :datetime
-#  status                 :string
-#  vendor                 :string
-#  vendor_amount          :string
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  hubspot_id             :string
-#  property_id            :uuid
+#  id                      :uuid             not null, primary key
+#  completed_at            :datetime
+#  customer_approved_work  :boolean
+#  description             :string
+#  homeowner_amount        :string
+#  homeowner_amount_actual :string
+#  hubspot_object          :jsonb
+#  refund_amount           :string
+#  refund_reason           :string
+#  scheduled_date          :string
+#  scheduled_time          :string
+#  scheduled_window_end    :datetime
+#  scheduled_window_start  :datetime
+#  status                  :string
+#  vendor                  :string
+#  vendor_amount           :string
+#  walkthrough_date        :datetime
+#  walkthrough_time        :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  hubspot_id              :string
+#  property_id             :uuid
 #
 # Indexes
 #
@@ -42,6 +49,17 @@ class WorkOrder < ApplicationRecord
   # validations
 
   validates :hubspot_id, uniqueness: true, allow_nil: true
+
+  # helpers
+
+  def amount
+    total = homeowner_amount_actual || homeowner_amount
+    if refund_amount.present?
+      total - refund_amount
+    else
+      total
+    end
+  end
 
   # callbacks
 
