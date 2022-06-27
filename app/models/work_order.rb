@@ -37,6 +37,7 @@
 class WorkOrder < ApplicationRecord
   # after_save_commit :handle_status_change, if: :saved_change_to_status?
 
+  after_create_commit :sync_create!
   after_update_commit :sync_update!
 
   # associations
@@ -89,7 +90,7 @@ class WorkOrder < ApplicationRecord
 
   def sync_actions
     [
-      # :create,
+      :create,
       :update,
       # :delete,
     ]
