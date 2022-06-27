@@ -37,7 +37,9 @@
 class WorkOrder < ApplicationRecord
   # after_save_commit :handle_status_change, if: :saved_change_to_status?
 
-  after_create_commit :sync_create!
+  before_create :set_status
+
+  # after_create_commit :sync_create!
   after_update_commit :sync_update!
 
   # associations
@@ -63,6 +65,10 @@ class WorkOrder < ApplicationRecord
   end
 
   # callbacks
+
+  def set_status
+    self.status ||= WorkOrderStatus.find_by(slug: 'work_request_received')
+  end
 
   # def handle_status_change
   #   case status.slug
