@@ -11,7 +11,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreatePolicy < ApplicationPolicy
   end
 
   def has_external_id?
-    record.first["objectId"].present?
+    record["objectId"].present?
   end
 
   def is_create_event?
@@ -19,7 +19,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreatePolicy < ApplicationPolicy
   end
 
   def is_new_record?
-    !WorkOrder.exists?(hubspot_id: record.first["objectId"]&.to_s)
+    !WorkOrder.exists?(hubspot_id: record["objectId"]&.to_s)
   end
 
   def webhook_is_unprocessed?

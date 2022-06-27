@@ -77,13 +77,27 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreatePolicy, type: :policy do
       }
     ]
   }
+  let(:entry) {
+    {
+      "eventId"=>3561786325,
+      "subscriptionId"=>1444072,
+      "portalId"=>20553083,
+      "appId"=>657827,
+      "occurredAt"=>1654802227679,
+      "subscriptionType"=>"deal.creation",
+      "attemptNumber"=>0,
+      "objectId"=>123456789,
+      "changeFlag"=>"NEW",
+      "changeSource"=>"CRM_UI"
+    }
+  }
   let(:webhook_event) {
     create(:webhook_event,
       service: 'hubspot',
       payload: payload
     )
   }
-  let(:policy) { described_class.new(payload, webhook_event: webhook_event) }
+  let(:policy) { described_class.new(entry, webhook_event: webhook_event) }
 
   describe_rule :can_sync? do
     it "returns true if all conditions true" do
@@ -107,12 +121,12 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreatePolicy, type: :policy do
 
   describe_rule :has_external_id? do
     it "returns true if external id present" do
-      payload.first["objectId"] = '1234'
+      entry["objectId"] = '1234'
       expect(policy.has_external_id?).to be_truthy
     end
 
     it "returns false if external id not present" do
-      payload.first["objectId"] = nil
+      entry["objectId"] = nil
       expect(policy.has_external_id?).to be_falsey
     end
   end
