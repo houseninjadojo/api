@@ -16,8 +16,8 @@ class Sync::Webhook::HubspotJob < ApplicationJob
   end
 
   def ingest!
-    if payload.is_deal_batch?
-      payload.deal_batch_entry.handler.perform_later(webhook_event, payload.deal_batch_entry)
+    if payload.is_create_batch?
+      payload.create_batch_entry.handler.perform_later(webhook_event, payload.create_batch_entry.payload)
     else
       payload.entries.each do |entry|
         entry.handler.perform_later(webhook_event, entry.payload)

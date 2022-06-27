@@ -40,7 +40,8 @@ module Hubspot
       alias is_deal_batch? is_create_batch?
 
       def create_batch_entry
-        webhook_payload.entries.find { |i| i["subscriptionType"].split(".").last == "creation" }
+        payload = webhook_payload.entries.find { |i| i["subscriptionType"].split(".").last == "creation" }
+        Hubspot::Webhook::Entry.new(@webhook_event, payload)
       end
       alias deal_batch_entry create_batch_entry
     end
