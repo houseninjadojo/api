@@ -29,7 +29,7 @@
 #  index_users_on_gender           (gender)
 #  index_users_on_hubspot_id       (hubspot_id) UNIQUE
 #  index_users_on_onboarding_code  (onboarding_code) UNIQUE
-#  index_users_on_phone_number     (phone_number) UNIQUE
+#  index_users_on_phone_number     (phone_number)
 #  index_users_on_promo_code_id    (promo_code_id)
 #  index_users_on_stripe_id        (stripe_id) UNIQUE
 #
@@ -69,7 +69,7 @@ class User < ApplicationRecord
   validates :first_name,      presence: true
   validates :last_name,       presence: true
   validates :email,           presence: true, uniqueness: true
-  validates :phone_number,    presence: true, uniqueness: true, phone: true
+  validates :phone_number,    presence: true, phone: true
   validates :gender,          inclusion: { in: %w(male female other) }
   validates :stripe_id,       uniqueness: true, allow_nil: true
   validates :hubspot_id,      uniqueness: true, allow_nil: true

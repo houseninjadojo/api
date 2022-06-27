@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_27_101145) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_27_121435) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -331,7 +331,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_27_101145) do
     t.index ["gender"], name: "index_users_on_gender"
     t.index ["hubspot_id"], name: "index_users_on_hubspot_id", unique: true
     t.index ["onboarding_code"], name: "index_users_on_onboarding_code", unique: true
-    t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
+    t.index ["phone_number"], name: "index_users_on_phone_number"
     t.index ["promo_code_id"], name: "index_users_on_promo_code_id"
     t.index ["stripe_id"], name: "index_users_on_stripe_id", unique: true
   end
