@@ -96,4 +96,12 @@ Rails.application.configure do
       verify_mode: OpenSSL::SSL::VERIFY_NONE,
     },
   }
+
+  # Sendgrid
+  config.action_mailer.delivery_method = :sendgrid_actionmailer
+  config.action_mailer.sendgrid_actionmailer_settings = {
+    api_key: Rails.secrets.sendgrid[:api_key],
+    raise_delivery_errors: true,
+    mail_settings: { sandbox_mode: { enable: false } }
+  }
 end

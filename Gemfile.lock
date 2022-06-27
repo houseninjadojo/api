@@ -367,10 +367,16 @@ GEM
     ruby-progressbar (1.11.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
+    ruby_http_client (3.5.5)
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_logger (4.10.0)
       concurrent-ruby (~> 1.0)
+    sendgrid-actionmailer (3.2.0)
+      mail (~> 2.7)
+      sendgrid-ruby (~> 6.4)
+    sendgrid-ruby (6.6.2)
+      ruby_http_client (~> 3.4)
     sentry-rails (5.3.1)
       railties (>= 5.0)
       sentry-ruby-core (~> 5.3.1)
@@ -451,6 +457,7 @@ DEPENDENCIES
   rspec-rails (~> 5.1.2)
   rubocop-rails
   seedbank
+  sendgrid-actionmailer
   sentry-rails
   sentry-ruby
   sentry-sidekiq
