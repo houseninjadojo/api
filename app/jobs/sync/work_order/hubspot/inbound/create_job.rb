@@ -11,7 +11,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < ApplicationJob
 
     return unless policy.can_sync?
 
-    resource_klass.create!(params)
+    resource_klass.create!(deal_params)
 
     webhook_event.update!(processed_at: Time.now)
   end
@@ -33,5 +33,19 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < ApplicationJob
 
   def params
     payload.as_params
+  end
+
+  def deal
+    @deal ||= Hubspot::Deal.find(entry.hubspot_id)
+  end
+
+  def deal_params
+    {
+      description: deal[:dealname],
+      hubspot_id: deal[:hs_object_id],
+      status: WorkOrderStatus.find_by(hubspot_id: deal[:dealstage]),
+      created_at: Time.at(deal[:createdate]&.to_i / 1000),
+      # updated_at: Time.at(deal[:hs_lastmodifieddate]&.to_i / 1000),
+    }
   end
 end
