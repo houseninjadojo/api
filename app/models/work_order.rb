@@ -41,6 +41,7 @@ class WorkOrder < ApplicationRecord
 
   after_create_commit :sync_create!
   after_create_commit :create_invoice!
+  after_update        :sync_total
   after_update_commit :sync_update!
 
   # associations
@@ -82,6 +83,12 @@ class WorkOrder < ApplicationRecord
       # user: user,
       work_order: self,
     )
+  end
+
+  def sync_total
+    if invoice.present? && invoice.total != amount
+      invoice.update(total: amount)
+    end
   end
 
   # def handle_status_change
