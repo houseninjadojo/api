@@ -14,7 +14,7 @@ class Sync::Payment::Stripe::Outbound::CreatePolicy < ApplicationPolicy
   end
 
   def user_has_external_id?
-    record&.property&.user&.stripe_id.present?
+    record&.invoice&.user&.stripe_id.present?
   end
 
   def payment_method_has_external_id?
