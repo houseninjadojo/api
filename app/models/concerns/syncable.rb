@@ -13,13 +13,13 @@ module Syncable
     sync_services.each do |service|
       @changesets[service] = SyncChangeset.initialize_changeset(record: self, service: service, action: :update)
     end
-    # if include_associations == true
-    #   sync_associations.each do |association|
-    #     [self.send(association)].flatten.each do |association_record|
-    #       association_record&.track_update_changes(include_associations: false)
-    #     end
-    #   end
-    # end
+    if include_associations == true
+      sync_associations.each do |association|
+        [self.send(association)].flatten.each do |association_record|
+          association_record&.track_update_changes(include_associations: false)
+        end
+      end
+    end
   end
 
   def sync_services

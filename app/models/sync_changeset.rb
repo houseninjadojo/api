@@ -30,7 +30,11 @@ class SyncChangeset < ActiveSupport::CurrentAttributes
     klass = changeset_klass(resource_klass: record.class, record: record, service: service, action: action, direction: direction)
     id = changeset_thread_id(resource_klass: record.class, record: record, service: service, action: action, direction: direction)
     return if klass.nil?
-    self.changesets ||= {}
+    if self.changesets.present? && self.changesets[id].present?
+      return self.changesets[id]
+    else
+      self.changesets ||= {}
+    end
     self.changesets[id] = klass.new(record)
   end
 
