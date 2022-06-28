@@ -75,7 +75,7 @@ class WorkOrder < ApplicationRecord
   def create_invoice!
     Invoice.create!(
       total: amount,
-      user: user,
+      # user: user,
       work_order: self,
     )
   end
