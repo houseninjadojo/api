@@ -6,6 +6,7 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
 
     return unless policy.can_sync?
 
+    puts params
     invoice.update!(params)
     refresh_pdf
 
