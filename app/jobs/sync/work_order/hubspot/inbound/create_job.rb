@@ -41,11 +41,17 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < ApplicationJob
 
   def deal_params
     {
+      user: User.find_by(hubspot_id: hubspot_contact&.id),
       description: deal[:dealname],
       hubspot_id: deal[:hs_object_id],
       status: WorkOrderStatus.find_by(hubspot_id: deal[:dealstage]),
       created_at: Time.at(deal[:createdate]&.to_i / 1000),
       # updated_at: Time.at(deal[:hs_lastmodifieddate]&.to_i / 1000),
     }
+  end
+
+  def hubspot_contact
+    @hubspot_contacts ||= Hubspot::Association.all(deal[:hs_object_id], Hubspot::Association::DEAL_TO_CONTACT) || []
+    @hubspot_contacts.first
   end
 end
