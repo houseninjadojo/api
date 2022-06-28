@@ -191,7 +191,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::UpdatePolicy, type: :policy do
     it "returns true if all conditions true" do
       expect(policy).to receive(:webhook_is_unprocessed?).and_return(true)
       expect(policy).to receive(:has_external_id?).and_return(true)
-      expect(policy).to receive(:is_new_record?).and_return(true)
+      expect(policy).to receive(:is_new_record?).and_return(false)
       expect(policy).to receive(:has_user_id?).and_return(true)
       expect(policy.can_sync?).to be_truthy
     end
@@ -199,7 +199,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::UpdatePolicy, type: :policy do
     it "returns false if any conditions false" do
       expect(policy).to receive(:webhook_is_unprocessed?).and_return(true)
       expect(policy).to receive(:has_external_id?).and_return(true)
-      expect(policy).to receive(:is_new_record?).and_return(true)
+      expect(policy).to receive(:is_new_record?).and_return(false)
       expect(policy).to receive(:has_user_id?).and_return(false)
       expect(policy.can_sync?).to be_falsey
     end

@@ -5,7 +5,7 @@ class Sync::Invoice::Stripe::Inbound::UpdatePolicy < ApplicationPolicy
   def can_sync?
     webhook_is_unprocessed? &&
     has_external_id? &&
-    is_new_record? &&
+    !is_new_record? &&
     has_user_id?
   end
 
