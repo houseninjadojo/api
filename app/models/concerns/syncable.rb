@@ -8,18 +8,18 @@ module Syncable
   # sets a thread-local change tracking object for each service on the syncable resource
   # we will use this change tracking object to detect when attributes or association attributes are modified during the request cycle.
   # this is used to determine if we should sync the resource to the service during :update actions
-  def track_update_changes(include_associations: true)
+  def track_update_changes(include_associations: false)
     @changesets = {}
     sync_services.each do |service|
       @changesets[service] = SyncChangeset.initialize_changeset(record: self, service: service, action: :update)
     end
-    if include_associations == true
-      sync_associations.each do |association|
-        [self.send(association)].flatten.each do |association_record|
-          association_record&.track_update_changes(include_associations: false)
-        end
-      end
-    end
+    # if include_associations == true
+    #   sync_associations.each do |association|
+    #     [self.send(association)].flatten.each do |association_record|
+    #       association_record&.track_update_changes(include_associations: false)
+    #     end
+    #   end
+    # end
   end
 
   def sync_services
