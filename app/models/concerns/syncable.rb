@@ -92,6 +92,7 @@ module Syncable
   def should_sync_service?(service:, action:)
     return false unless sync_actions.include?(action)
     policy = sync_policy(service: service, action: action)
+    return false if policy.nil?
     case action
     when :create
       policy.new(self).can_sync?

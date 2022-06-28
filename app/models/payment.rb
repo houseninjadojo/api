@@ -129,23 +129,6 @@ class Payment < ApplicationRecord
     end
 
     Sync::Payment::Stripe::Outbound::CreateJob.perform_now(self)
-    begin
-      payment = self
-      Wait.until(sleep_time: 1, max_time: 15) do |counter, time|
-        Rails.logger.info "Waiting for invoice to be paid... #{counter} seconds"
-        payment.reload.status.present?
-      end
-      return payment.reload
-    rescue Wait::TimeoutError => e
-      Rails.logger.info "Invoice payment timed out"
-      Sentry.capture_exception(e)
-    rescue Wait::LimitError => e
-      Rails.logger.info "Invoice payment time limit reached (15"
-      Sentry.capture_exception(e)
-    rescue StandardError => e
-      Rails.logger.info "Invoice payment failed: #{e.message}"
-      Sentry.capture_exception(e)
-    end
     return nil
   end
 

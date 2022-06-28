@@ -171,10 +171,9 @@ class Invoice < ApplicationRecord
       Invoice::ExternalAccess::GenerateDeepLinkJob.perform_later(self)
     when STATUS_PAID
       Invoice::ExternalAccess::ExpireJob.perform_later(self)
+      work_order.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER)
     when PAYMENT_FAILED
       work_order.update!(status: WorkOrderStatus::PAYMENT_FAILED)
-    when PAID
-      work_order.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER)
     end
   end
 end
