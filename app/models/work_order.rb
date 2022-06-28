@@ -49,7 +49,7 @@ class WorkOrder < ApplicationRecord
   belongs_to :status,    class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status, required: false
   has_one    :invoice,   dependent: :destroy
   has_one    :deep_link, through: :invoice
-  has_one    :user,      through: :property
+  # has_one    :user,      through: :property
 
   # validations
 
