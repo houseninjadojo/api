@@ -67,7 +67,7 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
 
   # We need to expand discounts so we have to retrieve the invoice
   def invoice_object
-    @invoice_object ||= Stripe::Invoice.retrieve(stripe_object.id, expand: [:discounts])
+    @invoice_object ||= Stripe::Invoice.retrieve(stripe_object.id, expand: :discounts)
   end
 
   def refresh_pdf

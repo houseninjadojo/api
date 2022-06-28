@@ -10,11 +10,11 @@ class Sync::Invoice::Stripe::Inbound::UpdatePolicy < ApplicationPolicy
   end
 
   def has_external_id?
-    invoice&.id.present?
+    invoice[:id].present?
   end
 
   def is_new_record?
-    !Invoice.exists?(stripe_id: invoice&.id)
+    !Invoice.exists?(stripe_id: invoice[:id])
   end
 
   def webhook_is_unprocessed?

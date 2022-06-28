@@ -13,7 +13,7 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < ApplicationJob
 
   def params
     {
-      dealstage: work_order.status.slug,
+      dealstage: work_order.status.hubspot_id,
       invoice_paid: invoice_paid,
       branch_payment_link: branch_link,
       # date_customer_paid_invoice,
