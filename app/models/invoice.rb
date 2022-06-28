@@ -51,7 +51,7 @@ class Invoice < ApplicationRecord
 
   # callbacks
 
-  after_create_commit :sync_create!
+  after_create_commit :sync_stripe
   after_update_commit :handle_status_change, if: :saved_change_to_status?
 
   # associations
@@ -137,6 +137,12 @@ class Invoice < ApplicationRecord
   end
 
   # sync
+
+  def sync_stripe
+    if Sync::Invoice::Stripe::Outbound::CreatePolicy.new(self).can_sync?
+      Sync::Invoice::Stripe::Outbound::CreateJob.perform_later(self)
+    end
+  end
 
   include Syncable
 
