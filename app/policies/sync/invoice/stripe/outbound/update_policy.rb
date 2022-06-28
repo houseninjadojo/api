@@ -3,6 +3,9 @@ class Sync::Invoice::Stripe::Outbound::UpdatePolicy < ApplicationPolicy
     observe :description,
             work_order: [
               :status,
+              :homeowner_amount,
+              :homeowner_amount_actual,
+              :refund_amount,
             ]
   end
 
