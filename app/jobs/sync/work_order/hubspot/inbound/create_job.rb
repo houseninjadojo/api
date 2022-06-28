@@ -39,9 +39,13 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < ApplicationJob
     @deal ||= Hubspot::Deal.find(entry.hubspot_id)
   end
 
+  def user
+    User.find_by(hubspot_id: hubspot_contact&.id)
+  end
+
   def deal_params
     {
-      user: User.find_by(hubspot_id: hubspot_contact&.id),
+      property: user&.default_property,
       description: deal[:dealname],
       hubspot_id: deal[:hs_object_id],
       status: WorkOrderStatus.find_by(hubspot_id: deal[:dealstage]),

@@ -12,6 +12,11 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
       hubspot_id: '12345'
     )
   }
+  let(:property) {
+    create(:property,
+      user: user
+    )
+  }
   let(:deal) {
     {
       "hs_closed_amount_in_home_currency"=>"0",
@@ -151,13 +156,14 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
       allow(Hubspot::Association).to receive(:all).and_return([double(id: '12345')])
       allow(Hubspot::Deal).to receive(:find).and_return(deal)
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
+      allow(user).to receive(:default_property).and_return(property)
       payload = Hubspot::Webhook::Payload.new(webhook_event)
       expect(WorkOrder).to receive(:create!).with({
         description: "Water Line Leak",
         status: WorkOrderStatus.find_by(slug: "work_order_initiated"),
         hubspot_id: "123456789",
         created_at: Time.at(1654802227679 / 1000),
-        user: user,
+        property: property,
       })
       expect(webhook_event).to receive(:update!)
       job.perform_now(webhook_event, webhook_entry)
