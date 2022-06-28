@@ -4,8 +4,7 @@ class Sync::Invoice::Stripe::Outbound::CreatePolicy < ApplicationPolicy
   def can_sync?
     !has_external_id? &&
     has_customer_id? &&
-    has_payment_method_id? &&
-    has_subscription_id?
+    (has_payment_method_id? || has_subscription_id?)
   end
 
   def has_external_id?

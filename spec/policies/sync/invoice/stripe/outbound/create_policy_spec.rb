@@ -14,7 +14,7 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreatePolicy, type: :policy do
     it "returns true if all conditions match" do
       expect(policy).to receive(:has_external_id?).and_return(false)
       expect(policy).to receive(:has_customer_id?).and_return(true)
-      expect(policy).to receive(:has_payment_method_id?).and_return(true)
+      expect(policy).to receive(:has_payment_method_id?).and_return(false)
       expect(policy).to receive(:has_subscription_id?).and_return(true)
       expect(policy.can_sync?).to be_truthy
     end
@@ -22,7 +22,7 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreatePolicy, type: :policy do
     it "returns false if any conditions fail" do
       expect(policy).to receive(:has_external_id?).and_return(false)
       expect(policy).to receive(:has_customer_id?).and_return(true)
-      expect(policy).to receive(:has_payment_method_id?).and_return(true)
+      expect(policy).to receive(:has_payment_method_id?).and_return(false)
       expect(policy).to receive(:has_subscription_id?).and_return(false)
       expect(policy.can_sync?).to be_falsey
     end
