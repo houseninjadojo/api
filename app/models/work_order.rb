@@ -39,7 +39,7 @@ class WorkOrder < ApplicationRecord
 
   before_create :set_status
 
-  # after_create_commit :sync_create!
+  after_create_commit :sync_create!
   after_update_commit :sync_update!
 
   # associations
