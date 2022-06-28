@@ -46,11 +46,11 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
   end
 
   def work_order_status_changed?
-    changeset.find { |change| change.path == [:work_order, :status] }.present?
+    changeset.find { |change| change[:path] == [:work_order, :status] }.present?
   end
 
   def description_changed?
-    changeset.find { |change| change.path == [:description] }.present?
+    changeset.find { |change| change[:path] == [:description] }.present?
   end
 
   def amount_changed?
@@ -58,7 +58,7 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
       [:work_order, :homeowner_amount],
       [:work_order, :homeowner_amount_actual],
     ]
-    changeset.find { |change| paths.include?(change.path) }.present?
+    changeset.find { |change| paths.include?(change[:path]) }.present?
   end
 
   def invoice
