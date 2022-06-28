@@ -48,7 +48,7 @@ class WorkOrder < ApplicationRecord
   belongs_to :property,  required: false
   belongs_to :status,    class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status, required: false
   has_one    :invoice,   dependent: :destroy
-  has_one    :deep_link, through: :invoice
+  # has_one    :deep_link, through: :invoice
   # has_one    :user,      through: :property
 
   # validations
@@ -64,6 +64,10 @@ class WorkOrder < ApplicationRecord
     else
       total || 0
     end
+  end
+
+  def deep_link
+    invoice&.deep_link
   end
 
   # callbacks
