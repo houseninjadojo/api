@@ -16,7 +16,7 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
   def policy
     Sync::Invoice::Stripe::Inbound::UpdatePolicy.new(
       stripe_event,
-      webhook_event: webhook_event
+      webhook_event: @webhook_event
     )
   end
 
@@ -59,7 +59,7 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
   end
 
   def stripe_event
-    @resource ||= Stripe::Event.construct_from(webhook_event.payload)
+    @resource ||= Stripe::Event.construct_from(@webhook_event.payload)
   end
 
   def stripe_object
