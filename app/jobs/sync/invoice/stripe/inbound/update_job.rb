@@ -6,7 +6,7 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
 
     return unless policy.can_sync?
 
-    puts params
+    Rails.logger.info("params:" + params)
     invoice.update!(params)
     refresh_pdf
 
