@@ -40,6 +40,7 @@ class WorkOrder < ApplicationRecord
   before_create :set_status
 
   after_create_commit :sync_create!
+  after_create_commit :create_invoice!
   after_update_commit :sync_update!
 
   # associations
@@ -48,6 +49,7 @@ class WorkOrder < ApplicationRecord
   belongs_to :status,    class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status, required: false
   has_one    :invoice,   dependent: :destroy
   has_one    :deep_link, through: :invoice
+  has_one    :user,      through: :property
 
   # validations
 
@@ -60,7 +62,7 @@ class WorkOrder < ApplicationRecord
     if refund_amount.present?
       total - refund_amount
     else
-      total
+      total || 0
     end
   end
 
@@ -68,6 +70,14 @@ class WorkOrder < ApplicationRecord
 
   def set_status
     self.status ||= WorkOrderStatus.find_by(slug: 'work_request_received')
+  end
+
+  def create_invoice!
+    Invoice.create!(
+      total: amount,
+      user: user,
+      work_order: self,
+    )
   end
 
   # def handle_status_change

@@ -46,25 +46,15 @@ module Syncable
     ]
   end
 
-  def sync_create!(include_associations: true)
+  def sync_create!
     return unless sync_actions.include?(:create)
     sync_services.each { |service| sync!(service: service, action: :create) }
-    sync_create_associations! if include_associations == true
   end
 
   def sync_update!(include_associations: true)
     return unless sync_actions.include?(:update)
     sync_services.each { |service| sync!(service: service, action: :update) }
     sync_update_associations! if include_associations == true
-  end
-
-  def sync_create_associations!
-    return unless sync_associations.any?
-    sync_associations.each do |association|
-      [self.send(association)].flatten.each do |association_record|
-        association_record&.sync_create!(include_associations: false)
-      end
-    end
   end
 
   def sync_update_associations!
