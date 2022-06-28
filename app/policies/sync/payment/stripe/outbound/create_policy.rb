@@ -4,8 +4,7 @@ class Sync::Payment::Stripe::Outbound::CreatePolicy < ApplicationPolicy
   def can_sync?
     !has_external_id? &&
     user_has_external_id? &&
-    invoice_has_external_id? &&
-    payment_method_has_external_id? &&
+    (invoice_has_external_id? || payment_method_has_external_id?) &&
     !invoice_already_paid?
   end
 
