@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Sync::PaymentMethod::Stripe::Outbound::CreateJob, type: :job do
-  let(:resource) { create(:payment_method) }
+  let(:resource) { create(:payment_method, card_number: '4242424242421234') }
 
   let(:job) { Sync::PaymentMethod::Stripe::Outbound::CreateJob }
 
@@ -17,10 +17,25 @@ RSpec.describe Sync::PaymentMethod::Stripe::Outbound::CreateJob, type: :job do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       params = job.new(resource).params
       idempotency_key = job.new(resource).idempotency_key
+      expect(Stripe::Customer).to receive(:list_payment_methods).with(resource.user.stripe_id, { type: 'card' }).and_return(double(data: []))
       expect(Stripe::PaymentMethod).to receive(:create).with(params, {
         idempotency_key: idempotency_key, proxy: nil
       }).and_return(double(id: "stripe_token", card: double(last4: "1234")))
       expect(Stripe::PaymentMethod).to receive(:attach).with("stripe_token", { customer: resource.user.stripe_id })
+      job.perform_now(resource)
+      expect(resource.stripe_id).to eq("stripe_token")
+    end
+
+    it "will sync matched card" do
+      allow_any_instance_of(job).to(receive(:resource).and_return(resource))
+      allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
+      params = job.new(resource).params
+      idempotency_key = job.new(resource).idempotency_key
+      expect(Stripe::Customer).to receive(:list_payment_methods).with(resource.user.stripe_id, { type: 'card' }).and_return(double(data: [double(id: "stripe_token", card: double(last4: "1234"))]))
+      # expect(Stripe::PaymentMethod).to receive(:create).with(params, {
+      #   idempotency_key: idempotency_key, proxy: nil
+      # }).and_return(double(id: "stripe_token", card: double(last4: "1234")))
+      # expect(Stripe::PaymentMethod).to receive(:attach).with("stripe_token", { customer: resource.user.stripe_id })
       job.perform_now(resource)
       expect(resource.stripe_id).to eq("stripe_token")
     end

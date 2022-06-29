@@ -59,7 +59,9 @@ class PaymentMethod < ApplicationRecord
   # callbacks
 
   def set_user_onboarding_step
-    self.user.update(onboarding_step: OnboardingStep::PAYMENT_METHOD)
+    if user.is_currently_onboarding?
+      self.user.update(onboarding_step: OnboardingStep::PAYMENT_METHOD)
+    end
   end
 
   # sync
