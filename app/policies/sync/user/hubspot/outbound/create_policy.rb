@@ -10,8 +10,9 @@ class Sync::User::Hubspot::Outbound::CreatePolicy < ApplicationPolicy
   end
 
   def should_sync?
-    # we want to hold on creating hubspot contacts until
-    # the customer hits the welcome step
-    record.onboarding_step == OnboardingStep::WELCOME
+    # # we want to hold on creating hubspot contacts until
+    # # the customer hits the welcome step
+    # record.onboarding_step == OnboardingStep::WELCOME
+    true
   end
 end

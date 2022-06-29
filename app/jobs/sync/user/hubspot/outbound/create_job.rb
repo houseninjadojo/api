@@ -26,6 +26,8 @@ class Sync::User::Hubspot::Outbound::CreateJob < ApplicationJob
 
       onboarding_code: user.onboarding_code,
       onboarding_link: user.onboarding_link,
+
+      hs_marketable_status: true,
     }
   end
 

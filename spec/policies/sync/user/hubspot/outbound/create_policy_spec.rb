@@ -34,14 +34,13 @@ RSpec.describe Sync::User::Hubspot::Outbound::CreatePolicy, type: :policy do
   end
 
   describe_rule :should_sync? do
-    it "returns true if user onboarding_step is WELCOME" do
-      user.onboarding_step = OnboardingStep::WELCOME
+    it "returns true" do
       expect(policy.should_sync?).to be_truthy
     end
 
-    it "returns false if user onboarding_step is not WELCOME" do
-      user.onboarding_step = OnboardingStep::CONTACT_INFO
-      expect(policy.should_sync?).to be_falsey
-    end
+    # it "returns false if user onboarding_step is not WELCOME" do
+    #   user.onboarding_step = OnboardingStep::CONTACT_INFO
+    #   expect(policy.should_sync?).to be_falsey
+    # end
   end
 end

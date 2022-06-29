@@ -15,7 +15,7 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdatePolicy < ApplicationPolicy
   end
 
   def has_attribute_name?
-    record["propertyName"]
+    record["propertyName"] && entry.attribute_name.present?
   end
 
   def has_attribute_value?
@@ -28,5 +28,11 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdatePolicy < ApplicationPolicy
 
   def enabled?
     ENV["HUBSPOT_WEBHOOK_DISABLED"] != "true"
+  end
+
+  private
+
+  def entry
+    Hubspot::Webhook::Entry.new(webhook_event, record)
   end
 end

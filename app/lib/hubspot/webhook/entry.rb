@@ -60,13 +60,19 @@ module Hubspot
             User
           end
         when "deal"
-          WorkOrder
+          if ["invoice_notes"].include?(payload["propertyName"])
+            Invoice
+          else
+            WorkOrder
+          end
         end
       end
 
       def resource
         if resource_klass == Property
           @resource ||= User.find_by(hubspot_id: hubspot_id)&.default_property
+        elsif resource_klass == Invoice
+          @resource ||= WorkOrder.find_by(hubspot_id: hubspot_id)&.invoice
         else
           @resource ||= resource_klass&.find_by(hubspot_id: hubspot_id)
         end
@@ -74,6 +80,21 @@ module Hubspot
 
       def occured_at
         Time.at(payload["occurredAt"].to_i / 1000)
+      end
+
+      def handle_as_document?
+        [
+          "preventative_maintenance_plan_pdf",
+          "walkthrough_report_pdf",
+        ].include?(property_name)
+      end
+
+      def document_tag
+        if property_name == "preventative_maintenance_plan_pdf"
+          Document::SystemTags::PREVENTATIVE_MAINTENANCE_PLAN
+        elsif property_name == "walkthrough_report_pdf"
+          Document::SystemTags::WALKTHROUGH_REPORT
+        end
       end
 
       def hubspot_id
@@ -158,6 +179,8 @@ module Hubspot
           :phone_number
         when "pipeline"
           #
+        when "preventative_maintenance_plan_pdf"
+          :preventative_maintenance_plan_pdf
         when "refund___make_good____"
           :refund_amount
         when "refund___make_good_reason"
@@ -174,6 +197,8 @@ module Hubspot
           #
         when "walkthrough_time"
           #
+        when "walkthrough_report_pdf"
+          :walkthrough_report_pdf
         when "zip"
           :zipcode
         end
@@ -244,6 +269,8 @@ module Hubspot
           property_value
         when "pipeline"
           #
+        when "preventative_maintenance_plan_pdf"
+          attribute_as_io
         when "refund___make_good____"
           attribute_as_amount_in_cents
         when "refund___make_good_reason"
@@ -260,6 +287,8 @@ module Hubspot
           #
         when "walkthrough_time"
           #
+        when "walkthrough_report_pdf"
+          attribute_as_io
         when "zip"
           property_value
         else
@@ -298,6 +327,10 @@ module Hubspot
         else
           nil
         end
+      end
+
+      def attribute_as_io
+        URI.open(property_value)
       end
     end
   end

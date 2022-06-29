@@ -66,7 +66,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::UpdatePolicy, type: :policy do
 
   describe_rule :has_attribute_name? do
     it "returns true if attribute name valid" do
-      payload["propertyName"] = 'status'
+      payload["propertyName"] = 'dealstage'
       expect(policy.has_attribute_name?).to be_truthy
     end
 

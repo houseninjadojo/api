@@ -7,6 +7,8 @@ RSpec.describe InvoiceMailer, type: :mailer do
         email: "test@houseninja.co",
         first_name: "Test",
         invoice_amount: "$100.00",
+        service_name: "Test Service",
+        service_provider: "Test Provider",
         payment_link: "https://app.houseninja.co/payment-link",
         app_store_url: "https://itunes.apple.com/us/app/houseninja/123456789"
       )
@@ -20,6 +22,8 @@ RSpec.describe InvoiceMailer, type: :mailer do
       expect(mail[:'template-id'].to_s).to eq('d-8f179d92b29645278a32855f82eda36b')
       expect(mail[:dynamic_template_data].value).to eq({
         first_name: "Test",
+        service_name: "Test Service",
+        service_provider: "Test Provider",
         invoice_amount: "$100.00",
         payment_link: "https://app.houseninja.co/payment-link",
         app_store_url: "https://itunes.apple.com/us/app/houseninja/123456789"

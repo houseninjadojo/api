@@ -59,12 +59,7 @@ class WorkOrder < ApplicationRecord
   # helpers
 
   def amount
-    total = homeowner_amount_actual || homeowner_amount
-    if refund_amount.present?
-      total - refund_amount
-    else
-      total || 0
-    end
+    homeowner_amount_actual || homeowner_amount
   end
 
   # callbacks
