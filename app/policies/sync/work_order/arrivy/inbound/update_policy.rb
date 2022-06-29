@@ -1,20 +1,37 @@
 class Sync::WorkOrder::Arrivy::Inbound::UpdatePolicy < ApplicationPolicy
-  # See https://actionpolicy.evilmartians.io/#/writing_policies
-  #
-  # def index?
-  #   true
-  # end
-  #
-  # def update?
-  #   # here we can access our context and record
-  #   user.admin? || (user.id == record.user_id)
-  # end
+  authorize :user, optional: true
+  authorize :webhook_event
 
-  # Scoping
-  # See https://actionpolicy.evilmartians.io/#/scoping
-  #
-  # relation_scope do |relation|
-  #   next relation if user.admin?
-  #   relation.where(user: user)
-  # end
+  def can_sync?
+    webhook_is_unprocessed? &&
+    has_external_id? &&
+    has_work_order? &&
+    is_valid_task_status? &&
+    has_dates_and_times?
+  end
+
+  def has_external_id?
+    record.hubspot_id.present?
+  end
+
+  def has_work_order?
+    WorkOrder.find_by(hubspot_id: record.hubspot_id).present?
+  end
+
+  def is_valid_task_status?
+    Arrivy::Event::TYPES::ALL.include?(record.event_type)
+  end
+
+  def has_dates_and_times?
+    [
+      record&.scheduled_date.present?,
+      record&.scheduled_time.present?,
+      # record&.starting_at.present?,
+      # record&.ending_at.present?
+    ].any?
+  end
+
+  def webhook_is_unprocessed?
+    !webhook_event.processed?
+  end
 end

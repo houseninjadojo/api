@@ -9,7 +9,9 @@ class Sync::Webhook::ArrivyJob < ApplicationJob
 
     return unless policy.can_sync?
 
-    # @todo
+    webhook_event.update!(payload: payload)
+
+    Sync::WorkOrder::Arrivy::Inbound::UpdateJob.perform_now(webhook_event)
   end
 
   def policy
@@ -17,6 +19,18 @@ class Sync::Webhook::ArrivyJob < ApplicationJob
   end
 
   def arrivy_event
-    @arrivy_event ||= Arrivy::Event.new(@webhook_event.payload)
+    @arrivy_event ||= Arrivy::Event.new(payload)
+  end
+
+  def payload
+    if arrivy_event.payload.is_a?(String)
+      begin
+        JSON.parse(arrivy_event.payload)
+      rescue
+        arrivy_event.payload
+      end
+    else
+      arrivy_event.payload
+    end
   end
 end

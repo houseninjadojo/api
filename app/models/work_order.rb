@@ -84,17 +84,6 @@ class WorkOrder < ApplicationRecord
     end
   end
 
-  # def handle_status_change
-  #   case status.slug
-  #   # create external access
-  #   when "invoice_sent_to_customer"
-  #     invoice.finalize!
-  #     Invoice::ExternalAccess::GenerateDeepLinkJob.perform_later(invoice)
-  #   when "invoice_paid_by_customer"
-  #     Invoice::ExternalAccess::ExpireJob.perform_later(invoice)
-  #   end
-  # end
-
   # sync
 
   include Syncable

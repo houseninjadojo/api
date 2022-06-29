@@ -31,7 +31,7 @@ class WebhooksController < ApplicationController
       end
     rescue
       webhook_event = WebhookEvent.create!(service: 'hubspot', payload: event)
-      Rails.logger.warn("Could not parse event=#{webhook_event.id}")
+      Rails.logger.warn("Could not parse service=hubspot event=#{webhook_event.id}")
     end
     render status: :ok
   end
@@ -45,9 +45,12 @@ class WebhooksController < ApplicationController
         content = JSON.parse(event)
         webhook_event = WebhookEvent.create!(service: 'arrivy', payload: content)
         Sync::Webhook::Arrivy.perform_later(webhook_event)
+      rescue JSON::ParserError => e
+        webhook_event = WebhookEvent.create!(service: 'arrivy', payload: event)
+        Rails.logger.warn("JSON parse error: Could not parse service=arrivy event=#{webhook_event.id}")
       rescue
         webhook_event = WebhookEvent.create!(service: 'arrivy', payload: event)
-        Rails.logger.warn("Could not parse event=#{webhook_event.id}")
+        Rails.logger.warn("Could not parse service=arrivy event=#{webhook_event.id}")
       end
       render status: :ok
     else
