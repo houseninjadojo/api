@@ -22,11 +22,13 @@
 #  walkthrough_time        :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  arrivy_id               :string
 #  hubspot_id              :string
 #  property_id             :uuid
 #
 # Indexes
 #
+#  index_work_orders_on_arrivy_id    (arrivy_id) UNIQUE
 #  index_work_orders_on_hubspot_id   (hubspot_id) UNIQUE
 #  index_work_orders_on_property_id  (property_id)
 #
