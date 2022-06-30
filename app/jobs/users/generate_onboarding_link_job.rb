@@ -5,13 +5,14 @@ class Users::GenerateOnboardingLinkJob < ApplicationJob
     @user = user
     link = DeepLink.create(payload)
     link.generate!
-    @user.update(onboarding_link: link.url)
+    @user.update!(onboarding_link: link.url)
   end
 
   private
 
   def payload
     {
+      linkable: @user,
       feature: "onboarding",
       stage: @user.onboarding_step,
       data: {
