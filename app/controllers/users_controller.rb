@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     authorize!
 
     if is_requesting_service?
-      create_interested_user
+      user = create_interested_user
       render jsonapi: user, status: 201
       return
     end
@@ -80,5 +80,15 @@ class UsersController < ApplicationController
     if email.present? && zip.present?
       Users::CreateIntestedUserJob.perform_later(email: email, zipcode: zip)
     end
+    {
+      data: {
+        type: 'users',
+        id: SecureRandom.uuid,
+        attributes: {
+          email: email,
+          requested_zipcode: zip,
+        },
+      },
+    }
   end
 end
