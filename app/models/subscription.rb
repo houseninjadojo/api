@@ -56,7 +56,7 @@ class Subscription < ApplicationRecord
 
   # callbacks
 
-  after_create_commit :set_user_onboarding_step
+  # after_create_commit :set_user_onboarding_step
 
   after_create :sync_create!
   # after_update_commit :sync_update!
@@ -83,10 +83,11 @@ class Subscription < ApplicationRecord
 
   # callbacks
 
-  def set_user_onboarding_step
-    # user.update(onboarding_step: OnboardingStep::WELCOME)
-    user.update(onboarding_step: OnboardingStep::SET_PASSWORD)
-  end
+  # def set_user_onboarding_step
+  #   if user.is_currently_onboarding?
+  #     user.update(onboarding_step: OnboardingStep::WELCOME)
+  #   end
+  # end
 
   # sync
 
