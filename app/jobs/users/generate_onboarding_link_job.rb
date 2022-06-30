@@ -4,6 +4,7 @@ class Users::GenerateOnboardingLinkJob < ApplicationJob
   def perform(user)
     @user = user
     link = DeepLink.create(payload)
+    link.generate!
     @user.update(onboarding_link: link.url)
   end
 
