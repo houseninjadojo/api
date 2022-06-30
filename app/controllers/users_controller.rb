@@ -16,13 +16,14 @@ class UsersController < ApplicationController
 
   def create
     authorize!
-    user = UserResource.build(params)
 
-    if is_requesting_service?(user)
-      create_interested_user(user)
+    if is_requesting_service?
+      create_interested_user
       render jsonapi: user, status: 201
       return
     end
+
+    user = UserResource.build(params)
 
     if user.save
       render jsonapi: user, status: 201
@@ -68,11 +69,11 @@ class UsersController < ApplicationController
     end
   end
 
-  def is_requesting_service?(user)
+  def is_requesting_service?
     params.dig(:data, :attributes, :requested_zipcode).present?
   end
 
-  def create_interested_user(user)
+  def create_interested_user
     ContactType::SERVICE_AREA_REQUESTED
     email = params.dig(:data, :attributes, :email)
     zip = params.dig(:data, :attributes, :requested_zipcode)
