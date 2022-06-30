@@ -58,7 +58,8 @@ class UserResource < ApplicationResource
   attribute :gender,       :string_enum, allow: ['male', 'female', 'other']
   attribute :password,     :string,      readable: false
 
-  attribute :requested_zipcode, :string, readable: false
+  attribute :requested_zipcode,         :string, readable: false
+  attribute :how_did_you_hear_about_us, :string, readable: false
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
