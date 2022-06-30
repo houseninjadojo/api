@@ -40,6 +40,7 @@ class WorkOrder < ApplicationRecord
   # after_save_commit :handle_status_change, if: :saved_change_to_status?
 
   before_create :set_status
+  before_save :ensure_invoice_status_conditions
 
   after_create_commit :sync_create!
   after_create_commit :create_invoice!
@@ -81,6 +82,13 @@ class WorkOrder < ApplicationRecord
   def sync_total
     if invoice.present? && invoice.total != amount
       invoice.update(total: amount)
+    end
+  end
+
+  def ensure_invoice_status_conditions
+    if status == WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER && !customer_approved_work
+      # go back
+      status = self.status_was
     end
   end
 
