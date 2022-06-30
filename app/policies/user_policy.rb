@@ -19,13 +19,10 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    allow! if is_setting_password?
     deny! if record.nil?
-    if user.present?
-      record.id == user.id
-    else
-      record.try(:hubspot_id).nil? && record.try(:auth_zero_user_created).nil? && record.try(:stripe_id).nil?
-    end
+    allow! if is_setting_password?
+    allow! if record.is_currently_onboarding?
+    record&.id == user&.id
   end
 
   def destroy?
@@ -43,5 +40,10 @@ class UserPolicy < ApplicationPolicy
 
   def is_setting_password?
     params.dig(:data, :attributes, :password).present?
+  end
+
+  def is_onboarding?
+    record.try(:is_currently_onboarding?) &&
+    params.dig(:data, :attributes, :onboarding_step).present?
   end
 end
