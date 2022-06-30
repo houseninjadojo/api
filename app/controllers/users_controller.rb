@@ -18,6 +18,12 @@ class UsersController < ApplicationController
     authorize!
     user = UserResource.build(params)
 
+    if is_requesting_service?(user)
+      create_interested_user(user)
+      render jsonapi: user, status: 201
+      return
+    end
+
     if user.save
       render jsonapi: user, status: 201
     elsif existing_user = user_if_onboarding(user, params)
@@ -59,6 +65,19 @@ class UsersController < ApplicationController
       UserResource.find(id: existing_user.id)
     else
       false
+    end
+  end
+
+  def is_requesting_service?(user)
+    params.dig(:data, :attributes, :requested_zipcode).present?
+  end
+
+  def create_interested_user(user)
+    ContactType::SERVICE_AREA_REQUESTED
+    email = params.dig(:data, :attributes, :email)
+    zip = params.dig(:data, :attributes, :requested_zipcode)
+    if email.present? && zip.present?
+      Users::CreateIntestedUserJob.perform_later(email: email, zipcode: zip)
     end
   end
 end

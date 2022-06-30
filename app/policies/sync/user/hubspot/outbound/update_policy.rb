@@ -5,7 +5,6 @@ class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
             :first_name,
             :last_name,
             :phone_number,
-            :requested_zipcode,
             :onboarding_code,
             :onboarding_link,
             :onboarding_step,

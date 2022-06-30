@@ -60,7 +60,7 @@ class PaymentMethod < ApplicationRecord
 
   def set_user_onboarding_step
     if user.is_currently_onboarding?
-      self.user.update(onboarding_step: OnboardingStep::PAYMENT_METHOD)
+      self.user.update(onboarding_step: OnboardingStep::WELCOME)
     end
   end
 
