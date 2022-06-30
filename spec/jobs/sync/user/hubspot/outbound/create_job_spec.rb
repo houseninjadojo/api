@@ -41,9 +41,10 @@ RSpec.describe Sync::User::Hubspot::Outbound::CreateJob, type: :job do
           lastname:        user.last_name,
           phone:           user.phone_number,
 
-          onboarding_code: user.onboarding_code,
-          onboarding_link: user.onboarding_link,
-          onboarding_step: user.onboarding_step,
+          onboarding_code:  user.onboarding_code,
+          onboarding_link:  user.onboarding_link,
+          onboarding_step:  user.onboarding_step,
+          onboarding_token: user.onboarding_token,
 
           how_did_you_hear_about_us_: user.how_did_you_hear_about_us,
         }

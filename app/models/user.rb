@@ -141,6 +141,12 @@ class User < ApplicationRecord
     end
   end
 
+  # second part of branch link
+  #   https://hnja.app/asdf2134 => asdf2134
+  def onboarding_token
+    self.onboarding_link&.split("/")&.last
+  end
+
   # gates
 
   def has_completed_onboarding?

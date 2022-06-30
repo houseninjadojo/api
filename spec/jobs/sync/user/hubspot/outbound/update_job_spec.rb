@@ -47,9 +47,10 @@ RSpec.describe Sync::User::Hubspot::Outbound::UpdateJob, type: :job do
         phone:         user.phone_number,
         zip:           user.requested_zipcode,
 
-        onboarding_code: user.onboarding_code,
-        onboarding_link: user.onboarding_link,
-        onboarding_step: user.onboarding_step,
+        onboarding_code:  user.onboarding_code,
+        onboarding_link:  user.onboarding_link,
+        onboarding_step:  user.onboarding_step,
+        onboarding_token: user.onboarding_token,
 
         contact_type:  user.contact_type,
         customer_type: user.customer_type,
