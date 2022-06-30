@@ -8,6 +8,7 @@
 #  email(Email Address)                      :string           default(""), not null
 #  first_name(First Name)                    :string           not null
 #  gender(Gender)                            :string           default("other"), not null
+#  how_did_you_hear_about_us                 :string
 #  hubspot_contact_object                    :jsonb
 #  last_name(Last Name)                      :string           not null
 #  onboarding_code                           :string

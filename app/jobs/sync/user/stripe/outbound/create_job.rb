@@ -5,10 +5,13 @@ class Sync::User::Stripe::Outbound::CreateJob < ApplicationJob
 
   def perform(user)
     @user = user
-    return unless policy.can_sync?
 
-    customer = Stripe::Customer.create(params, { idempotency_key: idempotency_key })
-    user.update!(stripe_id: customer.id)
+    ActiveRecord::Base.transaction do
+      return unless policy.can_sync?
+
+      customer = Stripe::Customer.create(params, { idempotency_key: idempotency_key })
+      user.update!(stripe_id: customer.id)
+    end
   end
 
   def params

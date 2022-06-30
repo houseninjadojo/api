@@ -26,6 +26,9 @@ class Sync::User::Hubspot::Outbound::CreateJob < ApplicationJob
 
       onboarding_code: user.onboarding_code,
       onboarding_link: user.onboarding_link,
+      onboarding_step: user.onboarding_step,
+
+      how_did_you_hear_about_us_: user.how_did_you_hear_about_us,
     }
   end
 
