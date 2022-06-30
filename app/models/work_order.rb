@@ -86,9 +86,8 @@ class WorkOrder < ApplicationRecord
   end
 
   def ensure_invoice_status_conditions
-    if status == WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER && !customer_approved_work
-      # go back
-      status = self.status_was
+    if status == WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
+      status = self.status_was if !customer_approved_work || amount == 0
     end
   end
 
