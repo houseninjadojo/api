@@ -70,7 +70,9 @@ class PaymentMethod < ApplicationRecord
 
   # after_create_commit  :sync_create!
   after_create do |payment_method|
-    payment_method.sync!(service: :stripe, action: :create, perform_now: true)
+    unless Rails.env.test?
+      payment_method.sync!(service: :stripe, action: :create, perform_now: true)
+    end
   end
   after_destroy_commit :sync_delete!
 

@@ -99,6 +99,9 @@ RSpec.configure do |config|
   config.before(:each) do
     allow_any_instance_of(ActiveStorage::Current).to receive(:url_options).and_return({ host: 'test.api.houseninja.co' })
     ActiveStorage::Current.url_options = { host: 'test.api.houseninja.co' }
+    allow(Stripe::Customer).to receive(:list_payment_methods).and_return(double(data: []))
+    allow(Stripe::PaymentMethod).to receive(:attach)
+    allow(Stripe::PaymentMethod).to receive(:create)
   end
 end
 
