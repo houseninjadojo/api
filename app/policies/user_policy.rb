@@ -21,7 +21,7 @@ class UserPolicy < ApplicationPolicy
   def update?
     deny! if record.nil?
     allow! if is_setting_password?
-    allow! if record.is_currently_onboarding?
+    allow! if is_onboarding?
     record&.id == user&.id
   end
 
@@ -43,7 +43,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def is_onboarding?
-    record.try(:is_currently_onboarding?) &&
+    # record.try(:is_currently_onboarding?) &&
     params.dig(:data, :attributes, :onboarding_step).present?
   end
 end

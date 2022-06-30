@@ -68,7 +68,10 @@ class PaymentMethod < ApplicationRecord
 
   include Syncable
 
-  after_create_commit  :sync_create!
+  # after_create_commit  :sync_create!
+  after_create do |payment_method|
+    payment_method.sync!(service: :stripe, action: :create, perform_now: true)
+  end
   after_destroy_commit :sync_delete!
 
   def sync_services
