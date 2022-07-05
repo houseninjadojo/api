@@ -26,7 +26,16 @@ ActiveJob::Uniqueness.configure do |config|
   # Array of redis servers for Redlock quorum.
   # Read more at https://github.com/leandromoreira/redlock-rb#redis-client-configuration
   #
-  # config.redlock_servers = [ENV.fetch('REDIS_URL', 'redis://localhost:6379')]
+  if Rails.env.production? || Rails.env.sandbox?
+    config.redlock_servers = [
+      Redis.new(
+        url: ENV.fetch('REDIS_URL', 'redis://localhost:6379'),
+        ssl_params: {
+          verify_mode: OpenSSL::SSL::VERIFY_NONE
+        }
+      ),
+    ]
+  end
 
   # Custom options for Redlock.
   # Read more at https://github.com/leandromoreira/redlock-rb#redlock-configuration
