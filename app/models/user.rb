@@ -190,14 +190,10 @@ class User < ApplicationRecord
   end
 
   def generate_document_groups
+    return if document_groups.present?
     DocumentGroup.insert_all(
       DocumentGroup::DEFAULT_GROUPS.map { |group| { user_id: self.id, name: group } }
     )
-    # ActiveRecord::Base.transaction do
-    #   DocumentGroup::DEFAULT_GROUPS.each do |group|
-    #     DocumentGroup.create!(user: self, name: group)
-    #   end
-    # end
   end
 
   def complete_onboarding

@@ -61,12 +61,14 @@ class UsersController < ApplicationController
   def user_if_onboarding(user, params)
     # this might be an onboarding user
     # return unless user.errors.to_a == ["Email has already been taken", "Phone number has already been taken"]
-    existing_user = User.find_by(email: user.data.email)
-    if existing_user&.is_currently_onboarding?
-      UserResource.find(id: existing_user.id)
-    else
-      false
+    @existing_user = User.find_by(email: user.data.email)
+    return false unless @existing_user.is_currently_onboarding?
+    resource = UserResource.find(id: @existing_user.id)
+    if resource.data.needs_setup?
+      Users::SendSetupEmailJob.perform_later(@existing_user)
+      resource.data.errors.add(:base, :setup_email_sent, message: "Check your email for further instructions.")
     end
+    resource
   end
 
   def is_requesting_service?
