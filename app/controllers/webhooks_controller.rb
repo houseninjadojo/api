@@ -42,12 +42,9 @@ class WebhooksController < ApplicationController
       Rails.logger.info(request.headers)
       event = request.body.read
       begin
-        content = event.is_a?(String) ? JSON.parse(event) : event
+        content = event
         webhook_event = WebhookEvent.create!(service: 'arrivy', payload: content)
         Sync::Webhook::Arrivy.perform_later(webhook_event)
-      rescue JSON::ParserError => e
-        webhook_event = WebhookEvent.create!(service: 'arrivy', payload: event)
-        Rails.logger.warn("JSON parse error: Could not parse service=arrivy event=#{webhook_event.id}")
       rescue
         webhook_event = WebhookEvent.create!(service: 'arrivy', payload: event)
         Rails.logger.warn("Could not parse service=arrivy event=#{webhook_event.id}")

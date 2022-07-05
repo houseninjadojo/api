@@ -73,7 +73,7 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
 
   def refresh_pdf
     invoice&.document&.destroy! if invoice&.document.present?
-    document = Document.create!(invoice: invoice, user: user)
+    document = Document.create!(invoice: invoice, user: user, tags: [Document::SystemTags::INVOICE])
     asset = URI.open(stripe_object.invoice_pdf)
     document.asset.attach(io: asset, filename: "invoice.pdf")
     document.save

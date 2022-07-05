@@ -31,7 +31,13 @@ class Document < ApplicationRecord
   module SystemTags
     PMP = 'system:preventative-maintenance-plan'
     WALKTHROUGH_REPORT = 'system:walkthrough-report'
+    INVOICE = 'system:invoice'
   end
+
+  # scopes
+
+  scope :pmp, -> { where(tags: { '$in' => [SystemTags::PMP] }) }
+  scope :invoices, -> { where(invoice_id: nil) }
 
   # callbacks
 

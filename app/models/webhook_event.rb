@@ -23,6 +23,16 @@ class WebhookEvent < ApplicationRecord
 
   belongs_to :webhookable, polymorphic: true, required: false
 
+  # scopes
+
+  scope :arrivy, -> { where(service: 'arrivy') }
+  scope :hubspot, -> { where(service: 'hubspot') }
+  scope :stripe, -> { where(service: 'stripe') }
+
+  def self.default_scope
+    order(created_at: :desc)
+  end
+
   # validations
 
   validates :service, presence: true
