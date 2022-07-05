@@ -91,7 +91,7 @@ module Hubspot
 
       def document_tag
         if property_name == "preventative_maintenance_plan_pdf"
-          Document::SystemTags::PREVENTATIVE_MAINTENANCE_PLAN
+          Document::SystemTags::PMP
         elsif property_name == "walkthrough_report_pdf"
           Document::SystemTags::WALKTHROUGH_REPORT
         end
