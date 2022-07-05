@@ -19,7 +19,7 @@ class Sync::Webhook::ArrivyJob < ApplicationJob
   end
 
   def arrivy_event
-    @arrivy_event ||= Arrivy::Event.new(payload)
+    @arrivy_event ||= Arrivy::Event.new(webhook_event.payload)
   end
 
   def payload
