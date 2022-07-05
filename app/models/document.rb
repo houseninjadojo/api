@@ -36,8 +36,8 @@ class Document < ApplicationRecord
 
   # scopes
 
-  scope :pmp, -> { where(tags: { '$in' => [SystemTags::PMP] }) }
-  scope :invoices, -> { where(invoice_id: nil) }
+  # scope :pmp, -> { where(tags: { '$in' => [SystemTags::PMP] }) }
+  scope :invoices, -> { where.not(invoice_id: nil) }
 
   # callbacks
 

@@ -39,14 +39,12 @@ class WebhooksController < ApplicationController
   def arrivy
     # if arrivy_webhook_header == arrivy_webhook_secret
     if true
-      Rails.logger.info(request.headers)
-      event = request.body.read
       begin
-        content = event
+        content = JSON.parse(request.body.string)
         webhook_event = WebhookEvent.create!(service: 'arrivy', payload: content)
         Sync::Webhook::Arrivy.perform_later(webhook_event)
       rescue
-        webhook_event = WebhookEvent.create!(service: 'arrivy', payload: event)
+        webhook_event = WebhookEvent.create!(service: 'arrivy', payload: request.body.string)
         Rails.logger.warn("Could not parse service=arrivy event=#{webhook_event.id}")
       end
       render status: :ok
