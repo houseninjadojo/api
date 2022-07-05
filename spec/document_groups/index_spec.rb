@@ -21,7 +21,7 @@ RSpec.describe "document_groups#index", type: :request do
       make_request
       expect(response.status).to eq(200), response.body
       expect(d.map(&:jsonapi_type).uniq).to match_array(['document-groups'])
-      expect(d.map(&:id)).to match_array([document_group1.id, document_group2.id])
+      expect(d.map(&:id)).to include(document_group1.id, document_group2.id)
     end
   end
 end

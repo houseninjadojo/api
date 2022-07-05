@@ -45,6 +45,8 @@ class User < ApplicationRecord
   before_save :set_contact_type
 
   after_create_commit :generate_onboarding_link
+  after_create_commit :generate_referral_promo_code
+  after_create_commit :generate_document_groups
 
   after_save :complete_onboarding,
     if: -> (user) { user.onboarding_step == OnboardingStep::SET_PASSWORD }
@@ -118,7 +120,7 @@ class User < ApplicationRecord
   #
   # @return {string} auth id
   def auth_id
-    "auth0|#{self.id}"
+    "auth0|#{self.id}" if self.auth_zero_user_created.present?
   end
 
   # intercom hash
@@ -161,6 +163,10 @@ class User < ApplicationRecord
     self.subscription.present? && self.subscription.active?
   end
 
+  def needs_setup?
+    self.auth_zero_user_created.present?
+  end
+
   # no-op
   # needs to exist, otherwise we get a 400 error
   def intercom_hash=(val)
@@ -179,8 +185,19 @@ class User < ApplicationRecord
 
   def generate_referral_promo_code
     return if promo_code.present?
-    promo_code = PromoCode.create!(coupon_id: PromoCode::REFERRAL_COUPON_ID)
-    user.update!(promo_code: promo_code)
+    promo_code = PromoCode.create!(coupon_id: PromoCode::REFERRAL_CODE_COUPON_ID)
+    update!(promo_code: promo_code)
+  end
+
+  def generate_document_groups
+    DocumentGroup.insert_all(
+      DocumentGroup::DEFAULT_GROUPS.map { |group| { user_id: self.id, name: group } }
+    )
+    # ActiveRecord::Base.transaction do
+    #   DocumentGroup::DEFAULT_GROUPS.each do |group|
+    #     DocumentGroup.create!(user: self, name: group)
+    #   end
+    # end
   end
 
   def complete_onboarding

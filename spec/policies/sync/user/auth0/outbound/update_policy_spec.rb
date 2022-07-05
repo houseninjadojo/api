@@ -38,7 +38,7 @@ RSpec.describe Sync::User::Auth0::Outbound::UpdatePolicy, type: :policy do
 
     it "returns false if user does not have stripe customer id" do
       user.auth_zero_user_created = nil
-      expect(user.auth_id).to eq("auth0|#{user.id}")
+      expect(user.auth_id).to be_nil
       expect(policy.has_external_id?).to be_falsey
     end
   end

@@ -18,6 +18,17 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class DocumentGroup < ApplicationRecord
+  DEFAULT_GROUPS = [
+    # "Invoices",
+    "Insurance",
+    "Manuals",
+    "Home Warranty",
+    "Home Inspection Reports",
+    "Paint Colors",
+    "Permits",
+    "Misc",
+  ]
+
 
   # associations
 

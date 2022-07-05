@@ -27,7 +27,7 @@ RSpec.describe DocumentGroupResource, type: :resource do
     it 'works' do
       expect {
         expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
-      }.to change { DocumentGroup.count }.by(1)
+      }.to change { DocumentGroup.count }.by(8)
     end
   end
 
