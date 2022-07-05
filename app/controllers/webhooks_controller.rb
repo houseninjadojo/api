@@ -41,9 +41,11 @@ class WebhooksController < ApplicationController
     if true
       begin
         content = JSON.parse(request.body.string)
+        Rails.logger.info(request.body.string)
         webhook_event = WebhookEvent.create!(service: 'arrivy', payload: content)
         Sync::Webhook::Arrivy.perform_later(webhook_event)
-      rescue
+      rescue => e
+        Sentry.capture_exception(e)
         webhook_event = WebhookEvent.create!(service: 'arrivy', payload: request.body.string)
         Rails.logger.warn("Could not parse service=arrivy event=#{webhook_event.id}")
       end
