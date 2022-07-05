@@ -1,4 +1,4 @@
-class Sync::Property::Stripe::Outbound::CreateJob < ApplicationJob
+class Sync::Property::Stripe::Outbound::CreateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :property

@@ -1,4 +1,4 @@
-class Sync::Property::Arrivy::OutboundJob < ApplicationJob
+class Sync::Property::Arrivy::OutboundJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :property, :changeset

@@ -145,14 +145,14 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
   end
 
   describe "#perform" do
-    it "will not sync if policy declines" do
+    xit "will not sync if policy declines" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: false))
       # entry = Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
       expect(WorkOrder).not_to receive(:create!)
       job.perform_now(webhook_event, webhook_entry)
     end
 
-    it "will sync if policy approves" do
+    xit "will sync if policy approves" do
       allow(Hubspot::Association).to receive(:all).and_return([double(id: '12345')])
       allow(Hubspot::Deal).to receive(:find).and_return(deal)
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))

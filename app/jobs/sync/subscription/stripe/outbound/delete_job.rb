@@ -1,4 +1,4 @@
-class Sync::Subscription::Stripe::Outbound::DeleteJob < ApplicationJob
+class Sync::Subscription::Stripe::Outbound::DeleteJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :resource

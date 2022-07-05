@@ -1,4 +1,4 @@
-class Sync::User::Hubspot::Outbound::CreateJob < ApplicationJob
+class Sync::User::Hubspot::Outbound::CreateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :user

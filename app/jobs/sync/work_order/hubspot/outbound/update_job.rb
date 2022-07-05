@@ -1,4 +1,4 @@
-class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < ApplicationJob
+class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :work_order, :changeset

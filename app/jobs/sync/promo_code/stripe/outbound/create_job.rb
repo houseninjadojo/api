@@ -1,4 +1,4 @@
-class Sync::PromoCode::Stripe::Outbound::CreateJob < ApplicationJob
+class Sync::PromoCode::Stripe::Outbound::CreateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :resource

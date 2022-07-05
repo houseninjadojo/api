@@ -1,4 +1,4 @@
-class Sync::PromoCode::Stripe::Inbound::UpdateJob < ApplicationJob
+class Sync::PromoCode::Stripe::Inbound::UpdateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :webhook_event

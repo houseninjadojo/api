@@ -1,4 +1,4 @@
-class Sync::PaymentMethod::Stripe::Outbound::DeleteJob < ApplicationJob
+class Sync::PaymentMethod::Stripe::Outbound::DeleteJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :resource

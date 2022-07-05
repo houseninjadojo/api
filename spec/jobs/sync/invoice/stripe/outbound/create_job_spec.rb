@@ -4,7 +4,7 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreateJob, type: :job do
   let(:payment_method) { build(:credit_card) }
   let(:subscription) { build(:subscription) }
   let(:user) { build(:user) }
-  let(:resource) { build(:invoice, user: user, subscription: subscription) }
+  let(:resource) { create(:invoice, user: user, subscription: subscription) }
 
   let(:job) { Sync::Invoice::Stripe::Outbound::CreateJob }
 

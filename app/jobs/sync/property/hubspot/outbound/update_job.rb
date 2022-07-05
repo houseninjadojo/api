@@ -1,4 +1,4 @@
-class Sync::Property::Hubspot::Outbound::UpdateJob < ApplicationJob
+class Sync::Property::Hubspot::Outbound::UpdateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :property, :changeset

@@ -1,4 +1,4 @@
-class Sync::Subscription::Stripe::Outbound::CreateJob < ApplicationJob
+class Sync::Subscription::Stripe::Outbound::CreateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :resource

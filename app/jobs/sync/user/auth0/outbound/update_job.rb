@@ -1,4 +1,4 @@
-class Sync::User::Auth0::Outbound::UpdateJob < ApplicationJob
+class Sync::User::Auth0::Outbound::UpdateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :user, :changeset

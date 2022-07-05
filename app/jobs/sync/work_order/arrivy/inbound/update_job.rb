@@ -1,4 +1,4 @@
-class Sync::WorkOrder::Arrivy::Inbound::UpdateJob < ApplicationJob
+class Sync::WorkOrder::Arrivy::Inbound::UpdateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :webhook_event

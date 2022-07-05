@@ -1,4 +1,4 @@
-class Sync::WorkOrder::Hubspot::Inbound::CreateJob < ApplicationJob
+class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :webhook_entry, :webhook_event
