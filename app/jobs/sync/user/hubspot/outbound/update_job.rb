@@ -46,7 +46,7 @@ class Sync::User::Hubspot::Outbound::UpdateJob < ApplicationJob
     case user.contact_type
     when ContactType::SERVICE_AREA_REQUESTED
       user.requested_zipcode
-    when ContactType::CUSTOMER
+    when ContactType::CUSTOMER, ContactType::LEAD
       user&.default_property&.zipcode
     end
   end

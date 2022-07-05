@@ -154,11 +154,11 @@ class User < ApplicationRecord
   end
 
   def is_currently_onboarding?
-    !has_completed_onboarding? && contact_type == ContactType::CUSTOMER
+    !has_completed_onboarding? && [ContactType::CUSTOMER, ContactType::LEAD].include?(contact_type)
   end
 
   def is_subscribed?
-    self.subscription.present? && self.subscription.is_subscribed?
+    self.subscription.present? && self.subscription.active?
   end
 
   # no-op
@@ -201,8 +201,10 @@ class User < ApplicationRecord
   def set_contact_type
     if self.requested_zipcode.present?
       self.contact_type = ContactType::SERVICE_AREA_REQUESTED
+    elsif self.is_subscribed?
+      self.contact_type = ContactType::CUSTOMER
     else
-      self.contact_type ||= ContactType::CUSTOMER
+      self.contact_type = ContactType::LEAD
     end
   end
 

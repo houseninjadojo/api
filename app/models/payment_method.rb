@@ -33,6 +33,7 @@ class PaymentMethod < ApplicationRecord
 
   # callbacks
 
+  before_create :ensure_stripe_user_exists!
   after_create_commit :set_user_onboarding_step
 
   # associations
@@ -61,6 +62,12 @@ class PaymentMethod < ApplicationRecord
   def set_user_onboarding_step
     if user.is_currently_onboarding?
       self.user.update(onboarding_step: OnboardingStep::WELCOME)
+    end
+  end
+
+  def ensure_stripe_user_exists!
+    if user.stripe_id.nil?
+      Sync::User::Stripe::Outbound::CreateJob.perform_now(user)
     end
   end
 
