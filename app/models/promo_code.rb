@@ -45,7 +45,7 @@ class PromoCode < ApplicationRecord
   # callbacks
 
   def generate_code
-    self.code ||= SecureRandom.hex(8)
+    self.code ||= SecureRandom.hex(4)
   end
 
   def format_code
