@@ -182,7 +182,7 @@ RSpec.describe Hubspot::Webhook::Entry do
 
     it 'estimate_approved => approved' do
       entry.payload["propertyName"] = "estimate_approved"
-      expect(entry.attribute_name).to eq(:approved)
+      expect(entry.attribute_name).to be_nil
     end
 
     it 'estimate___for_homeowner => nil' do

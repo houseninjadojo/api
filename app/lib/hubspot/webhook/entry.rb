@@ -153,7 +153,7 @@ module Hubspot
         when "email"
           :email
         when "estimate_approved"
-          :approved
+          # :customer_approved_estimate
         when "estimate___for_homeowner"
           #
         when "estimate___from_vendor"
