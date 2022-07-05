@@ -62,8 +62,11 @@ class UsersController < ApplicationController
     # this might be an onboarding user
     # return unless user.errors.to_a == ["Email has already been taken", "Phone number has already been taken"]
     @existing_user = User.find_by(email: user.data.email)
-    return false unless @existing_user.is_currently_onboarding?
     resource = UserResource.find(id: @existing_user.id)
+    if !@existing_user.is_currently_onboarding?
+      resource.data.errors.add(:base, :account_already_setup, message: "You already have an active account. Please log in to continue.")
+      return false
+    end
     if resource.data.needs_setup?
       Users::SendSetupEmailJob.perform_later(@existing_user)
       resource.data.errors.add(:base, :setup_email_sent, message: "Check your email for further instructions.")
