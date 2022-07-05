@@ -140,6 +140,10 @@ RSpec.describe Sync::Payment::Stripe::Inbound::UpdateJob, type: :job do
   }
   let(:job) { Sync::Payment::Stripe::Inbound::UpdateJob }
 
+  # before do
+  #   allow_any_instance_of(Stripe::Charge).to receive(:status_transitions).and_return(double(paid_at: 1656976377))
+  # end
+
   describe "#perform" do
     it "will not sync if policy declines" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: false))

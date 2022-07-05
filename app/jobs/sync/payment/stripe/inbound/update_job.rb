@@ -26,6 +26,7 @@ class Sync::Payment::Stripe::Inbound::UpdateJob < Sync::BaseJob
       refunded: stripe_object.refunded,
       statement_descriptor: stripe_object.statement_descriptor,
       status: stripe_object.status,
+      paid_at: (Time.at(stripe_object[:status_transitions]&[:paid_at]) if stripe_object[:status_transitions]&[:paid_at].present?),
 
       invoice: invoice,
       payment_method: payment_method,

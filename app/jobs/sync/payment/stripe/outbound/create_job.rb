@@ -40,6 +40,7 @@ class Sync::Payment::Stripe::Outbound::CreateJob < Sync::BaseJob
         stripe_id: paid_invoice.charge
       )
       invoice.update!(
+        paid_at: paid_invoice.paid_at,
         payment_attempted_at: Time.current,
         status: paid_invoice.status,
         stripe_object: paid_invoice

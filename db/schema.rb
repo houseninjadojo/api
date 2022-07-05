@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_30_122734) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_05_124540) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -148,6 +148,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_122734) do
     t.datetime "payment_attempted_at", precision: nil
     t.uuid "work_order_id"
     t.string "access_token"
+    t.date "paid_at"
     t.index ["access_token"], name: "index_invoices_on_access_token", unique: true
     t.index ["promo_code_id"], name: "index_invoices_on_promo_code_id"
     t.index ["status"], name: "index_invoices_on_status"

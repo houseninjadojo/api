@@ -16,7 +16,7 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < ApplicationJob
       dealstage: work_order.status.hubspot_id,
       invoice_paid: invoice_paid,
       branch_payment_link: branch_link,
-      # date_customer_paid_invoice,
+      date_customer_paid_invoice: work_order.invoice&.paid_at,
     }
   end
 

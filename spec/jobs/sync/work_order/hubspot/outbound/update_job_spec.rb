@@ -44,6 +44,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Outbound::UpdateJob, type: :job do
         dealstage: work_order.status.hubspot_id,
         invoice_paid: "No",
         branch_payment_link: nil,
+        date_customer_paid_invoice: nil,
       })
     end
   end

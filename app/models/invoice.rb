@@ -6,6 +6,7 @@
 #  access_token         :string
 #  description          :string
 #  finalized_at         :datetime
+#  paid_at              :date
 #  payment_attempted_at :datetime
 #  period_end           :datetime
 #  period_start         :datetime
