@@ -7,7 +7,7 @@ class DocumentsController < ApplicationController
 
   def index
     authorize!
-    scope = authorized_scope(Document.all)
+    scope = authorized_scope(Document.except_invoices)
     documents = DocumentResource.all(params, scope)
     respond_with(documents)
   end
