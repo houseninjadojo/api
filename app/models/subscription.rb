@@ -58,7 +58,7 @@ class Subscription < ApplicationRecord
 
   # after_create_commit :set_user_onboarding_step
 
-  after_create :sync_create!
+  # after_create :sync_create!
   # after_update_commit :sync_update!
   after_destroy_commit :sync_delete!
 
@@ -88,6 +88,8 @@ class Subscription < ApplicationRecord
   #     user.update(onboarding_step: OnboardingStep::WELCOME)
   #   end
   # end
+
+  # helpers
 
   # sync
 

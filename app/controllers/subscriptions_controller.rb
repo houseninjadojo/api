@@ -19,6 +19,7 @@ class SubscriptionsController < ApplicationController
     subscription = SubscriptionResource.build(params)
 
     if subscription.save
+      subscription.data.sync_create!
       render jsonapi: subscription, status: 201
     else
       render jsonapi_errors: subscription
