@@ -212,7 +212,7 @@ RSpec.describe Hubspot::Webhook::Entry do
 
     it 'invoice_notes => description' do
       entry.payload["propertyName"] = "invoice_notes"
-      expect(entry.attribute_name).to eq(:description)
+      expect(entry.attribute_name).to eq(:invoice_notes)
     end
 
     it 'vendor_name => vendor' do

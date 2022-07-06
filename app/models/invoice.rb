@@ -73,6 +73,14 @@ class Invoice < ApplicationRecord
 
   # helpers
 
+  def description
+    super || notes
+  end
+
+  def notes
+    work_order&.invoice_notes
+  end
+
   def user
     super.presence || work_order&.property&.user
   end

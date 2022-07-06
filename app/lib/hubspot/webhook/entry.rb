@@ -60,11 +60,7 @@ module Hubspot
             User
           end
         when "deal"
-          if ["invoice_notes"].include?(payload["propertyName"])
-            Invoice
-          else
-            WorkOrder
-          end
+          WorkOrder
         end
       end
 
@@ -170,7 +166,7 @@ module Hubspot
         when "invoice_from_vendor"
           :vendor_amount
         when "invoice_notes"
-          :description
+          :invoice_notes
         when "job_referred_"
           # :referred
         when "lastname"

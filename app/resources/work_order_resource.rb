@@ -9,6 +9,7 @@
 #  homeowner_amount        :string
 #  homeowner_amount_actual :string
 #  hubspot_object          :jsonb
+#  invoice_notes           :text
 #  refund_amount           :string
 #  refund_reason           :string
 #  scheduled_date          :string

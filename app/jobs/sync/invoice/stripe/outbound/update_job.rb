@@ -50,7 +50,11 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
   end
 
   def description_changed?
-    changeset.find { |change| change[:path] == [:description] }.present?
+    paths = [
+      [:work_order, :invoice_notes],
+      [:description],
+    ]
+    changeset.find { |change| paths.include?(change[:path]) }.present?
   end
 
   def amount_changed?

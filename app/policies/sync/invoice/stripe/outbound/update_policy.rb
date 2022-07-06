@@ -6,6 +6,7 @@ class Sync::Invoice::Stripe::Outbound::UpdatePolicy < ApplicationPolicy
               :homeowner_amount,
               :homeowner_amount_actual,
               :refund_amount,
+              :invoice_notes,
             ]
   end
 
