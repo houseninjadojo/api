@@ -34,7 +34,7 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < Sync::BaseJob
 
   def line_item_params
     {
-      amount:   resource.total,
+      amount:   resource.total || 0,
       currency: 'usd',
       customer: resource.user.stripe_id,
     }

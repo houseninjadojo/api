@@ -14,7 +14,7 @@ class Sync::User::Hubspot::Inbound::UpdateJob < Sync::BaseJob
     if handle_as_document?
       upsert_document!
     else
-      resource.update!(attribute_name => attribute_value)
+      resource&.update!(attribute_name => attribute_value)
     end
 
     webhook_event.update!(processed_at: Time.now)
