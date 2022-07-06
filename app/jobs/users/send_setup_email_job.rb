@@ -4,7 +4,8 @@ class Users::SendSetupEmailJob < ApplicationJob
   def perform(user)
     return unless user.needs_setup?
 
-    user.deep_links.find_by(purpose: "onboarding").destroy
+    DeepLink.find_by(linkable: user, feature: "onboarding")&.destroy
+
     user.update!(
       onboarding_link: nil,
       onboarding_code: SecureRandom.hex(12),

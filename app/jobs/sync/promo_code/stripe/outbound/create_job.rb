@@ -13,6 +13,10 @@ class Sync::PromoCode::Stripe::Outbound::CreateJob < Sync::BaseJob
     resource.update!(
       stripe_id: promo_code.id,
       stripe_object: promo_code,
+      active: promo_code.active,
+      name: promo_code.coupon&.name,
+      percent_off: promo_code.coupon&.percent_off,
+      amount_off: promo_code.coupon&.amount_off,
     )
   end
 

@@ -19,7 +19,16 @@ RSpec.describe Sync::PromoCode::Stripe::Outbound::CreateJob, type: :job do
       idempotency_key = job.new(resource).idempotency_key
       expect(Stripe::PromotionCode).to receive(:create).with(params, {
         idempotency_key: idempotency_key
-      }).and_return(double(id: "stripe_token"))
+      }).and_return(double(
+        id: "stripe_token",
+        active: "true",
+        coupon: double(
+          name: "asdf",
+          percent_off: "10",
+          amount_off: "100",
+        ),
+        code: "asdf",
+      ))
       job.perform_now(resource)
       expect(resource.stripe_id).to eq("stripe_token")
     end

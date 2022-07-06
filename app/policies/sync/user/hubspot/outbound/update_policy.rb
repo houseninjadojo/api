@@ -29,7 +29,8 @@ class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
 
   def can_sync?
     has_external_id? &&
-    has_changed_attributes?
+    has_changed_attributes? &&
+    enabled?
   end
 
   def has_external_id?
@@ -38,5 +39,10 @@ class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
 
   def has_changed_attributes?
     !changeset.blank?
+  end
+
+
+  def enabled?
+    ENV["HUBSPOT_OUTBOUND_DISABLED"] != "true"
   end
 end

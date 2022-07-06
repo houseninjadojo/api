@@ -13,6 +13,11 @@ class Sync::User::Hubspot::Outbound::CreatePolicy < ApplicationPolicy
     # # we want to hold on creating hubspot contacts until
     # # the customer hits the welcome step
     # record.onboarding_step == OnboardingStep::WELCOME
-    true
+    enabled?
+  end
+
+
+  def enabled?
+    ENV["HUBSPOT_OUTBOUND_DISABLED"] != "true"
   end
 end
