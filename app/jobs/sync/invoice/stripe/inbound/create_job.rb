@@ -50,8 +50,8 @@ class Sync::Invoice::Stripe::Inbound::CreateJob < Sync::BaseJob
   end
 
   def promo_code
-    discount = invoice_object&.discounts&.find { |discount| discount.present? }
-    @promo_code ||= PromoCode.find_by(coupon_id: discount&.coupon&.id)
+    coupon_id = invoice_object&.discount&.coupon&.id
+    @promo_code ||= PromoCode.find_by(coupon_id: coupon_id)
   end
 
   def stripe_event

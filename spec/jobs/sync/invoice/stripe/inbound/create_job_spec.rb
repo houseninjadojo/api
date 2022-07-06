@@ -45,7 +45,34 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::CreateJob, type: :job do
           "default_source"=>nil,
           "default_tax_rates"=>[],
           "description"=>"description here",
-          "discount"=>nil,
+          "discount"=>{
+            "id":"di_1LIXRfAWN1SYQ0Ctl3x7nYuK",
+            "object":"discount",
+            "checkout_session":nil,
+            "coupon":{
+              "id":"Uz8oOt9R",
+              "object":"coupon",
+              "amount_off":nil,
+              "created":1648535128,
+              "currency":nil,
+              "duration":"repeating",
+              "duration_in_months":6,
+              "livemode":true,
+              "max_redemptions":nil,
+              "metadata":{},
+              "name":"Six Months Free",
+              "percent_off":100.0,
+              "redeem_by":nil,
+              "times_redeemed":1,
+              "valid":true},
+              "customer":"cus_M0LMxZACAZgvWK",
+              "end":1673008507,
+              "invoice":nil,
+              "invoice_item":nil,
+              "promotion_code":"asdfasd",
+              "start":1657110907,
+              "subscription":"asfdf"
+            },
           "discounts"=>[
             "di_1LAoKMAWN1SYQ0CtVHdQYh1J",
           ],
@@ -234,7 +261,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::CreateJob, type: :job do
     it "will sync if policy approves" do
       [user, subscription, promo_code].each(&:to_s)
       invoice_object = object_double(Stripe::Event.construct_from(payload).data.object)
-      allow(invoice_object).to receive(:discounts).and_return([Stripe::Discount.construct_from(discount)])
+      allow(invoice_object).to receive(:discount).and_return(Stripe::Discount.construct_from(discount))
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       allow_any_instance_of(job).to receive(:webhook_event).and_return(webhook_event)
       allow(Stripe::Invoice).to receive(:retrieve).and_return(invoice_object)
@@ -282,7 +309,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::CreateJob, type: :job do
     it "returns params" do
       [user, subscription, promo_code].each(&:to_s)
       invoice_object = object_double(Stripe::Event.construct_from(payload).data.object)
-      allow(invoice_object).to receive(:discounts).and_return([Stripe::Discount.construct_from(discount)])
+      allow(invoice_object).to receive(:discount).and_return(Stripe::Discount.construct_from(discount))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
       allow(Stripe::Invoice).to receive(:retrieve).and_return(invoice_object)
       expect(job.new(webhook_event).params).to include(
