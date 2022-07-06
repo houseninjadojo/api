@@ -27,10 +27,13 @@ class UsersController < ApplicationController
 
     if user.save
       render jsonapi: user, status: 201
-    elsif existing_user = user_if_onboarding(user, params)
-      render jsonapi: existing_user, status: 201
     else
-      render jsonapi_errors: user
+      existing_user = user_if_onboarding(user, params)
+      if existing_user.errors.empty?
+        render jsonapi: existing_user, status: 201
+      else
+        render jsonapi_errors: existing_user
+      end
     end
   end
 
@@ -65,11 +68,9 @@ class UsersController < ApplicationController
     resource = UserResource.find(id: @existing_user.id)
     if !@existing_user.is_currently_onboarding?
       resource.data.errors.add(:base, :account_already_setup, message: "You already have an active account. Please log in to continue.")
-      return false
-    end
-    if resource.data.needs_setup?
+    elsif resource.data.needs_setup?
       Users::SendSetupEmailJob.perform_later(@existing_user)
-      resource.data.errors.add(:base, :setup_email_sent, message: "Check your email for further instructions.")
+      # resource.data.errors.add(:base, :setup_email_sent, message: "Check your email for further instructions.")
     end
     resource
   end
