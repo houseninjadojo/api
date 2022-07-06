@@ -52,7 +52,8 @@ class Invoice < ApplicationRecord
 
   # callbacks
 
-  after_create_commit :sync_stripe
+  after_create_commit :sync_stripe_create
+  # after_update_commit :sync_stripe_update
   after_update_commit :handle_status_change, if: :saved_change_to_status?
 
   # associations
@@ -152,11 +153,17 @@ class Invoice < ApplicationRecord
 
   # sync
 
-  def sync_stripe
+  def sync_stripe_create
     if Sync::Invoice::Stripe::Outbound::CreatePolicy.new(self).can_sync?
       Sync::Invoice::Stripe::Outbound::CreateJob.perform_later(self)
     end
   end
+
+  # def sync_stripe_update
+  #   if Sync::Invoice::Stripe::Outbound::UpdatePolicy.new(self).can_sync?
+  #     Sync::Invoice::Stripe::Outbound::UpdateJob.perform_later(self)
+  #   end
+  # end
 
   include Syncable
 
@@ -192,7 +199,7 @@ class Invoice < ApplicationRecord
     when STATUS_PAID
       Invoice::ExternalAccess::ExpireJob.perform_later(self)
       work_order&.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER)
-    when PAYMENT_FAILED
+    when STATUS_PAYMENT_FAILED
       work_order&.update!(status: WorkOrderStatus::PAYMENT_FAILED)
     end
   end
