@@ -64,7 +64,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::CreateJob, type: :job do
               "percent_off":100.0,
               "redeem_by":nil,
               "times_redeemed":1,
-              "valid":true},
+              "valid":true },
               "customer":"cus_M0LMxZACAZgvWK",
               "end":1673008507,
               "invoice":nil,

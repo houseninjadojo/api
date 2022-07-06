@@ -211,6 +211,17 @@ class User < ApplicationRecord
     end
   end
 
+  # @todo remove db contact type
+  def contact_type
+    if requested_zipcode.present?
+      ContactType::SERVICE_AREA_REQUESTED
+    elsif is_subscribed?
+      ContactType::CUSTOMER
+    else
+      ContactType::LEAD
+    end
+  end
+
   def set_contact_type
     if self.requested_zipcode.present?
       self.contact_type = ContactType::SERVICE_AREA_REQUESTED
