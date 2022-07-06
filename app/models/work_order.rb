@@ -46,6 +46,7 @@ class WorkOrder < ApplicationRecord
   after_create_commit :sync_create!
   after_create_commit :create_invoice!
   after_update        :sync_total
+  after_update        :sync_invoice_notes
   after_update_commit :sync_update!
 
   # associations
@@ -83,6 +84,12 @@ class WorkOrder < ApplicationRecord
   def sync_total
     if invoice.present? && invoice.total != amount
       invoice.update(total: amount)
+    end
+  end
+
+  def sync_invoice_notes
+    if invoice.present? && invoice_notes != invoice.notes
+      invoice.update(notes: invoice_notes)
     end
   end
 
