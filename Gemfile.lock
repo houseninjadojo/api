@@ -317,7 +317,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
-    redis (4.6.0)
+    redis (4.7.1)
     redlock (1.2.2)
       redis (>= 3.0.0, < 5.0)
     regexp_parser (2.5.0)
@@ -460,7 +460,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 7.0.3)
   rails_semantic_logger
-  redis (~> 4.6)
+  redis (~> 4.7)
   responders
   rspec-rails (~> 5.1.2)
   rubocop-rails
