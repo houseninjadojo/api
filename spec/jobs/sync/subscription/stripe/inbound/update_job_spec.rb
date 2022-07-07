@@ -30,8 +30,7 @@ RSpec.describe Sync::Subscription::Stripe::Inbound::UpdateJob, type: :job do
           "days_until_due": nil,
           "default_payment_method": "pm_1LIhBKAWN1SYQ0CtTppIJ6xE",
           "default_source": nil,
-          "default_tax_rates": [
-          ],
+          "default_tax_rates": [],
           "description": nil,
           "discount": {
             "id": "di_1LIwnXAWN1SYQ0Ct0IKJJQYu",
@@ -126,8 +125,7 @@ RSpec.describe Sync::Subscription::Stripe::Inbound::UpdateJob, type: :job do
                 },
                 "quantity": 1,
                 "subscription": "sub_1LIwnXAWN1SYQ0CtxWTsjvMJ",
-                "tax_rates": [
-                ]
+                "tax_rates": []
               }
             ],
             "has_more": false,
