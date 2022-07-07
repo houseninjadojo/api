@@ -179,6 +179,8 @@ module Hubspot
           # :referred
         when "lastname"
           :last_name
+        when "mobilephone"
+          :phone_number
         when "phone"
           :phone_number
         when "pipeline"
@@ -268,6 +270,8 @@ module Hubspot
         when "job_referred_"
           # attribute_as_boolean
         when "lastname"
+          property_value
+        when "mobilephone"
           property_value
         when "phone"
           property_value
