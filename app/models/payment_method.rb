@@ -33,7 +33,7 @@ class PaymentMethod < ApplicationRecord
 
   # callbacks
 
-  before_create :ensure_stripe_user_exists!
+  # before_create :ensure_stripe_user_exists!
   after_create_commit :set_user_onboarding_step
 
   # associations
@@ -75,13 +75,14 @@ class PaymentMethod < ApplicationRecord
 
   include Syncable
 
-  after_create_commit  :sync_create!
-  # after_create do |payment_method|
-  #   unless Rails.env.test?
-  #     payment_method.sync!(service: :stripe, action: :create, perform_now: true)
-  #   end
-  # end
+  # after_create_commit  :sync_create!
   after_destroy_commit :sync_delete!
+
+  def sync_create!
+    return if Rails.env.test?
+    Sync::User::Stripe::Outbound::CreateJob.perform_now(user) unless user&.stripe_id&.present?
+    Sync::CreditCard::Stripe::Outbound::CreateJob.perform_now(self)
+  end
 
   def sync_services
     [
