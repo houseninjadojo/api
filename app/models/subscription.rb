@@ -116,10 +116,13 @@ class Subscription < ApplicationRecord
     # we want to ensure we are charging the card BEFORE returning the http request to the user
     # furthermore we are invoking this with `after_create` instead of `after_create_commit`, so that
     # the result of the charge attempt fails the transaction and the subscription is not created on our end either
+    Rails.logger.info("Trying to create subscription=#{id}")
     response = Sync::Subscription::Stripe::Outbound::CreateJob.perform_now(self)
     if response.is_a?(Stripe::StripeError)
+      Rails.logger.info("Error creating subscription=#{id} - #{response.message}")
       raise ActiveRecord::RecordNotSaved.new(response.message, self)
     end
+    Rails.logger.info("Finished Trying to create subscription=#{id}")
   end
 
   def resync_user!

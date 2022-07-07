@@ -29,11 +29,19 @@ module Hubspot
       def handler
         [
           "Sync",
-          "#{resource_klass}",
+          "#{handler_klass}",
           "Hubspot",
           "Inbound",
           "#{handler_action.capitalize}Job"
         ].join("::").safe_constantize
+      end
+
+      def handler_klass
+        if resource_klass == Property
+          User
+        else
+          resource_klass
+        end
       end
 
       def handler_action
