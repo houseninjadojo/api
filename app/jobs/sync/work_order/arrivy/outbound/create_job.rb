@@ -18,6 +18,9 @@ class Sync::WorkOrder::Arrivy::Outbound::CreateJob < Sync::BaseJob
       end_datetime: work_order.scheduled_window_end&.iso8601,
       customer_id: work_order.user&.arrivy_id,
       external_id: work_order.id,
+
+      # if walkthrough
+      # template_id: 5989917552803840
     }
   end
 
@@ -25,13 +28,5 @@ class Sync::WorkOrder::Arrivy::Outbound::CreateJob < Sync::BaseJob
     Sync::WorkOrder::Arrivy::Outbound::CreatePolicy.new(
       work_order
     )
-  end
-
-  def start_datetime
-    if work_order.walkthrough_date.present?
-      work_order.walkthrough_date.iso8601
-    else
-      work_order
-    end
   end
 end

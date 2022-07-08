@@ -75,8 +75,8 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
 
   def timestamps
     return {} unless deal[:dealname].match(/Home Walkthrough\: /).present?
-    start_datetime = Time.at(walkthrough_engagement.metadata["startTime"] / 1000)
-    end_datetime = Time.at(walkthrough_engagement.metadata["endTime"] / 1000)
+    start_datetime = Time.at(walkthrough_engagement.metadata["startTime"] / 1000).in_time_zone("US/Pacific")
+    end_datetime = Time.at(walkthrough_engagement.metadata["endTime"] / 1000).in_time_zone("US/Pacific")
     time_window = "#{start_datetime.strftime("%I:%M %p")} - #{end_datetime.strftime("%I:%M %p")}"
     {
       scheduled_date: start_datetime.strftime("%m/%d/%Y"),

@@ -319,7 +319,7 @@ module Hubspot
 
       # "1644204893172" => "2016-04-20T18:53:13.172Z"
       def attribute_as_epoch_time
-        Time.at(property_value.to_i / 1000)
+        Time.at(property_value.to_i / 1000).in_time_zone("US/Pacific")
       end
 
       # "closed" #=> WorkOrderStatus::CLOSED

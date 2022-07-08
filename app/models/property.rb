@@ -88,7 +88,7 @@ class Property < ApplicationRecord
 
   def sync_services
     [
-      # :arrivy,
+      :arrivy,
       :hubspot,
       :stripe,
     ]
