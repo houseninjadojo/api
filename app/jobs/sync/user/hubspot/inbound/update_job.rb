@@ -33,7 +33,7 @@ class Sync::User::Hubspot::Inbound::UpdateJob < Sync::BaseJob
 
   def upsert_document!
     Document.find_by(user: resource, tags: [document_tag])&.destroy!
-    document = Document.create!(user: user, tags: [document_tag])
+    document = Document.create!(user: resource, tags: [document_tag])
     document.asset.attach(io: attribute_value, filename: "#{document_tag}.pdf")
     document.save!
   end
