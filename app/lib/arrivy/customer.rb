@@ -30,7 +30,7 @@ class Arrivy::Customer
   end
 
   def create
-    response = Arrivy::Request.post("customers", params)
+    response = Arrivy::Request.post("customers/new", params)
     if response.code == 200
       response_body = JSON.parse(response.body)
       @id = response_body["id"]

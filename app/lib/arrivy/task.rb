@@ -34,7 +34,7 @@ class Arrivy::Task
   end
 
   def create
-    response = Arrivy::Request.post("tasks", params)
+    response = Arrivy::Request.post("tasks/new", params)
     if response.code == 200
       response_body = JSON.parse(response.body)
       @id = response_body["id"]
