@@ -2,12 +2,13 @@
 #
 # Table name: work_order_statuses
 #
-#  id         :uuid             not null, primary key
-#  slug       :string           not null
-#  name       :string
-#  hubspot_id :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                  :uuid             not null, primary key
+#  name                :string
+#  slug                :string           not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  hubspot_id          :string
+#  hubspot_pipeline_id :string
 #
 # Indexes
 #

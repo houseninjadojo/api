@@ -25,8 +25,8 @@ class Sync::WorkOrder::Arrivy::Inbound::UpdateJob < Sync::BaseJob
       arrivy_id: arrivy_event.arrivy_id,
       scheduled_date: arrivy_event.scheduled_date,
       scheduled_time: arrivy_event.scheduled_time,
-      # scheduled_window_start: arrivy_event.scheduled_window_start,
-      # scheduled_window_end: arrivy_event.scheduled_window_end,
+      scheduled_window_start: arrivy_event.scheduled_window_start,
+      scheduled_window_end: arrivy_event.scheduled_window_end,
     }
   end
 
