@@ -74,6 +74,8 @@ RSpec.describe Sync::WorkOrder::Arrivy::Inbound::UpdateJob, type: :job do
         arrivy_id: 5892463768371200,
         scheduled_date: event.scheduled_date,
         scheduled_time: event.scheduled_time,
+        scheduled_window_end: event.scheduled_window_end,
+        scheduled_window_start: event.scheduled_window_start,
       )
       expect(webhook_event).to receive(:update!)
       job.perform_now(webhook_event)
@@ -95,6 +97,8 @@ RSpec.describe Sync::WorkOrder::Arrivy::Inbound::UpdateJob, type: :job do
         arrivy_id: 5892463768371200,
         scheduled_date: event.scheduled_date,
         scheduled_time: event.scheduled_time,
+        scheduled_window_end: event.scheduled_window_end,
+        scheduled_window_start: event.scheduled_window_start,
       })
     end
   end

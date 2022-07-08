@@ -67,6 +67,18 @@ class WorkOrder < ApplicationRecord
     homeowner_amount_actual || homeowner_amount
   end
 
+  # deconstruct timestamp into date and time attributes on save
+  def walkthrough_booking_timestamp=(val)
+    self.scheduled_date = val.strftime("%m/%d/%Y")
+    self.scheduled_time = val.strftime("%I:%M %p")
+    self.scheduled_window_start = val
+    self.walkthrough_date = val
+  end
+
+  def user
+    property&.user
+  end
+
   # callbacks
 
   def set_status

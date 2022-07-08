@@ -156,6 +156,8 @@ module Hubspot
           #
         when "email"
           :email
+        when "engagements_last_meeting_booked"
+          :walkthrough_booking_timestamp
         when "estimate_approved"
           # :customer_approved_estimate
         when "estimate___for_homeowner"
@@ -248,6 +250,8 @@ module Hubspot
           property_value
         when "email"
           property_value
+        when "engagements_last_meeting_booked"
+          attribute_as_epoch_time
         when "estimate_approved"
           attribute_as_boolean
         when "estimate___for_homeowner"
