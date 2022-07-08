@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Sync::Property::Arrivy::OutboundJob, type: :job do
+RSpec.describe Sync::Property::Arrivy::Outbound::UpdateJob, type: :job do
   let(:property) { create(:property) }
   let(:changeset) {
     [
@@ -11,7 +11,7 @@ RSpec.describe Sync::Property::Arrivy::OutboundJob, type: :job do
       }
     ]
   }
-  let(:job) { Sync::Property::Arrivy::OutboundJob }
+  let(:job) { Sync::Property::Arrivy::Outbound::UpdateJob }
 
   describe "#perform" do
     it "will not sync if policy declines" do
@@ -36,7 +36,7 @@ RSpec.describe Sync::Property::Arrivy::OutboundJob, type: :job do
     it "returns a policy" do
       expect_any_instance_of(job).to(receive(:property).at_least(:once).and_return(property))
       expect_any_instance_of(job).to(receive(:changeset).at_least(:once).and_return(changeset))
-      expect(job.new(property, changeset).policy).to be_a(Sync::Property::Arrivy::OutboundPolicy)
+      expect(job.new(property, changeset).policy).to be_a(Sync::Property::Arrivy::Outbound::UpdatePolicy)
     end
   end
 

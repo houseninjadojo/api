@@ -56,7 +56,9 @@ RSpec.describe Sync::WorkOrder::Arrivy::Inbound::UpdateJob, type: :job do
   let(:job) { Sync::WorkOrder::Arrivy::Inbound::UpdateJob }
 
   before do
-    allow(WorkOrder).to(receive(:find_by).and_return(work_order))
+    allow(WorkOrder).to(receive(:where).and_return(
+      double(or: double(first: work_order))
+    ))
   end
 
   describe "#perform" do

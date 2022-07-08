@@ -8,7 +8,7 @@ class Sync::WorkOrder::Arrivy::Inbound::UpdateJob < Sync::BaseJob
 
     return unless policy.can_sync?
 
-    work_order.update!(params)
+    work_order&.update!(params)
 
     webhook_event.update!(processed_at: Time.now)
   end
@@ -35,6 +35,8 @@ class Sync::WorkOrder::Arrivy::Inbound::UpdateJob < Sync::BaseJob
   end
 
   def work_order
-    @work_order ||= WorkOrder.find_by(hubspot_id: arrivy_event.hubspot_id)
+    @work_order ||= WorkOrder.where(arrivy_id: arrivy_event.arrivy_id).or(
+      WorkOrder.where(hubspot_id: arrivy_event.hubspot_id)
+    ).first
   end
 end

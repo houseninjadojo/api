@@ -1,4 +1,4 @@
-class Sync::Property::Arrivy::OutboundJob < Sync::BaseJob
+class Sync::Property::Arrivy::Outbound::UpdateJob < Sync::BaseJob
   queue_as :default
 
   attr_accessor :property, :changeset
@@ -27,7 +27,7 @@ class Sync::Property::Arrivy::OutboundJob < Sync::BaseJob
   end
 
   def policy
-    Sync::Property::Arrivy::OutboundPolicy.new(
+    Sync::Property::Arrivy::Outbound::UpdatePolicy.new(
       property,
       changeset: changeset
     )

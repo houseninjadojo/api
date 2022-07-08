@@ -92,13 +92,17 @@ RSpec.describe Sync::WorkOrder::Arrivy::Inbound::UpdatePolicy, type: :policy do
 
   describe_rule :has_work_order? do
     it "returns true if external id present" do
-      expect(WorkOrder).to receive(:find_by).with(hubspot_id: '1234').and_return(work_order)
+      allow(WorkOrder).to(receive(:where).and_return(
+        double(or: double(first: work_order))
+      ))
       payload["OBJECT_EXTERNAL_ID"] = '1234'
       expect(policy.has_work_order?).to be_truthy
     end
 
     it "returns false if external id not present" do
-      expect(WorkOrder).to receive(:find_by).with(hubspot_id: '1234').and_return(nil)
+      allow(WorkOrder).to(receive(:where).and_return(
+        double(or: double(first: nil))
+      ))
       payload["OBJECT_EXTERNAL_ID"] = '1234'
       expect(policy.has_work_order?).to be_falsey
     end

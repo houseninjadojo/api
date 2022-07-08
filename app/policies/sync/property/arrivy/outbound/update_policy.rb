@@ -1,4 +1,4 @@
-class Sync::Property::Arrivy::OutboundPolicy < ApplicationPolicy
+class Sync::Property::Arrivy::Outbound::UpdatePolicy < ApplicationPolicy
   class Changeset < TreeDiff
     observe :street_address1,
             :street_address2,

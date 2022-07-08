@@ -15,7 +15,9 @@ class Sync::WorkOrder::Arrivy::Inbound::UpdatePolicy < ApplicationPolicy
   end
 
   def has_work_order?
-    WorkOrder.find_by(hubspot_id: record.hubspot_id).present?
+    WorkOrder.where(arrivy_id: record.arrivy_id).or(
+      WorkOrder.where(hubspot_id: record.hubspot_id)
+    ).first.present?
   end
 
   def is_valid_task_status?
