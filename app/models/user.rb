@@ -238,7 +238,7 @@ class User < ApplicationRecord
 
   def sync_services
     [
-      # :arrivy,
+      :arrivy,
       :auth0,
       :hubspot,
       :stripe,

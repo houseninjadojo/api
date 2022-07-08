@@ -69,6 +69,9 @@ module HouseNinja
     # config.rails_semantic_logger.quiet_assets = true
     config.colorize_logging = true
 
+    # time zone
+    # config.time_zone = 'Pacific Time (US & Canada)'
+
     # config.debug_exception_response_format = :api
     # config.action_dispatch.show_exceptions = false
 
