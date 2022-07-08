@@ -100,8 +100,8 @@ class WorkOrder < ApplicationRecord
   end
 
   def sync_invoice_notes
-    if invoice.present? && invoice_notes != invoice.notes
-      invoice.update(notes: invoice_notes)
+    if invoice.present?
+      invoice.update(description: invoice_notes)
     end
   end
 

@@ -68,7 +68,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
 
   def walkthrough_engagement
     @engagement ||= begin
-      engagements = Hubspot::Engagement.find_by_association(user.hubspot_id&.to_i, 'CONTACT')
+      engagements = Hubspot::Engagement.find_by_association(user&.hubspot_id&.to_i, 'CONTACT')
       engagements.find { |e| e.engagement["type"] == "MEETING" && e.metadata["title"] == "House Ninja Home Walkthrough" }
     end
   end
