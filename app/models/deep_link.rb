@@ -67,6 +67,7 @@ class DeepLink < ApplicationRecord
       "$canonical_url" => canonical_url,
       "$deeplink_path" => deeplink_path,
       "$desktop_url" => canonical_url,
+      "$fallback_url" => canonical_url,
     })
   end
 
