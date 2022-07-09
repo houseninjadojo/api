@@ -243,6 +243,7 @@ class User < ApplicationRecord
       :arrivy,
       :auth0,
       :hubspot,
+      :intercom,
       :stripe,
     ]
   end

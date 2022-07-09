@@ -128,7 +128,7 @@ class WorkOrder < ApplicationRecord
       :arrivy,
       # :auth0,
       :hubspot,
-      # :stripe,
+      :stripe,
     ]
   end
 
