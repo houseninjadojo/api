@@ -3,7 +3,8 @@ class Sync::WorkOrder::Arrivy::Outbound::CreatePolicy < ApplicationPolicy
 
   def can_sync?
     !has_external_id? &&
-    has_start_datetime?
+    has_start_datetime? &&
+    should_sync?
   end
 
   def has_external_id?
@@ -12,5 +13,9 @@ class Sync::WorkOrder::Arrivy::Outbound::CreatePolicy < ApplicationPolicy
 
   def has_start_datetime?
     record.scheduled_window_start.present?
+  end
+
+  def should_sync?
+    false
   end
 end

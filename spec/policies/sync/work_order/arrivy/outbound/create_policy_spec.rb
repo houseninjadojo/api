@@ -11,7 +11,8 @@ RSpec.describe Sync::WorkOrder::Arrivy::Outbound::CreatePolicy, type: :policy do
     it "returns true if all conditions match" do
       expect(policy).to receive(:has_external_id?).and_return(false)
       expect(policy).to receive(:has_start_datetime?).and_return(true)
-      expect(policy.can_sync?).to be_truthy
+      expect(policy).to receive(:should_sync?).and_return(false)
+      expect(policy.can_sync?).to be_falsey
     end
 
     it "returns false if any conditions fail" do

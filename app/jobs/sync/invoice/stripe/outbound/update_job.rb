@@ -7,6 +7,13 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
     return unless policy.can_sync?
 
     # update invoice
+    if amount_changed?
+      line_item_id = invoice.lines&.first&.id
+      if line_item_id.present?
+        Stripe::InvoiceItem.update(line_item_id, line_item_params)
+      end
+    end
+
     if description_changed?
       Stripe::Invoice.update(resource.stripe_id, params)
     end
@@ -15,13 +22,6 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
       case resource.work_order&.status
       when WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
         Stripe::Invoice.finalize_invoice(resource.stripe_id, { auto_advance: false })
-      end
-    end
-
-    if amount_changed?
-      line_item_id = invoice.lines&.first&.id
-      if line_item_id.present?
-        Stripe::InvoiceItem.update(line_item_id, line_item_params)
       end
     end
   end

@@ -260,6 +260,12 @@ class User < ApplicationRecord
     ]
   end
 
+  def sync_create!
+    return unless sync_actions.include?(:create)
+    # dont create the stripe user
+    sync_services.without(:stripe).each { |service| sync!(service: service, action: :create) }
+  end
+
   # @todo clean this up
   def sync_delete!
     Auth::DeleteUserJob.perform_later(auth_id)

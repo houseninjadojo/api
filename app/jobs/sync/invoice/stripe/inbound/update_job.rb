@@ -72,6 +72,7 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
   end
 
   def refresh_pdf
+    return if stripe_object&.invoice_pdf.nil?
     invoice&.document&.destroy! if invoice&.document.present?
     document = Document.create!(invoice: invoice, user: user, tags: [Document::SystemTags::INVOICE])
     asset = URI.open(stripe_object.invoice_pdf)

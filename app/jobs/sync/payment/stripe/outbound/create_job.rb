@@ -39,8 +39,9 @@ class Sync::Payment::Stripe::Outbound::CreateJob < Sync::BaseJob
       resource.update!(
         stripe_id: paid_invoice.charge
       )
+      paid_at = paid_invoice&.status_transitions&.paid_at
       invoice.update!(
-        paid_at: paid_invoice&.status_transitions&.paid_at,
+        paid_at: (paid_at.present? ? Time.at(paid_at) : nil),
         payment_attempted_at: Time.current,
         status: paid_invoice.status,
         stripe_object: paid_invoice
