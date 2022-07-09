@@ -1,6 +1,7 @@
 class Sync::Invoice::Stripe::Outbound::UpdatePolicy < ApplicationPolicy
   class Changeset < TreeDiff
     observe :description,
+            :total,
             work_order: [
               :status,
               :homeowner_amount,

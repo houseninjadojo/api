@@ -383,7 +383,7 @@ module Hubspot
         first_url = "https://api.hubapi.com/files/v3/files/#{file_id}/signed-url?hapikey=#{Rails.secrets.dig(:hubspot, :api_key)}"
         signed_url_payload = OpenURI.open_uri(first_url).read
         signed_url = JSON.parse(signed_url_payload)["url"]
-        URI.open(url)
+        URI.open(signed_url)
       end
     end
   end

@@ -64,7 +64,11 @@ class WorkOrder < ApplicationRecord
   # helpers
 
   def amount
-    homeowner_amount_actual || homeowner_amount
+    if homeowner_amount_actual.to_i > 0
+      homeowner_amount_actual
+    else
+      homeowner_amount
+    end
   end
 
   def is_walkthrough?
