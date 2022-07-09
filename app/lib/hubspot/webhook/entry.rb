@@ -364,6 +364,8 @@ module Hubspot
       # ""    #=> nil
       def attribute_as_boolean
         case property_value
+        when true, false, "true", "false"
+          ActiveModel::Type::Boolean.new.cast(property_value)
         when "Yes"
           true
         when "No"
