@@ -13,6 +13,7 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < Sync::BaseJob
 
     # save to db
     resource.update!(
+      status: invoice.status,
       stripe_id: invoice.id,
       stripe_object: invoice.as_json
     )

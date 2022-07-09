@@ -16,6 +16,7 @@ gem 'dotenv-rails',                        require: 'dotenv/rails-now'         #
 gem 'graphiti',         github: 'houseninjadojo/graphiti', branch: 'activerecord-filter-array-eq'
 gem 'graphiti-rails'    
 gem 'image_processing',        '~> 1.12'                                        # Use Active Storage variant
+gem 'intercom'
 gem 'hubspot-api-ruby', github: 'houseninjadojo/hubspot-api-ruby'
 # gem 'hubspot-api-client'
 gem 'jwt'

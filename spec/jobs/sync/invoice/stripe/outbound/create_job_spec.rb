@@ -27,9 +27,10 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreateJob, type: :job do
       expect(Stripe::InvoiceItem).to receive(:create).with(job_instance.line_item_params)
       expect(Stripe::Invoice).to receive(:create).with(job_instance.params, {
         idempotency_key: job_instance.idempotency_key
-      }).and_return(double(id: "stripe_token"))
+      }).and_return(double(id: "stripe_token", status: "draft"))
       job.perform_now(resource)
       expect(resource.stripe_id).to eq("stripe_token")
+      expect(resource.status).to eq("draft")
     end
   end
 

@@ -20,6 +20,7 @@
 #  updated_at                                :datetime         not null
 #  arrivy_id                                 :string
 #  hubspot_id                                :string
+#  intercom_id                               :string
 #  promo_code_id                             :uuid
 #  stripe_id                                 :string
 #
@@ -29,6 +30,7 @@
 #  index_users_on_email            (email) UNIQUE
 #  index_users_on_gender           (gender)
 #  index_users_on_hubspot_id       (hubspot_id) UNIQUE
+#  index_users_on_intercom_id      (intercom_id) UNIQUE
 #  index_users_on_onboarding_code  (onboarding_code) UNIQUE
 #  index_users_on_phone_number     (phone_number)
 #  index_users_on_promo_code_id    (promo_code_id)
