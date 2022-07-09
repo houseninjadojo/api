@@ -149,7 +149,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreatePolicy, type: :policy do
     end
 
     it "returns true if resource already exits" do
-      work_order.update(hubspot_id: '123456789')
+      work_order.hubspot_id = '123456789'
       expect(policy.is_new_record?).to be_falsey
     end
   end
