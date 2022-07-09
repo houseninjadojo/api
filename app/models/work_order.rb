@@ -44,7 +44,7 @@ class WorkOrder < ApplicationRecord
   before_save :ensure_invoice_status_conditions
 
   after_create_commit :sync_create!
-  after_create_commit :create_invoice!
+  after_create_commit :create_invoice!, unless: :is_walkthrough?
   after_update        :sync_total
   after_update        :sync_invoice_notes
   after_update_commit :sync_update!
@@ -65,6 +65,10 @@ class WorkOrder < ApplicationRecord
 
   def amount
     homeowner_amount_actual || homeowner_amount
+  end
+
+  def is_walkthrough?
+    description.include?("Home Walkthrough:")
   end
 
   # deconstruct timestamp into date and time attributes on save

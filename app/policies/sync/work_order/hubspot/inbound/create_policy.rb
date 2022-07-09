@@ -15,7 +15,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreatePolicy < ApplicationPolicy
   end
 
   def is_create_event?
-    payload.is_deal_batch?
+    payload.is_deal_batch? || payload.is_create_event?
   end
 
   def is_new_record?

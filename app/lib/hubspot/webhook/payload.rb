@@ -44,6 +44,10 @@ module Hubspot
         Hubspot::Webhook::Entry.new(@webhook_event, payload)
       end
       alias deal_batch_entry create_batch_entry
+
+      def is_create_event?
+        webhook_payload.first["subscriptionType"].split(".").last == "creation"
+      end
     end
   end
 end
