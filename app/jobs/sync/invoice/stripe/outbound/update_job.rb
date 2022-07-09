@@ -11,9 +11,9 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
     # end
 
     # update invoice
-    line_item_id = invoice.lines&.first&.id
+    line_item_id = updated_invoice&.lines&.first&.id || invoice.lines&.first&.id
     if line_item_id.present?
-      updated_invoice = Stripe::InvoiceItem.update(line_item_id, line_item_params)
+      Stripe::InvoiceItem.update(line_item_id, line_item_params)
     end
 
     # if description_changed?
