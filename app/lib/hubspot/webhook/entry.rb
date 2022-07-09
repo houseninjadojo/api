@@ -304,7 +304,7 @@ module Hubspot
         when "pipeline"
           #
         when "preventative_maintenance_plan_pdf"
-          attribute_as_io
+          signed_url_attribute_as_io
         when "refund___make_good____"
           attribute_as_amount_in_cents
         when "refund___make_good_reason"
@@ -330,7 +330,7 @@ module Hubspot
         when "walkthrough_time"
           #
         when "walkthrough_report_pdf"
-          attribute_as_io
+          signed_url_attribute_as_io
         when "year_built"
           #
         when "zip"
@@ -375,6 +375,15 @@ module Hubspot
 
       def attribute_as_io
         URI.open(property_value)
+      end
+
+      def signed_url_attribute_as_io
+        uri = URI.parse(property_value)
+        file_id = uri.path&.split("/")&.last
+        first_url = "https://api.hubapi.com/files/v3/files/#{file_id}/signed-url?hapikey=#{Rails.secrets.dig(:hubspot, :api_key)}"
+        signed_url_payload = OpenURI.open_uri(first_url).read
+        signed_url = JSON.parse(signed_url_payload)["url"]
+        URI.open(url)
       end
     end
   end

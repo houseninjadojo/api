@@ -6,7 +6,8 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreatePolicy, type: :policy do
   let(:user) { build(:user) }
   let(:payment_method) { build(:credit_card, user: user) }
   let(:subscription) { build(:subscription, user: user) }
-  let(:resource) { build(:invoice, user: user, subscription: subscription) }
+  let(:work_order) { build(:work_order) }
+  let(:resource) { build(:invoice, user: user, subscription: subscription, work_order: work_order) }
 
   let(:policy) { described_class.new(resource) }
 
@@ -75,6 +76,18 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreatePolicy, type: :policy do
     it "returns false if resource subscription does not have stripe id" do
       resource.subscription.stripe_id = nil
       expect(policy.has_subscription_id?).to be_falsey
+    end
+  end
+
+  describe_rule :is_walkthrough? do
+    it "returns true if resource is_walkthrough" do
+      resource.work_order.description = "Home Walkthrough: asdf"
+      expect(policy.is_walkthrough?).to be_truthy
+    end
+
+    it "returns false if resource not is_walkthrough" do
+      resource.work_order.description = "Not home walkthrough"
+      expect(policy.is_walkthrough?).to be_falsey
     end
   end
 end

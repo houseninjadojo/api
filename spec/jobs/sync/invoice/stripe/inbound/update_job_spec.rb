@@ -241,7 +241,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::UpdateJob, type: :job do
     it "will sync if policy approves" do
       [invoice, user, subscription, promo_code].each(&:to_s)
       invoice_object = object_double(Stripe::Event.construct_from(payload).data.object)
-      allow(invoice_object).to receive(:discounts).and_return([Stripe::Discount.construct_from(discount)])
+      allow(invoice_object).to receive(:discount).and_return(Stripe::Discount.construct_from(discount))
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       allow_any_instance_of(job).to receive(:webhook_event).and_return(webhook_event)
       allow(Stripe::Invoice).to receive(:retrieve).and_return(invoice_object)
@@ -287,7 +287,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::UpdateJob, type: :job do
     it "returns params" do
       [user, subscription, promo_code].each(&:to_s)
       invoice_object = object_double(Stripe::Event.construct_from(payload).data.object)
-      allow(invoice_object).to receive(:discounts).and_return([Stripe::Discount.construct_from(discount)])
+      allow(invoice_object).to receive(:discount).and_return(Stripe::Discount.construct_from(discount))
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
       allow(Stripe::Invoice).to receive(:retrieve).and_return(invoice_object)
       expect(job.new(webhook_event).params).to include(

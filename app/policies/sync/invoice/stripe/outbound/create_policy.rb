@@ -4,7 +4,8 @@ class Sync::Invoice::Stripe::Outbound::CreatePolicy < ApplicationPolicy
   def can_sync?
     !has_external_id? &&
     has_customer_id? &&
-    (has_payment_method_id? || has_subscription_id?)
+    (has_payment_method_id? || has_subscription_id?) &&
+    !is_walkthrough?
   end
 
   def has_external_id?
@@ -21,5 +22,9 @@ class Sync::Invoice::Stripe::Outbound::CreatePolicy < ApplicationPolicy
 
   def has_subscription_id?
     record&.subscription&.stripe_id.present?
+  end
+
+  def is_walkthrough?
+    record&.work_order&.is_walkthrough?
   end
 end

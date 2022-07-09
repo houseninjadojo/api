@@ -54,7 +54,8 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
 
   def promo_code
     return invoice&.promo_code if invoice&.promo_code.present?
-    discount = invoice_object.discounts.find { |discount| discount.promotion_code.present? }
+    discount = invoice_object.discount
+    # discount = invoice_object.discounts.find { |discount| discount.promotion_code.present? }
     @promo_code ||= PromoCode.find_by(coupon_id: discount&.coupon&.id)
   end
 
