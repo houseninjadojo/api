@@ -15,7 +15,8 @@ class Sync::Invoice::Stripe::Outbound::UpdatePolicy < ApplicationPolicy
 
   def can_sync?
     has_external_id? &&
-    has_changed_attributes?
+    has_changed_attributes? &&
+    is_modifiable?
   end
 
   def has_external_id?
@@ -24,6 +25,10 @@ class Sync::Invoice::Stripe::Outbound::UpdatePolicy < ApplicationPolicy
 
   def has_changed_attributes?
     !changeset.blank?
+  end
+
+  def is_modifiable?
+    record&.draft?
   end
 
   def is_actionable?

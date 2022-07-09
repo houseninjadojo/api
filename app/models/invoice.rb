@@ -100,6 +100,11 @@ class Invoice < ApplicationRecord
     status == STATUS_OPEN
   end
 
+  def draft?
+    # payment_attempted_at.present? && payment.present?
+    status == STATUS_DRAFT
+  end
+
   def paid?
     # payment_attempted_at.present? && payment.present?
     status == STATUS_PAID

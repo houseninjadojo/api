@@ -164,6 +164,8 @@ module Hubspot
           #
         when "estimate___from_vendor"
           #
+        when "est__home_value"
+          # :home_value
         when "firstname"
           :first_name
         when "homeowner_name"
@@ -183,6 +185,10 @@ module Hubspot
           :last_name
         when "mobilephone"
           :phone_number
+        when "no__of_bathrooms"
+          #
+        when "number_of_bedrooms"
+          #
         when "phone"
           :phone_number
         when "pipeline"
@@ -193,6 +199,14 @@ module Hubspot
           :refund_amount
         when "refund___make_good_reason"
           :refund_reason
+        when "scheduled_work_date"
+          #
+        when "second_estimate___for_homeowner"
+          #
+        when "second_estimate___from_vendor"
+          #
+        when "size_of_home__sq_ft_"
+          #
         when "state"
           :state
         when "time_of_scheduled_work"
@@ -207,6 +221,8 @@ module Hubspot
           #
         when "walkthrough_report_pdf"
           :walkthrough_report_pdf
+        when "year_built"
+          #
         when "zip"
           :zipcode
         end
@@ -258,6 +274,8 @@ module Hubspot
           attribute_as_amount_in_cents
         when "estimate___from_vendor"
           attribute_as_amount_in_cents
+        when "est__home_value"
+          #
         when "firstname"
           property_value
         when "homeowner_name"
@@ -277,6 +295,10 @@ module Hubspot
           property_value
         when "mobilephone"
           property_value
+        when "no__of_bathrooms"
+          #
+        when "number_of_bedrooms"
+          #
         when "phone"
           property_value
         when "pipeline"
@@ -287,6 +309,14 @@ module Hubspot
           attribute_as_amount_in_cents
         when "refund___make_good_reason"
           property_value
+        when "scheduled_work_date"
+          #
+        when "second_estimate___for_homeowner"
+          #
+        when "second_estimate___from_vendor"
+          #
+        when "size_of_home__sq_ft_"
+          #
         when "state"
           property_value
         when "time_of_scheduled_work"
@@ -301,6 +331,8 @@ module Hubspot
           #
         when "walkthrough_report_pdf"
           attribute_as_io
+        when "year_built"
+          #
         when "zip"
           property_value
         else
