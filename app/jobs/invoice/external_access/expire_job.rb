@@ -1,5 +1,6 @@
 class Invoice::ExternalAccess::ExpireJob < ApplicationJob
   queue_as :default
+  unique :until_executed
 
   attr_accessor :invoice
 
@@ -9,7 +10,7 @@ class Invoice::ExternalAccess::ExpireJob < ApplicationJob
 
     ActiveRecord::Base.transaction do
       invoice.update(access_token: nil)
-      invoice.deep_link.expire! if deep_link.present?
+      DeepLink.find_by(linkable: invoice)&.expire!
     end
   end
 

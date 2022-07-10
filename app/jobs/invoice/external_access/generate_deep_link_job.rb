@@ -1,5 +1,6 @@
 class Invoice::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
   queue_as :default
+  unique :until_executed
 
   attr_accessor :invoice, :deep_link
 
