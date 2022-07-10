@@ -48,7 +48,7 @@ class WorkOrder < ApplicationRecord
   after_update        :sync_total
   after_update        :sync_invoice_notes
   after_update_commit :sync_update!
-  after_update_commit :finalize_invoice!
+  after_update_commit :finalize_invoice!, if: :saved_change_to_status?
 
   # associations
 
