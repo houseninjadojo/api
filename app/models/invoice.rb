@@ -60,8 +60,9 @@ class Invoice < ApplicationRecord
 
   has_many   :line_items,   dependent: :destroy
   has_one    :deep_link,    dependent: :destroy, as: :linkable
-  has_one    :document
+  has_one    :document, -> { where(tags: [Document::SystemTags::INVOICE]) }
   has_one    :payment
+  has_one    :receipt, -> { where(tags: [Document::SystemTags::RECEIPT]) }, class_name: 'Document'
   belongs_to :promo_code,   required: false
   belongs_to :subscription, required: false
   belongs_to :user,         required: false

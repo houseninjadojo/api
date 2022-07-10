@@ -32,6 +32,7 @@ class Document < ApplicationRecord
     PMP = 'system:preventative-maintenance-plan'
     WALKTHROUGH_REPORT = 'system:walkthrough-report'
     INVOICE = 'system:invoice'
+    RECEIPT = 'system:receipt'
   end
 
   # scopes

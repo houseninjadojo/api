@@ -9,6 +9,8 @@ class Sync::Payment::Stripe::Inbound::UpdateJob < Sync::BaseJob
     payment.update!(params)
 
     webhook_event.update!(processed_at: Time.now)
+
+    attach_receipt_to_invoice
   end
 
   def policy
@@ -58,5 +60,37 @@ class Sync::Payment::Stripe::Inbound::UpdateJob < Sync::BaseJob
 
   def stripe_object
     stripe_event.data.object
+  end
+
+  def receipt_url
+    return if stripe_object&.receipt_url.nil?
+    @receipt_url ||= begin
+      content = OpenURI.open_uri(stripe_object.receipt_url)&.read
+      receipt_uri = content.match(/(https\:\/\/pay\.stripe\.com\/invoice\/[\w\/\_]+\/pdf\?s\=em)/)
+      receipt_uri.present? ? receipt_uri[1] : nil
+    rescue => e
+      Rails.logger.warn(e)
+      Sentry.capture_exception(e)
+      nil
+    end
+  end
+
+  def receipt_pdf
+    return if receipt_url.nil?
+    @receipt_pdf ||= begin
+      file = OpenURI.open_uri(receipt_url)
+      file if file&.content_type == "application/pdf"
+    rescue => e
+      Rails.logger.warn(e)
+      Sentry.capture_exception(e)
+      nil
+    end
+  end
+
+  def attach_receipt_to_invoice
+    return if invoice.nil? || receipt_pdf.nil?
+    receipt = Document.create!(invoice: invoice, user: user, tags: [Document::SystemTags::RECEIPT])
+    receipt.asset.attach(io: receipt_pdf, filename: "receipt.pdf")
+    receipt.save
   end
 end
