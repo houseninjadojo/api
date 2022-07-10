@@ -95,7 +95,10 @@ module Syncable
   end
 
   def sync!(service:, action:, perform_now: false)
-    return unless should_sync_service?(service: service, action: action)
+    unless should_sync_service?(service: service, action: action)
+      Rails.logger.info("[Sync] Skipping sync for #{self.class.name}##{id} to #{service} for action #{action}")
+      return
+    end
     job = sync_job(service: service, action: action)
     method = perform_now ? :perform_now : :perform_later
     case action
