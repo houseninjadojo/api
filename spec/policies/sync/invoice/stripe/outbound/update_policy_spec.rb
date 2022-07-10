@@ -17,15 +17,15 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::UpdatePolicy, type: :policy do
 
   describe_rule :can_sync? do
     it "returns true if all conditions true" do
-      expect(policy).to receive(:has_external_id?).and_return(true)
-      expect(policy).to receive(:has_changed_attributes?).and_return(true)
-      expect(policy).to receive(:is_modifiable?).and_return(true)
+      expect(policy).to receive(:has_external_id?).and_return(true).at_least(:once)
+      expect(policy).to receive(:has_changed_attributes?).and_return(true).at_least(:once)
+      expect(policy).to receive(:is_modifiable?).and_return(true).at_least(:once)
       expect(policy.can_sync?).to be_truthy
     end
 
     it "returns false if any conditions false" do
-      expect(policy).to receive(:has_external_id?).and_return(true)
-      expect(policy).to receive(:has_changed_attributes?).and_return(false)
+      expect(policy).to receive(:has_external_id?).and_return(true).at_least(:once)
+      expect(policy).to receive(:has_changed_attributes?).and_return(false).at_least(:once)
       # expect(policy).to receive(:is_actionable?).and_return(false)
       expect(policy.can_sync?).to be_falsey
     end
