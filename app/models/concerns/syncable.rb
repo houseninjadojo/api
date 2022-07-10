@@ -96,12 +96,14 @@ module Syncable
 
   def sync!(service:, action:, perform_now: false)
     unless should_sync_service?(service: service, action: action)
-      Rails.logger.info("[Sync] Skipping sync for #{self.class.name}##{id} to #{service} for action #{action}",
-        service: service,
-        action: action,
-        id: id,
-        changeset: @changesets[service].changes,
-      )
+      if !Rails.env.test?
+        Rails.logger.info("[Sync] Skipping sync for #{self.class.name}##{id} to #{service} for action #{action}",
+          service: service,
+          action: action,
+          id: id,
+          changeset: @changesets[service].changes,
+        )
+      end
       return
     end
     job = sync_job(service: service, action: action)

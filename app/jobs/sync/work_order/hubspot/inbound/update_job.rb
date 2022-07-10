@@ -11,6 +11,8 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdateJob < Sync::BaseJob
 
     return unless policy.can_sync?
 
+    resource&track_update_changes(include_associations: true)
+
     resource&.update!(attribute_name => attribute_value)
 
     webhook_event.update!(processed_at: Time.now)
