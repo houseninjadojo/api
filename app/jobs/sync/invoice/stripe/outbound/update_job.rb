@@ -30,13 +30,14 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
 
   def params
     {
-      description: resource.description || "House Ninja Services",
+      description: resource.description,
     }
   end
 
   def line_item_params
     {
       amount: resource.total,
+      description: "House Ninja Services",
     }
   end
 
