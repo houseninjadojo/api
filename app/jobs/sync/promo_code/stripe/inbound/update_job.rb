@@ -29,7 +29,7 @@ class Sync::PromoCode::Stripe::Inbound::UpdateJob < Sync::BaseJob
   end
 
   def promo_code
-    @promo_code ||= PromoCode.find_by(stripe_id: stripe_object.id)
+    @promo_code ||= PromoCode.find_by(stripe_id: stripe_object.id) if stripe_object&.id.present?
   end
 
   def params

@@ -37,19 +37,19 @@ class Sync::Payment::Stripe::Inbound::UpdateJob < Sync::BaseJob
   end
 
   def payment
-    @payment ||= Payment.find_by(stripe_id: stripe_object.id)
+    @payment ||= Payment.find_by(stripe_id: stripe_object.id) if stripe_object&.id.present?
   end
 
   def invoice
-    @invoice ||= Invoice.find_by(stripe_id: stripe_object.invoice)
+    @invoice ||= Invoice.find_by(stripe_id: stripe_object.invoice) if stripe_object&.invoice.present?
   end
 
   def user
-    @user ||= User.find_by(stripe_id: stripe_object.customer)
+    @user ||= User.find_by(stripe_id: stripe_object.customer) if stripe_object&.customer.present?
   end
 
   def payment_method
-    @payment_method ||= PaymentMethod.find_by(stripe_token: stripe_object.payment_method)
+    @payment_method ||= PaymentMethod.find_by(stripe_token: stripe_object.payment_method) if stripe_object&.payment_method.present?
   end
 
   def stripe_event

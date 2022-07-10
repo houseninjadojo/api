@@ -29,7 +29,7 @@ class Sync::Subscription::Stripe::Inbound::UpdateJob < Sync::BaseJob
   end
 
   def subscription
-    @subscription ||= Subscription.find_by(stripe_id: stripe_object.id)
+    @subscription ||= Subscription.find_by(stripe_id: stripe_object.id) if stripe_object&.id.present?
   end
 
   def params

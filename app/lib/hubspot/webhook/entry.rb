@@ -74,11 +74,11 @@ module Hubspot
 
       def resource
         if resource_klass == Property
-          @resource ||= User.find_by(hubspot_id: hubspot_id)&.default_property
+          @resource ||= User.find_by(hubspot_id: hubspot_id)&.default_property if hubspot_id.present?
         elsif resource_klass == Invoice
-          @resource ||= WorkOrder.find_by(hubspot_id: hubspot_id)&.invoice
+          @resource ||= WorkOrder.find_by(hubspot_id: hubspot_id)&.invoice if hubspot_id.present?
         else
-          @resource ||= resource_klass&.find_by(hubspot_id: hubspot_id)
+          @resource ||= resource_klass&.find_by(hubspot_id: hubspot_id) if hubspot_id.present?
         end
       end
 

@@ -40,15 +40,16 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
   end
 
   def user
-    User.find_by(hubspot_id: hubspot_contact&.id)
+    User.find_by(hubspot_id: hubspot_contact&.id) if hubspot_contact&.id.present?
   end
 
   def deal_params
+    work_order_status = WorkOrderStatus.find_by(hubspot_id: deal[:dealstage]) if deal[:dealstage].present?
     {
       property: user&.default_property,
       description: deal[:dealname],
       hubspot_id: deal[:hs_object_id],
-      status: WorkOrderStatus.find_by(hubspot_id: deal[:dealstage]),
+      status: work_order_status,
       created_at: Time.at(deal[:createdate]&.to_i / 1000),
       # updated_at: Time.at(deal[:hs_lastmodifieddate]&.to_i / 1000),
 

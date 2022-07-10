@@ -22,6 +22,7 @@ class Sync::Subscription::Stripe::Inbound::UpdatePolicy < ApplicationPolicy
   end
 
   def is_active?
+    return false unless subscription[:id].present?
     Subscription.find_by(stripe_id: subscription[:id])&.active?
   end
 

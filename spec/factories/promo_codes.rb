@@ -26,5 +26,6 @@ FactoryBot.define do
     code { Faker::Alphanumeric.alphanumeric(number: 10).upcase }
     name { "10% off" }
     percent_off { "10.0" }
+    stripe_id { Faker::Alphanumeric.alphanumeric(number: 10).upcase }
   end
 end

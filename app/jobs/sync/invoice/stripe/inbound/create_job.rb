@@ -38,20 +38,26 @@ class Sync::Invoice::Stripe::Inbound::CreateJob < Sync::BaseJob
   end
 
   def user
-    @user ||= User.find_by(stripe_id: stripe_object.customer)
+    @user ||= User.find_by(stripe_id: stripe_object.customer) if stripe_object&.customer.present?
   end
 
   def subscription
-    @subscription ||= Subscription.find_by(stripe_id: stripe_object.subscription)
+    @subscription ||= begin
+      if stripe_object.subscription.nil?
+        return nil
+      else
+        Subscription.find_by(stripe_id: stripe_object.subscription)
+      end
+    end
   end
 
   def payment
-    @payment ||= Payment.find_by(stripe_id: stripe_object.charge)
+    @payment ||= Payment.find_by(stripe_id: stripe_object.charge) if stripe_object&.charge.present?
   end
 
   def promo_code
     coupon_id = invoice_object&.discount&.coupon&.id
-    @promo_code ||= PromoCode.find_by(coupon_id: coupon_id)
+    @promo_code ||= PromoCode.find_by(coupon_id: coupon_id) if coupon_id&.present?
   end
 
   def stripe_event

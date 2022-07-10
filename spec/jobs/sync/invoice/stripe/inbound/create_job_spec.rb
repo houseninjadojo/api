@@ -4,7 +4,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::CreateJob, type: :job do
   let(:user) { create(:user, stripe_id: "cus_LVeJwkMEn3BBnE") }
   let(:subscription) { create(:subscription, stripe_id: "sub_1Kod0ZAWN1SYQ0CtRiUcGEhe") }
   # let(:payment) { create(:payment, stripe_id: "ch_1Kod0ZAWN1SYQ0CtRiUcGEhe") }
-  let(:promo_code) { create(:promo_code, coupon_id: "coupon_1Kod0ZAWN1SYQ0CtRiUcGEhe") }
+  let(:promo_code) { create(:promo_code, coupon_id: "coupon_1Kod0ZAWN1SYQ0CtRiUcGEhe", stripe_id: "1234") }
   let(:payload) {
     {
       "id"=>"evt_1LAl7oAWN1SYQ0Ct06CqCvvZ",

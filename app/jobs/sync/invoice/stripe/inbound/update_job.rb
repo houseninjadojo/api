@@ -37,26 +37,26 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
   end
 
   def invoice
-    @invoice ||= Invoice.find_by(stripe_id: stripe_object.id)
+    @invoice ||= Invoice.find_by(stripe_id: stripe_object.id) if stripe_object&.id.present?
   end
 
   def user
-    @user ||= User.find_by(stripe_id: stripe_object.customer)
+    @user ||= User.find_by(stripe_id: stripe_object.customer) if stripe_object&.customer.present?
   end
 
   def subscription
-    @subscription ||= invoice&.subscription || Subscription.find_by(stripe_id: stripe_object.subscription)
+    @subscription ||= invoice&.subscription || Subscription.find_by(stripe_id: stripe_object.subscription) if stripe_object&.subscription.present?
   end
 
   def payment
-    @payment ||= invoice&.payment || Payment.find_by(stripe_id: stripe_object.charge)
+    @payment ||= invoice&.payment || Payment.find_by(stripe_id: stripe_object.charge) if stripe_object&.charge.present?
   end
 
   def promo_code
     return invoice&.promo_code if invoice&.promo_code.present?
     discount = invoice_object.discount
     # discount = invoice_object.discounts.find { |discount| discount.promotion_code.present? }
-    @promo_code ||= PromoCode.find_by(coupon_id: discount&.coupon&.id)
+    @promo_code ||= PromoCode.find_by(coupon_id: discount&.coupon&.id) if discount&.coupon&.id.present?
   end
 
   def stripe_event
