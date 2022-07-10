@@ -90,7 +90,7 @@ class Sync::Payment::Stripe::Inbound::UpdateJob < Sync::BaseJob
 
   def attach_receipt_to_invoice
     return if invoice.nil? || receipt_pdf.nil?
-    receipt = Document.create!(invoice: invoice, user: user, tags: [Document::SystemTags::RECEIPT])
+    receipt = Document.find_or_create_by(invoice: invoice, user: user, tags: [Document::SystemTags::RECEIPT])
     receipt.asset.attach(io: receipt_pdf, filename: "receipt.pdf")
     receipt.save
   end
