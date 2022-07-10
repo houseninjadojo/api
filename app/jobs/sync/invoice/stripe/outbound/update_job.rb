@@ -49,7 +49,11 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
   end
 
   def work_order_status_changed?
-    changeset.find { |change| change[:path] == [:work_order, :status] }.present?
+    paths = [
+      [:work_order, :status],
+      [:status],
+    ]
+    changeset.find { |change| paths.include?(change[:path]) }.present?
   end
 
   def description_changed?

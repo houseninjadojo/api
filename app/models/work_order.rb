@@ -106,7 +106,7 @@ class WorkOrder < ApplicationRecord
     return unless invoice&.can_be_finalized?
     Sync::Invoice::Stripe::Outbound::UpdateJob.perform_later(
       invoice,
-      [{ "path": ["status"] }], # mimicking a changeset
+      [{ path: [:work_order, :status] }], # mimicking a changeset
     )
   end
 
