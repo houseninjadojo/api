@@ -114,6 +114,10 @@ class Invoice < ApplicationRecord
     payment.try(:created_at)
   end
 
+  def can_be_finalized?
+    draft? && finalized_at.nil?
+  end
+
   # actions
 
   def send_payment_approval_email!

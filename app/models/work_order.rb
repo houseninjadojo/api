@@ -48,6 +48,7 @@ class WorkOrder < ApplicationRecord
   after_update        :sync_total
   after_update        :sync_invoice_notes
   after_update_commit :sync_update!
+  after_update_commit :finalize_invoice!
 
   # associations
 
@@ -98,6 +99,14 @@ class WorkOrder < ApplicationRecord
       total: amount,
       # user: user,
       work_order: self,
+    )
+  end
+
+  def finalize_invoice!
+    return unless invoice&.can_be_finalized?
+    Sync::Invoice::Stripe::Outbound::UpdateJob.perform_later(
+      invoice,
+      [{ "path": ["status"] }], # mimicking a changeset
     )
   end
 
