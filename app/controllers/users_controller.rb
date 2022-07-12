@@ -70,11 +70,11 @@ class UsersController < ApplicationController
       email = params.dig(:data, :attributes, :email)
       user = User.find_by!(email: email) if email.present?
       resource = UserResource.find(id: user.id)
-      if resource.data.is_currently_onboarding?
-        Rails.logger.warn("User #{user.id} is currently onboarding. Skipping.")
-        UserResource.build({})
-      else
+      if resource.data&.is_currently_onboarding?
         resource
+      else
+        Rails.logger.warn("User #{user.id} is not curently onboarding. Skipping.")
+        UserResource.build({})
       end
     rescue => e
       Rails.logger.warn("Failed to find user: #{e.message}")
