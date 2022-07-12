@@ -47,6 +47,7 @@ group :development, :test do
   gem 'faker'                                              # Generate fake data
   gem 'graphiti_spec_helpers'
   gem 'rspec-rails',           '~> 5.1.2'
+  gem 'rspec-sidekiq'
   gem 'rubocop-rails',                     require: false
   gem 'pry'
 end

@@ -26,7 +26,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    false
+    record&.id == user&.id
   end
 
   # Scoping

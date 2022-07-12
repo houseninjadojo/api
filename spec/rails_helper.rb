@@ -8,6 +8,8 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'graphiti_spec_helpers/rspec'
 require "action_policy/rspec/dsl"
+require 'sidekiq/testing'
+require 'rspec-sidekiq'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -84,6 +86,7 @@ RSpec.configure do |config|
       end
       WorkOrderStatus.create!(slug: s, name: s.titleize, hubspot_id: hubspot_id)
     end
+    Sidekiq::Testing.fake!
   end
 
   config.around(:each) do |example|
@@ -106,3 +109,14 @@ RSpec.configure do |config|
 end
 
 Faker::Config.locale = 'en-US'
+
+RSpec::Sidekiq.configure do |config|
+  # Clears all job queues before each example
+  config.clear_all_enqueued_jobs = true # default => true
+
+  # Whether to use terminal colours when outputting messages
+  config.enable_terminal_colours = true # default => true
+
+  # Warn when jobs are not enqueued to Redis but to a job array
+  config.warn_when_jobs_not_processed_by_sidekiq = false # default => true
+end

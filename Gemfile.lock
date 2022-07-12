@@ -354,6 +354,9 @@ GEM
       rspec-expectations (~> 3.10)
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
+    rspec-sidekiq (3.1.0)
+      rspec-core (~> 3.0, >= 3.0.0)
+      sidekiq (>= 2.4.0)
     rspec-support (3.10.3)
     rubocop (1.31.1)
       json (~> 2.3)
@@ -465,6 +468,7 @@ DEPENDENCIES
   redis (~> 4.7)
   responders
   rspec-rails (~> 5.1.2)
+  rspec-sidekiq
   rubocop-rails
   seedbank
   sendgrid-actionmailer
