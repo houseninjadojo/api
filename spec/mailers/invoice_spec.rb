@@ -7,6 +7,7 @@ RSpec.describe InvoiceMailer, type: :mailer do
         email: "test@houseninja.co",
         first_name: "Test",
         invoice_amount: "$100.00",
+        invoice_notes: "test\nnotest"&.to_s&.gsub(/\n/, '<br>')&.html_safe,
         service_name: "Test Service",
         service_provider: "Test Provider",
         payment_link: "https://app.houseninja.co/payment-link",
@@ -25,6 +26,7 @@ RSpec.describe InvoiceMailer, type: :mailer do
         service_name: "Test Service",
         service_provider: "Test Provider",
         invoice_amount: "$100.00",
+        invoice_notes: "test<br>notest",
         payment_link: "https://app.houseninja.co/payment-link",
         app_store_url: "https://itunes.apple.com/us/app/houseninja/123456789"
       }.to_s)
