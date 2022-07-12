@@ -25,7 +25,7 @@ class UsersController < ApplicationController
       user = create_user_resource
     end
 
-    if user.errors.empty?
+    if user&.errors.blank?
       render jsonapi: user, status: 201
     else
       render jsonapi_errors: user
