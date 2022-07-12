@@ -107,7 +107,7 @@ class User < ApplicationRecord
   #
   # @return {PaymentMethod}
   def default_payment_method
-    self.payment_methods.first
+    self.payment_methods.where.not(stripe_token: nil).first
   end
 
   # User Full Name (first_name + last_name)
@@ -154,7 +154,7 @@ class User < ApplicationRecord
   # gates
 
   def has_completed_onboarding?
-    onboarding_step == "completed"
+    self.subscription.present? && !self.needs_setup?
   end
 
   def is_currently_onboarding?
@@ -166,7 +166,7 @@ class User < ApplicationRecord
   end
 
   def needs_setup?
-    self.auth_zero_user_created.present?
+    self.auth_zero_user_created.nil?
   end
 
   # no-op

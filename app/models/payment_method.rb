@@ -80,8 +80,16 @@ class PaymentMethod < ApplicationRecord
 
   def sync_create!
     return if Rails.env.test?
+    # set user if needed
     Sync::User::Stripe::Outbound::CreateJob.perform_now(user) unless user&.stripe_id&.present?
-    Sync::CreditCard::Stripe::Outbound::CreateJob.perform_now(self)
+    # grab current payment method for after
+    current_method = user&.default_payment_method
+    # create & attach payment method in stripe
+    new_method = Sync::CreditCard::Stripe::Outbound::CreateJob.perform_now(self)
+    # set new default and mark the old
+    if new_method.persisted? && current_method.present?
+      Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
+    end
   end
 
   def sync_services

@@ -27,6 +27,7 @@ class Sync::PaymentMethod::Stripe::Outbound::CreateJob < Sync::BaseJob
       stripe_token: payment_method.id,
       last_four: payment_method.card.last4,
     )
+    resource
   end
 
   def params
