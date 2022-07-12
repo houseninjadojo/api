@@ -28,7 +28,7 @@ class UsersController < ApplicationController
     if user.errors.empty?
       render jsonapi: user, status: 201
     else
-      render jsonapi_errors: existing_user
+      render jsonapi_errors: user
     end
   end
 
