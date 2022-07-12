@@ -69,13 +69,13 @@ class UsersController < ApplicationController
       resource = UserResource.find(id: user.id)
       if resource.data.is_currently_onboarding?
         Rails.logger.warn("User #{user.id} is currently onboarding. Skipping.")
-        nil
+        UserResource.build({})
       else
         resource
       end
     rescue => e
       Rails.logger.warn("Failed to find user: #{e.message}")
-      nil
+      UserResource.build({})
     end
   end
 

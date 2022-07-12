@@ -15,8 +15,13 @@ class UserMailer < ApplicationMailer
   def delete_request(user:)
     mail(
       to: "miles@houseninja.co",
-      subject: "Delete Request for #{user.email}",
-      body: 'Testing'
+      body: '',
+      template_id: 'd-fa5ae35cc727496fb2e01c69e4cd04a9',
+      dynamic_template_data: {
+        email: user&.email,
+        name: user&.full_name,
+        requested_at: Time.zone.now.to_s(:long),
+      }
     )
   end
 end
