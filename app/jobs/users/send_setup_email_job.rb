@@ -7,6 +7,7 @@ class Users::SendSetupEmailJob < ApplicationJob
     DeepLink.find_by(linkable: user, feature: "onboarding")&.destroy
 
     user.update!(
+      onboarding_step: OnboardingStep::SET_PASSWORD,
       onboarding_link: nil,
       onboarding_code: SecureRandom.hex(12),
     )

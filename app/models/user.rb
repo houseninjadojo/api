@@ -155,7 +155,9 @@ class User < ApplicationRecord
   # gates
 
   def has_completed_onboarding?
-    self.subscription.present? && !self.needs_setup?
+    self.subscription.present? &&
+    self.default_property.present? &&
+    self.auth_zero_user_created == true
   end
 
   def is_currently_onboarding?
@@ -167,7 +169,10 @@ class User < ApplicationRecord
   end
 
   def needs_setup?
-    self.auth_zero_user_created == false && self.properties.blank?
+    # has properties, no user
+    self.auth_zero_user_created == false &&
+    self.subscription.present? &&
+    self.default_property.present?
   end
 
   # no-op
