@@ -69,7 +69,16 @@ class UsersController < ApplicationController
   private
 
   def onboarding_code
-    params.dig(:filter, :onboarding_code) || params.dig(:filter, :onboardingCode)
+    code = params.dig(:filter, :onboardingCode) || params.dig(:filter, :onboarding_code)
+    if code.present?
+      {
+        filter: {
+          onboarding_code: code,
+        }
+      }
+    else
+      nil
+    end
   end
 
   def create_user_resource
