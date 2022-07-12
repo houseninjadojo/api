@@ -69,7 +69,7 @@ class UsersController < ApplicationController
       resource = UserResource.find(id: user.id)
       if resource.data.is_currently_onboarding?
         Rails.logger.warn("User #{user.id} is currently onboarding. Skipping.")
-        return nil
+        nil
       else
         resource
       end
@@ -88,12 +88,10 @@ class UsersController < ApplicationController
   end
 
   def is_requesting_account_setup?
-    user_resource.data.present? &&
     params.dig(:data, :attributes, :onboarding_step) == OnboardingStep::ACCOUNT_SETUP
   end
 
   def is_requesting_service?
-    user_resource.data.present? &&
     params.dig(:data, :attributes, :requested_zipcode).present?
   end
 
