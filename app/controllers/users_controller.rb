@@ -18,10 +18,13 @@ class UsersController < ApplicationController
     authorize!
 
     if is_requesting_account_setup? # trying to email account setup
+      Rails.logger.info("User is requesting account setup", params: params)
       user = account_setup_user_resource
     elsif is_requesting_service? # not servicing their area
+      Rails.logger.info("User is requesting service", params: params)
       user = create_interested_user
     else
+      Rails.logger.info("User is creating a new user", params: params)
       user = create_user_resource
     end
 
