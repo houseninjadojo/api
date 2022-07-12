@@ -167,7 +167,7 @@ class User < ApplicationRecord
   end
 
   def needs_setup?
-    self.auth_zero_user_created == false
+    self.auth_zero_user_created == false && self.properties.blank?
   end
 
   # no-op
