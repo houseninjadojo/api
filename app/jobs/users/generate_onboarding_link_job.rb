@@ -6,6 +6,8 @@ class Users::GenerateOnboardingLinkJob < ApplicationJob
   def perform(user)
     @user = user
 
+    return if user.onboarding_link.present?
+
     deep_link.generate!
     user.update!(onboarding_link: onboarding_link)
   end

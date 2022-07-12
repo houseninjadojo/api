@@ -47,9 +47,10 @@ class User < ApplicationRecord
 
   before_save :set_contact_type
 
-  after_create_commit :generate_onboarding_link
   after_create_commit :generate_referral_promo_code
   after_create_commit :generate_document_groups
+
+  after_save_commit :generate_onboarding_link
 
   # after_save :complete_onboarding,
   #   if: -> (user) { user.onboarding_step == OnboardingStep::SET_PASSWORD }
@@ -187,10 +188,6 @@ class User < ApplicationRecord
   end
 
   def generate_onboarding_link
-    if has_completed_onboarding?
-      Rails.logger.info("Will not create onboarding link for user=#{self.id} they already completed onboarding.")
-      return
-    end
     Users::GenerateOnboardingLinkJob.perform_later(self)
   end
 
