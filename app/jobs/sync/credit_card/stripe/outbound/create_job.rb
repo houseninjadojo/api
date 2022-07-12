@@ -23,6 +23,8 @@ class Sync::CreditCard::Stripe::Outbound::CreateJob < Sync::BaseJob
     Stripe::PaymentMethod.attach(resource.stripe_token, {
       customer: resource.user.stripe_id
     })
+
+    resource
   end
 
   def params
