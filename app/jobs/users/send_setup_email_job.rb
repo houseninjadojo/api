@@ -14,6 +14,6 @@ class Users::SendSetupEmailJob < ApplicationJob
     UserMailer.account_setup(
       email: user.email,
       url: user.onboarding_link,
-    )
+    ).deliver_later
   end
 end
