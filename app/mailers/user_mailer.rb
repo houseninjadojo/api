@@ -11,4 +11,12 @@ class UserMailer < ApplicationMailer
       }
     )
   end
+
+  def delete_request(user:)
+    mail(
+      to: "miles@houseninja.co",
+      subject: "Delete Request for #{user.email}",
+      body: 'Testing'
+    )
+  end
 end
