@@ -26,7 +26,7 @@ class Users::GenerateOnboardingLinkJob < ApplicationJob
         user_id: user_id,
         onboarding_code: onboarding_code,
         onboarding_step: onboarding_step,
-        "$web_only" => true,
+        "$web_only" => false,
       },
     }
   end
