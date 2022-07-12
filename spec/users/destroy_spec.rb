@@ -15,7 +15,7 @@ RSpec.describe "users#destroy", type: :request do
       expect {
         make_request
         expect(response.status).to eq(200), response.body
-      }.to have_enqueued_job
+      }.to have_enqueued_mail(UserMailer, :delete_request)
       expect { user.reload }
         .to change { user.delete_requested_at }
       expect(json).to eq('meta' => {})
