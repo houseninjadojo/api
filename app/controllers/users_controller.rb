@@ -4,7 +4,15 @@ class UsersController < ApplicationController
   def index
     authorize!
     scope = authorized_scope(User.all)
-    users = UserResource.all(params, scope)
+    # rudimentary security
+    # only filter if we know the device_id
+    if params.dig(:filter, :onboarding_code)
+      users = UserResource.all(params)
+    else
+      # search for nothing
+      users = UserResource.all(params, scope)
+    end
+    
     respond_with(users)
   end
 
