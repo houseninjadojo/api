@@ -1,12 +1,13 @@
 class UsersController < ApplicationController
-  before_action :authenticate_request!, except: [:create, :update, :show]
+  before_action :authenticate_request!, except: [:index, :create, :update, :show]
 
   def index
+    authenticate_request! if onboarding_code.nil?
     authorize!
     scope = authorized_scope(User.all)
     # rudimentary security
     # only filter if we know the device_id
-    if params.dig(:filter, :onboarding_code)
+    if onboarding_code.present?
       users = UserResource.all(params)
     else
       # search for nothing
@@ -66,6 +67,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def onboarding_code
+    params.dig(:filter, :onboarding_code)
+  end
 
   def create_user_resource
     user = UserResource.build(params)
