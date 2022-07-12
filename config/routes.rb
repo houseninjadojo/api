@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     resources :service_areas,      path: 'service-areas',      only: [:index, :show]
     resources :subscription_plans, path: 'subscription-plans', only: [:index, :show]
     resources :subscriptions,      path: 'subscriptions',      only: [:index, :show, :create]
-    resources :users,              path: 'users',              only: [:index, :show, :create, :update]
+    resources :users,              path: 'users',              only: [:index, :show, :create, :update, :destroy]
     resources :work_orders,        path: 'work-orders',        only: [:index, :show, :create, :update]
 
     resources :resource_verifications, path: 'resource-verifications', only: [:create]

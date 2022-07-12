@@ -5,6 +5,7 @@
 #  id                                        :uuid             not null, primary key
 #  auth_zero_user_created                    :boolean          default(FALSE)
 #  contact_type                              :string           default("Customer")
+#  delete_requested_at                       :datetime
 #  email(Email Address)                      :string           default(""), not null
 #  first_name(First Name)                    :string           not null
 #  gender(Gender)                            :string           default("other"), not null
@@ -232,6 +233,11 @@ class User < ApplicationRecord
     else
       self.contact_type = ContactType::LEAD
     end
+  end
+
+  def destroy
+    update!(delete_requested_at: Time.now)
+    UserMailer.delete_request(user: self).deliver_later
   end
 
   # sync

@@ -21,7 +21,16 @@ class UserMailer < ApplicationMailer
         email: user&.email,
         name: user&.full_name,
         requested_at: Time.zone.now.to_s(:long),
-      }
+      },
+      personalizations: [
+        {
+          to: [
+            { email: "miles@houseninja.co" },
+            { email: "rachael@houseninja.co" },
+            { email: "hello@houseninja.co" },
+          ],
+        },
+      ]
     )
   end
 end

@@ -85,7 +85,7 @@ class UsersController < ApplicationController
   def account_setup_user_resource
     onboarding_step = params.dig(:data, :attributes, :onboarding_step)
     if onboarding_step == OnboardingStep::ACCOUNT_SETUP && user_resource&.data&.needs_setup?
-      Users::SendSetupEmailJob.perform_later(user_resource)
+      Users::SendSetupEmailJob.perform_later(user_resource&.data)
     end
     user_resource
   end

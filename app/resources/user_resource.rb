@@ -5,6 +5,7 @@
 #  id                                        :uuid             not null, primary key
 #  auth_zero_user_created                    :boolean          default(FALSE)
 #  contact_type                              :string           default("Customer")
+#  delete_requested_at                       :datetime
 #  email(Email Address)                      :string           default(""), not null
 #  first_name(First Name)                    :string           not null
 #  gender(Gender)                            :string           default("other"), not null
@@ -41,7 +42,7 @@ class UserResource < ApplicationResource
   self.model = User
   self.type = :users
 
-  primary_endpoint 'users', [:index, :show, :create, :update]
+  primary_endpoint 'users', [:index, :show, :create, :update, :destroy]
 
   has_many   :devices
   has_many   :documents
