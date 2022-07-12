@@ -7,6 +7,7 @@ class InvoiceMailer < ApplicationMailer
     service_name:,
     service_provider:,
     invoice_amount:,
+    invoice_notes:,
     payment_link:,
     app_store_url: Rails.settings.app_store_url
   )
@@ -19,6 +20,7 @@ class InvoiceMailer < ApplicationMailer
         service_name: service_name,
         service_provider: service_provider,
         invoice_amount: invoice_amount,
+        invoice_notes: invoice_notes,
         payment_link: payment_link,
         app_store_url: app_store_url
       }
