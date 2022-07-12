@@ -51,8 +51,8 @@ class User < ApplicationRecord
   after_create_commit :generate_referral_promo_code
   after_create_commit :generate_document_groups
 
-  after_save :complete_onboarding,
-    if: -> (user) { user.onboarding_step == OnboardingStep::SET_PASSWORD }
+  # after_save :complete_onboarding,
+  #   if: -> (user) { user.onboarding_step == OnboardingStep::SET_PASSWORD }
 
   after_save_commit    :sync_create!
   after_update_commit  :sync_update!
