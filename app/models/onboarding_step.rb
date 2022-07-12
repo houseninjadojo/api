@@ -10,6 +10,7 @@ class OnboardingStep
   WALKTHROUGH_BOOKING = "walkthrough-booking"
   WELCOME = "welcome"
   COMPLETED = "completed"
+  ACCOUNT_SETUP = "account-setup"
 
   ALL = [
     AREA_NOTIFICATION,

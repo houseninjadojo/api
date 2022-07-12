@@ -17,23 +17,18 @@ class UsersController < ApplicationController
   def create
     authorize!
 
-    if is_requesting_service?
+    if is_requesting_account_setup? # trying to email account setup
+      user = account_setup_user_resource
+    elsif is_requesting_service? # not servicing their area
       user = create_interested_user
-      render jsonapi: user, status: 201
-      return
+    else
+      user = create_user_resource
     end
 
-    user = UserResource.build(params)
-
-    if user.save
+    if user.errors.empty?
       render jsonapi: user, status: 201
     else
-      existing_user = user_if_onboarding(user, params)
-      if existing_user.errors.empty?
-        render jsonapi: existing_user, status: 201
-      else
-        render jsonapi_errors: existing_user
-      end
+      render jsonapi_errors: existing_user
     end
   end
 
@@ -61,21 +56,44 @@ class UsersController < ApplicationController
 
   private
 
-  def user_if_onboarding(user, params)
-    # this might be an onboarding user
-    # return unless user.errors.to_a == ["Email has already been taken", "Phone number has already been taken"]
-    @existing_user = User.find_by(email: user.data.email)
-    resource = UserResource.find(id: @existing_user.id)
-    if !@existing_user.is_currently_onboarding?
-      resource.data.errors.add(:base, :account_already_setup, message: "You already have an active account. Please log in to continue.")
-    elsif resource.data.needs_setup?
-      Users::SendSetupEmailJob.perform_later(@existing_user)
-      # resource.data.errors.add(:base, :setup_email_sent, message: "Check your email for further instructions.")
+  def create_user_resource
+    user = UserResource.build(params)
+    user.save
+    user
+  end
+
+  def user_resource
+    @user_resource ||= begin
+      email = params.dig(:data, :attributes, :email)
+      user = User.find_by!(email: email) if email.present?
+      resource = UserResource.find(id: user.id)
+      if resource.data.is_currently_onboarding?
+        Rails.logger.warn("User #{user.id} is currently onboarding. Skipping.")
+        return nil
+      else
+        resource
+      end
+    rescue => e
+      Rails.logger.warn("Failed to find user: #{e.message}")
+      nil
     end
-    resource
+  end
+
+  def account_setup_user_resource
+    onboarding_step = params.dig(:data, :attributes, :onboarding_step)
+    if onboarding_step == OnboardingStep::ACCOUNT_SETUP && user_resource.needs_setup?
+      Users::SendSetupEmailJob.perform_later(user_resource)
+    end
+    user_resource
+  end
+
+  def is_requesting_account_setup?
+    user_resource.present? &&
+    params.dig(:data, :attributes, :onboarding_step) == OnboardingStep::ACCOUNT_SETUP
   end
 
   def is_requesting_service?
+    user_resource.present? &&
     params.dig(:data, :attributes, :requested_zipcode).present?
   end
 

@@ -72,6 +72,10 @@ class WorkOrder < ApplicationRecord
     end
   end
 
+  def total=(val)
+    self.homeowner_amount_actual = val
+  end
+
   def is_walkthrough?
     description.include?("Home Walkthrough:")
   end
