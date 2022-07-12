@@ -12,7 +12,7 @@ class UsersController < ApplicationController
       # search for nothing
       users = UserResource.all(params, scope)
     end
-    
+
     respond_with(users)
   end
 
