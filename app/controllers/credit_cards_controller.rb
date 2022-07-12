@@ -15,6 +15,7 @@ class CreditCardsController < ApplicationController
     credit_card = CreditCardResource.build(params)
 
     if credit_card.save
+      credit_card.data&.sync_create!
       render jsonapi: credit_card, status: 201
     else
       render jsonapi_errors: credit_card

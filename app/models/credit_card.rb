@@ -60,4 +60,10 @@ class CreditCard < PaymentMethod
       self.exp_year = "20#{self.exp_year}"
     end
   end
+
+  # sync
+
+  def sync_create!
+    super # lets make sure w're invoking the parent
+  end
 end
