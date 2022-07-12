@@ -48,10 +48,10 @@ RSpec.describe Sync::Invoice::Stripe::Outbound::CreateJob, type: :job do
         {
           auto_advance:           false,
           collection_method:      "charge_automatically",
-          customer:               resource.user.stripe_id,
-          default_payment_method: resource.user.default_payment_method.stripe_id,
+          customer:               resource.user&.stripe_id,
+          default_payment_method: resource.user&.default_payment_method&.stripe_id,
           description:            resource.description,
-          subscription:           resource.subscription.stripe_id,
+          subscription:           resource.subscription&.stripe_id,
           metadata: {
             house_ninja_id: resource.id,
           }

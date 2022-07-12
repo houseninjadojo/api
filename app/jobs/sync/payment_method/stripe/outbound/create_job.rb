@@ -59,7 +59,7 @@ class Sync::PaymentMethod::Stripe::Outbound::CreateJob < Sync::BaseJob
 
   def matched_card
     @matched_card ||= begin
-      payment_methods = Stripe::Customer.list_payment_methods(resource.user.stripe_id, { type: 'card' })
+      payment_methods = Stripe::Customer.list_payment_methods(resource.user&.stripe_id, { type: 'card' })
       payment_methods.data.find { |pm| pm.card.last4 == resource.card_number&.last(4) }
     end
   end
