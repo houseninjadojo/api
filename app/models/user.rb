@@ -187,7 +187,10 @@ class User < ApplicationRecord
   end
 
   def generate_onboarding_link
-    return if onboarding_link.present?
+    if has_completed_onboarding?
+      Rails.logger.info("Will not create onboarding link for user=#{self.id} they already completed onboarding.")
+      return
+    end
     Users::GenerateOnboardingLinkJob.perform_later(self)
   end
 
@@ -205,6 +208,7 @@ class User < ApplicationRecord
   end
 
   def complete_onboarding
+    DeepLink.where(linkable: self, feature: "onboarding").destroy_all
     self.onboarding_step = 'completed'
     self.onboarding_code = nil
     self.onboarding_link = nil
