@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     # rudimentary security
     # only filter if we know the device_id
     if onboarding_code.present?
-      users = UserResource.all(params)
+      users = UserResource.all(onboarding_code)
     else
       # search for nothing
       users = UserResource.all(params, scope)
