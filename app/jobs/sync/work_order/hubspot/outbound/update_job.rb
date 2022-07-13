@@ -16,7 +16,7 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < Sync::BaseJob
       dealstage: work_order.status.hubspot_id,
       invoice_paid: invoice_paid,
       branch_payment_link: branch_link,
-      date_customer_paid_invoice: work_order.invoice&.paid_at&.to_datetime&.to_i,
+      date_customer_paid_invoice: date_customer_paid_invoice,
     }
   end
 
@@ -37,5 +37,9 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < Sync::BaseJob
 
   def branch_link
     work_order.invoice&.deep_link&.url
+  end
+
+  def date_customer_paid_invoice
+    work_order.invoice&.paid_at&.to_datetime&.to_i * 1000
   end
 end
