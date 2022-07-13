@@ -37,7 +37,7 @@ class SubscriptionResource < ApplicationResource
   self.model = Subscription
   self.type = :subscriptions
 
-  primary_endpoint 'subscriptions', [:index, :show, :create]
+  primary_endpoint 'subscriptions', [:index, :show, :create, :destroy]
 
   belongs_to :promo_code
   belongs_to :payment_method

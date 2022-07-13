@@ -60,7 +60,7 @@ class Subscription < ApplicationRecord
 
   # after_create :sync_create!
   # after_update_commit :sync_update!
-  after_destroy_commit :sync_delete!
+  # after_destroy_commit :sync_delete!
 
   after_create_commit :resync_user!
 
@@ -90,6 +90,22 @@ class Subscription < ApplicationRecord
   # end
 
   # helpers
+
+  def destroy
+    Rails.logger.info("Cancelling subscription=#{id} for user=#{user_id}")
+    if active? == false || canceled_at.present?
+      Rails.logger.info("Cannot cancel subscription=#{id}. It is already cancelled.")
+    end
+    sync_delete!
+  end
+
+  def delete
+    destroy
+  end
+
+  def destroy!
+    destroy
+  end
 
   # sync
 

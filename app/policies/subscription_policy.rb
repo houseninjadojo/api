@@ -21,7 +21,7 @@ class SubscriptionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    false
+    record&.user_id == user&.id
   end
 
   # Scoping
