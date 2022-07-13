@@ -24,9 +24,9 @@ class Sync::Subscription::Stripe::Outbound::DeleteJob < Sync::BaseJob
   end
 
   def epoch_to_datetime(epoch)
-    if epoch.present?
-      Time.at(epoch)
-    else
+    begin
+      Time.at(epoch).to_datetime
+    rescue
       nil
     end
   end

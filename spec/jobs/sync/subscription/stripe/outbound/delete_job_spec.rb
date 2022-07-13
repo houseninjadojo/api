@@ -20,6 +20,7 @@ RSpec.describe Sync::Subscription::Stripe::Outbound::DeleteJob, type: :job do
       )
       job.perform_now(resource)
       expect(resource.status).to eq('canceled')
+      expect(resource.canceled_at).to be_within(1.second).of(Time.zone.now)
     end
   end
 

@@ -255,13 +255,13 @@ class User < ApplicationRecord
     destroy
   end
 
-  def destroyed?
-    delete_requested_at.present?
-  end
+  # def destroyed?
+  #   delete_requested_at.present?
+  # end
 
-  def deleted?
-    delete_requested_at.present?
-  end
+  # def deleted?
+  #   delete_requested_at.present?
+  # end
 
   # sync
 
