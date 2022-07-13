@@ -188,6 +188,7 @@ class User < ApplicationRecord
   end
 
   def generate_onboarding_link
+    return if onboarding_link.present? || has_completed_onboarding?
     Users::GenerateOnboardingLinkJob.perform_later(self)
   end
 
