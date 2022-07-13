@@ -107,6 +107,14 @@ class Subscription < ApplicationRecord
     destroy
   end
 
+  def destroyed?
+    canceled_at.present?
+  end
+
+  def deleted?
+    canceled_at.present?
+  end
+
   # sync
 
   include Syncable

@@ -247,6 +247,22 @@ class User < ApplicationRecord
     UserMailer.delete_request(user: self).deliver_later
   end
 
+  def delete
+    destroy
+  end
+
+  def delete!
+    destroy
+  end
+
+  def destroyed?
+    delete_requested_at.present?
+  end
+
+  def deleted?
+    delete_requested_at.present?
+  end
+
   # sync
 
   include Syncable

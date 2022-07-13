@@ -10,6 +10,9 @@ class Users::GenerateOnboardingLinkJob < ApplicationJob
 
     deep_link.generate!
     user.update!(onboarding_link: onboarding_link)
+
+    # this does not seem to work every time
+    user.sync_update!
   end
 
   private
