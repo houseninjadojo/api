@@ -45,6 +45,7 @@ class InvoiceResource < ApplicationResource
   primary_endpoint 'invoices', [:index, :show]
 
   has_one    :document
+  has_one    :receipt
   has_one    :payment
   belongs_to :promo_code
   belongs_to :subscription
