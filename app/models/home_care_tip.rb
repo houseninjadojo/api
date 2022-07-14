@@ -23,4 +23,9 @@ class HomeCareTip < ApplicationRecord
   # validations
   validates :show_button, presence: true, inclusion: { in: [true, false] }
   validates :label,       presence: true
+  validates :week,        presence: true
+
+  scope :current, -> {
+    where(week: 0..Date.current.cweek).order(week: :desc).limit(1)
+  }
 end

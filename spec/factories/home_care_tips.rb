@@ -28,6 +28,6 @@ FactoryBot.define do
     other_provider { "" }
     service_provider { "" }
     time_of_year { "Any" }
-    week { -1 }
+    week { Date.current.cweek }
   end
 end

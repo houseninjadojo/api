@@ -1,7 +1,7 @@
 class HomeCareTipsController < ApplicationController
   def index
     authorize!
-    scope = authorized_scope(HomeCareTip.all)
+    scope = authorized_scope(HomeCareTip.current)
     home_care_tips = HomeCareTipResource.all(params, scope)
     respond_with(home_care_tips)
   end

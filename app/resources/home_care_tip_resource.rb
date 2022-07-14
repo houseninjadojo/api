@@ -30,6 +30,9 @@ class HomeCareTipResource < ApplicationResource
   attribute :label,       :string,  except: [:writeable]
   attribute :description, :string,  except: [:sortable, :writeable]
   attribute :show_button, :boolean, except: [:sortable, :writeable]
+
+  attribute :service_provider, :string,  except: [:sortable, :writeable]
+  attribute :other_provider,   :string,  except: [:sortable, :writeable]
   attribute :default_hn_chat_message, :string, except: [:writeable]
 
   attribute :created_at, :datetime, except: [:writeable]
