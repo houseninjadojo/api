@@ -65,7 +65,7 @@ class User < ApplicationRecord
   has_many   :documents
   has_many   :document_groups
   has_many   :invoices
-  has_many   :payment_methods
+  has_many   :payment_methods, -> { active.limit(1) }
   has_many   :payments
   has_many   :properties
   has_one    :subscription

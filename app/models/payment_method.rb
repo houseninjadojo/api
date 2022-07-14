@@ -31,6 +31,8 @@ class PaymentMethod < ApplicationRecord
     'CreditCard',
   ]
 
+  scope :active, -> { where.not(stripe_token: nil) }
+
   # callbacks
 
   # before_create :ensure_stripe_user_exists!
