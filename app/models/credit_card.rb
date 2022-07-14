@@ -61,6 +61,10 @@ class CreditCard < PaymentMethod
     end
   end
 
+  def obfuscated_card_number
+    self.card_number.gsub(/\d(?=\d{4})/, '*')
+  end
+
   # sync
 
   def sync_create!

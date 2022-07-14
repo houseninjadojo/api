@@ -35,7 +35,9 @@ class CreditCardResource < PaymentMethodResource
   attribute :cvv,         :string, sortable: false, readable: false
   attribute :exp_month,   :string
   attribute :exp_year,    :string
-  attribute :card_number, :string, readable: false
+  attribute :card_number, :string, sortable: false do
+    @object.obfuscated_card_number
+  end
   attribute :zipcode,     :string
   attribute :last_four,   :string, except: [:sortable]
 end
