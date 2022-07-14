@@ -40,6 +40,7 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < Sync::BaseJob
   end
 
   def date_customer_paid_invoice
-    work_order.invoice&.paid_at&.to_datetime&.to_i * 1000
+    epoch = work_order.invoice&.paid_at&.to_datetime.to_i * 1000
+    epoch == 0 ? nil : epoch
   end
 end
