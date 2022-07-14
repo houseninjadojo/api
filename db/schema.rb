@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_12_180733) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_14_113530) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -128,7 +128,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_12_180733) do
     t.string "default_hn_chat_message", default: ""
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "week"
+    t.string "time_of_year"
+    t.string "service_provider"
+    t.string "other_provider"
     t.index ["label"], name: "index_home_care_tips_on_label"
+    t.index ["week"], name: "index_home_care_tips_on_week"
   end
 
   create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
