@@ -124,7 +124,7 @@ class User < ApplicationRecord
   #
   # @return {string} auth id
   def auth_id
-    "auth0|#{self.id}" if self.auth_zero_user_created.present?
+    "auth0|#{self.id}" if self.auth_zero_user_created == true
   end
 
   # intercom hash
@@ -169,8 +169,13 @@ class User < ApplicationRecord
     self.subscription.present? && self.subscription.active?
   end
 
+  def current_customer?
+    self.contact_type == ContactType::CUSTOMER &&
+    self.customer_type == "Current"
+  end
+
   def needs_setup?
-    contact_type == ContactType::CUSTOMER && customer_type == "Current"
+    current_customer? && self.auth_zero_user_created == false
   end
 
   # no-op
