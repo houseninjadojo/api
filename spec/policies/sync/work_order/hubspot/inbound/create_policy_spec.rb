@@ -6,7 +6,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreatePolicy, type: :policy do
   let(:work_order) {
     create(:work_order,
       hubspot_id: '123456789',
-      status: WorkOrderStatus.find_by(slug: 'work_request_received'),
+      status: WorkOrderStatus::WORK_REQUEST_RECEIVED,
     )
   }
   let(:payload) {

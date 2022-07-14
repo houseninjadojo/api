@@ -4,7 +4,7 @@ RSpec.describe Sync::WorkOrder::Arrivy::Inbound::UpdateJob, type: :job do
   let(:work_order) {
     create(:work_order,
       hubspot_id: '1234',
-      status: WorkOrderStatus.find_by(slug: 'closed'),
+      status: WorkOrderStatus::CLOSED,
     )
   }
   let(:payload) {

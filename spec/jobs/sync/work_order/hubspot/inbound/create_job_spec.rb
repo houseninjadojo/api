@@ -4,7 +4,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
   let(:work_order) {
     create(:work_order,
       hubspot_id: '123456789',
-      status: WorkOrderStatus.find_by(slug: 'closed'),
+      status: WorkOrderStatus::CLOSED,
     )
   }
   let(:user) {
@@ -160,7 +160,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
       payload = Hubspot::Webhook::Payload.new(webhook_event)
       expect(WorkOrder).to receive(:create!).with({
         description: "Water Line Leak",
-        status: WorkOrderStatus.find_by(slug: "work_order_initiated"),
+        status: WorkOrderStatus::WORK_ORDER_INITIATED,
         hubspot_id: "123456789",
         created_at: Time.at(1654802227679 / 1000),
         property: property,
@@ -204,7 +204,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::CreateJob, type: :job do
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
       expect(job.new(webhook_event, webhook_entry).payload.as_params).to include(
         description: "Water Line Leak",
-        status: WorkOrderStatus.find_by(slug: "work_order_initiated"),
+        status: WorkOrderStatus::WORK_ORDER_INITIATED,
         hubspot_id: "123456789"
       )
     end
