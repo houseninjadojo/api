@@ -170,10 +170,7 @@ class User < ApplicationRecord
   end
 
   def needs_setup?
-    # has properties, no user
-    self.auth_zero_user_created == false &&
-    self.subscription.present? &&
-    self.default_property.present?
+    contact_type == ContactType::CUSTOMER && customer_type == "Current"
   end
 
   # no-op
