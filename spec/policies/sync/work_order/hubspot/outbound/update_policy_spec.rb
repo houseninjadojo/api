@@ -51,7 +51,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy, type: :policy d
 
   describe_rule :has_changed_attributes? do
     it "returns true if work_order has changed attributes" do
-      work_order.update(status: WorkOrderStatus.find_by(slug: 'canceled'))
+      work_order.update(status: WorkOrderStatus::CANCELED)
       policy = described_class.new(work_order, changeset: changeset)
       expect(policy.has_changed_attributes?).to be_truthy
     end

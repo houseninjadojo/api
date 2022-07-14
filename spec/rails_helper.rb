@@ -80,12 +80,6 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
-    WorkOrderStatus::SLUGS.each do |s|
-      if s == "work_order_initiated"
-        hubspot_id = "15611951"
-      end
-      WorkOrderStatus.create!(slug: s, name: s.titleize, hubspot_id: hubspot_id)
-    end
     Sidekiq::Testing.fake!
   end
 

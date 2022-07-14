@@ -14,7 +14,7 @@ RSpec.describe Hubspot::Webhook::Entry do
   }
   let(:work_order) { create(:work_order,
       hubspot_id: '123456789',
-      status: WorkOrderStatus.find_by(slug: 'work_request_received'),
+      status: WorkOrderStatus::WORK_REQUEST_RECEIVED,
     )
   }
   let(:payload) {
@@ -267,7 +267,7 @@ RSpec.describe Hubspot::Webhook::Entry do
     it 'dealstage => WorkOrderStatus' do
       entry.payload["propertyName"] = "dealstage"
       entry.payload["propertyValue"] = "15611951"
-      expect(entry.attribute_value).to eq(WorkOrderStatus.find_by(slug: "work_order_initiated"))
+      expect(entry.attribute_value).to eq(WorkOrderStatus::WORK_ORDER_INITIATED)
     end
 
     it 'dealtype => nil' do

@@ -356,7 +356,7 @@ module Hubspot
 
       # "closed" #=> WorkOrderStatus::CLOSED
       def attribute_as_status
-        WorkOrderStatus.find_by(hubspot_id: property_value)
+        WorkOrderStatus.for_hubspot_deal(property_value)
       end
 
       # "Yes" #=> true

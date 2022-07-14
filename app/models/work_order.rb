@@ -53,10 +53,15 @@ class WorkOrder < ApplicationRecord
   # associations
 
   belongs_to :property,  required: false
-  belongs_to :status,    class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status, required: false
   has_one    :invoice,   dependent: :destroy
   has_one    :deep_link, through: :invoice
   # has_one    :user,      through: :property
+
+  extend ActiveHash::Associations::ActiveRecordExtensions
+  belongs_to :status, class_name: "WorkOrderStatus",
+                      primary_key: :slug,
+                      foreign_key: :status,
+                      required: false
 
   # validations
 
@@ -95,7 +100,7 @@ class WorkOrder < ApplicationRecord
   # callbacks
 
   def set_status
-    self.status ||= WorkOrderStatus.find_by(slug: 'work_request_received')
+    self.status ||= WorkOrderStatus::WORK_REQUEST_RECEIVED
   end
 
   def create_invoice!

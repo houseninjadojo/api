@@ -4,7 +4,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::UpdateJob, type: :job do
   let(:work_order) {
     create(:work_order,
       hubspot_id: '123456789',
-      status: WorkOrderStatus.find_by(slug: 'closed'),
+      status: WorkOrderStatus::CLOSED,
     )
   }
   let(:webhook_entry) {
