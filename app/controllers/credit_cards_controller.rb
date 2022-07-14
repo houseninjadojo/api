@@ -2,16 +2,20 @@ class CreditCardsController < ApplicationController
   # before_action :authenticate_request!, except: [:create, :update]
 
   def index
-    credit_cards = CreditCardResource.all(params)
+    authorize!
+    scope = authorized_scope(CreditCard.active)
+    credit_cards = CreditCardResource.all(params, scope)
     respond_with(credit_cards)
   end
 
   def show
     credit_card = CreditCardResource.find(params)
+    authorize! credit_card.data
     respond_with(credit_card)
   end
 
   def create
+    authorize!
     credit_card = CreditCardResource.build(params)
 
     if credit_card.save
@@ -24,6 +28,7 @@ class CreditCardsController < ApplicationController
 
   def update
     credit_card = CreditCardResource.find(params)
+    authorize! credit_card.data
 
     if credit_card.update_attributes
       render jsonapi: credit_card
@@ -34,6 +39,7 @@ class CreditCardsController < ApplicationController
 
   def destroy
     credit_card = CreditCardResource.find(params)
+    authorize! credit_card.data
 
     if credit_card.destroy
       render jsonapi: { meta: {} }, status: 200

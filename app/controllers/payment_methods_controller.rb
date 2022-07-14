@@ -3,7 +3,7 @@ class PaymentMethodsController < ApplicationController
 
   def index
     authorize!
-    scope = authorized_scope(PaymentMethod.all)
+    scope = authorized_scope(PaymentMethod.active)
     payment_methods = PaymentMethodResource.all(params, scope)
     respond_with(payment_methods)
   end
