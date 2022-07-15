@@ -2,17 +2,19 @@
 #
 # Table name: promo_codes
 #
-#  id            :uuid             not null, primary key
-#  active        :boolean          default(FALSE), not null
-#  code          :string           not null
-#  name          :string
-#  percent_off   :string
-#  stripe_id     :string
-#  stripe_object :jsonb
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  amount_off    :string
-#  coupon_id     :string
+#  id                 :uuid             not null, primary key
+#  active             :boolean          default(FALSE), not null
+#  amount_off         :string
+#  code               :string           not null
+#  duration           :string
+#  duration_in_months :integer
+#  name               :string
+#  percent_off        :string
+#  stripe_object      :jsonb
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  coupon_id          :string
+#  stripe_id          :string
 #
 # Indexes
 #
@@ -22,6 +24,8 @@
 #
 class PromoCode < ApplicationRecord
   REFERRAL_CODE_COUPON_ID = 'referral_code'
+
+  scope :referral_codes, -> { where(coupon_id: REFERRAL_CODE_COUPON_ID) }
 
   # callbacks
 
@@ -39,8 +43,23 @@ class PromoCode < ApplicationRecord
 
   # validations
 
-  validates :code,      uniqueness: true, allow_nil: true
-  validates :stripe_id, uniqueness: true, allow_nil: true
+  validates :code,
+    uniqueness: true,
+    allow_nil: true
+  validates :stripe_id,
+    uniqueness: true,
+    allow_nil: true
+  validates :duration,
+    inclusion: {
+      in: %w[once repeating forever]
+    },
+    allow_nil: true
+  validates :duration_in_months,
+    numericality: {
+      only_integer: true,
+      greater_than_or_equal_to: 0
+    },
+    allow_nil: true
 
   # callbacks
 

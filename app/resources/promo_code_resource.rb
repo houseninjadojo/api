@@ -2,17 +2,19 @@
 #
 # Table name: promo_codes
 #
-#  id            :uuid             not null, primary key
-#  active        :boolean          default(FALSE), not null
-#  amount_off    :string
-#  code          :string           not null
-#  name          :string
-#  percent_off   :string
-#  stripe_object :jsonb
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  coupon_id     :string
-#  stripe_id     :string
+#  id                 :uuid             not null, primary key
+#  active             :boolean          default(FALSE), not null
+#  amount_off         :string
+#  code               :string           not null
+#  duration           :string
+#  duration_in_months :integer
+#  name               :string
+#  percent_off        :string
+#  stripe_object      :jsonb
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  coupon_id          :string
+#  stripe_id          :string
 #
 # Indexes
 #
@@ -37,6 +39,9 @@ class PromoCodeResource < ApplicationResource
   attribute :name,        :string, except: [:writeable]
   attribute :amount_off,  :string, except: [:writeable]
   attribute :percent_off, :string, except: [:writeable]
+
+  attribute :duration,           :string,  except: [:writeable]
+  attribute :duration_in_months, :integer, except: [:writeable]
 
   attribute :active, :boolean, except: [:writeable]
 

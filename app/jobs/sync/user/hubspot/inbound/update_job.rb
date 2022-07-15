@@ -22,7 +22,7 @@ class Sync::User::Hubspot::Inbound::UpdateJob < Sync::BaseJob
 
   def policy
     Sync::User::Hubspot::Inbound::UpdatePolicy.new(
-      webhook_entry,
+      entry,
       webhook_event: webhook_event
     )
   end
