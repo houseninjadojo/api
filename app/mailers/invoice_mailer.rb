@@ -16,6 +16,7 @@ class InvoiceMailer < ApplicationMailer
       body: '',
       template_id: 'd-8f179d92b29645278a32855f82eda36b',
       dynamic_template_data: {
+        subject: "You have an invoice ready for payment for #{service_name}",
         first_name: first_name,
         service_name: service_name,
         service_provider: service_provider,
