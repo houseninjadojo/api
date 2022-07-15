@@ -14,7 +14,8 @@ class Users::GenerateOnboardingLinkJob < ApplicationJob
     user.update!(onboarding_link: onboarding_link)
 
     # this does not seem to work every time
-    user.sync_update!
+    # user.sync_update!
+    Sync::User::Hubspot::Outbound::UpdateJob.set(wait: 1.minute).perform_later(user)
   end
 
   private
