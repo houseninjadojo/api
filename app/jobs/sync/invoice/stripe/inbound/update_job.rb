@@ -6,7 +6,9 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
 
     return unless policy.can_sync?
 
-    invoice.update!(params)
+    ActiveRecord::Base.transaction do
+      invoice.update!(params)
+    end
     refresh_pdf
 
     webhook_event.update!(processed_at: Time.now)
