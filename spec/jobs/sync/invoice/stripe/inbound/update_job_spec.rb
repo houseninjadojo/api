@@ -246,6 +246,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::UpdateJob, type: :job do
       allow_any_instance_of(job).to receive(:webhook_event).and_return(webhook_event)
       allow(Stripe::Invoice).to receive(:retrieve).and_return(invoice_object)
       params = job.new(webhook_event).params
+      expect(URI).to receive(:open).with(payload.dig("data", "object", "invoice_pdf")).and_return(File.open(Rails.root.join('spec', 'fixtures', 'files', 'invoice.pdf')))
       expect_any_instance_of(Invoice).to receive(:update!).with({
         description: "description here",
         period_end: Time.at(1655252851),
