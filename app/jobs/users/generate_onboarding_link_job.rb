@@ -1,7 +1,7 @@
 class Users::GenerateOnboardingLinkJob < ApplicationJob
   queue_as :default
 
-  unique :until_expired, runtime_lock_ttl: 1.second, on_conflict: :log
+  unique :until_expired, runtime_lock_ttl: 1.minute, on_conflict: :log
 
   attr_accessor :user
 
