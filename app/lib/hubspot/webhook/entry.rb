@@ -183,6 +183,8 @@ module Hubspot
           # :referred
         when "lastname"
           :last_name
+        when "lifecyclestage"
+          #
         when "mobilephone"
           :phone_number
         when "no__of_bathrooms"
@@ -293,6 +295,8 @@ module Hubspot
           # attribute_as_boolean
         when "lastname"
           property_value
+        when "lifecyclestage"
+          #
         when "mobilephone"
           property_value
         when "no__of_bathrooms"
