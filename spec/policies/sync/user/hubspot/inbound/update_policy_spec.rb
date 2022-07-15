@@ -30,7 +30,8 @@ RSpec.describe Sync::User::Hubspot::Inbound::UpdatePolicy, type: :policy do
       payload: [payload]
     )
   }
-  let(:policy) { described_class.new(payload, webhook_event: webhook_event) }
+  let(:entry) { Hubspot::Webhook::Entry.new(webhook_event, payload) }
+  let(:policy) { described_class.new(entry, webhook_event: webhook_event) }
 
   describe_rule :can_sync? do
     it "returns true if all conditions true" do
