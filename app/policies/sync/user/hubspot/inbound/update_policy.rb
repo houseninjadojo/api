@@ -15,7 +15,7 @@ class Sync::User::Hubspot::Inbound::UpdatePolicy < ApplicationPolicy
   end
 
   def has_attribute_name?
-    record["propertyName"]
+    !record.attribute_name.blank?
   end
 
   def has_attribute_value?
