@@ -28,6 +28,11 @@ class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   authorize :changeset
 
   def can_sync?
+    Rails.logger.info("Sync::User::Hubspot::Outbound::UpdatePolicy.can_sync?")
+    Rails.logger.info("  has_external_id?=#{has_external_id?}")
+    Rails.logger.info("  has_changed_attributes?=#{has_changed_attributes?}")
+    Rails.logger.info("  enabled?=#{enabled?}")
+    Rails.logger.info("changeset: #{changeset.inspect}")
     has_external_id? &&
     has_changed_attributes? &&
     enabled?
@@ -40,7 +45,6 @@ class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   def has_changed_attributes?
     !changeset.blank?
   end
-
 
   def enabled?
     ENV["HUBSPOT_OUTBOUND_DISABLED"] != "true"
