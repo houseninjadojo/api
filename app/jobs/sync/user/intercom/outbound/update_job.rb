@@ -4,6 +4,7 @@ class Sync::User::Intercom::Outbound::UpdateJob < Sync::BaseJob
   attr_accessor :user, :changeset
 
   def perform(user, changeset)
+    @user = user
     @changeset = changeset
     return unless policy.can_sync?
 
