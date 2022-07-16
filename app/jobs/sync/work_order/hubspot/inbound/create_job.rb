@@ -9,7 +9,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
     @webhook_entry = webhook_entry
     @webhook_event = webhook_event
 
-    return unless policy.can_sync?
+    return unless policy.can_sync? || is_walkthrough?
 
     resource_klass.create!(deal_params)
 
@@ -53,12 +53,12 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
       created_at: Time.at(deal[:createdate]&.to_i / 1000),
       # updated_at: Time.at(deal[:hs_lastmodifieddate]&.to_i / 1000),
 
-      scheduled_date: timestamps[:scheduled_date],
-      scheduled_time: timestamps[:scheduled_time],
-      scheduled_window_start: timestamps[:scheduled_window_start],
-      scheduled_window_end: timestamps[:scheduled_window_end],
-      walkthrough_date: timestamps[:walkthrough_date],
-      walkthrough_time: timestamps[:walkthrough_time],
+      # scheduled_date: timestamps[:scheduled_date],
+      # scheduled_time: timestamps[:scheduled_time],
+      # scheduled_window_start: timestamps[:scheduled_window_start],
+      # scheduled_window_end: timestamps[:scheduled_window_end],
+      # walkthrough_date: timestamps[:walkthrough_date],
+      # walkthrough_time: timestamps[:walkthrough_time],
     }
   end
 
@@ -67,25 +67,31 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
     @hubspot_contacts.first
   end
 
-  def walkthrough_engagement
-    @engagement ||= begin
-      engagements = Hubspot::Engagement.find_by_association(user&.hubspot_id&.to_i, 'CONTACT')
-      engagements.find { |e| e.engagement["type"] == "MEETING" && e.metadata["title"] == "House Ninja Home Walkthrough" }
-    end
+  def is_walkthrough?
+    deal[:dealname].match(/Home Walkthrough\:/).present?
   end
 
-  def timestamps
-    return {} unless deal[:dealname].match(/Home Walkthrough\: /).present?
-    start_datetime = Time.at(walkthrough_engagement.metadata["startTime"] / 1000).in_time_zone("US/Pacific")
-    end_datetime = Time.at(walkthrough_engagement.metadata["endTime"] / 1000).in_time_zone("US/Pacific")
-    time_window = "#{start_datetime.strftime("%I:%M %p")} - #{end_datetime.strftime("%I:%M %p")}"
-    {
-      scheduled_date: start_datetime.strftime("%m/%d/%Y"),
-      scheduled_time: time_window,
-      scheduled_window_start: start_datetime,
-      scheduled_window_end: end_datetime,
-      walkthrough_date: start_datetime,
-      walkthrough_time: time_window,
-    }
-  end
+  # def walkthrough_engagement
+  #   @engagement ||= begin
+  #     engagements = Hubspot::Engagement.find_by_association(user&.hubspot_id&.to_i, 'CONTACT')
+  #     engagements.find { |e| e.engagement["type"] == "MEETING" && e.metadata["title"] == "House Ninja Home Walkthrough" }
+  #   end
+  # end
+
+  ## filter walkthroughs
+
+  # def timestamps
+  #   return {} unless deal[:dealname].match(/Home Walkthrough\: /).present?
+  #   start_datetime = Time.at(walkthrough_engagement.metadata["startTime"] / 1000).in_time_zone("US/Pacific")
+  #   end_datetime = Time.at(walkthrough_engagement.metadata["endTime"] / 1000).in_time_zone("US/Pacific")
+  #   time_window = "#{start_datetime.strftime("%I:%M %p")} - #{end_datetime.strftime("%I:%M %p")}"
+  #   {
+  #     scheduled_date: start_datetime.strftime("%m/%d/%Y"),
+  #     scheduled_time: time_window,
+  #     scheduled_window_start: start_datetime,
+  #     scheduled_window_end: end_datetime,
+  #     walkthrough_date: start_datetime,
+  #     walkthrough_time: time_window,
+  #   }
+  # end
 end
