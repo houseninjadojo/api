@@ -109,7 +109,11 @@ class User < ApplicationRecord
   #
   # @return {PaymentMethod}
   def default_payment_method
-    self.payment_methods.where.not(stripe_token: nil).first
+    # self.payment_methods.where.not(stripe_token: nil).first
+    self.payment_methods
+      .where.not(stripe_token: nil)
+      .order(created_at: :desc)
+      .first
   end
 
   # User Full Name (first_name + last_name)

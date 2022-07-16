@@ -27,7 +27,9 @@ class Sync::Payment::Stripe::Outbound::CreateJob < Sync::BaseJob
     user = resource.user || invoice.user
     return if invoice.nil?
 
+    ##
     payment_method = user.default_payment_method&.stripe_token
+    ##
 
     paid_invoice = Stripe::Invoice.pay(
       invoice.stripe_id,
