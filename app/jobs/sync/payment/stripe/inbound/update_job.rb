@@ -67,7 +67,7 @@ class Sync::Payment::Stripe::Inbound::UpdateJob < Sync::BaseJob
     @receipt_url ||= begin
       content = OpenURI.open_uri(stripe_object.receipt_url)&.read
       # receipt_uri = content.match(/(https\:\/\/pay\.stripe\.com\/invoice\/[\w\/\_]+\/pdf\?s\=em)/)
-      receipt_uri = content.match(/(https\:\/\/dashboard\.stripe\.com\/emails\/receipts\/[\w\_]+\/pdf)/)
+      receipt_uri = content.match(/(https\:\/\/dashboard\.stripe\.com\/(receipts\/invoices|emails\/receipts)\/[\w\_\-]+\/pdf)/)
       receipt_uri.present? ? receipt_uri[1] : nil
     rescue => e
       Rails.logger.warn(e)
