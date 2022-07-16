@@ -27,6 +27,7 @@ class Sync::CreditCard::Stripe::Outbound::CreateJob < Sync::BaseJob
       stripe_token: payment_method.id,
       last_four: payment_method.card.last4,
     )
+    resource.touch
     resource
   end
 
