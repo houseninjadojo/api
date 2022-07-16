@@ -174,8 +174,8 @@ class User < ApplicationRecord
   end
 
   def current_customer?
-    self.contact_type == ContactType::CUSTOMER &&
-    self.customer_type == "Current"
+    contact_type == ContactType::CUSTOMER &&
+    customer_type == "Current"
   end
 
   def needs_setup?
