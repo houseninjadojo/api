@@ -10,6 +10,7 @@ class Sync::CreditCard::Stripe::Outbound::CreateJob < Sync::BaseJob
     # Match payment method
     if matched_card.present?
       payment_method = matched_card
+      resource.touch
     else
       # Create Payment Method
       # @see https://stripe.com/docs/api/payment_methods/create
@@ -22,12 +23,11 @@ class Sync::CreditCard::Stripe::Outbound::CreateJob < Sync::BaseJob
       Stripe::PaymentMethod.attach(payment_method.id, {
         customer: resource.user.stripe_id
       })
+      resource.update!(
+        stripe_token: payment_method.id,
+        last_four: payment_method.card.last4,
+      )
     end
-    resource.update!(
-      stripe_token: payment_method.id,
-      last_four: payment_method.card.last4,
-    )
-    resource.touch
     resource
   end
 
