@@ -22,6 +22,7 @@ RSpec.describe InvoiceMailer, type: :mailer do
       expect(mail.body).to eq('')
       expect(mail[:'template-id'].to_s).to eq('d-8f179d92b29645278a32855f82eda36b')
       expect(mail[:dynamic_template_data].value).to eq({
+        subject: "You have an invoice ready for payment for Test Service",
         first_name: "Test",
         service_name: "Test Service",
         service_provider: "Test Provider",
