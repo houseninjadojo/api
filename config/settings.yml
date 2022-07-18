@@ -13,7 +13,7 @@ shared:
     default: House Ninja <hello@houseninja.co>   # default email
     reply_to: House Ninja <hello@houseninja.co>    # reply to email
   protocol: 'https'
-  app_store_url: 'https://www.houseninja.co/download-app'
+  app_store_url: 'https://apps.apple.com/us/app/house-ninja/id1603710358'
 
 development:
   domains:
