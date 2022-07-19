@@ -12,12 +12,14 @@ RSpec.describe Sync::CreditCard::Stripe::Outbound::CreatePolicy, type: :policy d
     it "returns true if all conditions match" do
       expect(policy).to receive(:has_external_id?).and_return(false)
       expect(policy).to receive(:user_has_external_id?).and_return(true)
+      expect(policy).to receive(:persisted?).and_return(false)
       expect(policy.can_sync?).to be_truthy
     end
 
     it "returns false if any conditions fail" do
       expect(policy).to receive(:has_external_id?).and_return(false)
       expect(policy).to receive(:user_has_external_id?).and_return(false)
+      # expect(policy).to receive(:persisted?).and_return(true)
       expect(policy.can_sync?).to be_falsey
     end
   end
