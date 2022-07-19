@@ -7,6 +7,8 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
     @resource = resource
     return unless policy.can_sync?
 
+    resource.id = SecureRandom.uuid
+
     begin
       create_stripe_payment_method
       attach_stripe_payment_method
@@ -17,6 +19,8 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
     end
     resource.stripe_token = @stripe_payment_method.id
     resource.last_four = @stripe_payment_method.card.last4
+    resource.brand = @stripe_payment_method.card.brand
+    resource.country = @stripe_payment_method.card.country
     resource
   end
 
@@ -32,7 +36,7 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
         cvc: resource.cvv,
       },
       metadata: {
-        # house_ninja_id: resource.id,
+        house_ninja_id: resource.id,
       },
     }
   end
@@ -61,7 +65,7 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
   end
 
   def idempotency_key
-    Digest::SHA256.hexdigest("#{resource.card_number}_#{resource.exp_month}_#{resource.exp_year}_#{resource.cvv}")
+    Digest::SHA256.hexdigest("#{resource.id}_#{resource.card_number}_#{resource.exp_month}_#{resource.exp_year}_#{resource.cvv}")
   end
 
   def matched_card

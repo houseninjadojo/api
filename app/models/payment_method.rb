@@ -78,7 +78,7 @@ class PaymentMethod < ApplicationRecord
     current_method = user&.default_payment_method
 
     card = CreditCards::CreateAndAttachJob.perform_now(self)
-    throw(:abort) unless card.errors.blank?
+    throw(:abort) if !card?.errors?.messages.blank?
 
     # self.stripe_token = card.id
     # self.last_four = card.card.last4
