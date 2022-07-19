@@ -75,6 +75,8 @@ class PaymentMethod < ApplicationRecord
 
   def create_and_attach_to_stripe
     return if Rails.env.test?
+    current_method = user&.default_payment_method
+
     card = CreditCards::CreateAndAttachJob.perform_now(self)
     throw(:abort) unless card.errors.blank?
 
