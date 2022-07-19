@@ -53,7 +53,7 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
   def attach_stripe_payment_method
     # Attach Payment Method to Customer
     # @see https://stripe.com/docs/api/payment_methods/attach
-    Stripe::PaymentMethod.attach(payment_method.id, {
+    Stripe::PaymentMethod.attach(@stripe_payment_method.id, {
       customer: resource.user.stripe_id
     })
   end
