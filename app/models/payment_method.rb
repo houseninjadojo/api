@@ -83,8 +83,10 @@ class PaymentMethod < ApplicationRecord
     # self.stripe_token = card.id
     # self.last_four = card.card.last4
 
+    errors = card&.errors&.messages.dup
+
     # set new default and mark the old
-    if card&.errors.present? && card&.errors&.messages.blank? && current_method.present?
+    if errors.respond_to?(:[]) && errors.blank? && current_method.present?
       Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
     end
   end
