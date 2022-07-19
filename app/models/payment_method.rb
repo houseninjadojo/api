@@ -77,6 +77,7 @@ class PaymentMethod < ApplicationRecord
     return if Rails.env.test?
     current_method = user&.default_payment_method
 
+    self.id = SecureRandom.uuid
     card = CreditCards::CreateAndAttachJob.perform_now(self)
     throw(:abort) if !card&.errors&.messages.blank?
     # self.stripe_token = card.id

@@ -1,8 +1,6 @@
 class Sync::Payment::Stripe::Outbound::CreateJob < Sync::BaseJob
   attr_accessor :resource
 
-  attr_accessor :resource
-
   def perform(resource)
     @resource = resource
     return unless policy.can_sync?

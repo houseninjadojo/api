@@ -1,13 +1,13 @@
 class CreditCards::CreateAndAttachJob < ApplicationJob
   queue_as :default
 
+  unique :until_expired, runtime_lock_ttl: 1.minute, on_conflict: :log
+
   attr_accessor :resource
 
   def perform(resource)
     @resource = resource
     return unless policy.can_sync?
-
-    resource.id = SecureRandom.uuid
 
     begin
       create_stripe_payment_method
