@@ -19,7 +19,7 @@ class PaymentMethodsController < ApplicationController
     payment_method = PaymentMethodResource.build(params)
 
     if payment_method.save
-      payment_method.data.sync_create!
+      # payment_method.data.sync_create!
       render jsonapi: payment_method, status: 201
     else
       render jsonapi_errors: payment_method

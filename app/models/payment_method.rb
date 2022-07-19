@@ -45,7 +45,7 @@ class PaymentMethod < ApplicationRecord
   has_many   :payments
 
   # validations
-
+  before_validation :create_and_attach_to_stripe
   validates :stripe_token, uniqueness: true, allow_nil: true
 
   # helpers
@@ -73,6 +73,20 @@ class PaymentMethod < ApplicationRecord
     end
   end
 
+  def create_and_attach_to_stripe
+    return if Rails.env.test?
+    card = CreditCards::CreateAndAttachJob.perform_now(self)
+    throw(:abort) unless card.errors.blank?
+
+    self.stripe_token = card.id
+    self.last_four = card.card.last4
+
+    # set new default and mark the old
+    if card.persisted? && current_method.present?
+      Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
+    end
+  end
+
   # sync
 
   include Syncable
@@ -81,17 +95,17 @@ class PaymentMethod < ApplicationRecord
   after_destroy_commit :sync_delete!
 
   def sync_create!
-    return if Rails.env.test?
-    # set user if needed
-    Sync::User::Stripe::Outbound::CreateJob.perform_now(user) unless user&.stripe_id&.present?
-    # grab current payment method for after
-    current_method = user&.default_payment_method
-    # create & attach payment method in stripe
-    new_method = Sync::CreditCard::Stripe::Outbound::CreateJob.perform_now(self)
-    # set new default and mark the old
-    if new_method.persisted? && current_method.present?
-      Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
-    end
+    # return if Rails.env.test?
+    # # set user if needed
+    # Sync::User::Stripe::Outbound::CreateJob.perform_now(user) unless user&.stripe_id&.present?
+    # # grab current payment method for after
+    # current_method = user&.default_payment_method
+    # # create & attach payment method in stripe
+    # new_method = Sync::CreditCard::Stripe::Outbound::CreateJob.perform_now(self)
+    # # set new default and mark the old
+    # if new_method.persisted? && current_method.present?
+    #   Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
+    # end
   end
 
   def sync_services

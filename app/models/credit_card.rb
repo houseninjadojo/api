@@ -67,7 +67,7 @@ class CreditCard < PaymentMethod
 
   # sync
 
-  def sync_create!
-    super # lets make sure w're invoking the parent
-  end
+  # def sync_create!
+  #   super # lets make sure w're invoking the parent
+  # end
 end
