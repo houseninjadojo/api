@@ -14,7 +14,7 @@ class Sync::CreditCard::Stripe::Outbound::CreatePolicy < ApplicationPolicy
   def user_has_external_id?
     record&.user&.stripe_id.present?
   end
-  
+
   def persisted?
     record.try(:persisted?)
   end
