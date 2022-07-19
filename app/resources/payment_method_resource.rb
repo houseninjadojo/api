@@ -47,4 +47,8 @@ class PaymentMethodResource < ApplicationResource
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
+
+  def base_scope
+    PaymentMethod.active.order(created_at: :desc).limit(1)
+  end
 end
