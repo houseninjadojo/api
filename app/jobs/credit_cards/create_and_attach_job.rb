@@ -15,6 +15,8 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
     rescue
       resource.errors.add(:base, "Something went wrong. Please try again.")
     end
+    resource.stripe_token = @stripe_payment_method.id
+    resource.last_four = @stripe_payment_method.card.last4
     resource
   end
 
