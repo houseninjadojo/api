@@ -147,7 +147,7 @@ class User < ApplicationRecord
     if is_subscribed?
       "Current"
     else
-      nil
+      "Former"
     end
   end
 
