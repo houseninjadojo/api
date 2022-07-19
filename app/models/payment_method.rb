@@ -79,14 +79,17 @@ class PaymentMethod < ApplicationRecord
 
     self.id = SecureRandom.uuid
     card = CreditCards::CreateAndAttachJob.perform_now(self)
-    throw(:abort) if !card&.errors&.messages.blank?
+
+    errors = card&.errors&.messages.dup
+    has_errors = errors.respond_to?(:[]) && errors.blank?
+
+    throw(:abort) if !has_errors
+
     # self.stripe_token = card.id
     # self.last_four = card.card.last4
 
-    errors = card&.errors&.messages.dup
-
     # set new default and mark the old
-    if errors.respond_to?(:[]) && errors.blank? && current_method.present?
+    if has_errors && current_method.present?
       Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
     end
   end
