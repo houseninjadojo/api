@@ -74,7 +74,7 @@ class PaymentMethod < ApplicationRecord
   end
 
   def create_and_attach_to_stripe
-    return if Rails.env.test?
+    return true if Rails.env.test?
     current_method = user&.default_payment_method
 
     self.id = SecureRandom.uuid

@@ -8,7 +8,7 @@ RSpec.describe "credit_cards#create", type: :request do
   describe 'basic create' do
     let(:user) { create(:user) }
     let(:params) do
-      attributes_for(:credit_card)
+      attributes_for(:credit_card).without(:stripe_token)
     end
     let(:payload) do
       {

@@ -7,7 +7,7 @@ RSpec.describe CreditCardResource, type: :resource do
       {
         data: {
           type: 'credit-cards',
-          attributes: attributes_for(:credit_card),
+          attributes: attributes_for(:credit_card).without(:stripe_token),
           relationships: {
             user: {
               data: {

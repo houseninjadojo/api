@@ -137,6 +137,7 @@ class Subscription < ApplicationRecord
   end
 
   def sync_create!
+    return if Rails.env.test?
     # we want to ensure we are charging the card BEFORE returning the http request to the user
     # furthermore we are invoking this with `after_create` instead of `after_create_commit`, so that
     # the result of the charge attempt fails the transaction and the subscription is not created on our end either
