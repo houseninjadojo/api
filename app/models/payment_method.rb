@@ -84,7 +84,7 @@ class PaymentMethod < ApplicationRecord
     # self.last_four = card.card.last4
 
     # set new default and mark the old
-    if card.errors.blank? && current_method.present?
+    if card?.errors.present? && card?.errors?.messages.blank? && current_method.present?
       Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
     end
   end
