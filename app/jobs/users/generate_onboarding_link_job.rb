@@ -61,6 +61,11 @@ class Users::GenerateOnboardingLinkJob < ApplicationJob
   end
 
   def deep_link
-    @deep_link ||= DeepLink.create(payload)
+    @deep_link ||= begin
+      DeepLink.create(payload)
+    rescue Net::HTTPInternalServerError => e
+      Rails.logger.error "Failed to create deep link: #{e.message}. Trying again..."
+      DeepLink.create(payload)
+    end
   end
 end
