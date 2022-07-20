@@ -67,7 +67,7 @@ class Subscription < ApplicationRecord
   # associations
 
   belongs_to :promo_code, required: false
-  belongs_to :payment_method
+  belongs_to :payment_method, validate: false
   belongs_to :subscription_plan
   belongs_to :user
 

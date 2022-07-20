@@ -41,11 +41,11 @@ class PaymentMethod < ApplicationRecord
   # associations
 
   belongs_to :user
-  has_one    :subscription
+  has_one    :subscription, validate: false
   has_many   :payments
 
   # validations
-  before_validation :create_and_attach_to_stripe
+  before_validation :create_and_attach_to_stripe, on: :create
   validates :stripe_token, uniqueness: true, allow_nil: true
 
   # helpers
