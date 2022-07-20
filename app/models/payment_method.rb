@@ -75,6 +75,10 @@ class PaymentMethod < ApplicationRecord
 
   def create_and_attach_to_stripe
     return true if Rails.env.test?
+
+    # sync user if needed
+    Sync::User::Stripe::Outbound::CreateJob.perform_now(user) unless user&.stripe_id&.present?
+
     current_method = user&.default_payment_method
 
     self.id = SecureRandom.uuid
