@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.3"
 
+gem 'active_hash'
 gem 'activejob-uniqueness', require: 'active_job/uniqueness/sidekiq_patch'
 gem 'amazing_print'
 gem 'auth0'

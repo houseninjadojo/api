@@ -51,7 +51,7 @@ class Sync::Webhook::StripeJob < ApplicationJob
       LineItem
     when "payment_method"
       PaymentMethod
-    when "promotion_code"
+    when "promotion_code", "coupon"
       PromoCode
     end
   end

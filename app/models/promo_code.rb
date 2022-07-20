@@ -71,6 +71,17 @@ class PromoCode < ApplicationRecord
     self.code = self.code.upcase if self.code.present?
   end
 
+  # helpers
+
+  def self.find_coupon_by(months:)
+    Coupon.find_by(
+      system_coupon: false,
+      percent_off: "100",
+      duration: "repeating",
+      duration_in_months: months,
+    )
+  end
+
   # sync
 
   include Syncable

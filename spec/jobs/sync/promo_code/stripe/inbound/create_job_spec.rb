@@ -79,11 +79,13 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::CreateJob, type: :job do
 
     it "will sync if policy approves" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
+      # expect(PromoCode).to receive(:find_coupon_by).and_return(nil)
       expect(PromoCode).to receive(:create!).with({
         active: true,
         code: "test",
         name: "TEST CODE",
         percent_off: 100,
+        duration: "forever",
         # amount_off: nil,
         coupon_id: "VeNkKlf7",
         created_at: Time.at(1654892941),
@@ -116,6 +118,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::CreateJob, type: :job do
         active: true,
         code: "test",
         name: "TEST CODE",
+        duration: "forever",
         percent_off: 100,
         # amount_off: nil,
         coupon_id: "VeNkKlf7",

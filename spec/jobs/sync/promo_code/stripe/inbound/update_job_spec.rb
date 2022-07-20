@@ -87,6 +87,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::UpdateJob, type: :job do
         active: true,
         code: "test",
         name: "TEST CODE",
+        duration: "forever",
         percent_off: 100,
         # amount_off: nil,
         coupon_id: "VeNkKlf7",
