@@ -1,7 +1,7 @@
 class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   class Changeset < TreeDiff
+    # observe :email,
     observe :contact_type,
-            :email,
             :first_name,
             :last_name,
             :phone_number,

@@ -1,7 +1,7 @@
 class Sync::User::Intercom::Outbound::UpdatePolicy < ApplicationPolicy
   class Changeset < TreeDiff
-    observe :email,
-            :first_name,
+    # observe :email,
+    observe :first_name,
             :last_name,
             :phone_number
   end

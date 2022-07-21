@@ -2,6 +2,7 @@ class MarketingMailer < ApplicationMailer
   default from: Rails.settings.email[:reply_to]
 
   def app_announcement(email:, url: Rails.settings.app_store_url)
+    return unless email.include?("@houseninja.co")
     mail(
       to: email,
       body: '',
