@@ -17,6 +17,7 @@
 #  onboarding_step                           :string
 #  phone_number(Phone Number (+15555555555)) :string           not null
 #  requested_zipcode                         :string
+#  test_account                              :boolean          default(FALSE)
 #  created_at                                :datetime         not null
 #  updated_at                                :datetime         not null
 #  arrivy_id                                 :string
