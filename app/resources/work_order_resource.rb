@@ -59,10 +59,10 @@ class WorkOrderResource < ApplicationResource
   attribute :updated_at, :datetime, except: [:writeable]
 
   attribute :status, :string, except: [:writeable] do
-    @object.status.slug
+    @object.status&.slug
   end
 
   def base_scope
-    WorkOrder.where.not(status: nil)
+    WorkOrder.has_status
   end
 end

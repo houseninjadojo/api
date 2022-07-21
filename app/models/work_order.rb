@@ -58,6 +58,10 @@ class WorkOrder < ApplicationRecord
   has_one    :deep_link, through: :invoice
   # has_one    :user,      through: :property
 
+  # scopes
+
+  scope :has_status, -> { where.not(status: nil) }
+
   # validations
 
   validates :hubspot_id, uniqueness: true, allow_nil: true
