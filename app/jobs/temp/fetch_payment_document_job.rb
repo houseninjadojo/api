@@ -1,9 +1,12 @@
 class Temp::FetchPaymentDocumentJob < ApplicationJob
+  sidekiq_options retry: 0
   queue_as :default
+
+  unique :until_executed
 
   def perform(payment)
     charge = payment.stripe_object
-
+    attach_receipt(payment)
   end
 
   def receipt_url(charge)
