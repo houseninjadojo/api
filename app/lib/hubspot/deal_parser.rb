@@ -190,7 +190,8 @@ module Hubspot
       when "estimate___from_vendor"
         attribute_as_amount_in_cents(property_value)
       when "est__home_value"
-        attribute_as_amount_in_cents(property_value)
+        val = property_value.to_s.gsub(/\D/, "")
+        Money.from_cents(val).fractional.to_s
       when "firstname"
         property_value
       when "homeowner_name"
@@ -265,7 +266,6 @@ module Hubspot
 
     # "805.5" => "80550"
     def attribute_as_amount_in_cents(property_value)
-      val = property_value.to_s.gsub(/\D/, "")
       Money.from_amount(property_value.to_f).fractional.to_s
     end
 
