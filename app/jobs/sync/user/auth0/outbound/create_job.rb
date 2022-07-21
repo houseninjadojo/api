@@ -10,7 +10,10 @@ class Sync::User::Auth0::Outbound::CreateJob < Sync::BaseJob
     return unless policy.can_sync?
 
     AuthZero.client.create_user(AuthZero.connection, **params)
-    user.update!(auth_zero_user_created: true, onboarding_step: OnboardingStep::COMPLETED)
+    user.update!(
+      auth_zero_user_created: true,
+      onboarding_step: OnboardingStep::COMPLETED
+    )
   end
 
   def params
