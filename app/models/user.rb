@@ -206,7 +206,7 @@ class User < ApplicationRecord
 
   def generate_document_groups
     return if document_groups.present?
-    DocumentGroup.insert_all(
+    DocumentGroup.upsert_all(
       DocumentGroup::DEFAULT_GROUPS.map { |group| { user_id: self.id, name: group } }
     )
   end

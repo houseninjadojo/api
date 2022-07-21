@@ -38,6 +38,7 @@ class Payment < ApplicationRecord
 
   # associations
 
+  has_one :document, dependent: :destroy
   belongs_to :invoice
   belongs_to :payment_method, required: false
   belongs_to :user,           required: false

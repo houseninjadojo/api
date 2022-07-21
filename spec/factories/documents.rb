@@ -10,6 +10,7 @@
 #  updated_at        :datetime         not null
 #  document_group_id :uuid
 #  invoice_id        :uuid
+#  payment_id        :uuid
 #  property_id       :uuid
 #  user_id           :uuid
 #
@@ -17,6 +18,7 @@
 #
 #  index_documents_on_document_group_id  (document_group_id)
 #  index_documents_on_invoice_id         (invoice_id)
+#  index_documents_on_payment_id         (payment_id)
 #  index_documents_on_property_id        (property_id)
 #  index_documents_on_tags               (tags) USING gin
 #  index_documents_on_user_id            (user_id)

@@ -39,6 +39,7 @@ class PaymentResource < ApplicationResource
 
   primary_endpoint 'payments', [:index, :show, :create]
 
+  has_one    :document
   belongs_to :invoice
   belongs_to :payment_method
   belongs_to :user

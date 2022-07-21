@@ -10,6 +10,7 @@
 #  updated_at        :datetime         not null
 #  document_group_id :uuid
 #  invoice_id        :uuid
+#  payment_id        :uuid
 #  property_id       :uuid
 #  user_id           :uuid
 #
@@ -17,6 +18,7 @@
 #
 #  index_documents_on_document_group_id  (document_group_id)
 #  index_documents_on_invoice_id         (invoice_id)
+#  index_documents_on_payment_id         (payment_id)
 #  index_documents_on_property_id        (property_id)
 #  index_documents_on_tags               (tags) USING gin
 #  index_documents_on_user_id            (user_id)
@@ -35,12 +37,14 @@ class DocumentResource < ApplicationResource
 
   belongs_to :document_group
   belongs_to :invoice
+  belongs_to :payment
   belongs_to :property
   belongs_to :user
 
   attribute :id, :uuid
 
   attribute :invoice_id,        :uuid, only: [:filterable]
+  attribute :payment_id,        :uuid, only: [:filterable]
   attribute :property_id,       :uuid, only: [:filterable]
   attribute :user_id,           :uuid, only: [:filterable]
   attribute :document_group_id, :uuid, only: [:filterable], allow_nil: true

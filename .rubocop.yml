@@ -9,6 +9,7 @@ AllCops:
     - "Dockerfile"
     - "Gemfile"
     - "Gemfile.lock"
+    - "lib/tasks"
   DisabledByDefault: true
 
 
