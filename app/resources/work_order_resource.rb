@@ -61,4 +61,8 @@ class WorkOrderResource < ApplicationResource
   attribute :status, :string, except: [:writeable] do
     @object.status.slug
   end
+
+  def base_scope
+    WorkOrder.where.not(status: nil)
+  end
 end

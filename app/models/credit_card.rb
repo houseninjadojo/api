@@ -49,20 +49,20 @@ class CreditCard < PaymentMethod
 
   # "4242-4242-4242-4242" => "4242424242424242"
   def normalize_card_number
-    self.card_number = self.card_number.gsub(/\D/,'')
+    self.card_number = self.card_number&.gsub(/\D/,'')
   end
 
   # convert from "22" => "2022"
   def normalize_year
     return unless self.exp_year.present?
-    self.exp_year = self.exp_year.to_s
+    self.exp_year = self.exp_year&.to_s
     if self.exp_year.length == 2
       self.exp_year = "20#{self.exp_year}"
     end
   end
 
   def obfuscated_card_number
-    self.card_number.gsub(/\d(?=\d{4})/, '*')
+    self.card_number&.gsub(/\d(?=\d{4})/, '*')
   end
 
   # sync
