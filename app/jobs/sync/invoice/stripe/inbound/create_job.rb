@@ -42,13 +42,7 @@ class Sync::Invoice::Stripe::Inbound::CreateJob < Sync::BaseJob
   end
 
   def subscription
-    @subscription ||= begin
-      if stripe_object.subscription.nil?
-        return nil
-      else
-        Subscription.find_by(stripe_id: stripe_object.subscription)
-      end
-    end
+    @subscription ||= Subscription.find_by(stripe_id: stripe_object.subscription) if stripe_object&.subscription.present?
   end
 
   def payment
