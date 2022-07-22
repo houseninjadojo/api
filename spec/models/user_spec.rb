@@ -8,6 +8,7 @@
 #  delete_requested_at                       :datetime
 #  email(Email Address)                      :string           default(""), not null
 #  first_name(First Name)                    :string           not null
+#  first_walkthrough_performed               :boolean          default(FALSE), not null
 #  gender(Gender)                            :string           default("other"), not null
 #  how_did_you_hear_about_us                 :string
 #  hubspot_contact_object                    :jsonb

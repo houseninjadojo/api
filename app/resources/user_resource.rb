@@ -8,6 +8,7 @@
 #  delete_requested_at                       :datetime
 #  email(Email Address)                      :string           default(""), not null
 #  first_name(First Name)                    :string           not null
+#  first_walkthrough_performed               :boolean          default(FALSE), not null
 #  gender(Gender)                            :string           default("other"), not null
 #  how_did_you_hear_about_us                 :string
 #  hubspot_contact_object                    :jsonb
@@ -64,6 +65,9 @@ class UserResource < ApplicationResource
 
   attribute :requested_zipcode,         :string, readable: false
   attribute :how_did_you_hear_about_us, :string, readable: false
+  attribute :should_book_walkthrough,   :boolean, except: [:writeable] do
+    !@object.first_walkthrough_performed
+  end
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
