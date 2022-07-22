@@ -37,6 +37,6 @@ FactoryBot.define do
     card_number { Faker::Finance.credit_card(brand) }
     zipcode { Faker::Address.zip_code }
     last_four { "1111" }
-    stripe_token { Faker::Stripe.valid_token }
+    stripe_token { Faker::Alphanumeric.alphanumeric(number: 20) }
   end
 end

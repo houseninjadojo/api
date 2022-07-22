@@ -11,9 +11,12 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
 
     return unless policy.can_sync? || is_walkthrough?
 
-    resource_klass.create!(deal_params)
+    resource = resource_klass.create!(deal_params)
 
-    webhook_event.update!(processed_at: Time.now)
+    webhook_event.update!(
+      processed_at: Time.now,
+      webhookable: resource
+    )
   end
 
   def policy

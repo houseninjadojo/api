@@ -18,7 +18,7 @@ module Hubspot
       attr_accessor :payload
 
       def initialize(webhook_event, payload)
-        @payload = payload
+        @payload = payload.respond_to?(:with_indifferent_access) ? payload.with_indifferent_access : payload
         @webhook_event = webhook_event
       end
 
@@ -54,7 +54,8 @@ module Hubspot
         when "propertyChange"
           :update
         when "privacyDeletion"
-          # nothing for now
+          SystemMailer.privacy_delete_request(payload: payload).deliver_later
+          :delete
         end
       end
 
@@ -383,8 +384,8 @@ module Hubspot
         URI.open(property_value)
       end
 
-      def signed_url_attribute_as_io
-        uri = URI.parse(property_value)
+      def signed_url_attribute_as_io(url)
+        uri = URI.parse(url)
         file_id = uri.path&.split("/")&.last
         first_url = "https://api.hubapi.com/files/v3/files/#{file_id}/signed-url?hapikey=#{Rails.secrets.dig(:hubspot, :api_key)}"
         signed_url_payload = OpenURI.open_uri(first_url).read

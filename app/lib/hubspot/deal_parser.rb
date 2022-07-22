@@ -8,7 +8,7 @@ module Hubspot
     end
 
     def work_order_params
-      params = payload.map{|k,v| [attribute_name(k), attribute_value(k, v)] }.to_h
+      params = payload.map{ |k,v| [attribute_name(k), attribute_value(k, v)] }.to_h
       params.merge(
         hubspot_id: deal_id,
         hubspot_object: payload,

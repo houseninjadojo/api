@@ -23,6 +23,8 @@ module Hubspot
           elsif entry.handler_action == :update
             next if entry.attribute_name.nil?
             params[entry.attribute_name] = entry.attribute_value
+          elsif entry.handler_action == :delete
+            next
           end
         end
       end
