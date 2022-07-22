@@ -77,6 +77,8 @@ module Hubspot
         :estimated_value
       when "firstname"
         :first_name
+      when "first_walkthrough_performed_"
+        :first_walkthrough_performed
       when "homeowner_name"
         #
       when "hs_lastmodifieddate"
@@ -194,6 +196,8 @@ module Hubspot
         Money.from_cents(val).fractional.to_s
       when "firstname"
         property_value
+      when "first_walkthrough_performed_"
+        attribute_as_boolean
       when "homeowner_name"
         property_value
       when "hs_lastmodifieddate"

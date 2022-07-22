@@ -66,7 +66,8 @@ class UserResource < ApplicationResource
   attribute :requested_zipcode,         :string, readable: false
   attribute :how_did_you_hear_about_us, :string, readable: false
   attribute :should_book_walkthrough,   :boolean, except: [:writeable] do
-    !@object.first_walkthrough_performed
+    # !@object.first_walkthrough_performed
+    false
   end
 
   attribute :created_at, :datetime, except: [:writeable]
