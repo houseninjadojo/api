@@ -5,6 +5,7 @@
 #  id                      :uuid             not null, primary key
 #  completed_at            :datetime
 #  customer_approved_work  :boolean
+#  deleted_at              :datetime
 #  description             :string
 #  homeowner_amount        :string
 #  homeowner_amount_actual :string
@@ -30,6 +31,7 @@
 # Indexes
 #
 #  index_work_orders_on_arrivy_id    (arrivy_id) UNIQUE
+#  index_work_orders_on_deleted_at   (deleted_at)
 #  index_work_orders_on_hubspot_id   (hubspot_id) UNIQUE
 #  index_work_orders_on_property_id  (property_id)
 #

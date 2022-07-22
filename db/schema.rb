@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_21_160613) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_22_091909) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -398,7 +398,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_21_160613) do
     t.string "refund_reason"
     t.string "arrivy_id"
     t.text "invoice_notes"
+    t.datetime "deleted_at"
     t.index ["arrivy_id"], name: "index_work_orders_on_arrivy_id", unique: true
+    t.index ["deleted_at"], name: "index_work_orders_on_deleted_at"
     t.index ["hubspot_id"], name: "index_work_orders_on_hubspot_id", unique: true
     t.index ["property_id"], name: "index_work_orders_on_property_id"
   end
