@@ -63,6 +63,8 @@ class WorkOrder < ApplicationRecord
   # scopes
 
   scope :has_status, -> { where.not(status: nil) }
+  scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :available, -> { where(deleted_at: nil) }
 
   # validations
 

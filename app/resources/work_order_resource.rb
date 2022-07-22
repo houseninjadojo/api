@@ -65,6 +65,6 @@ class WorkOrderResource < ApplicationResource
   end
 
   def base_scope
-    WorkOrder.has_status
+    WorkOrder.available.has_status
   end
 end
