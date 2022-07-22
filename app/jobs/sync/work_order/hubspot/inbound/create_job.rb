@@ -9,7 +9,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
     @webhook_entry = webhook_entry
     @webhook_event = webhook_event
 
-    return unless policy.can_sync? || is_walkthrough?
+    return unless policy.can_sync? || !is_walkthrough?
 
     resource = resource_klass.create!(deal_params)
 
