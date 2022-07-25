@@ -90,7 +90,8 @@ class User < ApplicationRecord
   # scopes
 
   scope :test, -> { where(test_account: true) }
-  scope :deleted, -> { where.not(delete_requested_at: nil) }
+  scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :active, -> { where(deleted_at: nil) }
 
   default_scope { order(created_at: :asc) }
 

@@ -82,6 +82,6 @@ class UserResource < ApplicationResource
   attribute :onboarding_code, :string, except: [:writeable]
 
   def base_scope
-    User.unscoped
+    User.unscoped.active
   end
 end
