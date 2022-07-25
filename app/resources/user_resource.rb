@@ -6,6 +6,7 @@
 #  auth_zero_user_created                    :boolean          default(FALSE)
 #  contact_type                              :string           default("Customer")
 #  delete_requested_at                       :datetime
+#  deleted_at                                :datetime
 #  email(Email Address)                      :string           default(""), not null
 #  first_name(First Name)                    :string           not null
 #  first_walkthrough_performed               :boolean          default(FALSE), not null
