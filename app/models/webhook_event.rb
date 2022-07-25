@@ -29,9 +29,7 @@ class WebhookEvent < ApplicationRecord
   scope :hubspot, -> { where(service: 'hubspot') }
   scope :stripe, -> { where(service: 'stripe') }
 
-  def self.default_scope
-    order(created_at: :desc)
-  end
+  default_scope { order(created_at: :desc) }
 
   # validations
 

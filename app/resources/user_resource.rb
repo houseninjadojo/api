@@ -79,4 +79,8 @@ class UserResource < ApplicationResource
 
   attribute :onboarding_step, :string, except: [:writeable]
   attribute :onboarding_code, :string, except: [:writeable]
+
+  def base_scope
+    User.unscoped
+  end
 end

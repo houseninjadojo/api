@@ -66,6 +66,8 @@ class WorkOrder < ApplicationRecord
   scope :deleted, -> { where.not(deleted_at: nil) }
   scope :available, -> { where(deleted_at: nil) }
 
+  default_scope { order(created_at: :asc)}
+
   # validations
 
   validates :hubspot_id, uniqueness: true, allow_nil: true

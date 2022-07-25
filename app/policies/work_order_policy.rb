@@ -26,6 +26,8 @@ class WorkOrderPolicy < ApplicationPolicy
   # Scoping
   # See https://actionpolicy.evilmartians.io/#/scoping
   relation_scope do |relation|
-    relation.includes(:property).where(property: { user_id: user.try(:id) })
+    relation
+      .includes(:property)
+      .where(property: { user_id: user.try(:id) })
   end
 end

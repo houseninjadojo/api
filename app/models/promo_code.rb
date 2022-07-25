@@ -27,6 +27,8 @@ class PromoCode < ApplicationRecord
 
   scope :referral_codes, -> { where(coupon_id: REFERRAL_CODE_COUPON_ID) }
 
+  # default_scope { order(created_at: :asc) }
+
   # callbacks
 
   before_validation :generate_code, on: :create

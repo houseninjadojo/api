@@ -9,7 +9,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
     @webhook_entry = webhook_entry
     @webhook_event = webhook_event
 
-    return unless policy.can_sync? || !is_walkthrough?
+    return unless policy.can_sync? && not_a_walkthrough?
 
     resource = resource_klass.create!(deal_params)
 
@@ -70,8 +70,8 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
     @hubspot_contacts.first
   end
 
-  def is_walkthrough?
-    deal[:dealname].match(/Home Walkthrough\:/).present?
+  def not_a_walkthrough?
+    deal[:dealname].match(/Home Walkthrough\:/).nil?
   end
 
   # def walkthrough_engagement

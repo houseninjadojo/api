@@ -86,6 +86,13 @@ class User < ApplicationRecord
   validates :contact_type,    inclusion: { in: ContactType::ALL }
   validates :onboarding_step, inclusion: { in: OnboardingStep::ALL }, allow_nil: true
 
+  # scopes
+
+  scope :test, -> { where(test_account: true) }
+  scope :deleted, -> { where.not(delete_requested_at: nil) }
+
+  default_scope { order(created_at: :asc) }
+
   # Temporary password token management
   # VGS Volatile tokens expire in 1 hour
   attr_reader :_password

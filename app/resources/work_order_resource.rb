@@ -73,6 +73,13 @@ class WorkOrderResource < ApplicationResource
   end
 
   def base_scope
-    WorkOrder.available.has_status
+    WorkOrder
+      .unscoped
+      .available
+      .has_status
+      .order(
+        completed_at: :desc,
+        created_at: :desc
+      )
   end
 end
