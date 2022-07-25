@@ -57,6 +57,14 @@ class WorkOrderResource < ApplicationResource
   attribute :scheduled_date, :string, except: [:sortable]
   attribute :scheduled_time, :string, except: [:sortable]
 
+  attribute :completed_at,  :datetime, only: [:readable]
+  attribute :invoice_notes, :string,   only: [:readable]
+
+  attribute :cost, :string, only: [:readable] do
+    Money.from_cents(@object.amount)&.format
+  end
+
+
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
 
