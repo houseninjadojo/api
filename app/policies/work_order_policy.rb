@@ -27,7 +27,14 @@ class WorkOrderPolicy < ApplicationPolicy
   # See https://actionpolicy.evilmartians.io/#/scoping
   relation_scope do |relation|
     relation
+      .available
+      .has_status
       .includes(:property)
       .where(property: { user_id: user.try(:id) })
+      .order(
+        completed_at: :desc,
+        scheduled_window_start: :desc,
+        created_at: :desc
+      )
   end
 end
