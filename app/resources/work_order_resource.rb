@@ -57,6 +57,9 @@ class WorkOrderResource < ApplicationResource
   attribute :scheduled_date, :string, except: [:sortable]
   attribute :scheduled_time, :string, except: [:sortable]
 
+  attribute :scheduled_window_start, :datetime, only: [:filterable]
+  attribute :scheduled_window_end,   :datetime, only: [:filterable]
+
   attribute :completed_at,  :datetime, only: [:readable]
   attribute :invoice_notes, :string,   only: [:readable]
 
@@ -79,6 +82,7 @@ class WorkOrderResource < ApplicationResource
       .has_status
       .order(
         completed_at: :desc,
+        scheduled_window_start: :desc,
         created_at: :desc
       )
   end

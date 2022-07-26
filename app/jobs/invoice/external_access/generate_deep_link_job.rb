@@ -4,7 +4,7 @@ class Invoice::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
 
   attr_accessor :invoice, :deep_link
 
-  def perform(invoice)
+  def perform(invoice:, send_email: false)
     @invoice = invoice
     return unless conditions_met?
 
@@ -12,7 +12,9 @@ class Invoice::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
     generate_deep_link!
     # set_hubspot_branch_payment_link!
 
-    invoice.send_payment_approval_email!
+    if send_email
+      invoice.send_payment_approval_email!
+    end
   end
 
   def conditions_met?

@@ -206,7 +206,7 @@ class Invoice < ApplicationRecord
   def handle_status_change
     case status
     when STATUS_OPEN
-      Invoice::ExternalAccess::GenerateDeepLinkJob.perform_later(self)
+      Invoice::ExternalAccess::GenerateDeepLinkJob.perform_later(invoice: self, send_email: true)
     when STATUS_PAID
       Invoice::ExternalAccess::ExpireJob.perform_later(self)
       work_order&.update!(status: WorkOrderStatus::INVOICE_PAID_BY_CUSTOMER)
