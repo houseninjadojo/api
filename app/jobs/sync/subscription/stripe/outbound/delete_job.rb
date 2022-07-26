@@ -7,14 +7,14 @@ class Sync::Subscription::Stripe::Outbound::DeleteJob < Sync::BaseJob
     @resource = resource
     return unless policy.can_sync?
 
-    # delete
-    response = Stripe::Subscription.delete(resource.stripe_id)
+    # # delete
+    # response = Stripe::Subscription.delete(resource.stripe_id)
 
-    # update subscription
-    resource.update!(
-      status: response.status,
-      canceled_at: epoch_to_datetime(response.canceled_at),
-    )
+    # # update subscription
+    # resource.update!(
+    #   status: response.status,
+    #   canceled_at: epoch_to_datetime(response.canceled_at),
+    # )
   end
 
   def policy

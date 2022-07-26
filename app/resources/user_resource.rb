@@ -50,7 +50,7 @@ class UserResource < ApplicationResource
   has_many   :devices
   has_many   :documents
   has_many   :invoices
-  has_many   :payment_methods
+  has_many   :payment_methods, base_scope: -> { PaymentMethod.active.order(created_at: :desc).limit(1) }
   has_many   :payments
   has_many   :properties
   has_one    :subscription
@@ -82,6 +82,6 @@ class UserResource < ApplicationResource
   attribute :onboarding_code, :string, except: [:writeable]
 
   def base_scope
-    User.unscoped.active
+    User.active
   end
 end

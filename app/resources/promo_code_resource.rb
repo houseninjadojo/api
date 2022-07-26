@@ -30,7 +30,7 @@ class PromoCodeResource < ApplicationResource
 
   has_many :invoices
   has_many :subscriptions
-  has_many :users
+  has_many :users, base_scope: -> { User.active }
 
   attribute :id, :uuid
 

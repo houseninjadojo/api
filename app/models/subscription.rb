@@ -70,6 +70,7 @@ class Subscription < ApplicationRecord
   belongs_to :payment_method, validate: false
   belongs_to :subscription_plan
   belongs_to :user
+  has_many :invoices
 
   # validations
 
