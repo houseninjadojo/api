@@ -45,7 +45,11 @@ class PropertyResource < ApplicationResource
   primary_endpoint 'properties', [:index, :show, :create, :update, :destroy]
 
   has_many :documents
-  has_many :work_orders
+  has_many :work_orders do
+    params do |hash, work_orders|
+      work_orders.available.has_status
+    end
+  end
   belongs_to :service_area
   belongs_to :user
 
