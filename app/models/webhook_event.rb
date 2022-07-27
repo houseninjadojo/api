@@ -17,6 +17,8 @@
 #  index_webhook_events_on_webhookable  (webhookable_type,webhookable_id)
 #
 class WebhookEvent < ApplicationRecord
+  attr_readonly :service
+  attr_readonly :payload
   encrypts :payload
 
   # associations

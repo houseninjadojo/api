@@ -100,10 +100,6 @@ class Subscription < ApplicationRecord
     sync_delete!
   end
 
-  def delete
-    destroy
-  end
-
   def destroy!
     destroy
   end
