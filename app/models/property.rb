@@ -42,7 +42,7 @@ class Property < ApplicationRecord
   # associations
 
   has_many :documents
-  has_many :work_orders
+  has_many :work_orders, -> { available }
   belongs_to :service_area, required: false
   belongs_to :user
 

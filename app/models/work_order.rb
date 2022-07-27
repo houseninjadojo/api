@@ -66,7 +66,7 @@ class WorkOrder < ApplicationRecord
   scope :deleted, -> { where.not(deleted_at: nil) }
   scope :available, -> { where(deleted_at: nil) }
 
-  default_scope { order(created_at: :asc) }
+  default_scope { where(deleted_at: nil).order(created_at: :asc) }
 
   # validations
 
