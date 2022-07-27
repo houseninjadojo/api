@@ -17,6 +17,7 @@
 #
 class WorkOrderStatus < ApplicationRecord
   SLUGS = [
+    "customer_confirmed_work",
     "work_request_received",
     "work_order_initiated",
     "sourcing_vendor",
@@ -27,11 +28,11 @@ class WorkOrderStatus < ApplicationRecord
     "work_in_progress",
     "change_order_received",
     "work_completed",
-    "customer_confirmed_work",
     "problem_reported",
     "problem_being_addressed",
     "problem_resolved",
     "vendor_invoice_received",
+    "ready_to_invoice_customer",
     "invoice_sent_to_customer",
     "invoice_paid_by_customer",
     "closed",

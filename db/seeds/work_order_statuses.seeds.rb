@@ -47,13 +47,15 @@ end
 
 # load into database
 def map_and_save_stages(pipeline_id)
-  mapped_stages(pipeline_id).each do |status|
-    WorkOrderStatus.find_or_create_by(hubspot_id: status[:hubspot_id]) do |work_order_status|
-      work_order_status.name = status[:name]
-      work_order_status.slug = status[:slug]
-      work_order_status.hubspot_pipeline_id = pipeline_id
-    end
+  stages = mapped_stages(pipeline_id).map do |status|
+    {
+      hubspot_id: status[:hubspot_id],
+      name: status[:name],
+      slug: status[:slug],
+      hubspot_pipeline_id: pipeline_id,
+    }
   end
+  WorkOrderStatus.upsert_all(stages, unique_by: [:slug])
 end
 
 pipelines = [
