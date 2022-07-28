@@ -2,7 +2,6 @@ class UserMailer < ApplicationMailer
   default from: Rails.settings.email[:reply_to]
 
   def account_setup(email:, url:)
-    return unless email.include?("@houseninja.co")
     mail(
       to: email,
       body: '',
@@ -14,7 +13,6 @@ class UserMailer < ApplicationMailer
   end
 
   def delete_request(user:)
-    return unless email.include?("@houseninja.co")
     mail(
       to: "miles@houseninja.co",
       body: '',
