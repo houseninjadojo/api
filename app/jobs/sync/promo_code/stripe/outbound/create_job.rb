@@ -17,6 +17,8 @@ class Sync::PromoCode::Stripe::Outbound::CreateJob < Sync::BaseJob
       name: promo_code.coupon&.name,
       percent_off: promo_code.coupon&.percent_off,
       amount_off: promo_code.coupon&.amount_off,
+      duration: promo_code.coupon&.duration,
+      duration_in_months: promo_code.coupon&.duration_in_months,
     )
   end
 
