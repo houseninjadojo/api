@@ -26,6 +26,8 @@ RSpec.describe Sync::PromoCode::Stripe::Outbound::CreateJob, type: :job do
           name: "asdf",
           percent_off: "10",
           amount_off: "100",
+          duration: "repeating",
+          duration_in_months: 3,
         ),
         code: "asdf",
       ))
