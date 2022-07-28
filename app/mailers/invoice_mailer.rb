@@ -11,7 +11,6 @@ class InvoiceMailer < ApplicationMailer
     payment_link:,
     app_store_url: Rails.settings.app_store_url
   )
-    return unless email.include?("@houseninja.co")
     mail(
       to: email,
       body: '',
