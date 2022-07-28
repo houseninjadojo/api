@@ -157,6 +157,12 @@ class Subscription < ApplicationRecord
       raise ActiveRecord::RecordNotSaved.new(response.message, self)
     end
     Rails.logger.info("Finished creating subscription=#{id}")
+
+    # todo WHY DO WE NEED THIS CARVEOUT
+    Sync::User::Hubspot::Outbound::UpdateJob.perform_later(
+      user,
+      [{ path: [:subscription, :status] }], # mimicking a changeset
+    )
   end
 
   def resync_user!
