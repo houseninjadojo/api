@@ -155,14 +155,14 @@ class Subscription < ApplicationRecord
     if response.is_a?(Stripe::StripeError)
       Rails.logger.info("Error creating subscription=#{id} - #{response.message}")
       raise ActiveRecord::RecordNotSaved.new(response.message, self)
+    else
+      Rails.logger.info("Finished creating subscription=#{id}")
+      # todo WHY DO WE NEED THIS CARVEOUT
+      Sync::User::Hubspot::Outbound::UpdateJob.perform_later(
+        user,
+        [{ path: [:subscription, :status] }], # mimicking a changeset
+      )
     end
-    Rails.logger.info("Finished creating subscription=#{id}")
-
-    # todo WHY DO WE NEED THIS CARVEOUT
-    Sync::User::Hubspot::Outbound::UpdateJob.perform_later(
-      user,
-      [{ path: [:subscription, :status] }], # mimicking a changeset
-    )
   end
 
   def resync_user!
