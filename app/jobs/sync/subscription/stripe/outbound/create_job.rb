@@ -22,6 +22,8 @@ class Sync::Subscription::Stripe::Outbound::CreateJob < Sync::BaseJob
       trial_end: epoch_to_datetime(subscription.trial_end),
       status: subscription.status,
     )
+
+    return resource
   end
 
   def params

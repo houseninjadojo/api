@@ -157,8 +157,10 @@ class User < ApplicationRecord
   def customer_type
     if is_subscribed?
       "Current"
-    else
+    elsif has_canceled_subscription?
       "Former"
+    else
+      ""
     end
   end
 
@@ -182,6 +184,11 @@ class User < ApplicationRecord
 
   def is_subscribed?
     self.subscription.present? && self.subscription.active?
+  end
+  alias has_active_subscription? is_subscribed?
+
+  def has_canceled_subscription?
+    self.subscription.present? && !self.subscription.active?
   end
 
   def current_customer?
@@ -264,13 +271,13 @@ class User < ApplicationRecord
     UserMailer.delete_request(user: self).deliver_later
   end
 
-  def delete
-    destroy
-  end
+  # def delete
+    # destroy
+  # end
 
-  def delete!
-    destroy
-  end
+  # def delete!
+    # destroy
+  # end
 
   # def destroyed?
   #   delete_requested_at.present?
@@ -304,7 +311,7 @@ class User < ApplicationRecord
 
   def sync_associations
     [
-      :subscription,
+      # :subscription,
       :properties,
     ]
   end

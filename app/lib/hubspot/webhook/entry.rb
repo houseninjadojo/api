@@ -388,8 +388,8 @@ module Hubspot
         URI.open(property_value)
       end
 
-      def signed_url_attribute_as_io(url)
-        uri = URI.parse(url)
+      def signed_url_attribute_as_io
+        uri = URI.parse(property_value)
         file_id = uri.path&.split("/")&.last
         first_url = "https://api.hubapi.com/files/v3/files/#{file_id}/signed-url?hapikey=#{Rails.secrets.dig(:hubspot, :api_key)}"
         signed_url_payload = OpenURI.open_uri(first_url).read

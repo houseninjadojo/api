@@ -32,6 +32,8 @@ class Sync::User::Hubspot::Outbound::UpdateJob < Sync::BaseJob
 
       # customer's referral promo code
       personal_referral_code: user&.promo_code&.code,
+
+      how_did_you_hear_about_us_: user.how_did_you_hear_about_us,
     }.compact
   end
 

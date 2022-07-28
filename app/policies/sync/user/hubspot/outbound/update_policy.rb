@@ -2,16 +2,21 @@ class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   class Changeset < TreeDiff
     # observe :email,
     observe :contact_type,
+            :customer_type,
             :first_name,
             :last_name,
             :phone_number,
             :onboarding_code,
             :onboarding_link,
             :onboarding_step,
+            :requested_zipcode,
+            :how_did_you_hear_about_us,
             subscription: [
               :id,
               :updated_at,
               :promo_code_id,
+              :status,
+              :stripe_object,
             ],
             properties: [
               :id,

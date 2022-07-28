@@ -82,6 +82,10 @@ class Subscription < ApplicationRecord
     status == STATUS::ACTIVE
   end
 
+  def canceled?
+    status == STATUS::CANCELED
+  end
+
   # callbacks
 
   # def set_user_onboarding_step
@@ -93,11 +97,13 @@ class Subscription < ApplicationRecord
   # helpers
 
   def destroy
-    Rails.logger.info("Cancelling subscription=#{id} for user=#{user_id}")
-    if active? == false || canceled_at.present?
-      Rails.logger.info("Cannot cancel subscription=#{id}. It is already cancelled.")
-    end
-    sync_delete!
+    false
+    # Rails.logger.info("Cancelling subscription=#{id} for user=#{user_id}")
+    # if active? == false || canceled_at.present?
+    #   Rails.logger.info("Cannot cancel subscription=#{id}. It is already cancelled.")
+    #   return
+    # end
+    # sync_delete!
   end
 
   def destroy!
@@ -133,6 +139,12 @@ class Subscription < ApplicationRecord
     ]
   end
 
+  def sync_associations
+    [
+      :user,
+    ]
+  end
+
   def sync_create!
     return if Rails.env.test?
     # we want to ensure we are charging the card BEFORE returning the http request to the user
@@ -144,7 +156,7 @@ class Subscription < ApplicationRecord
       Rails.logger.info("Error creating subscription=#{id} - #{response.message}")
       raise ActiveRecord::RecordNotSaved.new(response.message, self)
     end
-    Rails.logger.info("Finished Trying to create subscription=#{id}")
+    Rails.logger.info("Finished creating subscription=#{id}")
   end
 
   def resync_user!
