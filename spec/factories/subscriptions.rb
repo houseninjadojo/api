@@ -22,7 +22,7 @@
 #
 #  index_subscriptions_on_payment_method_id     (payment_method_id)
 #  index_subscriptions_on_promo_code_id         (promo_code_id)
-#  index_subscriptions_on_stripe_id             (stripe_id)
+#  index_subscriptions_on_stripe_id             (stripe_id) UNIQUE
 #  index_subscriptions_on_subscription_plan_id  (subscription_plan_id)
 #  index_subscriptions_on_user_id               (user_id)
 #

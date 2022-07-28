@@ -22,7 +22,7 @@
 #
 #  index_subscriptions_on_payment_method_id     (payment_method_id)
 #  index_subscriptions_on_promo_code_id         (promo_code_id)
-#  index_subscriptions_on_stripe_id             (stripe_id)
+#  index_subscriptions_on_stripe_id             (stripe_id) UNIQUE
 #  index_subscriptions_on_subscription_plan_id  (subscription_plan_id)
 #  index_subscriptions_on_user_id               (user_id)
 #
@@ -74,12 +74,12 @@ class Subscription < ApplicationRecord
 
   # validations
 
-  validates :stripe_id, uniqueness: true, allow_nil: true
+  validates :stripe_id, uniqueness: true
 
   # gates
 
   def active?
-    status == STATUS::ACTIVE
+    status == STATUS::ACTIVE || status == STATUS::TRIALING
   end
 
   def canceled?
