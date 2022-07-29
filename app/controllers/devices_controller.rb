@@ -33,14 +33,12 @@ class DevicesController < ApplicationController
 
   def update
     device = DeviceResource.find(params)
-    if allowed_to?(:update?, device.data)
-      if device.update_attributes
-        render jsonapi: device
-      else
-        render jsonapi_errors: device
-      end
+    authorize! device.data
+
+    if device.update_attributes
+      render jsonapi: device
     else
-      render jsonapi: { meta: {} }, status: 200
+      render jsonapi_errors: device
     end
   end
 
