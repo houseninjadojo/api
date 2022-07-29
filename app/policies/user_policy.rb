@@ -11,7 +11,7 @@ class UserPolicy < ApplicationPolicy
     # not signed in and trying to resume logging in
     allow! if user.nil? && record.is_currently_onboarding?
     # signed in and checking own user
-    record&.id == user&.id
+    record&.id == user&.id || record.try(:user_id) == user&.id
   end
 
   def create?
