@@ -28,6 +28,10 @@ class DevicePolicy < ApplicationPolicy
   # See https://actionpolicy.evilmartians.io/#/scoping
   relation_scope do |relation|
     # next relation if user.admin?
-    relation.where(user: user)
+    if user.present?
+      relation.where(user: user)
+    else
+      relation.none
+    end
   end
 end
