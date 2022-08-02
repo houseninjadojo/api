@@ -13,7 +13,7 @@ if [ -n "$REDIS_URL" ]; then
     sed -i "s/<YOUR USERNAME>/${BASH_REMATCH[1]}/" "$DD_CONF_DIR/conf.d/redisdb.d/conf.yaml"
     sed -i "s/<YOUR PASSWORD>/${BASH_REMATCH[2]}/" "$DD_CONF_DIR/conf.d/redisdb.d/conf.yaml"
     sed -i "s/<YOUR PORT>/${BASH_REMATCH[4]}/" "$DD_CONF_DIR/conf.d/redisdb.d/conf.yaml"
-    # sed -i "s/<YOUR DBNAME>/${BASH_REMATCH[5]}/" "$DD_CONF_DIR/conf.d/redisdb.d/conf.yaml"
+    sed -i "s/<YOUR ENV>/${$RAILS_ENV}/" "$DD_CONF_DIR/conf.d/redisdb.d/conf.yaml"
   fi
 fi
 
@@ -26,6 +26,7 @@ if [ -n "$DATABASE_URL" ]; then
     sed -i "s/<YOUR PASSWORD>/${BASH_REMATCH[2]}/" "$DD_CONF_DIR/conf.d/postgres.d/conf.yaml"
     sed -i "s/<YOUR PORT>/${BASH_REMATCH[4]}/" "$DD_CONF_DIR/conf.d/postgres.d/conf.yaml"
     sed -i "s/<YOUR DBNAME>/${BASH_REMATCH[5]}/" "$DD_CONF_DIR/conf.d/postgres.d/conf.yaml"
+    sed -i "s/<YOUR ENV>/${$RAILS_ENV}/" "$DD_CONF_DIR/conf.d/postgres.d/conf.yaml"
   fi
 fi
 

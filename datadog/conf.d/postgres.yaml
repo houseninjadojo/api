@@ -7,7 +7,7 @@ init_config:
     ##
     ## Additionally, this sets the default `service` for every log source.
     #
-    # service: <SERVICE>
+    service: postgres
 
 ## Every instance is scheduled independent of the others.
 #
@@ -459,8 +459,8 @@ instances:
     ##
     ## Learn more about tagging at https://docs.datadoghq.com/tagging
     #
-    # tags:
-    #   - <KEY_1>:<VALUE_1>
+    tags:
+      - env:<YOUR ENV>
     #   - <KEY_2>:<VALUE_2>
 
     ## @param service - string - optional
