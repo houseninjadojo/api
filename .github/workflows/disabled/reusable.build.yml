@@ -22,7 +22,7 @@ on:
         required: true
 
 env:
-  RUBY_VERSION: 3.0.3
+  RUBY_VERSION: 3.0.4
   BUILD_MODE: true
   DOCKER_REPO: ${{ inputs.docker_repo }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

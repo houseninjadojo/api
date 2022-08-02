@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:1.0-experimental
-FROM --platform=$BUILDPLATFORM ruby:3.0.3-alpine
+FROM --platform=$BUILDPLATFORM ruby:3.0.4-alpine
 LABEL maintainer="engineering@houseninja.co"
 LABEL org.opencontainers.image.source="https://github.com/houseninjadojo/api"
 
