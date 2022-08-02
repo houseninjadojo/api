@@ -1,28 +1,28 @@
-# name: cd / deploy / production
+name: cd / deploy / production
 
-# # trigger this workflow after tests pass
-# on:
-#   workflow_run:
-#     workflows: [ci / tests]
-#     types: [completed]
-#     branches: [main]
+# trigger this workflow after tests pass
+on:
+  workflow_run:
+    workflows: [ci / tests]
+    types: [completed]
+    branches: [main]
 
-# # only run one of these at a time
-# concurrency: cd-deploy-production
+# only run one of these at a time
+concurrency: cd-deploy-production
 
-# env:
-#   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-#   HEROKU_APP_NAME: houseninja-api-production
-#   HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+env:
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+  HEROKU_APP_NAME: houseninja-api-production
+  HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
 
-# jobs:
-#   build:
-#     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-#         with:
-#           heroku_api_key: ${{ env.HEROKU_API_KEY }}
-#           heroku_app_name: ${{ env.HEROKU_APP_NAME }}
-#           heroku_email: ${{ env.HEROKU_EMAIL }}
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{ env.HEROKU_API_KEY }}
+          heroku_app_name: ${{ env.HEROKU_APP_NAME }}
+          heroku_email: ${{ env.HEROKU_EMAIL }}
