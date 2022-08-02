@@ -9,8 +9,8 @@ RSpec.describe "subscriptions#index", type: :request do
 
   describe 'basic fetch' do
     let!(:user) { create(:user) }
-    let!(:subscription1) { create(:subscription) }
-    let!(:subscription2) { create(:subscription) }
+    let!(:subscription1) { create(:subscription, user: user) }
+    let!(:subscription2) { create(:subscription, user: user) }
 
     before {
       allow_any_instance_of(Auth).to receive(:current_user).and_return(user)

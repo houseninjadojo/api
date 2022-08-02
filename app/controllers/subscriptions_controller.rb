@@ -3,7 +3,7 @@ class SubscriptionsController < ApplicationController
 
   def index
     authorize!
-    scope = Subscription.all
+    scope = authorized_scope(Subscription.all)
     subscriptions = SubscriptionResource.all(params, scope)
     respond_with(subscriptions)
   end

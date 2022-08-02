@@ -8,8 +8,13 @@ RSpec.describe "devices#index", type: :request do
   end
 
   describe 'basic fetch' do
-    let!(:device1) { create(:device) }
-    let!(:device2) { create(:device) }
+    let(:user) { create(:user) }
+    let!(:device1) { create(:device, user: user) }
+    let!(:device2) { create(:device, user: user) }
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     it 'works' do
       expect(DeviceResource).to receive(:all).and_call_original
