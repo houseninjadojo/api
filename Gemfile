@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.3"
+ruby "3.1.2"
 
 gem 'active_hash'
 gem 'activejob-uniqueness', require: 'active_job/uniqueness/sidekiq_patch'
