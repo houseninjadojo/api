@@ -14,6 +14,7 @@ gem 'branch_io'
 gem 'credit_card_validations'
 gem 'ddtrace',                             require: 'ddtrace/auto_instrument'  # Datadog Metrics Instrumentation
 gem 'dotenv-rails',                        require: 'dotenv/rails-now'         # ENV file management
+gem 'fcm'
 gem 'graphiti',         github: 'houseninjadojo/graphiti', branch: 'activerecord-filter-array-eq'
 gem 'graphiti-rails'    
 gem 'image_processing',        '~> 1.12'                                        # Use Active Storage variant
