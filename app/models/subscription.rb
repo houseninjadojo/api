@@ -168,4 +168,25 @@ class Subscription < ApplicationRecord
   def resync_user!
     user&.sync_update!
   end
+
+  def self.params_from_stripe(stripe_object)
+  # sub = Stripe::Subscription.retrieve(subid)
+    payment_method = PaymentMethod.find_by(stripe_token: stripe_object.default_payment_method)
+    subscription_plan = SubscriptionPlan.find_by(stripe_price_id: stripe_object.plan.id)
+    user = User.find_by(stripe_id: stripe_object.customer)
+    {
+      stripe_id: stripe_object.id,
+      canceled_at: Time.safe_at(stripe_object.canceled_at),
+      current_period_end: Time.safe_at(stripe_object.current_period_end),
+      current_period_start: Time.safe_at(stripe_object.current_period_start),
+      status: stripe_object.status,
+      stripe_object: stripe_object.as_json,
+      trial_end: Time.safe_at(stripe_object.trial_end),
+      trial_start: Time.safe_at(stripe_object.trial_start),
+      created_at: Time.safe_at(stripe_object.created),
+      payment_method_id: payment_method&.id,
+      subscription_plan_id: subscription_plan&.id,
+      user_id: user&.id,
+    }
+  end
 end

@@ -11,6 +11,7 @@ require 'graphiti/rails/railtie'
 # core_ext
 require_relative "../lib/core_ext/rails/settings"
 require_relative "../lib/core_ext/ruby/array/intersect"
+require_relative "../lib/core_ext/rails/active_support/time"
 
 module HouseNinja
   class Application < Rails::Application

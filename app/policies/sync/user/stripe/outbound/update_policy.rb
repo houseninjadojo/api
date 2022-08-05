@@ -1,8 +1,8 @@
 
 class Sync::User::Stripe::Outbound::UpdatePolicy < ActionPolicy::Base
   class Changeset < TreeDiff
-    # observe :email,
-    observe :first_name,
+    observe :email,
+            :first_name,
             :last_name,
             :phone_number
   end
