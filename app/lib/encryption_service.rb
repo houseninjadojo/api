@@ -27,7 +27,7 @@ class EncryptionService
       return value unless value.present?
       decrypt_and_verify(value, **options)
     rescue => e
-      Rails.logger.error "EncryptionService.safe_decrypt(#{value}) failed: #{e.message}"
+      Rails.logger.warn "EncryptionService.safe_decrypt(#{value}) failed: #{e.message}"
       nil
     end
   end
