@@ -26,7 +26,7 @@ class Invoice::NotifyJob < ApplicationJob
   def notification
     @notification ||= PushNotification.create!(
       device: device,
-      body: notification_body,
+      body: body,
       deeplink_path: deeplink_path,
     )
   end
