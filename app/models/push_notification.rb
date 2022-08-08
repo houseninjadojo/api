@@ -50,6 +50,10 @@ class PushNotification < ApplicationRecord
     self.device = value.current_device
   end
 
+  def default_title
+    "House Ninja"
+  end
+
   # associations
 
   belongs_to :device, required: true
@@ -67,6 +71,7 @@ class PushNotification < ApplicationRecord
   before_save :capture_token
 
   def ensure_defaults
+    self.title ||= default_title
     self.priority ||= Priority::DEFAULT.id
     self.visibility ||= Visibility::PRIVATE.id
     self.options ||= {}
