@@ -50,4 +50,10 @@ class Device < ApplicationRecord
   # validations
 
   validates :device_id, presence: true, uniqueness: true
+
+  # attributes
+
+  def device_id
+    read_attribute(:device_id).upcase
+  end
 end

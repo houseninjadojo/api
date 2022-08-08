@@ -12,4 +12,5 @@ Rails.application.config.filter_parameters += [
   :ssn,
   :stripe,
   :token,
+  :device_id,
 ]
