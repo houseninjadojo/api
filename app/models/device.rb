@@ -34,4 +34,10 @@
 #
 class Device < ApplicationRecord
   belongs_to :user, required: false
+  has_many :push_notifications
+
+  # scopes
+
+  scope :with_token, -> { where.not(fcm_token: nil) }
+  default_scope { order(created_at: :asc) }
 end

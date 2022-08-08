@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_28_085352) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_06_020109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -269,6 +269,31 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_28_085352) do
     t.index ["zipcode"], name: "index_properties_on_zipcode"
   end
 
+  create_table "push_notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "device_id", null: false
+    t.string "fcm_message_id"
+    t.string "fcm_project_id"
+    t.string "fcm_token"
+    t.string "priority_id", default: "default", null: false
+    t.string "visibility_id", default: "private", null: false
+    t.string "topic"
+    t.string "analytics_label"
+    t.string "title", null: false
+    t.string "body"
+    t.string "image_url"
+    t.jsonb "data", default: {}, null: false
+    t.jsonb "response"
+    t.jsonb "options", default: {}, null: false
+    t.datetime "sent_at"
+    t.datetime "delivered_at"
+    t.datetime "opened_at"
+    t.string "error_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_push_notifications_on_device_id"
+    t.index ["fcm_message_id"], name: "index_push_notifications_on_fcm_message_id", unique: true
+  end
+
   create_table "service_areas", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "zipcodes", default: [], null: false, array: true
@@ -424,6 +449,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_28_085352) do
   add_foreign_key "payments", "payment_methods"
   add_foreign_key "payments", "users"
   add_foreign_key "properties", "users"
+  add_foreign_key "push_notifications", "devices"
   add_foreign_key "subscriptions", "payment_methods"
   add_foreign_key "subscriptions", "promo_codes"
   add_foreign_key "subscriptions", "subscription_plans"

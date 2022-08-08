@@ -5,4 +5,6 @@ class ApplicationRecord < ActiveRecord::Base
   scope :hubspot, -> { where.not(hubspot_id: nil) }
   scope :stripe, -> { where.not(stripe_id: nil) }
   scope :intercom, -> { where.not(intercom_id: nil) }
+
+  extend ActiveHash::Associations::ActiveRecordExtensions
 end

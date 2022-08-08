@@ -62,4 +62,8 @@ class DeviceResource < ApplicationResource
 
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
+
+  def base_scope
+    Device.unscoped
+  end
 end

@@ -170,6 +170,10 @@ class User < ApplicationRecord
     self.onboarding_link&.split("/")&.last
   end
 
+  def current_device
+    self.devices.with_token.first
+  end
+
   # gates
 
   def has_completed_onboarding?
