@@ -39,5 +39,5 @@ class Device < ApplicationRecord
   # scopes
 
   scope :with_token, -> { where.not(fcm_token: nil) }
-  default_scope, -> { order(created_at: :asc) }
+  default_scope { order(created_at: :asc) }
 end

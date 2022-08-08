@@ -35,6 +35,7 @@
 #
 FactoryBot.define do
   factory :push_notification do
-    
+    body { Faker::Lorem.sentence }
+    title { Faker::Lorem.sentence }
   end
 end
