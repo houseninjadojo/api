@@ -53,6 +53,7 @@ module HouseNinja
     # more performant decryption
     # @see https://edgeguides.rubyonrails.org/active_record_encryption.html#storing-key-references
     config.active_record.encryption.store_key_references = true
+    config.active_record.encryption.support_unencrypted_data = true
 
     # ActiveStorage
     # use proxy for ActiveStorage

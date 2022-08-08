@@ -6,11 +6,11 @@ class Invoice::NotifyJob < ApplicationJob
 
   def perform(invoice)
     @invoice = invoice
-    @user = @invoice.user
-    @device = @user.current_device
-    @work_order = @invoice.work_order
+    @user = @invoice&.user
+    @device = @user&.current_device
+    @work_order = @invoice&.work_order
 
-    return unless work_order.present? && device.present?
+    return unless should_send?
 
     notification.deliver_later
   end
@@ -29,5 +29,13 @@ class Invoice::NotifyJob < ApplicationJob
       body: body,
       deeplink_path: deeplink_path,
     )
+  end
+
+  private
+
+  def should_send?
+    work_order.present? &&
+    device.present? &&
+    user.email.include?("@houseninja.co")
   end
 end

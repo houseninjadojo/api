@@ -114,11 +114,13 @@ class PushNotification < ApplicationRecord
       self.delivered_at = DateTime.parse(res[:headers]["date"])
       self.fcm_message_id = res[:body][:name].split('/').last
       self.fcm_project_id = res[:body][:name].split('/').second
+      self.save
+      return true
     else
       self.error_code = res[:status_code]
+      self.save
       return false
     end
-    self.save
   end
 
   def deliver_later

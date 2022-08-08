@@ -33,6 +33,11 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Device < ApplicationRecord
+  encrypts :apns_device_token
+  encrypts :fcm_token
+
+  # associations
+
   belongs_to :user, required: false
   has_many :push_notifications
 
