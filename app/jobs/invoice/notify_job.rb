@@ -10,9 +10,17 @@ class Invoice::NotifyJob < ApplicationJob
     @device = @user&.current_device
     @work_order = @invoice&.work_order
 
-    return unless should_send?
-
-    notification.deliver_later
+    if should_send?
+      notification.deliver_later
+    else
+      Rails.logger.info("Not sending PushNotification for invoice=#{invoice.id}",
+        invoice: invoice.id,
+        user: user&.id,
+        device: device&.id,
+        work_order: work_order&.id,
+      )
+      clear_lock!
+    end
   end
 
   def body
@@ -36,6 +44,11 @@ class Invoice::NotifyJob < ApplicationJob
   def should_send?
     work_order.present? &&
     device.present? &&
+    user.present? &&
     user.email.include?("@houseninja.co")
+  end
+
+  def clear_lock!
+    Invoice::NotifyJob.clear_lock!(invoice)
   end
 end

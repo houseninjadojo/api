@@ -110,6 +110,11 @@ class PushNotification < ApplicationRecord
 
   def deliver_now
     return false if sent?
+    Rails.logger.info("Delivering PushNotification id=#{id}",
+      push_notification: id,
+      user: device&.user&.id,
+      device: device&.id,
+    )
     self.sent_at = Time.now
     res = FCMClient.send_notification(to_fcm_payload)
     res[:body] = JSON.parse(res[:body])&.symbolize_keys
