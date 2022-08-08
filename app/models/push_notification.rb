@@ -54,6 +54,10 @@ class PushNotification < ApplicationRecord
     "House Ninja"
   end
 
+  def failed?
+    error_code.present?
+  end
+
   # associations
 
   belongs_to :device, required: true

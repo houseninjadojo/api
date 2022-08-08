@@ -33,6 +33,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Device < ApplicationRecord
+  encrypts :device_id, deterministic: true, downcase: true
   encrypts :apns_device_token
   encrypts :fcm_token
 
@@ -45,4 +46,8 @@ class Device < ApplicationRecord
 
   scope :with_token, -> { where.not(fcm_token: nil) }
   default_scope { order(created_at: :asc) }
+
+  # validations
+
+  validates :device_id, presence: true, uniqueness: true
 end
