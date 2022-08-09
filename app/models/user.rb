@@ -171,7 +171,7 @@ class User < ApplicationRecord
   end
 
   def current_device
-    self.devices.with_token.first
+    self.devices.with_token.last
   end
 
   # gates
