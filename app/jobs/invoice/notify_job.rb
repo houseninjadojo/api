@@ -49,6 +49,6 @@ class Invoice::NotifyJob < ApplicationJob
   end
 
   def clear_lock!
-    Invoice::NotifyJob.clear_lock!(invoice)
+    Invoice::NotifyJob.unlock!(invoice)
   end
 end
