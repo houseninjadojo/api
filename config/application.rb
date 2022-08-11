@@ -105,7 +105,7 @@ module HouseNinja
 
     # Rails Safer Console
     # https://github.com/salsify/safer_rails_console
-    config.safer_rails_console.sandbox_environments = %w{sandbox production} 
+    config.safer_rails_console.sandbox_environments = %w{sandbox production}
     config.safer_rails_console.console = 'irb'
     config.safer_rails_console.environment_names = {
       'development' => 'development',
