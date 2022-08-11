@@ -34,6 +34,7 @@ gem 'rails',                   '~> 7.0.3'                                      #
 gem 'rails_semantic_logger'
 gem 'redis',                   '~> 4.7'                                        # Use Redis adapter to run Action Cable in production
 gem 'responders'
+gem 'safer_rails_console'
 gem 'seedbank'
 gem 'sendgrid-actionmailer'
 gem 'sentry-ruby'

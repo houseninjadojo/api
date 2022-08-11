@@ -102,6 +102,27 @@ module HouseNinja
         request.params.except(:controller, :action, :format)
       }
     }
+
+    # Rails Safer Console
+    # https://github.com/salsify/safer_rails_console
+    config.safer_rails_console.sandbox_environments = %w{sandbox production} 
+    config.safer_rails_console.console = 'irb'
+    config.safer_rails_console.environment_names = {
+      'development' => 'development',
+      'sandbox' => 'sandbox',
+      'production' => 'production',
+    }
+    config.safer_rails_console.environment_prompt_colors = {
+      'development' => SaferRailsConsole::Colors::GREEN,
+      'sandbox' => SaferRailsConsole::Colors::YELLOW,
+      'production' => SaferRailsConsole::Colors::RED
+    }
+    config.safer_rails_console.warn_environments = %w{sandbox production}
+    config.safer_rails_console.warn_text = <<~TEXT
+      WARNING: YOU ARE USING RAILS CONSOLE IN PRODUCTION!
+      Changing data can cause serious data loss.
+      Make sure you know what you're doing.
+    TEXT
   end
 end
 
