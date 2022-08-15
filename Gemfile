@@ -7,7 +7,7 @@ gem 'active_hash'
 gem 'activejob-uniqueness', require: 'active_job/uniqueness/sidekiq_patch'
 gem 'amazing_print'
 gem 'auth0'
-gem 'action_policy',           '~> 0.6.1'
+gem 'action_policy',           '~> 0.6.2'
 gem 'aws-sdk-s3',                          require: false
 gem 'bootsnap',                '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
 gem 'branch_io'
