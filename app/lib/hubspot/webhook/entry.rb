@@ -192,6 +192,8 @@ module Hubspot
           :phone_number
         when "no__of_bathrooms"
           #
+        when "num_associated_contacts"
+          :property_id # we need to connect it to the property, not the user directly
         when "number_of_bedrooms"
           #
         when "phone"
@@ -308,6 +310,8 @@ module Hubspot
           #
         when "number_of_bedrooms"
           #
+        when "num_associated_contacts"
+          attribute_as_property_id
         when "phone"
           property_value
         when "pipeline"
@@ -395,6 +399,21 @@ module Hubspot
         signed_url_payload = OpenURI.open_uri(first_url).read
         signed_url = JSON.parse(signed_url_payload)["url"]
         URI.open(signed_url)
+      end
+
+      def attribute_as_property_id
+        user&.default_property&.id
+      end
+
+      # fetch hubspot stuff
+
+      def hubspot_contact
+        contacts = Hubspot::Association.all(hubspot_id, Hubspot::Association::DEAL_TO_CONTACT) || []
+        contacts.first
+      end
+
+      def user
+        User.find_by(hubspot_id: hubspot_contact&.id)
       end
     end
   end
