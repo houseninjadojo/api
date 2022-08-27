@@ -45,7 +45,7 @@ gem 'stripe',                  '~> 6.5.0'
 gem 'strong_migrations',       '~> 1.2.0'
 gem 'valid_email'
 
-gem 'net-ssh', '7.0.0.beta1'
+gem 'net-ssh', '7.0.1'
 
 group :development, :test do
   gem 'factory_bot_rails'

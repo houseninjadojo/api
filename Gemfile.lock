@@ -276,7 +276,7 @@ GEM
       digest
       net-protocol
       timeout
-    net-ssh (7.0.0.beta1)
+    net-ssh (7.0.1)
     netrc (0.11.0)
     nio4r (2.5.8)
     nokogiri (1.13.8-arm64-darwin)
@@ -480,7 +480,7 @@ DEPENDENCIES
   kaminari
   kredis
   money
-  net-ssh (= 7.0.0.beta1)
+  net-ssh (= 7.0.1)
   okcomputer
   pg (~> 1.4)
   phonelib
