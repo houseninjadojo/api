@@ -8,6 +8,8 @@ class ApplicationController < ActionController::API
   authorize :user,   through: :current_user
   authorize :params, through: :params
 
+  etag { current_user&.id }
+
   def context
     {
       current_user: current_user,
