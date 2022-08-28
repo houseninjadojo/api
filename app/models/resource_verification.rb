@@ -47,7 +47,7 @@ class ResourceVerification
   end
 
   def verification_validation
-    errors.add(:base, 'resource verification failed') unless verified?
+    errors.add(:base, message: 'resource verification failed') unless verified?
   end
 
   def value

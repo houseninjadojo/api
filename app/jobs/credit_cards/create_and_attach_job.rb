@@ -11,26 +11,32 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
 
     begin
       if matched_card.present?
+        # matched card
         payment_method = matched_card
       elsif stored_payment_methods.size > 0
-        # throw error
+        # payment methods exist, but no match found
+        resource.errors.add(:card_number, :mismatch, message: "does not match existing card on file")
+        return resource
       else
         # Create Payment Method
         payment_method = create_stripe_payment_method
         attach_stripe_payment_method
       end
     rescue Stripe::CardError => e
+      # str
       attribute = e.param&.to_sym == :number ? :card_number : e.param&.to_sym
       attribute = attribute || :base
-      resource.errors.add(attribute, e.message)
+      resource.errors.add(attribute, :invalid, message: e.message)
     rescue
-      resource.errors.add(:base, "Something went wrong. Please try again.")
+      resource.errors.add(:base, :invalid, message: "Something went wrong. Please try again.")
     end
     if payment_method.present?
       resource.stripe_token = payment_method.id
       resource.last_four = payment_method.card.last4
       resource.brand = payment_method.card.brand
       resource.country = payment_method.card.country
+      # resource.exp_month = payment_method.card.exp_month
+      # resource.exp_year = payment_method.card.exp_year
     end
     resource
   end
