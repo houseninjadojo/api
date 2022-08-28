@@ -23,6 +23,7 @@ class InvoiceMailer < ApplicationMailer
         invoice_amount: invoice_amount,
         invoice_notes: invoice_notes,
         payment_link: payment_link,
+        approve_invoice_message: "You have an invoice ready for payment.",
         app_store_url: app_store_url
       }
     )
