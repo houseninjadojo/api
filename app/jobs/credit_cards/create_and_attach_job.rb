@@ -10,18 +10,33 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
     return unless policy.can_sync?
 
     begin
-      create_stripe_payment_method
-      attach_stripe_payment_method
+      if matched_card.present?
+        # matched card
+        payment_method = matched_card
+      elsif stored_payment_methods.size > 0
+        # payment methods exist, but no match found
+        resource.errors.add(:card_number, :mismatch, message: "does not match existing card on file")
+        return resource
+      else
+        # Create Payment Method
+        payment_method = create_stripe_payment_method
+        attach_stripe_payment_method
+      end
     rescue Stripe::CardError => e
-      resource.errors.add(:base, e.message)
+      # str
+      attribute = e.param&.to_sym == :number ? :card_number : e.param&.to_sym
+      attribute = attribute || :base
+      resource.errors.add(attribute, :invalid, message: e.message)
     rescue
-      resource.errors.add(:base, "Something went wrong. Please try again.")
+      resource.errors.add(:base, :invalid, message: "Something went wrong. Please try again.")
     end
-    if @stripe_payment_method.present?
-      resource.stripe_token = @stripe_payment_method.id
-      resource.last_four = @stripe_payment_method.card.last4
-      resource.brand = @stripe_payment_method.card.brand
-      resource.country = @stripe_payment_method.card.country
+    if payment_method.present?
+      resource.stripe_token = payment_method.id
+      resource.last_four = payment_method.card.last4
+      resource.brand = payment_method.card.brand
+      resource.country = payment_method.card.country
+      # resource.exp_month = payment_method.card.exp_month
+      # resource.exp_year = payment_method.card.exp_year
     end
     resource
   end
@@ -52,7 +67,7 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
   def create_stripe_payment_method
     # Create Payment Method
     # @see https://stripe.com/docs/api/payment_methods/create
-    @stripe_payment_method = Stripe::PaymentMethod.create(params, {
+    @stripe_payment_method ||= Stripe::PaymentMethod.create(params, {
       idempotency_key: idempotency_key,
       proxy: Rails.secrets.dig(:vgs, :outbound, :proxy_url)
     })
@@ -70,10 +85,11 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
     Digest::SHA256.hexdigest("#{resource.id}_#{resource.card_number}_#{resource.exp_month}_#{resource.exp_year}_#{resource.cvv}")
   end
 
+  def stored_payment_methods
+    @stored_payment_methods ||= Stripe::Customer.list_payment_methods(resource.user&.stripe_id, { type: 'card' })&.data
+  end
+
   def matched_card
-    @matched_card ||= begin
-      payment_methods = Stripe::Customer.list_payment_methods(resource.user&.stripe_id, { type: 'card' })
-      payment_methods.data.find { |pm| pm.card.last4 == resource.card_number&.last(4) }
-    end
+    @matched_card ||= stored_payment_methods.find { |pm| pm.card.last4 == resource.card_number&.last(4) }
   end
 end

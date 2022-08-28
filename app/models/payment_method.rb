@@ -94,7 +94,7 @@ class PaymentMethod < ApplicationRecord
 
     # set new default and mark the old
     if has_errors && current_method.present?
-      Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
+      # Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
     end
   end
 
