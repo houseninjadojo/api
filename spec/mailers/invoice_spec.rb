@@ -29,6 +29,7 @@ RSpec.describe InvoiceMailer, type: :mailer do
         invoice_amount: "$100.00",
         invoice_notes: "test<br>notest",
         payment_link: "https://app.houseninja.co/payment-link",
+        approve_invoice_message: "You have an invoice ready for payment.",
         app_store_url: "https://itunes.apple.com/us/app/houseninja/123456789"
       }.to_s)
     end
