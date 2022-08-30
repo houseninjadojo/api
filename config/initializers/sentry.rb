@@ -16,6 +16,13 @@ Sentry.init do |config|
   # We recommend adjusting this value in production
   config.traces_sample_rate = 1.0
 
+  # Send Default PII data to Sentry
+  #  - user ip
+  #  - user cookie
+  #  - request body
+  #  - query string in the url
+  config.send_default_pii = true
+
   # strip unecessary attributes from breadcrumbs
   config.before_breadcrumb = lambda do |breadcrumb, _|
     if breadcrumb.data.include?(:datadog_span)

@@ -18,12 +18,15 @@ module Auth
   def current_user
     return nil unless current_token.present?
     if access_token.present?
-      return access_token_user
+      user = access_token_user
     else
       user = User.find_by(id: current_token.user_id)
-      Sentry.set_user(email: user.email)
-      @current_user ||= user
     end
+    Sentry.set_user(
+      id: user.id,
+      email: user.email
+    )
+    @current_user ||= user
   end
 
   def access_token
