@@ -132,7 +132,7 @@ GEM
     concurrent-ruby (1.1.10)
     connection_pool (2.2.5)
     crass (1.0.6)
-    credit_card_validations (5.0.0)
+    credit_card_validations (6.0.0)
       activemodel (>= 5.2, < 7.1)
       activesupport (>= 5.2, < 7.1)
     database_cleaner (2.0.1)
