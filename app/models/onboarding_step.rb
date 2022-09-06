@@ -24,5 +24,6 @@ class OnboardingStep
     WALKTHROUGH_BOOKING,
     WELCOME,
     COMPLETED,
+    ACCOUNT_SETUP,
   ]
 end
