@@ -11,6 +11,7 @@ class OnboardingStep
   WELCOME = "welcome"
   COMPLETED = "completed"
   ACCOUNT_SETUP = "account-setup"
+  IMPORTING = "importing"
 
   ALL = [
     AREA_NOTIFICATION,
@@ -25,5 +26,6 @@ class OnboardingStep
     WELCOME,
     COMPLETED,
     ACCOUNT_SETUP,
+    IMPORTING,
   ]
 end
