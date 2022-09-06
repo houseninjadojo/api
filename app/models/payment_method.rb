@@ -83,6 +83,7 @@ class PaymentMethod < ApplicationRecord
 
     self.id = SecureRandom.uuid
     card = CreditCards::CreateAndAttachJob.perform_now(self)
+    self.errors = card.errors
 
     errors = card&.errors&.messages.dup
     has_errors = errors.respond_to?(:[]) && errors.blank?
