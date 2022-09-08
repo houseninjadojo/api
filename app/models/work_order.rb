@@ -51,6 +51,7 @@ class WorkOrder < ApplicationRecord
   after_update        :sync_invoice_notes
   after_update_commit :sync_update!
   after_update_commit :finalize_invoice!, if: :saved_change_to_status?
+  after_update_commit :share_estimate!, if: :saved_change_to_status?
 
   # associations
 
@@ -104,6 +105,24 @@ class WorkOrder < ApplicationRecord
     property&.user
   end
 
+  def current_estimate
+    estimates.order(created_at: :desc).first
+  end
+
+  def fetch_or_create_estimate
+    if estimates.any?
+      current_estimate
+    else
+      Estimate.create!(
+        work_order: self,
+      )
+    end
+  end
+
+  def estimate_approved?
+    current_estimate&.approved?
+  end
+
   # callbacks
 
   def set_status
@@ -141,6 +160,13 @@ class WorkOrder < ApplicationRecord
   def ensure_invoice_status_conditions
     if status == WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
       status = self.status_was if !customer_approved_work || amount == 0
+    end
+  end
+
+  def share_estimate!
+    return if estimate_approved?
+    if status == WorkOrderStatus::ESTIMATE_SHARED_WITH_CUSTOMER
+      current_estimate&.share_with_customer!
     end
   end
 

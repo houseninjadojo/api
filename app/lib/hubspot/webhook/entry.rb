@@ -69,7 +69,20 @@ module Hubspot
             User
           end
         when "deal"
-          WorkOrder
+          if [
+            "date_estimate_sent",
+            "estimate_approved",
+            "estimate_notes",
+            "estimate___for_homeowner",
+            "estimate___from_vendor",
+            "revised_estimate___for_homeowner",
+            "second_estimate___for_homeowner",
+            "second_estimate___from_vendor",
+          ].include?(payload["propertyName"])
+            Estimate
+          else
+            WorkOrder
+          end
         end
       end
 
@@ -78,6 +91,8 @@ module Hubspot
           @resource ||= User.find_by(hubspot_id: hubspot_id)&.default_property if hubspot_id.present?
         elsif resource_klass == Invoice
           @resource ||= WorkOrder.find_by(hubspot_id: hubspot_id)&.invoice if hubspot_id.present?
+        elsif resource_klass == Estimate
+          @resource ||= WorkOrder.find_by(hubspot_id: hubspot_id)&.fetch_or_create_estimate if hubspot_id.present?
         else
           @resource ||= resource_klass&.find_by(hubspot_id: hubspot_id) if hubspot_id.present?
         end
@@ -121,8 +136,6 @@ module Hubspot
 
       def attribute_name
         case property_name
-        when "revised_estimate___for_homeowner"
-          #
         when "actual_invoice___for_homeowner"
           :homeowner_amount_actual
         when "address"
@@ -142,7 +155,7 @@ module Hubspot
         when "customer_approved_work_"
           :customer_approved_work
         when "date_estimate_sent"
-          :sent_at
+          :shared_at
         when "date___time_of_the_walkthrough"
           :walkthrough_date
         when "date_work_completed"
@@ -160,11 +173,13 @@ module Hubspot
         when "engagements_last_meeting_booked"
           :walkthrough_booking_timestamp
         when "estimate_approved"
-          # :customer_approved_estimate
+          :approved
+        when "estimate_notes"
+          :description
         when "estimate___for_homeowner"
-          #
+          :homeowner_amount
         when "estimate___from_vendor"
-          #
+          :vendor_amount
         when "est__home_value"
           # :home_value
         when "firstname"
@@ -206,12 +221,14 @@ module Hubspot
           :refund_amount
         when "refund___make_good_reason"
           :refund_reason
+        when "revised_estimate___for_homeowner"
+          :homeowner_amount_actual
         when "scheduled_work_date"
           #
         when "second_estimate___for_homeowner"
-          #
+          :homeowner_amount
         when "second_estimate___from_vendor"
-          #
+          :second_vendor_amount
         when "size_of_home__sq_ft_"
           #
         when "state"
@@ -237,8 +254,6 @@ module Hubspot
 
       def attribute_value
         case property_name
-        when "revised_estimate___for_homeowner"
-          # attribute_as_amount_in_cents
         when "actual_invoice___for_homeowner"
           attribute_as_amount_in_cents
         when "address"
@@ -277,6 +292,8 @@ module Hubspot
           attribute_as_epoch_time
         when "estimate_approved"
           attribute_as_boolean
+        when "estimate_notes"
+          property_value
         when "estimate___for_homeowner"
           attribute_as_amount_in_cents
         when "estimate___from_vendor"
@@ -322,12 +339,14 @@ module Hubspot
           attribute_as_amount_in_cents
         when "refund___make_good_reason"
           property_value
+        when "revised_estimate___for_homeowner"
+          attribute_as_amount_in_cents
         when "scheduled_work_date"
           #
         when "second_estimate___for_homeowner"
-          #
+          attribute_as_amount_in_cents
         when "second_estimate___from_vendor"
-          #
+          attribute_as_amount_in_cents
         when "size_of_home__sq_ft_"
           #
         when "state"

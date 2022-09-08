@@ -3,21 +3,17 @@ class Sync::Estimate::Hubspot::Outbound::UpdateJob < Sync::BaseJob
 
   attr_accessor :estimate, :changeset
 
-  def perform(property, changeset)
+  def perform(estimate, changeset)
     @changeset = changeset
     @estimate = estimate
     return unless policy.can_sync?
 
-    # Hubspot::Contact.update!(property.user.hubspot_id, params)
+    Hubspot::Deal.update!(estimate.work_order.hubspot_id, params)
   end
 
   def params
     {
-      # address: property.street_address1,
-      # address_2: property.street_address2,
-      # city: property.city,
-      # state_new: state_name,
-      # zip: property.zipcode,
+      estimate_approved: estimate_approved,
     }
   end
 
@@ -26,5 +22,13 @@ class Sync::Estimate::Hubspot::Outbound::UpdateJob < Sync::BaseJob
       estimate,
       changeset: changeset
     )
+  end
+
+  def estimate_approved
+    if estimate.approved
+      "Yes"
+    else
+      "No"
+    end
   end
 end

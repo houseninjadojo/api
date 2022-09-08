@@ -3,6 +3,7 @@
 # Table name: estimates
 #
 #  id                      :uuid             not null, primary key
+#  access_token            :string
 #  approved_at             :datetime
 #  deleted_at              :datetime
 #  description             :text
@@ -11,6 +12,7 @@
 #  scheduled_at            :datetime
 #  scheduled_window_end    :datetime
 #  scheduled_window_start  :datetime
+#  second_vendor_amount    :string
 #  shared_at               :datetime
 #  vendor_amount           :string
 #  vendor_category         :string
