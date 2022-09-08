@@ -60,6 +60,7 @@ class WorkOrder < ApplicationRecord
   has_one    :invoice,   dependent: :destroy
   has_one    :deep_link, through: :invoice
   # has_one    :user,      through: :property
+  has_many   :estimates
 
   # scopes
 

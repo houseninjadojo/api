@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :devices,            path: 'devices',            only: [:index, :show, :create, :update]
     resources :documents,          path: 'documents',          only: [:index, :show, :create, :update, :destroy]
     resources :document_groups,    path: 'document-groups',    only: [:index, :show, :create, :update, :destroy]
+    resources :estimates,          path: 'estimates',          only: [:index, :show, :update]
     resources :invoices,           path: 'invoices',           only: [:index, :show]
     resources :home_care_tips,     path: 'home-care-tips',     only: [:index, :show]
     resources :line_items,         path: 'line-items',         only: [:index, :show]
