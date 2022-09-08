@@ -4,7 +4,7 @@ RSpec.describe "estimates#index", type: :request do
   let(:params) { {} }
 
   subject(:make_request) do
-    jsonapi_get "//estimates", params: params
+    jsonapi_get "/estimates", params: params
   end
 
   describe 'basic fetch' do

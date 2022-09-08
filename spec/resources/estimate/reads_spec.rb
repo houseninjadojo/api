@@ -29,34 +29,34 @@ RSpec.describe EstimateResource, type: :resource do
   end
 
   describe 'sorting' do
-    describe 'by id' do
-      let!(:estimate1) { create(:estimate) }
-      let!(:estimate2) { create(:estimate) }
+    describe 'by created_at' do
+      let!(:estimate1) { create(:estimate, created_at: DateTime.now) }
+      let!(:estimate2) { create(:estimate, created_at: DateTime.now + 1.hour) }
 
       context 'when ascending' do
         before do
-          params[:sort] = 'id'
+          params[:sort] = 'created_at'
         end
 
         it 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            estimate1.id,
-            estimate2.id
+          expect(d.map(&:created_at)).to eq([
+            datetime(estimate1.created_at),
+            datetime(estimate2.created_at)
           ])
         end
       end
 
       context 'when descending' do
         before do
-          params[:sort] = '-id'
+          params[:sort] = '-created_at'
         end
 
         it 'works' do
           render
-          expect(d.map(&:id)).to eq([
-            estimate2.id,
-            estimate1.id
+          expect(d.map(&:created_at)).to eq([
+            datetime(estimate2.created_at),
+            datetime(estimate1.created_at)
           ])
         end
       end

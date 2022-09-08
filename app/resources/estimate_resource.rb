@@ -66,8 +66,5 @@ class EstimateResource < ApplicationResource
     Estimate
       .unscoped
       .present
-      .order(
-        created_at: :desc
-      )
   end
 end

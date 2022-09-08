@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "estimates#update", type: :request do
   subject(:make_request) do
-    jsonapi_put "//estimates/#{estimate.id}", payload
+    jsonapi_put "/estimates/#{estimate.id}", payload
   end
 
   describe 'basic update' do
@@ -14,14 +14,13 @@ RSpec.describe "estimates#update", type: :request do
           id: estimate.id.to_s,
           type: 'estimates',
           attributes: {
-            # ... your attrs here
+            approved_at: Time.now,
           }
         }
       }
     end
 
-    # Replace 'xit' with 'it' after adding attributes
-    xit 'updates the resource' do
+    it 'updates the resource' do
       expect(EstimateResource).to receive(:find).and_call_original
       expect {
         make_request

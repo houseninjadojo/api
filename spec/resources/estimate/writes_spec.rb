@@ -15,7 +15,7 @@ RSpec.describe EstimateResource, type: :resource do
       EstimateResource.build(payload)
     end
 
-    it 'works' do
+    xit 'works' do
       expect {
         expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
       }.to change { Estimate.count }.by(1)
@@ -25,12 +25,16 @@ RSpec.describe EstimateResource, type: :resource do
   describe 'updating' do
     let!(:estimate) { create(:estimate) }
 
+    let(:timestamp) { Time.zone.now }
+
     let(:payload) do
       {
         data: {
           id: estimate.id.to_s,
           type: 'estimates',
-          attributes: { } # Todo!
+          attributes: {
+            approved_at: timestamp
+          }
         }
       }
     end
@@ -39,11 +43,11 @@ RSpec.describe EstimateResource, type: :resource do
       EstimateResource.find(payload)
     end
 
-    xit 'works (add some attributes and enable this spec)' do
+    it 'works (add some attributes and enable this spec)' do
       expect {
         expect(instance.update_attributes).to eq(true)
       }.to change { estimate.reload.updated_at }
-      # .and change { estimate.foo }.to('bar') <- example
+      .and change { estimate.approved_at }.to(timestamp)
     end
   end
 
@@ -54,7 +58,7 @@ RSpec.describe EstimateResource, type: :resource do
       EstimateResource.find(id: estimate.id)
     end
 
-    it 'works' do
+    xit 'works' do
       expect {
         expect(instance.destroy).to eq(true)
       }.to change { Estimate.count }.by(-1)

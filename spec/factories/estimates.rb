@@ -31,6 +31,16 @@
 #
 FactoryBot.define do
   factory :estimate do
-    
+    work_order
+
+    description { Faker::Lorem.sentence(word_count: 4) }
+
+    scheduled_window_start { Faker::Time.between_dates(from: Date.today + 5.days, to: Date.today + 15.days, period: :all) }
+    scheduled_window_end { scheduled_window_start + 2.hours }
+
+    vendor_category { Faker::Construction.trade }
+    vendor_name { Faker::Company.name }
+
+    homeowner_amount { Faker::Number.between(from: 10000, to: 1000000) }
   end
 end
