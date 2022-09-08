@@ -25,7 +25,7 @@ RSpec.describe EstimateResource, type: :resource do
   describe 'updating' do
     let!(:estimate) { create(:estimate) }
 
-    let(:timestamp) { Time.zone.now }
+    let(:timestamp) { Time.zone.now.round }
 
     let(:payload) do
       {
