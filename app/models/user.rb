@@ -49,6 +49,7 @@ class User < ApplicationRecord
   before_create :set_onboarding_step
 
   before_save :set_contact_type
+  before_save :normalize_email
 
   after_create_commit :generate_referral_promo_code
   after_create_commit :generate_document_groups
@@ -268,6 +269,10 @@ class User < ApplicationRecord
     else
       self.contact_type = ContactType::LEAD
     end
+  end
+
+  def normalize_email
+    self.email = self.email&.downcase
   end
 
   def destroy
