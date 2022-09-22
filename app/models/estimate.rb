@@ -50,6 +50,7 @@ class Estimate < ApplicationRecord
   # callbacks
 
   after_update_commit :sync_update!
+  after_update_commit :update_work_order_status, if: :saved_change_to_approved_at?
 
   # associations
 
@@ -176,5 +177,11 @@ class Estimate < ApplicationRecord
     [
       :update,
     ]
+  end
+
+  def update_work_order_status
+    if approved_at.present?
+      work_order.update!(status: WorkOrderStatus::SCHEDULING_IN_PROGRESS)
+    end
   end
 end
