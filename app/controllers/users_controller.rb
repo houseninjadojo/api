@@ -89,7 +89,7 @@ class UsersController < ApplicationController
 
   def user_resource
     @user_resource ||= begin
-      email = params.dig(:data, :attributes, :email)
+      email = params.dig(:data, :attributes, :email)&.downcase
       user = User.find_by!(email: email) if email.present?
       resource = UserResource.find(id: user.id)
       if resource.data&.is_currently_onboarding?
