@@ -97,9 +97,8 @@ module Hubspot
             return nil unless work_order.present?
             if work_order.user.is_houseninja?
               return work_order&.fetch_or_create_estimate
-            else
-              return nil
             end
+            nil
           end
         else
           @resource ||= resource_klass&.find_by(hubspot_id: hubspot_id) if hubspot_id.present?

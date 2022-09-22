@@ -8,7 +8,14 @@ RSpec.describe "estimates#show", type: :request do
   end
 
   describe 'basic fetch' do
-    let!(:estimate) { create(:estimate) }
+    let!(:user) { create(:user) }
+    let!(:property) { create(:property, user: user) }
+    let!(:work_order) { create(:work_order, property: property) }
+    let!(:estimate) { create(:estimate, work_order: work_order) }
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     it 'works' do
       expect(EstimateResource).to receive(:find).and_call_original

@@ -3,7 +3,7 @@ class EstimatesController < ApplicationController
 
   def index
     authorize!
-    scope = authorized_scope(Invoice.all)
+    scope = authorized_scope(Estimate.all)
     estimates = EstimateResource.all(params, scope)
     respond_with(estimates)
   end

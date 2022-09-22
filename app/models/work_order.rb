@@ -59,7 +59,8 @@ class WorkOrder < ApplicationRecord
   belongs_to :status,    class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status, required: false
   has_one    :estimate,  dependent: :destroy
   has_one    :invoice,   dependent: :destroy
-  # has_one    :deep_link, through: :invoice
+  has_one    :invoice_deep_link, through: :invoice, class_name: "DeepLink", source: :deep_link
+  has_one    :estimate_deep_link, through: :estimate, class_name: "DeepLink", source: :deep_link
 
   # scopes
 
@@ -165,7 +166,7 @@ class WorkOrder < ApplicationRecord
 
   def share_estimate!
     return if estimate_approved?
-    if status == WorkOrderStatus::ESTIMATE_SHARED_WITH_CUSTOMER
+    if status == WorkOrderStatus::ESTIMATE_SHARED_WITH_HOMEOWNER
       estimate&.share_with_customer!
     end
   end

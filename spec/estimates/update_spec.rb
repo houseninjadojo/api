@@ -6,7 +6,10 @@ RSpec.describe "estimates#update", type: :request do
   end
 
   describe 'basic update' do
-    let!(:estimate) { create(:estimate) }
+    let!(:user) { create(:user) }
+    let!(:property) { create(:property, user: user) }
+    let!(:work_order) { create(:work_order, property: property) }
+    let!(:estimate) { create(:estimate, work_order: work_order) }
 
     let(:payload) do
       {
@@ -19,6 +22,10 @@ RSpec.describe "estimates#update", type: :request do
         }
       }
     end
+
+    before {
+      allow_any_instance_of(Auth).to receive(:current_user).and_return(user)
+    }
 
     it 'updates the resource' do
       expect(EstimateResource).to receive(:find).and_call_original

@@ -1,7 +1,7 @@
 class Sync::WorkOrder::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   class Changeset < TreeDiff
     observe :status,
-            deep_link: [
+            invoice_deep_link: [
               :url,
             ]
   end

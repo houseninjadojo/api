@@ -155,9 +155,9 @@ RSpec.describe Hubspot::Webhook::Entry do
       expect(entry.attribute_name).to eq(:created_at)
     end
 
-    it 'date_estimate_sent => sent_at' do
+    it 'date_estimate_sent => shared_at' do
       entry.payload["propertyName"] = "date_estimate_sent"
-      expect(entry.attribute_name).to eq(:sent_at)
+      expect(entry.attribute_name).to eq(:shared_at)
     end
 
     it 'dealname => description' do
@@ -182,17 +182,17 @@ RSpec.describe Hubspot::Webhook::Entry do
 
     it 'estimate_approved => approved' do
       entry.payload["propertyName"] = "estimate_approved"
-      expect(entry.attribute_name).to be_nil
+      expect(entry.attribute_name).to eq(:approved)
     end
 
     it 'estimate___for_homeowner => nil' do
       entry.payload["propertyName"] = "estimate___for_homeowner"
-      expect(entry.attribute_name).to be_nil
+      expect(entry.attribute_name).to eq(:homeowner_amount)
     end
 
     it 'estimate___from_vendor => nil' do
       entry.payload["propertyName"] = "estimate___from_vendor"
-      expect(entry.attribute_name).to be_nil
+      expect(entry.attribute_name).to eq(:vendor_amount)
     end
 
     it 'hs_lastmodifieddate => nil' do
