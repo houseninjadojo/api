@@ -5,6 +5,7 @@
 #  id                      :uuid             not null, primary key
 #  access_token            :string
 #  approved_at             :datetime
+#  declined_at             :datetime
 #  deleted_at              :datetime
 #  description             :text
 #  homeowner_amount        :string
@@ -35,6 +36,7 @@ class Estimate < ApplicationRecord
   # scopes
 
   scope :approved, -> { where.not(approved_at: nil) }
+  scope :declined, -> { where.not(declined_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
   scope :present, -> { where(deleted_at: nil) }
   scope :shared, -> { where.not(shared_at: nil) }
@@ -72,6 +74,15 @@ class Estimate < ApplicationRecord
     self.approved_at = value.present? ? Time.now : nil
   end
 
+  def declined
+    declined_at.present?
+  end
+  alias_method :declined?, :declined
+
+  def declined=(value)
+    self.declined_at = value.present? ? Time.now : nil
+  end
+
   def shared
     shared_at.present?
   end
@@ -87,6 +98,11 @@ class Estimate < ApplicationRecord
     else
       homeowner_amount
     end
+  end
+
+  def formatted_total
+    format = I18n.t(:format, scope: 'number.currency.format')
+    Money.from_cents(amount)&.format(format: format)
   end
 
   # actions
@@ -129,6 +145,21 @@ class Estimate < ApplicationRecord
 
   def has_external_access_expired?
     deep_link.present? && deep_link.is_expired?
+  end
+
+  def send_estimate_approval_email!
+    unless approved? || declined?
+      Rails.logger.info("Not sending estimate approval email, customer has already decided on estimate for work_order=#{work_order&.id}")
+    end
+    EstimateMailer.estimate_approval(
+      email: user.email,
+      first_name: user.first_name,
+      service_name: work_order&.description,
+      service_provider: work_order&.vendor
+      estimate_amount_or_actual_estimate_if_populated: formatted_total,
+      estimate_notes: description&.to_s&.gsub(/\n/, '<br>')&.html_safe,
+      estimate_link: deep_link&.to_s,
+    ).deliver_later
   end
 
   # sync

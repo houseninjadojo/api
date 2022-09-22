@@ -92,7 +92,14 @@ module Hubspot
         elsif resource_klass == Invoice
           @resource ||= WorkOrder.find_by(hubspot_id: hubspot_id)&.invoice if hubspot_id.present?
         elsif resource_klass == Estimate
-          @resource ||= WorkOrder.find_by(hubspot_id: hubspot_id)&.fetch_or_create_estimate if hubspot_id.present?
+          @resource ||= begin
+            work_order = WorkOrder.find_by(hubspot_id: hubspot_id) if hubspot_id.present?
+            if work_order.user.is_houseninja?
+              return work_order&.fetch_or_create_estimate
+            else
+              return nil
+            end
+          end
         else
           @resource ||= resource_klass&.find_by(hubspot_id: hubspot_id) if hubspot_id.present?
         end

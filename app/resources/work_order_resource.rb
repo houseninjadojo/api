@@ -46,6 +46,7 @@ class WorkOrderResource < ApplicationResource
   primary_endpoint 'work-orders', [:index, :show, :create, :update]
 
   belongs_to :property
+  has_one    :estimate
   has_one    :invoice
 
   attribute :property_id, :uuid, only: [:filterable]

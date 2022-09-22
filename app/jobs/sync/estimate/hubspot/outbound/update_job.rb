@@ -25,10 +25,12 @@ class Sync::Estimate::Hubspot::Outbound::UpdateJob < Sync::BaseJob
   end
 
   def estimate_approved
-    if estimate.approved
+    if estimate.approved?
       "Yes"
-    # elsif  declined_at
+    elsif estimate.declined?
       "No"
+    else
+      ""
     end
   end
 end

@@ -10,6 +10,10 @@ class Estimate::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
 
     estimate.generate_access_token!
     generate_deep_link!
+
+    if send_email
+      estimate.send_estimate_approval_email!
+    end
   end
 
   def conditions_met?

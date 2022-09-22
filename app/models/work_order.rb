@@ -57,11 +57,9 @@ class WorkOrder < ApplicationRecord
 
   belongs_to :property,  required: false
   belongs_to :status,    class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status, required: false
-  # belongs_to :user,      through: :property
+  has_one    :estimate,  dependent: :destroy
   has_one    :invoice,   dependent: :destroy
-  has_one    :deep_link, through: :invoice
-  # has_one    :user,      through: :property
-  has_many   :estimates
+  # has_one    :deep_link, through: :invoice
 
   # scopes
 
@@ -105,22 +103,24 @@ class WorkOrder < ApplicationRecord
     property&.user
   end
 
-  def current_estimate
-    estimates.order(created_at: :desc).first
-  end
-
   def fetch_or_create_estimate
-    if estimates.any?
-      current_estimate
+    if estimate.present?
+      estimate
     else
-      Estimate.create!(
-        work_order: self,
-      )
+      create_estimate
     end
   end
 
   def estimate_approved?
-    current_estimate&.approved?
+    estimate&.approved?
+  end
+
+  def branch_estimate_link
+    DeepLink.find_by(linkable: self.estimate) if self.estimate.present?
+  end
+
+  def branch_payment_link
+    DeepLink.find_by(linkable: self.invoice) if self.invoice.present?
   end
 
   # callbacks
@@ -166,7 +166,7 @@ class WorkOrder < ApplicationRecord
   def share_estimate!
     return if estimate_approved?
     if status == WorkOrderStatus::ESTIMATE_SHARED_WITH_CUSTOMER
-      current_estimate&.share_with_customer!
+      estimate&.share_with_customer!
     end
   end
 

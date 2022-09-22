@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_08_124343) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_22_120929) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -141,6 +141,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_08_124343) do
     t.datetime "deleted_at"
     t.string "second_vendor_amount"
     t.string "access_token"
+    t.datetime "declined_at"
     t.index ["approved_at"], name: "index_estimates_on_approved_at"
     t.index ["shared_at"], name: "index_estimates_on_shared_at"
     t.index ["work_order_id"], name: "index_estimates_on_work_order_id"

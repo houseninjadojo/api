@@ -5,6 +5,7 @@
 #  id                      :uuid             not null, primary key
 #  access_token            :string
 #  approved_at             :datetime
+#  declined_at             :datetime
 #  deleted_at              :datetime
 #  description             :text
 #  homeowner_amount        :string

@@ -24,6 +24,7 @@ class Estimate::EncryptedAccessToken
     {
       "access_token" => access_token,
       "estimate_id" => estimate&.id,
+      "work_order_id" => work_order&.id,
       "user_id" => user&.id,
     }
   end
@@ -42,8 +43,8 @@ class Estimate::EncryptedAccessToken
 
   private
 
-  def estimate
-    work_order&.user
+  def user
+    work_order.user
   end
 
   def work_order

@@ -45,7 +45,7 @@ class Invoice::NotifyJob < ApplicationJob
     work_order.present? &&
     device.present? &&
     user.present? &&
-    user.email.include?("@houseninja.co")
+    user.is_houseninja?
   end
 
   def clear_lock!
