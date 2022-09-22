@@ -156,7 +156,7 @@ class Estimate < ApplicationRecord
       email: user.email,
       first_name: user.first_name,
       service_name: work_order&.description,
-      service_provider: work_order&.vendor
+      service_provider: work_order&.vendor,
       estimate_amount_or_actual_estimate_if_populated: formatted_total,
       estimate_notes: description&.to_s&.gsub(/\n/, '<br>')&.html_safe,
       estimate_link: deep_link&.to_s,
