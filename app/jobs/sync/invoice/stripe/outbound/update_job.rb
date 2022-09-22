@@ -30,7 +30,7 @@ class Sync::Invoice::Stripe::Outbound::UpdateJob < Sync::BaseJob
 
   def params
     {
-      description: resource.description.truncate(500),
+      description: resource.description&.truncate(500),
     }
   end
 
