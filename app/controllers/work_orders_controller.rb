@@ -10,8 +10,12 @@ class WorkOrdersController < ApplicationController
 
   def show
     if access_token.present?
-      invoice_record = Invoice.includes(:work_order).find_by(access_token: access_token)
-      params[:id] = invoice_record.work_order.id
+      record = begin
+        invoice = Invoice.includes(:work_order).find_by(access_token: access_token)
+        estimate = Estimate.includes(:work_order).find_by(access_token: access_token)
+        invoice || estimate
+      end
+      params[:id] = record&.work_order&.id
       user = access_token_user
     else
       user = current_user
