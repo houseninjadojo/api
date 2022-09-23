@@ -42,7 +42,7 @@ gem 'sentry-rails'
 gem 'sentry-sidekiq'
 gem 'sidekiq',                 '~> 6.5'
 gem 'stripe',                  '~> 7.1.0'
-gem 'strong_migrations',       '~> 1.3.0'
+gem 'strong_migrations',       '~> 1.3.1'
 gem 'valid_email'
 
 gem 'net-ssh', '7.0.1'
