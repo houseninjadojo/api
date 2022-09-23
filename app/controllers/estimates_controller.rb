@@ -36,8 +36,18 @@ class EstimatesController < ApplicationController
   end
 
   def update
+    # if access token is present, use it to find the estimate
+    # as well, bypass authorization context
+    # otherwise, use the id as usual
+    if access_token.present?
+      estimate_record = Estimate.find_by(access_token: access_token)
+      params[:id] = estimate_record.id
+      user = access_token_user
+    else
+      user = current_user
+    end
     estimate = EstimateResource.find(params)
-    authorize! estimate.data
+    authorize!(estimate.data, context: { user: user })
 
     if estimate.update_attributes
       render jsonapi: estimate
