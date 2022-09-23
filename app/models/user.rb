@@ -210,6 +210,10 @@ class User < ApplicationRecord
   def intercom_hash=(val)
   end
 
+  def is_houseninja?
+    email.ends_with?("@houseninja.com")
+  end
+
   # callbacks
 
   def generate_onboarding_code

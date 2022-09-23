@@ -1,20 +1,20 @@
-class Invoice::NotifyJob < ApplicationJob
+class Estimate::NotifyJob < ApplicationJob
   queue_as :default
   unique :until_expired, lock_ttl: 5.minutes
 
-  attr_accessor :invoice, :user, :device, :work_order
+  attr_accessor :estimate, :user, :device, :work_order
 
-  def perform(invoice)
-    @invoice = invoice
-    @user = @invoice&.user
+  def perform(estimate)
+    @estimate = estimate
+    @user = @estimate.work_order&.user
     @device = @user&.current_device
-    @work_order = @invoice&.work_order
+    @work_order = @estimate&.work_order
 
     if should_send?
       notification.deliver_later
     else
-      Rails.logger.info("Not sending PushNotification for invoice=#{invoice.id}",
-        invoice: invoice.id,
+      Rails.logger.info("Not sending PushNotification for estimate=#{estimate.id}",
+        estimate: estimate.id,
         user: user&.id,
         device: device&.id,
         work_order: work_order&.id,
@@ -24,11 +24,11 @@ class Invoice::NotifyJob < ApplicationJob
   end
 
   def body
-    "You have a new invoice ready for payment"
+    "You have a new estimate ready for review"
   end
 
   def deeplink_path
-    "/work-orders/#{invoice.work_order.id}"
+    "/work-orders/#{estimate.work_order.id}"
   end
 
   def notification
@@ -42,6 +42,7 @@ class Invoice::NotifyJob < ApplicationJob
   private
 
   def should_send?
+    estimate.present? &&
     work_order.present? &&
     device.present? &&
     user.present? &&
@@ -49,6 +50,6 @@ class Invoice::NotifyJob < ApplicationJob
   end
 
   def clear_lock!
-    Invoice::NotifyJob.unlock!(invoice)
+    Estimate::NotifyJob.unlock!(invoice)
   end
 end

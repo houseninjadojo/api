@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_06_020109) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_22_120929) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -121,6 +121,30 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_020109) do
     t.index ["property_id"], name: "index_documents_on_property_id"
     t.index ["tags"], name: "index_documents_on_tags", using: :gin
     t.index ["user_id"], name: "index_documents_on_user_id"
+  end
+
+  create_table "estimates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "work_order_id", null: false
+    t.string "homeowner_amount"
+    t.string "homeowner_amount_actual"
+    t.string "vendor_amount"
+    t.text "description"
+    t.string "vendor_name"
+    t.string "vendor_category"
+    t.datetime "scheduled_at"
+    t.datetime "scheduled_window_start"
+    t.datetime "scheduled_window_end"
+    t.datetime "shared_at"
+    t.datetime "approved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.string "second_vendor_amount"
+    t.string "access_token"
+    t.datetime "declined_at"
+    t.index ["approved_at"], name: "index_estimates_on_approved_at"
+    t.index ["shared_at"], name: "index_estimates_on_shared_at"
+    t.index ["work_order_id"], name: "index_estimates_on_work_order_id"
   end
 
   create_table "home_care_tips", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -439,6 +463,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_020109) do
   add_foreign_key "documents", "invoices"
   add_foreign_key "documents", "properties"
   add_foreign_key "documents", "users"
+  add_foreign_key "estimates", "work_orders"
   add_foreign_key "invoices", "promo_codes"
   add_foreign_key "invoices", "subscriptions"
   add_foreign_key "invoices", "users"

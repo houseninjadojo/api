@@ -36,7 +36,7 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < Sync::BaseJob
   end
 
   def branch_link
-    work_order.invoice&.deep_link&.url
+    work_order.branch_payment_link&.url
   end
 
   def date_customer_paid_invoice

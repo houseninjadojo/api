@@ -51,15 +51,16 @@ class WorkOrder < ApplicationRecord
   after_update        :sync_invoice_notes
   after_update_commit :sync_update!
   after_update_commit :finalize_invoice!, if: :saved_change_to_status?
+  after_update_commit :share_estimate!, if: :saved_change_to_status?
 
   # associations
 
   belongs_to :property,  required: false
   belongs_to :status,    class_name: "WorkOrderStatus", primary_key: :slug, foreign_key: :status, required: false
-  # belongs_to :user,      through: :property
+  has_one    :estimate,  dependent: :destroy
   has_one    :invoice,   dependent: :destroy
-  has_one    :deep_link, through: :invoice
-  # has_one    :user,      through: :property
+  has_one    :invoice_deep_link, through: :invoice, class_name: "DeepLink", source: :deep_link
+  has_one    :estimate_deep_link, through: :estimate, class_name: "DeepLink", source: :deep_link
 
   # scopes
 
@@ -103,6 +104,26 @@ class WorkOrder < ApplicationRecord
     property&.user
   end
 
+  def fetch_or_create_estimate
+    if estimate.present?
+      estimate
+    else
+      create_estimate
+    end
+  end
+
+  def estimate_approved?
+    estimate&.approved?
+  end
+
+  def branch_estimate_link
+    DeepLink.find_by(linkable: self.estimate) if self.estimate.present?
+  end
+
+  def branch_payment_link
+    DeepLink.find_by(linkable: self.invoice) if self.invoice.present?
+  end
+
   # callbacks
 
   def set_status
@@ -140,6 +161,13 @@ class WorkOrder < ApplicationRecord
   def ensure_invoice_status_conditions
     if status == WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER
       status = self.status_was if !customer_approved_work || amount == 0
+    end
+  end
+
+  def share_estimate!
+    return if estimate_approved?
+    if status == WorkOrderStatus::ESTIMATE_SHARED_WITH_HOMEOWNER
+      estimate&.share_with_customer!
     end
   end
 
