@@ -39,6 +39,8 @@ module Hubspot
       def handler_klass
         if resource_klass == Property
           User
+        elsif resource_klass == Estimate
+          WorkOrder
         else
           resource_klass
         end
