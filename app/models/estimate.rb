@@ -117,7 +117,7 @@ class Estimate < ApplicationRecord
     return nil if shared?
     update!(shared_at: Time.now)
     # generate deep link
-    Estimate::ExternalAccess::GenerateDeepLinkJob.perform_later(estimate: self)
+    Estimate::ExternalAccess::GenerateDeepLinkJob.perform_later(estimate: self, send_email: true)
     # notify
     Estimate::NotifyJob.perform_later(self)
   end
