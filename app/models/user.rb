@@ -211,7 +211,7 @@ class User < ApplicationRecord
   end
 
   def is_houseninja?
-    email.ends_with?("@houseninja.com")
+    email.ends_with?("@houseninja.co")
   end
 
   # callbacks
