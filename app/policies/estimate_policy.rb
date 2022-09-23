@@ -16,8 +16,10 @@ class EstimatePolicy < ApplicationPolicy
 
   def update?
     deny! if record.nil? || user.nil?
-    user_id = params.dig(:data, :relationships, :user, :data, :id)
-    record.user.id == user.id || user_id == user.id
+    work_order_id = params.dig(:data, :relationships, :work_order, :data, :id)
+    work_order = WorkOrder.includes(:property).find_by(id: work_order_id)
+    user_id = work_order&.property&.user_id
+    record&.work_order&.property&.user_id == user.id || user_id == user.id
   end
 
   def destroy?
