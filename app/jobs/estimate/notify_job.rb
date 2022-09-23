@@ -50,6 +50,6 @@ class Estimate::NotifyJob < ApplicationJob
   end
 
   def clear_lock!
-    Estimate::NotifyJob.unlock!(invoice)
+    Estimate::NotifyJob.unlock!(estimate)
   end
 end

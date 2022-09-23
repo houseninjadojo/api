@@ -43,7 +43,7 @@ class Estimate::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
       feature: "estimate_external_access",
       linkable: estimate,
       path: canonical_url,
-      stage: estimate.status,
+      stage: estimate.work_order.status.slug,
       data: {
         access_token: estimate.encrypted_access_token,
         # "$canonical_url" => canonical_url,
