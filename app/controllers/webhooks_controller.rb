@@ -4,7 +4,7 @@ class WebhooksController < ApplicationController
   def stripe
     begin
       event = stripe_webhook_event.to_hash
-      webhook_event = WebhookEvent.create!(service: 'stripe', payload: event)
+      @webhook_event = WebhookEvent.create!(service: 'stripe', payload: event)
       Sync::Webhook::StripeJob.perform_later(webhook_event)
     rescue JSON::ParserError => e
       Rails.logger.error(e)
@@ -25,7 +25,7 @@ class WebhooksController < ApplicationController
     event = request.body.read
     begin
       content = JSON.parse(event)
-      webhook_event = WebhookEvent.create!(service: 'hubspot', payload: content)
+      @webhook_event = WebhookEvent.create!(service: 'hubspot', payload: content)
       content.each do |payload|
         Sync::Webhook::HubspotJob.perform_later(webhook_event)
       end
@@ -71,5 +71,23 @@ class WebhooksController < ApplicationController
 
   def arrivy_webhook_header
     request.headers['ARRIVY_SECRET']
+  end
+
+  def append_info_to_payload(payload)
+    super
+    # stripe sends us big honkin payloads
+    # heroku has a limit of 10000 bytes for log lines
+    # so we're gonna swap out the payload for identifiers since those are stable
+    if payload[:action] == 'stripe'
+      stripe_event_id = payload.dig(:params, :id) || payload.dig(:params, "id")
+      payload[:params] = {
+        stripe_event_id: stripe_event_id,
+        webhook_event_id: @webhook_event&.id,
+      }
+    else
+      payload[:params] = {
+        webhook_event_id: @webhook_event&.id,
+      }
+    end
   end
 end
