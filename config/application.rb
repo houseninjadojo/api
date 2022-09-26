@@ -68,7 +68,7 @@ module HouseNinja
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
 
     # semantic logger
-    config.semantic_logger.backtrace_level = :debug
+    config.semantic_logger.backtrace_level = :error
     # config.rails_semantic_logger.quiet_assets = true
     config.colorize_logging = true
 
