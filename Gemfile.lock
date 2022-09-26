@@ -19,6 +19,15 @@ GIT
       activesupport (>= 4.2.2)
       httparty (>= 0.10)
 
+GIT
+  remote: https://github.com/houseninjadojo/rails_semantic_logger.git
+  revision: c3296037d1abeab06b486c27764a16ce381327bc
+  specs:
+    rails_semantic_logger (4.10.0)
+      rack
+      railties (>= 5.1)
+      semantic_logger (~> 4.9)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -321,10 +330,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
-    rails_semantic_logger (4.10.0)
-      rack
-      railties (>= 5.1)
-      semantic_logger (~> 4.9)
     railties (7.0.4)
       actionpack (= 7.0.4)
       activesupport (= 7.0.4)
@@ -488,7 +493,7 @@ DEPENDENCIES
   puma (~> 5.6)
   rack-cors
   rails (~> 7.0.4)
-  rails_semantic_logger
+  rails_semantic_logger!
   redis (~> 4.8)
   responders
   rspec-rails (~> 5.1.2)
