@@ -19,6 +19,25 @@ GIT
       activesupport (>= 4.2.2)
       httparty (>= 0.10)
 
+GIT
+  remote: https://github.com/houseninjadojo/rails_semantic_logger.git
+  revision: 11ae361d79969096bbf2f4927c83838648a0e670
+  ref: 11ae361
+  specs:
+    rails_semantic_logger (4.10.0)
+      rack
+      railties (>= 5.1)
+      semantic_logger (~> 4.9)
+
+GIT
+  remote: https://github.com/houseninjadojo/sendgrid-actionmailer.git
+  revision: e55f2b32cd50ecdd8e24e229c60ecabc47558d15
+  ref: e55f2b3
+  specs:
+    sendgrid-actionmailer (3.2.0)
+      mail (~> 2.7)
+      sendgrid-ruby (~> 6.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -321,10 +340,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
-    rails_semantic_logger (4.10.0)
-      rack
-      railties (>= 5.1)
-      semantic_logger (~> 4.9)
     railties (7.0.4)
       actionpack (= 7.0.4)
       activesupport (= 7.0.4)
@@ -402,9 +417,6 @@ GEM
       rake (>= 10.0)
     semantic_logger (4.11.0)
       concurrent-ruby (~> 1.0)
-    sendgrid-actionmailer (3.2.0)
-      mail (~> 2.7)
-      sendgrid-ruby (~> 6.4)
     sendgrid-ruby (6.6.2)
       ruby_http_client (~> 3.4)
     sentry-rails (5.4.2)
@@ -488,7 +500,7 @@ DEPENDENCIES
   puma (~> 5.6)
   rack-cors
   rails (~> 7.0.4)
-  rails_semantic_logger
+  rails_semantic_logger!
   redis (~> 4.8)
   responders
   rspec-rails (~> 5.1.2)
@@ -496,7 +508,7 @@ DEPENDENCIES
   rubocop-rails
   safer_rails_console
   seedbank
-  sendgrid-actionmailer
+  sendgrid-actionmailer!
   sentry-rails
   sentry-ruby
   sentry-sidekiq
