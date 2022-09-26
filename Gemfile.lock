@@ -21,8 +21,8 @@ GIT
 
 GIT
   remote: https://github.com/houseninjadojo/rails_semantic_logger.git
-  revision: 11ae361d79969096bbf2f4927c83838648a0e670
-  ref: 11ae361
+  revision: 81a7cd7451d7b509c1b45f2d0742d88a140089a5
+  ref: 81a7cd7
   specs:
     rails_semantic_logger (4.10.0)
       rack
