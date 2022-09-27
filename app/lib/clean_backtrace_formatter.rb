@@ -2,7 +2,7 @@ class CleanBacktraceFormatter < SemanticLogger::Formatters::Json
   def self.cleaner
     @cleaner ||= begin
       bc = ActiveSupport::BacktraceCleaner.new
-      bc.remove_silencers! # remove defaults
+      # bc.remove_silencers! # remove defaults
       bc.add_silencer { |line| /datadog|sentry|semantic_logger/.match?(line) }
       bc
     end
