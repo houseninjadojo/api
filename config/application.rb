@@ -97,9 +97,6 @@ module HouseNinja
           "HTTP_X_CSRF_TOKEN",
           "REDIRECT_X_HTTP_AUTHORIZATION"
         )
-      },
-      params: -> request {
-        request.params.except(:controller, :action, :format)
       }
     }
 
