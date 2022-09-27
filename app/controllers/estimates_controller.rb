@@ -12,10 +12,10 @@ class EstimatesController < ApplicationController
     # if access token is present, use it to find the estimate
     # as well, bypass authorization context
     # otherwise, use the id as usual
-    if access_token.present?
-      estimate_record = Estimate.find_by(access_token: access_token)
+    if unauthed_access_token.present?
+      estimate_record = Estimate.find_by(access_token: unauthed_access_token)
       params[:id] = estimate_record.id
-      user = access_token_user
+      user = unauthed_access_token_user
     else
       user = current_user
     end
@@ -36,18 +36,18 @@ class EstimatesController < ApplicationController
   end
 
   def update
-    # if access token is present, use it to find the estimate
-    # as well, bypass authorization context
-    # otherwise, use the id as usual
-    if access_token.present?
-      estimate_record = Estimate.find_by(access_token: access_token)
-      params[:id] = estimate_record.id
-      user = access_token_user
-    else
-      user = current_user
-    end
+    # # if access token is present, use it to find the estimate
+    # # as well, bypass authorization context
+    # # otherwise, use the id as usual
+    # if access_token.present?
+    #   estimate_record = Estimate.find_by(access_token: access_token)
+    #   params[:id] = estimate_record.id
+    #   user = access_token_user
+    # else
+    #   user = current_user
+    # end
     estimate = EstimateResource.find(params)
-    authorize!(estimate.data, context: { user: user })
+    authorize!(estimate.data, context: { user: current_user })
 
     if estimate.update_attributes
       render jsonapi: estimate
@@ -71,8 +71,8 @@ class EstimatesController < ApplicationController
 
   # decrypt and reveal access token, or nil
   # access token is derived from id
-  def access_token_payload
-    @access_token_payload ||= begin
+  def unauthed_access_token_payload
+    @unauthed_access_token_payload ||= begin
       payload = params.fetch(:id, nil)
       EncryptionService.decrypt(payload)&.with_indifferent_access
     rescue => e
@@ -80,13 +80,13 @@ class EstimatesController < ApplicationController
     end
   end
 
-  def access_token
-    @access_token ||= access_token_payload&.fetch(:access_token, nil)
+  def unauthed_access_token
+    @unauthed_access_token ||= unauthed_access_token_payload&.fetch(:access_token, nil)
   end
 
-  def access_token_user
-    @access_token_user ||= begin
-      user_id = access_token_payload&.fetch(:user_id, nil)
+  def unauthed_access_token_user
+    @unauthed_access_token_user ||= begin
+      user_id = unauthed_access_token_payload&.fetch(:user_id, nil)
       User.find_by(id: user_id)
     end
   end

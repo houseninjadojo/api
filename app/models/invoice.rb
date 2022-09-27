@@ -116,7 +116,7 @@ class Invoice < ApplicationRecord
   end
 
   def can_be_finalized?
-    draft? && finalized_at.nil?
+    work_order&.can_finalize_invoice?
   end
 
   # actions

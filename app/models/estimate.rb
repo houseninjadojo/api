@@ -51,6 +51,7 @@ class Estimate < ApplicationRecord
 
   after_update_commit :sync_update!
   after_update_commit :update_work_order_status, if: :saved_change_to_approved_at?
+  after_update_commit :sync_after_approval!, if: :saved_change_to_approved_at?
 
   # associations
 
@@ -90,8 +91,17 @@ class Estimate < ApplicationRecord
   alias_method :shared?, :shared
 
   def shared=(value)
-    self.shared_at = value.present ? Time.now : nil
+    self.shared_at = value.present? ? Time.now : nil
   end
+
+  def deleted=(value)
+    self.deleted_at = value.present? ? Time.now : nil
+  end
+
+  def deleted
+    deleted_at.present?
+  end
+  alias_method :deleted?, :deleted
 
   def amount
     if homeowner_amount_actual.to_i > 0
@@ -101,9 +111,17 @@ class Estimate < ApplicationRecord
     end
   end
 
+  def amount=(value)
+    # no-op
+  end
+
   def formatted_total
     format = I18n.t(:format, scope: 'number.currency.format')
     Money.from_cents(amount)&.format(format: format)
+  end
+
+  def should_share_with_customer?
+    !(shared? || declined? || approved? || deleted?)
   end
 
   # actions
@@ -114,7 +132,7 @@ class Estimate < ApplicationRecord
   end
 
   def share_with_customer!
-    return nil if shared?
+    return nil if !should_share_with_customer?
     update!(shared_at: Time.now)
     # generate deep link
     Estimate::ExternalAccess::GenerateDeepLinkJob.perform_later(estimate: self, send_email: true)
@@ -149,7 +167,7 @@ class Estimate < ApplicationRecord
   end
 
   def send_estimate_approval_email!
-    unless approved? || declined?
+    if !should_share_with_customer?
       Rails.logger.info("Not sending estimate approval email, customer has already decided on estimate for work_order=#{work_order&.id}")
     end
     EstimateMailer.estimate_approval(
@@ -161,6 +179,23 @@ class Estimate < ApplicationRecord
       estimate_notes: description&.to_s&.gsub(/\n/, '<br>')&.html_safe,
       estimate_link: deep_link&.to_s,
     ).deliver_later
+  end
+
+  # force it
+  def sync_after_approval!
+    Rails.logger.info("FORCING SYNC!")
+    if !approved? || work_order.status.slug != "scheduling_in_progress"
+      Rails.logger.info("Not syncing after approval, estimate=#{id} is not approved or work_order=#{work_order&.id} is not in scheduling_in_progress")
+      return
+    end
+    Sync::Estimate::Hubspot::Outbound::UpdateJob.perform_later(
+      self,
+      [{ path: [:approved_at] }], # mimicking a changeset
+    )
+    Sync::WorkOrder::Hubspot::Outbound::UpdateJob.perform_later(
+      self.work_order,
+      [{ path: [:status] }], # mimicking a changeset
+    )
   end
 
   # sync
@@ -176,6 +211,12 @@ class Estimate < ApplicationRecord
   def sync_actions
     [
       :update,
+    ]
+  end
+
+  def sync_associations
+    [
+      :work_order,
     ]
   end
 

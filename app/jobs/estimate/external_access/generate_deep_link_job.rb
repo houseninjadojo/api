@@ -52,4 +52,10 @@ class Estimate::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
       },
     )
   end
+
+  private
+
+  def clear_lock!
+    Estimate::ExternalAccess::GenerateDeepLinkJob.unlock!(estimate: estimate, send_email: true)
+  end
 end

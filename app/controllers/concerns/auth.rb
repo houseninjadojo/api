@@ -52,6 +52,10 @@ module Auth
 
   private
 
+  def auth_header
+    @auth_header ||= request.headers["HTTP_AUTHORIZATION"]
+  end
+
   def token_from_header
     header = request.headers["HTTP_AUTHORIZATION"]
     match = JSONWebToken::HEADER_REGEX.match(header)
@@ -66,7 +70,7 @@ module Auth
   # access token is derived from header
   def access_token_payload
     @access_token_payload ||= begin
-      header = request.headers["HTTP_AUTHORIZATION"].gsub('Bearer ', '')
+      header = auth_header&.gsub('Bearer ', '')
       EncryptionService.safe_decrypt(header)&.with_indifferent_access
     rescue => e
       nil

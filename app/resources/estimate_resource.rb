@@ -59,7 +59,7 @@ class EstimateResource < ApplicationResource
 
   # virtual
 
-  attribute :amount, :string, only: [:readable] do
+  attribute :amount, :string, except: [:writeable] do
     Money.from_cents(@object.amount)&.format
   end
 

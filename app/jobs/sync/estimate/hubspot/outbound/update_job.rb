@@ -14,6 +14,7 @@ class Sync::Estimate::Hubspot::Outbound::UpdateJob < Sync::BaseJob
   def params
     {
       estimate_approved: estimate_approved,
+      date_estimate_approved: date_estimate_approved
     }
   end
 
@@ -26,11 +27,16 @@ class Sync::Estimate::Hubspot::Outbound::UpdateJob < Sync::BaseJob
 
   def estimate_approved
     if estimate.approved?
-      "Yes"
+      true
     elsif estimate.declined?
-      "No"
+      false
     else
-      ""
+      nil
     end
+  end
+
+  def date_estimate_approved
+    epoch = estimate.approved_at&.to_date&.to_datetime.to_i * 1000
+    epoch == 0 ? nil : epoch
   end
 end

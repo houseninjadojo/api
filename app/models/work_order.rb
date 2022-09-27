@@ -124,6 +124,10 @@ class WorkOrder < ApplicationRecord
     DeepLink.find_by(linkable: self.invoice) if self.invoice.present?
   end
 
+  def can_finalize_invoice?
+    invoice&.draft? && invoice&.finalized_at.nil? && status.slug == 'invoice_sent_to_customer'
+  end
+
   # callbacks
 
   def set_status
@@ -139,7 +143,7 @@ class WorkOrder < ApplicationRecord
   end
 
   def finalize_invoice!
-    return unless invoice&.can_be_finalized?
+    return unless can_finalize_invoice?
     Sync::Invoice::Stripe::Outbound::UpdateJob.perform_later(
       invoice,
       [{ path: [:work_order, :status] }], # mimicking a changeset
