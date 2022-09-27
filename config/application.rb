@@ -12,6 +12,7 @@ require 'graphiti/rails/railtie'
 require_relative "../lib/core_ext/rails/settings"
 require_relative "../lib/core_ext/ruby/array/intersect"
 require_relative "../lib/core_ext/rails/active_support/time"
+require_relative "../app/lib/clean_backtrace_formatter"
 
 module HouseNinja
   class Application < Rails::Application

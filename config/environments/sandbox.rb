@@ -78,7 +78,7 @@ Rails.application.configure do
 
   config.semantic_logger.backtrace_level = :info
   config.colorize_logging = false
-  config.rails_semantic_logger.format = :json
+  config.rails_semantic_logger.format = CleanBacktraceFormatter.new
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     $stdout.sync = true
