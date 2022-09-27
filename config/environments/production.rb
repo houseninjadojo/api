@@ -1,5 +1,31 @@
 require "active_support/core_ext/integer/time"
 
+class CleanBacktraceFormatter < SemanticLogger::Formatters::Json
+  def self.cleaner
+    @cleaner ||= begin
+      bc = ActiveSupport::BacktraceCleaner.new
+      bc.add_silencer { |line| /datadog|sentry/.match?(line) }
+    end
+  end
+
+  # Override SemanticLogger::Formatters::Json#exception
+  def exception
+    return unless log.exception
+
+    root = hash
+    log.each_exception do |exception, i|
+      backtrace = self.class.cleaner.clean(exception.backtrace)
+      name       = i.zero? ? :exception : :cause
+      root[name] = {
+        name:        exception.class.name,
+        message:     exception.message,
+        stack_trace: backtrace
+      }
+      root = root[name]
+    end
+  end
+end
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -78,7 +104,7 @@ Rails.application.configure do
 
   config.semantic_logger.backtrace_level = :info
   config.colorize_logging = false
-  config.rails_semantic_logger.format = :json
+  config.rails_semantic_logger.format = CleanBacktraceFormatter.new
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     $stdout.sync = true

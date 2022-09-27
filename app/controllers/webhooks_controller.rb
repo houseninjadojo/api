@@ -5,7 +5,7 @@ class WebhooksController < ApplicationController
     begin
       event = stripe_webhook_event.to_hash
       @webhook_event = WebhookEvent.create!(service: 'stripe', payload: event)
-      Sync::Webhook::StripeJob.perform_later(webhook_event)
+      Sync::Webhook::StripeJob.perform_later(@webhook_event)
     rescue JSON::ParserError => e
       Rails.logger.error(e)
       render status: 400
@@ -27,11 +27,11 @@ class WebhooksController < ApplicationController
       content = JSON.parse(event)
       @webhook_event = WebhookEvent.create!(service: 'hubspot', payload: content)
       content.each do |payload|
-        Sync::Webhook::HubspotJob.perform_later(webhook_event)
+        Sync::Webhook::HubspotJob.perform_later(@webhook_event)
       end
     rescue
-      webhook_event = WebhookEvent.create!(service: 'hubspot', payload: event)
-      Rails.logger.warn("Could not parse service=hubspot event=#{webhook_event.id}")
+      @webhook_event = WebhookEvent.create!(service: 'hubspot', payload: event)
+      Rails.logger.warn("Could not parse service=hubspot event=#{@webhook_event.id}")
     end
     render status: :ok
   end
@@ -41,12 +41,12 @@ class WebhooksController < ApplicationController
     if true
       begin
         content = JSON.parse(request.body.string)
-        webhook_event = WebhookEvent.create!(service: 'arrivy', payload: content)
-        Sync::Webhook::ArrivyJob.perform_later(webhook_event)
+        @webhook_event = WebhookEvent.create!(service: 'arrivy', payload: content)
+        Sync::Webhook::ArrivyJob.perform_later(@webhook_event)
       rescue => e
         Sentry.capture_exception(e)
-        webhook_event = WebhookEvent.create!(service: 'arrivy', payload: request.body.string)
-        Rails.logger.warn("Could not parse service=arrivy event=#{webhook_event.id}")
+        @webhook_event = WebhookEvent.create!(service: 'arrivy', payload: request.body.string)
+        Rails.logger.warn("Could not parse service=arrivy event=#{@webhook_event.id}")
       end
       render status: :ok
     else
