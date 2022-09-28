@@ -183,11 +183,11 @@ class Estimate < ApplicationRecord
 
   # force it
   def sync_after_approval!
-    Rails.logger.info("FORCING SYNC!")
     if !approved? || work_order.status.slug != "scheduling_in_progress"
       Rails.logger.info("Not syncing after approval, estimate=#{id} is not approved or work_order=#{work_order&.id} is not in scheduling_in_progress")
       return
     end
+    Estimate::ExternalAccess::ExpireJob.perform_later(estimate: self)
     Sync::Estimate::Hubspot::Outbound::UpdateJob.perform_later(
       self,
       [{ path: [:approved_at] }], # mimicking a changeset
