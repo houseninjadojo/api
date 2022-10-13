@@ -25,7 +25,7 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < Sync::BaseJob
       collection_method:      "charge_automatically",
       customer:               resource.user.stripe_id,
       default_payment_method: resource.user&.default_payment_method&.stripe_id,
-      description:            resource.description,
+      description:            description,
       subscription:           resource.subscription&.stripe_id,
       metadata:               {
         house_ninja_id: resource.id,
@@ -49,5 +49,9 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < Sync::BaseJob
 
   def idempotency_key
     Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")
+  end
+
+  def description
+    resource.description.truncate(500)
   end
 end
