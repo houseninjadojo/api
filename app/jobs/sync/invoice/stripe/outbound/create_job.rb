@@ -52,6 +52,6 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < Sync::BaseJob
   end
 
   def description
-    resource.description.truncate(500)
+    resource.description&.truncate(500)
   end
 end
