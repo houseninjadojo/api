@@ -38,6 +38,8 @@ Datadog.configure do |c|
 
   # c.tracing.instrument :action_pack,
   #   service_name: 'controllers'
+  c.tracing.instrument :action_mailer,
+    service_name: 'mailers'
 
   c.tracing.instrument :active_job,
     service_name: 'workers'
@@ -52,16 +54,49 @@ Datadog.configure do |c|
   c.tracing.instrument :aws,
     service_name: 'aws'
 
-  c.tracing.instrument :http, describes: /api\.stripe\.com/ do |http|
-    http.service_name    = 'api.stripe.com'
+  # c.tracing.instrument :faraday, describes: /fcm\.googleapis\.com/ do |faraday|
+  #   faraday.service_name = 'firebase'
+  #   faraday.split_by_domain = false
+  # end
+
+  c.tracing.instrument :http, describes: /((app|api)\.)?arrivy\.com/ do |http|
+    http.service_name    = 'arrivy'
     http.split_by_domain = false
   end
-  c.tracing.instrument :http, describes: /(sandbox\.)?auth\.houseninja\.co/ do |http|
-    http.service_name    = 'auth'
+  c.tracing.instrument :http, describes: /((sandbox\.)?auth\.houseninja\.co)|houseninja\.us\.auth0\.com/ do |http|
+    http.service_name    = 'auth0'
     http.split_by_domain = false
   end
-  c.tracing.instrument :http, describes: /api\.hubapi\.com/ do |http|
-    http.service_name    = 'api.hubapi.com'
+  c.tracing.instrument :http, describes: /s3\.amazonaws\.com/ do |http|
+    http.service_name    = 'aws'
+    http.split_by_domain = false
+  end
+  c.tracing.instrument :http, describes: /api[\d]{0,2}\.branch.io/ do |http|
+    http.service_name    = 'branch'
+    http.split_by_domain = false
+  end
+  c.tracing.instrument :http, describes: /www\.cloudflare\.com/ do |http|
+    http.service_name    = 'cloudflare'
+    http.split_by_domain = false
+  end
+  c.tracing.instrument :http, describes: /(fcm|www)\.googleapis\.com/ do |http|
+    http.service_name = 'firebase'
+    http.split_by_domain = false
+  end
+  c.tracing.instrument :http, describes: /((\w*\.)*hubapi\.com)|hubspotusercontent-\w+\.net/ do |http|
+    http.service_name    = 'hubspot'
+    http.split_by_domain = false
+  end
+  c.tracing.instrument :http, describes: /(api)?\.intercom.com/ do |http|
+    http.service_name    = 'intercom'
+    http.split_by_domain = false
+  end
+  c.tracing.instrument :http, describes: /(api)?\.sendgrid.com/ do |http|
+    http.service_name    = 'intercom'
+    http.split_by_domain = false
+  end
+  c.tracing.instrument :http, describes: /((\w*\.)*stripe\.com)|stripe-upload-api\.s3\.us-west-1\.amazonaws\.com/ do |http|
+    http.service_name    = 'stripe'
     http.split_by_domain = false
   end
   c.tracing.instrument :http, split_by_domain: true
