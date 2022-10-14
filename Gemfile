@@ -16,7 +16,8 @@ gem 'ddtrace',                             require: 'ddtrace/auto_instrument'  #
 gem 'dotenv-rails',                        require: 'dotenv/rails-now'         # ENV file management
 gem 'fcm'
 gem 'graphiti',         github: 'houseninjadojo/graphiti', branch: 'activerecord-filter-array-eq'
-gem 'graphiti-rails'    
+gem 'graphiti-rails'
+gem 'httplog'
 gem 'image_processing',        '~> 1.12'                                        # Use Active Storage variant
 gem 'intercom'
 gem 'hubspot-api-ruby', github: 'houseninjadojo/hubspot-api-ruby'
