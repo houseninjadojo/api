@@ -30,7 +30,7 @@ HttpLog.configure do |config|
 
   # Limit logging based on URL patterns
   # config.url_whitelist_pattern = nil
-  config.url_blacklist_pattern = ["http://127.0.0.1:8126/v0.4/traces"]
+  config.url_blacklist_pattern = /^http:\/\/127.0.0.1\:8126\/.+\/traces$/
 
   # Mask sensitive information in request and response JSON data.
   # Enable global JSON masking by setting the parameter to `/.*/`
