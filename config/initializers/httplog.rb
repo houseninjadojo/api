@@ -5,7 +5,7 @@ HttpLog.configure do |config|
 
   # You can assign a different logger or method to call on that logger
   config.logger = Rails.logger
-  config.logger_method = :log
+  config.logger_method = :info
 
   # I really wouldn't change this...
   config.severity = Logger::Severity::INFO
