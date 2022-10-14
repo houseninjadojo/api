@@ -92,7 +92,7 @@ Datadog.configure do |c|
     http.split_by_domain = false
   end
   c.tracing.instrument :http, describes: /(api)?\.sendgrid.com/ do |http|
-    http.service_name    = 'intercom'
+    http.service_name    = 'sendgrid'
     http.split_by_domain = false
   end
   c.tracing.instrument :http, describes: /((\w*\.)*stripe\.com)|stripe-upload-api\.s3\.us-west-1\.amazonaws\.com/ do |http|
