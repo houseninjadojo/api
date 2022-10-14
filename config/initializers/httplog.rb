@@ -20,7 +20,7 @@ HttpLog.configure do |config|
   # config.log_benchmark = true
 
   # ...or log all request as a single line by setting this to `true`
-  # config.compact_log = false
+  config.compact_log = true
 
   # You can also log in JSON format
   config.json_log = ['production', 'sandbox'].include?(Rails.env)
