@@ -13,4 +13,5 @@ Rails.application.config.filter_parameters += [
   :stripe,
   :token,
   :device_id,
+  :hapikey
 ]
