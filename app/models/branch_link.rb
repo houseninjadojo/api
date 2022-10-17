@@ -94,7 +94,7 @@ class BranchLink
 
   def create_link!
     return if created?
-    res = branch_client.link!(@params)
+    res = safe_create_link(attempt: 0)
     @url = res.url
   end
 
@@ -109,5 +109,15 @@ class BranchLink
 
   def update_link
     # @todo
+  end
+
+  def safe_create_link(attempt: 0, max_attempts: 3)
+    begin
+      branch_client.link!(@params)
+    rescue BranchIO::Client::ErrorApiCallFailed
+      if attempt < max_attempts
+        safe_create_link(attempt: attempt + 1)
+      end
+    end
   end
 end

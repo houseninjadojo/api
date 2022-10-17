@@ -31,7 +31,8 @@ class DeepLink < ApplicationRecord
 
   def generate!
     return if is_generated?
-    update!(url: BranchLink.create(branch_link_params).url)
+    link = BranchLink.create(branch_link_params)
+    update!(url: link.url)
   end
 
   def branch_link_params
