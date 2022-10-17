@@ -12,6 +12,15 @@ GIT
       jsonapi-serializable (~> 0.3.0)
 
 GIT
+  remote: https://github.com/houseninjadojo/httplog.git
+  revision: b134d7ab47b5d5402f23ef51f9a0038f7b9ec73a
+  ref: b134d7a
+  specs:
+    httplog (1.6.0)
+      rack (>= 2.0)
+      rainbow (>= 2.0.0)
+
+GIT
   remote: https://github.com/houseninjadojo/hubspot-api-ruby.git
   revision: ddaec37c6467469af70076b02908118e222056b3
   specs:
@@ -233,9 +242,6 @@ GEM
     httparty (0.20.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
-    httplog (1.6.0)
-      rack (>= 2.0)
-      rainbow (>= 2.0.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -493,7 +499,7 @@ DEPENDENCIES
   graphiti!
   graphiti-rails
   graphiti_spec_helpers
-  httplog
+  httplog!
   hubspot-api-ruby!
   image_processing (~> 1.12)
   intercom

@@ -13,5 +13,8 @@ Rails.application.config.filter_parameters += [
   :stripe,
   :token,
   :device_id,
-  :hapikey
+  :hapikey,
+  "x-auth-key",
+  "x-auth-token",
+  :authorization,
 ]

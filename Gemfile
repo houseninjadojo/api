@@ -17,7 +17,7 @@ gem 'dotenv-rails',                        require: 'dotenv/rails-now'         #
 gem 'fcm'
 gem 'graphiti',         github: 'houseninjadojo/graphiti', branch: 'activerecord-filter-array-eq'
 gem 'graphiti-rails'
-gem 'httplog'
+gem 'httplog',          github: 'houseninjadojo/httplog', ref: 'b134d7a'
 gem 'image_processing',        '~> 1.12'                                        # Use Active Storage variant
 gem 'intercom'
 gem 'hubspot-api-ruby', github: 'houseninjadojo/hubspot-api-ruby'

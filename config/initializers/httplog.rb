@@ -14,7 +14,7 @@ HttpLog.configure do |config|
   config.log_connect   = false
   config.log_request   = false
   config.log_headers   = true
-  config.log_data      = true
+  config.log_data      = false
   config.log_status    = true
   config.log_response  = false
   config.log_benchmark = true
