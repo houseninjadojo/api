@@ -10,14 +10,18 @@ class Estimate::ExternalAccess::ExpireJob < ApplicationJob
 
     ActiveRecord::Base.transaction do
       estimate.update(access_token: nil)
-      DeepLink.find_by(linkable: estimate)&.expire!
+      deep_link&.expire!
     end
   end
 
   def conditions_met?
     [
       estimate.present?,
-      estimate.deep_link.present?,
+      deep_link.present?,
     ].all?
+  end
+
+  def deep_link
+    @deep_link ||= DeepLink.find_by(linkable: estimate)
   end
 end
