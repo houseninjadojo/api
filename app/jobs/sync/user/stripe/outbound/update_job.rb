@@ -1,6 +1,24 @@
 class Sync::User::Stripe::Outbound::UpdateJob < Sync::BaseJob
   queue_as :default
 
+  retry_on Stripe::APIConnectionError, wait: 5.minutes, attempts: 3 do |job, error|
+    Rails.logger.warn(
+      "Stripe - API Connection Error Updating User `#{user&.stripe_id}`",
+      usr: { id: user&.id, email: user&.email },
+      active_job: { id: job&.job_id },
+      error: error
+    )
+  end
+
+  discard_on Stripe::StripeError do |job, error|
+    Rails.logger.error(
+      "Stripe - Error Updating User `#{user&.stripe_id}`",
+      usr: { id: user&.id, email: user&.email },
+      active_job: { id: job.job_id },
+      error: e
+    )
+  end
+
   attr_accessor :user, :changeset
 
   def perform(user, changeset)
