@@ -16,5 +16,6 @@ Rails.application.config.filter_parameters += [
   :hapikey,
   "x-auth-key",
   "x-auth-token",
-  :authorization,
+  "authorization",
+  "Bearer",
 ]
