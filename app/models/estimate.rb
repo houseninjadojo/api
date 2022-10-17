@@ -223,6 +223,8 @@ class Estimate < ApplicationRecord
   def update_work_order_status
     if approved_at.present?
       work_order.update!(status: WorkOrderStatus::SCHEDULING_IN_PROGRESS)
+      expire_external_access!
+      # sync_after_approval!
     end
   end
 end
