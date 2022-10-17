@@ -124,6 +124,10 @@ class Estimate < ApplicationRecord
     !(shared? || declined? || approved? || deleted?)
   end
 
+  def deep_link
+    DeepLink.find_by(linkable: self)
+  end
+
   # actions
 
   def approve!
@@ -223,7 +227,6 @@ class Estimate < ApplicationRecord
   def update_work_order_status
     if approved_at.present?
       work_order.update!(status: WorkOrderStatus::SCHEDULING_IN_PROGRESS)
-      expire_external_access!
       # sync_after_approval!
     end
   end
