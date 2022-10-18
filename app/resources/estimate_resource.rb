@@ -45,6 +45,7 @@ class EstimateResource < ApplicationResource
   attribute :work_order_id, :uuid, only: [:filterable]
 
   attribute :approved_at, :datetime
+  attribute :declined_at, :datetime
 
   attribute :description, :string, except: [:writeable]
 

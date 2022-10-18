@@ -10,7 +10,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     if Rails.env.development?
       origins "localhost:4200", "co.houseninja.application"
     else
-      origins /co\.houseninja\.application\:\/\//, /[a-z0-9]+\.houseninja\.pages\.dev/, "app.houseninja.co"
+      origins /co\.houseninja\.application\:\/\//, /[a-z0-9]+\.houseninja\.pages\.dev/, "app.houseninja.co", "api-origin.houseninja.co", "tntmcgm6sar.live.verygoodproxy.com"
     end
 
     resource "*",
