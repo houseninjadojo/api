@@ -1,6 +1,6 @@
 class Estimate::NotifyJob < ApplicationJob
   queue_as :default
-  unique :until_expired, lock_ttl: 5.minutes
+  unique :until_expired, lock_ttl: 10.seconds
 
   attr_accessor :estimate, :user, :device, :work_order
 
