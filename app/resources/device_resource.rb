@@ -63,6 +63,15 @@ class DeviceResource < ApplicationResource
   attribute :created_at, :datetime, except: [:writeable]
   attribute :updated_at, :datetime, except: [:writeable]
 
+  filter :device_id, :uuid do
+    eq do |scope, value|
+      Rails.logger.info("Trying to find device with device_id: #{value}")
+      found = scope.where(device_id: value)
+      Rails.logger.info("Found devices: #{found.size}")
+      found
+    end
+  end
+
   def base_scope
     Device.unscoped
   end
