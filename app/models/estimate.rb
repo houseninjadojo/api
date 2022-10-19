@@ -50,8 +50,10 @@ class Estimate < ApplicationRecord
   # callbacks
 
   after_update_commit :sync_update!
-  after_update_commit :update_work_order_status, if: :saved_change_to_approved_at?
-  after_update_commit :sync_after_approval!, if: :saved_change_to_approved_at?
+  after_update_commit :update_work_order_status,
+    if: Proc.new { saved_change_to_approved_at? || saved_change_to_declined_at? }
+  after_update_commit :sync_after_approval!,
+    if: Proc.new { saved_change_to_approved_at? || saved_change_to_declined_at? }
 
   # associations
 
@@ -187,8 +189,8 @@ class Estimate < ApplicationRecord
 
   # force it
   def sync_after_approval!(bypass_status_check: false)
-    if !approved? || (work_order.reload.status.slug != "scheduling_in_progress" || !bypass_status_check)
-      Rails.logger.info("Not syncing after approval, estimate=#{id} is not approved or work_order=#{work_order&.id} is not in scheduling_in_progress")
+    if (!approved? && !declined?) || (work_order.reload.status.slug != "scheduling_in_progress" || !bypass_status_check)
+      Rails.logger.info("Not syncing after approval, estimate=#{id} is not approved/declined or work_order=#{work_order&.id} is not in scheduling_in_progress")
       return
     end
     Estimate::ExternalAccess::ExpireJob.perform_later(estimate: self)
@@ -225,7 +227,7 @@ class Estimate < ApplicationRecord
   end
 
   def update_work_order_status
-    if approved_at.present?
+    if approved_at.present? || declined_at.present?
       work_order.update!(status: WorkOrderStatus::SCHEDULING_IN_PROGRESS)
       sync_after_approval!(bypass_status_check: true) # i guess we have to force it
     end
