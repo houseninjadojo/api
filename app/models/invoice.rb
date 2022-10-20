@@ -125,7 +125,11 @@ class Invoice < ApplicationRecord
     unless work_order&.customer_approved_work
       Rails.logger.info("Not sending payment approval email, customer has not approved work for work_order=#{work_order&.id}")
     end
-    Campaign::PaymentApprovalJob.perform_later(user: user, invoice: self)
+    if user.is_houseninja?
+      Campaign::PaymentApprovalJob.perform_later(user: user, invoice: self)
+    else
+      InvoiceMailer.with(user: user, invoice: invoice).payment_approval.deliver_later
+    end
   end
 
   # external access / payment approval
