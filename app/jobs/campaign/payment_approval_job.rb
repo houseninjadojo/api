@@ -5,7 +5,7 @@ class Campaign::PaymentApprovalJob < ApplicationJob
     [
       {
         subject: "Reminder: You have an invoice ready for payment",
-        wait: 1.minute,
+        wait: 1.minutes,
       },
       {
         subject: "Reminder: You have an invoice ready for payment",
@@ -13,7 +13,7 @@ class Campaign::PaymentApprovalJob < ApplicationJob
       },
       {
         subject: "You have an overdue invoice",
-        approve_invoice_message: "Your invoice is overdue. Please make payment as soon as possible.",
+        approve_invoice_header: "Your invoice is overdue. Please make payment as soon as possible.",
         wait: 3.minutes,
       }
     ]
@@ -33,7 +33,7 @@ class Campaign::PaymentApprovalJob < ApplicationJob
           user: user,
           invoice: invoice,
           subject: followup[:subject],
-          approve_invoice_message: followup[:approve_invoice_message]
+          approve_invoice_header: followup[:approve_invoice_header]
         }.compact)
         .payment_approval
         .deliver_later(wait: followup[:wait])

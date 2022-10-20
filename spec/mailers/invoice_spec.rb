@@ -37,7 +37,7 @@ RSpec.describe InvoiceMailer, type: :mailer do
         invoice_amount: invoice.formatted_total,
         invoice_notes: invoice.notes&.to_s&.gsub(/\n/, '<br>')&.html_safe,
         payment_link: deep_link.to_s,
-        approve_invoice_message: "You have an invoice ready for payment.",
+        approve_invoice_header: "You have an invoice ready for payment.",
       }.to_s)
     end
   end

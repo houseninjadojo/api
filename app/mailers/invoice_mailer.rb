@@ -13,15 +13,15 @@ class InvoiceMailer < ApplicationMailer
       invoice_amount: @invoice.formatted_total,
       invoice_notes: @invoice.notes&.to_s&.gsub(/\n/, '<br>')&.html_safe,
       payment_link: deep_link&.to_s,
-      approve_invoice_message: approve_invoice_message,
+      approve_invoice_header: approve_invoice_header,
     }
     mail(mail_params)
   end
 
   private
 
-  def approve_invoice_message
-    params[:approve_invoice_message] || "You have an invoice ready for payment."
+  def approve_invoice_header
+    params[:approve_invoice_header] || "You have an invoice ready for payment."
   end
 
   def deep_link
