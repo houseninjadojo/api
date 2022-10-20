@@ -9,7 +9,7 @@ class Sync::User::Stripe::Outbound::UpdateJob < Sync::BaseJob
   def perform(user, changeset)
     @changeset = changeset
     @user = user
-    
+
     unless policy.can_sync?
       Rails.logger.info(
         "Sync::User::Stripe::Outbound::UpdateJob - Skipping Sync",
