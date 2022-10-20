@@ -96,9 +96,12 @@ class Invoice < ApplicationRecord
     # no-op
   end
 
-  def finalized?
-    # finalized_at.present?
+  def open?
     status == STATUS_OPEN
+  end
+
+  def finalized?
+    open? && finalized_at.present?
   end
 
   def draft?

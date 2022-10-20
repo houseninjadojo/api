@@ -29,8 +29,8 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def should_cancel_delivery?
-    @invoice&.paid? ||
+    !@invoice.open? ||
     @work_order.status != WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER ||
-    @work_order&.customer_approved_work == true
+    @work_order&.customer_approved_work == false
   end
 end
