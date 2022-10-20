@@ -45,7 +45,7 @@ HttpLog.configure do |config|
 
   # Mask the values of sensitive request parameters
   config.filter_parameters = Rails.application.config.filter_parameters
-  
+
   # Customize the prefix with a proc or lambda
   # config.prefix = ->{ "[httplog] #{Time.now} " }
 end
