@@ -1,22 +1,25 @@
 class UserMailer < ApplicationMailer
-  default from: Rails.settings.email[:reply_to]
-
-  def account_setup(email:, url:)
+  def account_setup #(email:, url:)
+    @template_id = 'd-fc9c5420ba1d4a96902f3292a31d7ae5'
+    @email = params[:email]
+    @url = params[:url]
     mail(
-      to: email,
+      to: @email,
       body: '',
-      template_id: 'd-fc9c5420ba1d4a96902f3292a31d7ae5',
+      template_id: @template_id,
       dynamic_template_data: {
-        url: url,
+        url: @url,
       }
     )
   end
 
   def delete_request(user:)
+    @template_id = 'd-fa5ae35cc727496fb2e01c69e4cd04a9'
+    @email = "miles@houseninja.co"
     mail(
-      to: "miles@houseninja.co",
+      to: @email,
       body: '',
-      template_id: 'd-fa5ae35cc727496fb2e01c69e4cd04a9',
+      template_id: @template_id,
       dynamic_template_data: {
         email: user&.email,
         name: user&.full_name,

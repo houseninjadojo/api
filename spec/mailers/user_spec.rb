@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe UserMailer, type: :mailer do
   describe "account_setup" do
     let(:mail) {
-      UserMailer.account_setup(
+      UserMailer.with(
         email: "test@houseninja.co",
         url: "https://www.houseninja.co"
-      )
+      ).account_setup
     }
 
     it "calls sendgrid" do

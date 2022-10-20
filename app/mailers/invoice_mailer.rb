@@ -1,6 +1,4 @@
 class InvoiceMailer < ApplicationMailer
-  default from: Rails.settings.email[:reply_to]
-
   def payment_approval(
     email:,
     first_name:,
