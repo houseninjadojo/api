@@ -2,16 +2,13 @@ require "rails_helper"
 
 RSpec.describe EstimateMailer, type: :mailer do
   describe "estimate_approval" do
+    let(:user) { create(:user) }
+    let(:work_order) { create(:work_order) }
+    let(:estimate) { create(:estimate, work_order: work_order) }
     let(:mail) {
       EstimateMailer.estimate_approval(
-        email: "test@houseninja.co",
-        first_name: "Test",
-        service_name: "Test Service",
-        service_provider: "Test Provider",
-        estimate_amount_or_actual_estimate_if_populated: "$100.00",
-        estimate_notes: "test\nnotest"&.to_s&.gsub(/\n/, '<br>')&.html_safe,
-        estimate_link: "https://app.houseninja.co/estimate-link",
-        app_store_url: "https://itunes.apple.com/us/app/houseninja/123456789"
+        estimate: estimate,
+        user: user,
       )
     }
     # let(:mail) { InvoiceMailer.payment_approval }

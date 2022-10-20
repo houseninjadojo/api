@@ -72,6 +72,7 @@ class WorkOrder < ApplicationRecord
 
   # validations
 
+  validates :description, presence: true
   validates :hubspot_id, uniqueness: true, allow_nil: true
 
   # helpers

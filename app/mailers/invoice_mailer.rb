@@ -1,29 +1,32 @@
 class InvoiceMailer < ApplicationMailer
-  def payment_approval(
-    email:,
-    first_name:,
-    service_name:,
-    service_provider:,
-    invoice_amount:,
-    invoice_notes:,
-    payment_link:,
-    app_store_url: Rails.settings.app_store_url
-  )
-    mail(
-      to: email,
-      body: '',
-      template_id: 'd-8f179d92b29645278a32855f82eda36b',
-      dynamic_template_data: {
-        subject: "You have an invoice ready for payment for #{service_name}",
-        first_name: first_name,
-        service_name: service_name,
-        service_provider: service_provider,
-        invoice_amount: invoice_amount,
-        invoice_notes: invoice_notes,
-        payment_link: payment_link,
-        approve_invoice_message: "You have an invoice ready for payment.",
-        app_store_url: app_store_url
-      }
-    )
+  before_action {
+    @invoice = params[:invoice]
+    @work_order = @invoice&.work_order
+  }
+
+  def payment_approval
+    @template_id = 'd-8f179d92b29645278a32855f82eda36b'
+    @subject = "You have an invoice ready for payment for #{@work_order.description}"
+    @template_data = {
+      service_name: @work_order.description,
+      service_provider: @work_order.vendor,
+      invoice_amount: @invoice.formatted_total,
+      invoice_notes: @invoice.notes&.to_s&.gsub(/\n/, '<br>')&.html_safe,
+      payment_link: @invoice.deep_link&.to_s,
+      approve_invoice_message: approve_invoice_message,
+    }
+    mail(mail_params)
+  end
+
+  private
+
+  def approve_invoice_message
+    params[:approve_invoice_message] || "You have an invoice ready for payment."
+  end
+
+  def should_cancel_delivery?
+    @invoice&.paid? ||
+    @work_order.status != WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER ||
+    @work_order&.customer_approved_work == true
   end
 end

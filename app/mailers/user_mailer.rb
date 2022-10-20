@@ -1,30 +1,30 @@
 class UserMailer < ApplicationMailer
-  def account_setup #(email:, url:)
+  def account_setup
     @template_id = 'd-fc9c5420ba1d4a96902f3292a31d7ae5'
-    @email = params[:email]
-    @url = params[:url]
-    mail(
-      to: @email,
-      body: '',
-      template_id: @template_id,
-      dynamic_template_data: {
-        url: @url,
-      }
-    )
+    @template_data = {
+      url: @user&.onboarding_link,
+    }
+    mail(mail_params)
   end
 
-  def delete_request(user:)
+  def delete_request
     @template_id = 'd-fa5ae35cc727496fb2e01c69e4cd04a9'
-    @email = "miles@houseninja.co"
-    mail(
-      to: @email,
-      body: '',
-      template_id: @template_id,
-      dynamic_template_data: {
-        email: user&.email,
-        name: user&.full_name,
-        requested_at: Time.zone.now.to_s(:long),
-      },
+    @email = email_address_with_name("miles@houseninja.co", "Miles")
+    @template_data = {
+      email: @user&.email,
+      name: @user&.full_name,
+      requested_at: Time.zone.now.to_s(:long),
+    }
+    mail({
+      **mail_params,
+      **personalizations
+    })
+  end
+
+  private
+
+  def personalizations
+    {
       personalizations: [
         {
           to: [
@@ -34,6 +34,6 @@ class UserMailer < ApplicationMailer
           ],
         },
       ]
-    )
+    }
   end
 end

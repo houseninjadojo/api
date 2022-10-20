@@ -125,15 +125,7 @@ class Invoice < ApplicationRecord
     unless work_order&.customer_approved_work
       Rails.logger.info("Not sending payment approval email, customer has not approved work for work_order=#{work_order&.id}")
     end
-    InvoiceMailer.payment_approval(
-      email: user.email,
-      first_name: user.first_name,
-      invoice_amount: formatted_total,
-      invoice_notes: notes&.to_s&.gsub(/\n/, '<br>')&.html_safe,
-      payment_link: deep_link&.to_s,
-      service_name: work_order&.description,
-      service_provider: work_order&.vendor
-    ).deliver_later
+    Campaign::PaymentApprovalJob.perform_later(user: user, invoice: self)
   end
 
   # external access / payment approval

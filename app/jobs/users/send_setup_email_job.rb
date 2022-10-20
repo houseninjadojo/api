@@ -13,9 +13,6 @@ class Users::SendSetupEmailJob < ApplicationJob
     )
     Users::GenerateOnboardingLinkJob.perform_now(user)
 
-    UserMailer.with(
-      email: user.email,
-      url: user.onboarding_link,
-    ).account_setup.deliver_later
+    UserMailer.with(user: user).account_setup.deliver_later
   end
 end
