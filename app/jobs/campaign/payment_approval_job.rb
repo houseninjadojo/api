@@ -15,7 +15,7 @@ class Campaign::PaymentApprovalJob < ApplicationJob
         subject: "You have an overdue invoice",
         approve_invoice_message: "Your invoice is overdue. Please make payment as soon as possible.",
         wait: 9.days,
-      } 
+      }
     ]
   end
 

@@ -12,7 +12,7 @@ class InvoiceMailer < ApplicationMailer
       service_provider: @work_order.vendor,
       invoice_amount: @invoice.formatted_total,
       invoice_notes: @invoice.notes&.to_s&.gsub(/\n/, '<br>')&.html_safe,
-      payment_link: @invoice.deep_link&.to_s,
+      payment_link: deep_link&.to_s,
       approve_invoice_message: approve_invoice_message,
     }
     mail(mail_params)
@@ -22,6 +22,10 @@ class InvoiceMailer < ApplicationMailer
 
   def approve_invoice_message
     params[:approve_invoice_message] || "You have an invoice ready for payment."
+  end
+
+  def deep_link
+    @invoice.deep_link || DeepLink.find_by(linkable: @invoice)
   end
 
   def should_cancel_delivery?

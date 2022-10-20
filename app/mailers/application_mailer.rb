@@ -97,7 +97,7 @@ class ApplicationMailer < ActionMailer::Base
       subject: subject,
       first_name: @first_name,
       app_store_url: @app_store_url,
-    }
+    }.compact
   end
 
   def mail_settings
@@ -113,7 +113,7 @@ class ApplicationMailer < ActionMailer::Base
     if @template_id.present?
       {
         **default_template_data,
-        **@template_data,
+        **(@template_data || {}),
       }
     else
       nil
