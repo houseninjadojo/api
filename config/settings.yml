@@ -10,8 +10,9 @@ shared:
   lang: en_US.UTF-8
   port: 3000
   email:
+    name: 'House Ninja'
     default: House Ninja <hello@houseninja.co>   # default email
-    reply_to: House Ninja <hello@houseninja.co>    # reply to email
+    reply_to: hello@houseninja.co    # reply to email
   protocol: 'https'
   app_store_url: 'https://apps.apple.com/us/app/house-ninja/id1603710358'
 

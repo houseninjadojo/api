@@ -281,7 +281,7 @@ class User < ApplicationRecord
 
   def destroy
     update!(delete_requested_at: Time.now)
-    UserMailer.delete_request(user: self).deliver_later
+    UserMailer.with(user: self).delete_request.deliver_later
   end
 
   # def delete

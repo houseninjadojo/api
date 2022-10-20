@@ -12,9 +12,7 @@ class Users::SendSetupEmailJob < ApplicationJob
       onboarding_code: SecureRandom.hex(12),
     )
     Users::GenerateOnboardingLinkJob.perform_now(user)
-    UserMailer.account_setup(
-      email: user.email,
-      url: user.onboarding_link,
-    ).deliver_later
+
+    UserMailer.with(user: user).account_setup.deliver_later
   end
 end

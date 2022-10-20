@@ -3,10 +3,9 @@ require "rails_helper"
 RSpec.describe MarketingMailer, type: :mailer do
   describe "payment_approval" do
     let(:mail) {
-      MarketingMailer.app_announcement(
+      MarketingMailer.with(
         email: "test@houseninja.co",
-        url: "https://www.houseninja.co"
-      )
+      ).app_announcement
     }
 
     it "calls sendgrid" do
@@ -15,7 +14,7 @@ RSpec.describe MarketingMailer, type: :mailer do
       expect(mail.body).to eq('')
       expect(mail[:'template-id'].to_s).to eq('d-32e6334f2ec24e968189c9ad6aa8f7fa')
       expect(mail[:dynamic_template_data].value).to eq({
-        url: "https://www.houseninja.co"
+        app_store_url: Rails.settings.app_store_url
       }.to_s)
     end
   end

@@ -56,7 +56,7 @@ module Hubspot
         when "propertyChange"
           :update
         when "privacyDeletion"
-          SystemMailer.privacy_delete_request(payload: payload).deliver_later
+          SystemMailer.with(payload: payload).privacy_delete_request.deliver_later
           :delete
         end
       end
