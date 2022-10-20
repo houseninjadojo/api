@@ -5,16 +5,16 @@ class Campaign::PaymentApprovalJob < ApplicationJob
     [
       {
         subject: "Reminder: You have an invoice ready for payment",
-        wait: 1.minutes,
+        wait: 3.days,
       },
       {
         subject: "Reminder: You have an invoice ready for payment",
-        wait: 2.minutes,
+        wait: 6.days,
       },
       {
         subject: "You have an overdue invoice",
         approve_invoice_header: "Your invoice is overdue. Please make payment as soon as possible.",
-        wait: 3.minutes,
+        wait: 9.days,
       }
     ]
   end
