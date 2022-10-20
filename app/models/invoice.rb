@@ -131,7 +131,7 @@ class Invoice < ApplicationRecord
     if user.is_houseninja?
       Campaign::PaymentApprovalJob.perform_later(user: user, invoice: self)
     else
-      InvoiceMailer.with(user: user, invoice: invoice).payment_approval.deliver_later
+      InvoiceMailer.with(user: user, invoice: self).payment_approval.deliver_later
     end
   end
 
