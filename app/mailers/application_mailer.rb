@@ -36,7 +36,7 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def prevent_delivery_unless_houseninja
-    if !@email&.ends_with?('@houseninja.co')
+    if !@email&.include?('@houseninja.co')
       Rails.logger.error("not delivering email - not a houseninja email address", log_tags)
       mail.perform_deliveries = false
     end
