@@ -4,8 +4,6 @@ class EstimateMailer < ApplicationMailer
     @work_order = @estimate&.work_order
   }
 
-  after_action :prevent_delivery_unless_houseninja
-
   def estimate_approval
     @template_id = 'd-63a05b08f1ab43a3865811ef9509a2fc'
     @subject = "You have an estimate ready for #{@work_order.description}"
