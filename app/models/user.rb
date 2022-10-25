@@ -187,6 +187,10 @@ class User < ApplicationRecord
     !has_completed_onboarding? && [ContactType::CUSTOMER, ContactType::LEAD].include?(contact_type)
   end
 
+  def is_presently_onboarding?
+    self.auth_zero_user_created == false
+  end
+
   def is_subscribed?
     self.subscription.present? && self.subscription.active?
   end

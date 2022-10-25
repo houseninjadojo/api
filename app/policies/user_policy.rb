@@ -9,7 +9,7 @@ class UserPolicy < ApplicationPolicy
     # no user found
     deny! if record.nil?
     # not signed in and trying to resume logging in
-    allow! if user.nil? && record.is_currently_onboarding?
+    allow! if user.nil? && record.is_presently_onboarding?
     # signed in and checking own user
     record&.id == user&.id
   end
