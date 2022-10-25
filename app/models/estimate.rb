@@ -185,7 +185,7 @@ class Estimate < ApplicationRecord
   # force it
   def sync_after_approval!(bypass_status_check: false)
     statuses = ["scheduling_in_progress", "onsite_estimate_scheduled"]
-    if (!approved? && !declined?) || (!statuses.include?[work_order.reload&.status&.slug] || !bypass_status_check)
+    if (!approved? && !declined?) || (!statuses.include?(work_order.reload&.status&.slug) || !bypass_status_check)
       Rails.logger.info("Not syncing after approval, estimate=#{id} is not approved/declined or work_order=#{work_order&.id} is not in scheduling_in_progress")
       return
     end
