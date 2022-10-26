@@ -2,10 +2,6 @@ class Sync::Invoice::Stripe::Outbound::CreatePolicy < ApplicationPolicy
   authorize :user, optional: true
 
   def can_sync?
-    result = !has_external_id? &&
-    has_customer_id? &&
-    (has_payment_method_id? || has_subscription_id?) &&
-    !is_walkthrough?
     if !Rails.env.test?
       Rails.logger.info("sync policy action=create invoice=#{record.id}", {
         policy: {
@@ -13,7 +9,7 @@ class Sync::Invoice::Stripe::Outbound::CreatePolicy < ApplicationPolicy
           service: "stripe",
           direction: "outbound",
           action: "create",
-          result: result,
+          result: can_sync_result,
         },
         resource: {
           id: record&.id,
@@ -27,8 +23,8 @@ class Sync::Invoice::Stripe::Outbound::CreatePolicy < ApplicationPolicy
           is_walkthrough: is_walkthrough?,
         },
       })
-      result
     end
+    can_sync_result
   end
 
   def has_external_id?
@@ -49,5 +45,14 @@ class Sync::Invoice::Stripe::Outbound::CreatePolicy < ApplicationPolicy
 
   def is_walkthrough?
     record&.work_order&.is_walkthrough?
+  end
+
+  private
+
+  def can_sync_result
+    !has_external_id? &&
+    has_customer_id? &&
+    (has_payment_method_id? || has_subscription_id?) &&
+    !is_walkthrough?
   end
 end
