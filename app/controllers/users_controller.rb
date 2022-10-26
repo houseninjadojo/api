@@ -34,7 +34,7 @@ class UsersController < ApplicationController
       user = create_interested_user
     else
       Rails.logger.info("User is creating a new user", params: params)
-      user = create_user_resource
+      user = find_or_create_user_resource
     end
 
     if user&.errors.blank?
@@ -87,6 +87,18 @@ class UsersController < ApplicationController
     user
   end
 
+  def find_or_create_user_resource
+    email = params.dig(:data, :attributes, :email)&.downcase
+    user = User.find_by(email: email) if email.present?
+    if user.present? && matched_user_resource?(user) && user.is_currently_onboarding?
+      UserResource.find(id: user.id)
+    else
+      user = UserResource.build(params)
+      user.save
+      user
+    end
+  end
+
   def user_resource
     @user_resource ||= begin
       email = params.dig(:data, :attributes, :email)&.downcase
@@ -137,5 +149,12 @@ class UsersController < ApplicationController
         },
       },
     }
+  end
+
+  def matched_user_resource?(user)
+    user_params = user.slice(:email, :first_name, :last_name, :phone_number)
+    user_params.all? do |key, value|
+      value&.downcase == params.dig(:data, :attributes, key)&.downcase
+    end
   end
 end
