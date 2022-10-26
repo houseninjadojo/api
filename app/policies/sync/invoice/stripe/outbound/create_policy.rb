@@ -2,10 +2,33 @@ class Sync::Invoice::Stripe::Outbound::CreatePolicy < ApplicationPolicy
   authorize :user, optional: true
 
   def can_sync?
-    !has_external_id? &&
+    result = !has_external_id? &&
     has_customer_id? &&
     (has_payment_method_id? || has_subscription_id?) &&
     !is_walkthrough?
+    if !Rails.env.test?
+      Rails.logger.info("sync policy action=create invoice=#{record.id}", {
+        policy: {
+          resource: "invoice",
+          service: "stripe",
+          direction: "outbound",
+          action: "create",
+          result: result,
+        },
+        resource: {
+          id: record&.id,
+          type: "invoice",
+        },
+        factors: {
+          has_external_id: has_external_id?,
+          has_customer_id: has_customer_id?,
+          has_payment_method_id: has_payment_method_id?,
+          has_subscription_id: has_subscription_id?,
+          is_walkthrough: is_walkthrough?,
+        },
+      })
+      result
+    end
   end
 
   def has_external_id?

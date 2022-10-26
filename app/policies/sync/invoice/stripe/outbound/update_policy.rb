@@ -15,14 +15,31 @@ class Sync::Invoice::Stripe::Outbound::UpdatePolicy < ApplicationPolicy
   authorize :changeset
 
   def can_sync?
-    Rails.logger.info("Invoice::Stripe::Outbound::UpdatePolicy.can_sync?")
-    Rails.logger.info("  has_external_id?=#{has_external_id?}")
-    Rails.logger.info("  has_changed_attributes?=#{has_changed_attributes?}")
-    Rails.logger.info("  is_modifiable?=#{is_modifiable?}")
-    Rails.logger.info("changeset: #{changeset.inspect}")
-    has_external_id? &&
+    result = has_external_id? &&
     has_changed_attributes? &&
     is_modifiable?
+    if !Rails.env.test?
+      Rails.logger.info("sync policy action=update invoice=#{record.id}", {
+        policy: {
+          resource: "invoice",
+          service: "stripe",
+          direction: "outbound",
+          action: "update",
+          result: result,
+        },
+        resource: {
+          id: record&.id,
+          type: "invoice",
+        },
+        factors: {
+          has_external_id: has_external_id?,
+          has_changed_attributes: has_changed_attributes?,
+          is_modifiable: is_modifiable?,
+        },
+        changeset: changeset,
+      })
+    end
+    result
   end
 
   def has_external_id?
