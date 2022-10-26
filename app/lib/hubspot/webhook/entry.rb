@@ -143,16 +143,80 @@ module Hubspot
         end
       end
 
+      class Base
+        attr_accessor :payload
+        attr_accessor :resource_klass
+
+        attribute :updated_at, :epoch_time, mapping: "hs_lastmodifieddate"
+
+        def initialize(payload)
+          @payload = payload
+          @resource_klass = Estimate
+        end
+      end
+      class Estimate < Base
+        resource_klass Estimate 
+
+        attribute :shared_at,               :epoch_time, mapping: "date_estimate_sent"
+        attribute :approved,                :boolean,    mapping: "estimate_approved"
+        attribute :description,             :string,     mapping: "estimate_notes"
+        attribute :homeowner_amount,        :cents,      mapping: "estimate___for_homeowner"
+        attribute :vendor_amount,           :cents,      mapping: "estimate___from_vendor"
+        attribute :homeowner_amount_actual, :cents,      mapping: "revised_estimate___for_homeowner"
+        attribute :second_homeowner_amount, :cents,      mapping: "second_estimate___for_homeowner"
+        attribute :second_vendor_amount,    :cents,      mapping: "second_estimate___from_vendor"
+      end
+
+      class User < Base
+        resource_klass User
+
+        attribute :email,           :string, mapping: "email"
+        attribute :first_name,      :string, mapping: "firstname"
+        attribute :last_name,       :string, mapping: "lastname"
+        attribute :phone_number,    :string, mapping: ["phone", "mobilephone"]
+      end
+
+      class WorkOrder < Base
+        resource_klass Invoice
+
+        attribute :completed_at,            :epoch_time, mapping: "date_work_completed"
+        attribute :customer_approved_work,  :boolean,    mapping: "customer_approved_work"
+        attribute :description,             :string,     mapping: "dealname"
+        attribute :invoice_notes,           :string,     mapping: "invoice_notes"
+        attribute :homeowner_amount_actual, :cents,      mapping: "actual_invoice___for_homeowner"
+        attribute :homeowner_amount,        :cents,      mapping: "invoice_for_homeowner"
+        attribute :refund_amount,           :cents,      mapping: "refund___make_good____"
+        attribute :refund_reason,           :string,     mapping: "refund___make_good_reason"
+        attribute :status,                  :status,     mapping: "dealstage"
+        attribute :total,                   :cents,      mapping: "amount"
+        attribute :vendor_amount,           :cents,      mapping: "invoice_from_vendor"
+        attribute :vendor,                  :string,     mapping: "vendor_name"
+      end
+
+      class Property < Base
+        resource_klass Property
+
+        attribute :city,            :string, mapping: "city"
+        attribute :state,           :string, mapping: "state"
+        attribute :street_address1, :string, mapping: "address"
+        attribute :zipcode,         :string, mapping: "zip"
+
+        attribute :bathrooms,  :number, mapping: "no__of_bathrooms"
+        attribute :bedrooms,   :number, mapping: "number_of_bedrooms"
+        attribute :home_size,  :number, mapping: "size_of_home__sq_ft_"
+        attribute :year_built, :number, mapping: "year_built"
+      end
+
       def attribute_name
         case property_name
-        when "actual_invoice___for_homeowner"
-          :homeowner_amount_actual
-        when "address"
-          :street_address1
-        when "amount"
-          :total
-        when "city"
-          :city
+        # when "actual_invoice___for_homeowner"
+        #   :homeowner_amount_actual
+        # when "address"
+        #   :street_address1
+        # when "amount"
+        #   :total
+        # when "city"
+        #   :city
         when "closedate"
           # :scheduled_window_start
         when "closed_lost_reason"
@@ -161,103 +225,103 @@ module Hubspot
           #
         when "createdate"
           :created_at
-        when "customer_approved_work_"
-          :customer_approved_work
-        when "date_estimate_sent"
-          :shared_at
-        when "date___time_of_the_walkthrough"
-          :walkthrough_date
-        when "date_work_completed"
-          :completed_at
-        when "dealname"
-          :description
-        when "dealstage"
-          :status
+        # when "customer_approved_work_"
+        #   :customer_approved_work
+        # when "date_estimate_sent"
+        #   :shared_at
+        # when "date___time_of_the_walkthrough"
+        #   :walkthrough_date
+        # when "date_work_completed"
+        #   :completed_at
+        # when "dealname"
+        #   :description
+        # when "dealstage"
+        #   :status
         when "dealtype"
           #
         when "description"
           #
-        when "email"
-          :email
+        # when "email"
+        #   :email
         when "engagements_last_meeting_booked"
           :walkthrough_booking_timestamp
-        when "estimate_approved"
-          :approved
-        when "estimate_notes"
-          :description
-        when "estimate___for_homeowner"
-          :homeowner_amount
-        when "estimate___from_vendor"
-          :vendor_amount
+        # when "estimate_approved"
+        #   :approved
+        # when "estimate_notes"
+        #   :description
+        # when "estimate___for_homeowner"
+        #   :homeowner_amount
+        # when "estimate___from_vendor"
+        #   :vendor_amount
         when "est__home_value"
           # :home_value
-        when "firstname"
-          :first_name
+        # when "firstname"
+        #   :first_name
         when "first_walkthrough_performed_"
           :first_walkthrough_performed
         when "homeowner_name"
           #
         when "hs_lastmodifieddate"
           :updated_at
-        when "invoice_for_homeowner"
-          :homeowner_amount
+        # when "invoice_for_homeowner"
+        #   :homeowner_amount
           # work_order.homeowner_amount
-        when "invoice_from_vendor"
-          :vendor_amount
-        when "invoice_notes"
-          :invoice_notes
+        # when "invoice_from_vendor"
+        #   :vendor_amount
+        # when "invoice_notes"
+        #   :invoice_notes
         when "job_referred_"
           # :referred
-        when "lastname"
-          :last_name
+        # when "lastname"
+        #   :last_name
         when "lifecyclestage"
           #
-        when "mobilephone"
-          :phone_number
-        when "no__of_bathrooms"
+        # when "mobilephone"
+        #   :phone_number
+        # when "no__of_bathrooms"
           #
         when "num_associated_contacts"
           :property_id # we need to connect it to the property, not the user directly
-        when "number_of_bedrooms"
+        # when "number_of_bedrooms"
           #
-        when "phone"
-          :phone_number
+        # when "phone"
+        #   :phone_number
         when "pipeline"
           #
         when "preventative_maintenance_plan_pdf"
           :preventative_maintenance_plan_pdf
-        when "refund___make_good____"
-          :refund_amount
-        when "refund___make_good_reason"
-          :refund_reason
-        when "revised_estimate___for_homeowner"
-          :homeowner_amount_actual
+        # when "refund___make_good____"
+        #   :refund_amount
+        # when "refund___make_good_reason"
+        #   :refund_reason
+        # when "revised_estimate___for_homeowner"
+        #   :homeowner_amount_actual
         when "scheduled_work_date"
           #
-        when "second_estimate___for_homeowner"
-          :homeowner_amount
-        when "second_estimate___from_vendor"
-          :second_vendor_amount
-        when "size_of_home__sq_ft_"
+        # when "second_estimate___for_homeowner"
+        #   :homeowner_amount
+        # when "second_estimate___from_vendor"
+        #   :second_vendor_amount
+        # when "size_of_home__sq_ft_"
           #
-        when "state"
-          :state
+        # when "state"
+        #   :state
         when "time_of_scheduled_work"
           :scheduled_time
         when "time_of_the_walkthrough"
           :walkthrough_time
-        when "vendor_name"
-          :vendor
+        # when "vendor_name"
+        #   :vendor
         when "vendor_paid"
           #
         when "walkthrough_time"
           #
         when "walkthrough_report_pdf"
           :walkthrough_report_pdf
-        when "year_built"
+        # when "year_built"
           #
-        when "zip"
-          :zipcode
+        # when "zip"
+        #   :zipcode
         end
       end
 
@@ -265,8 +329,8 @@ module Hubspot
         case property_name
         when "actual_invoice___for_homeowner"
           attribute_as_amount_in_cents
-        when "address"
-          property_value
+        # when "address"
+        #   property_value
         when "amount"
           attribute_as_amount_in_cents
         when "city"
@@ -281,8 +345,8 @@ module Hubspot
           attribute_as_epoch_time
         when "customer_approved_work_"
           attribute_as_boolean
-        when "date_estimate_sent"
-          attribute_as_epoch_time
+        # when "date_estimate_sent"
+        #   attribute_as_epoch_time
         when "date___time_of_the_walkthrough"
           attribute_as_epoch_time
         when "date_work_completed"
@@ -299,14 +363,14 @@ module Hubspot
           property_value
         when "engagements_last_meeting_booked"
           attribute_as_epoch_time
-        when "estimate_approved"
-          attribute_as_boolean
-        when "estimate_notes"
-          property_value
-        when "estimate___for_homeowner"
-          attribute_as_amount_in_cents
-        when "estimate___from_vendor"
-          attribute_as_amount_in_cents
+        # when "estimate_approved"
+        #   attribute_as_boolean
+        # when "estimate_notes"
+        #   property_value
+        # when "estimate___for_homeowner"
+        #   attribute_as_amount_in_cents
+        # when "estimate___from_vendor"
+        #   attribute_as_amount_in_cents
         when "est__home_value"
           #
         when "firstname"
@@ -348,14 +412,14 @@ module Hubspot
           attribute_as_amount_in_cents
         when "refund___make_good_reason"
           property_value
-        when "revised_estimate___for_homeowner"
-          attribute_as_amount_in_cents
+        # when "revised_estimate___for_homeowner"
+        #   attribute_as_amount_in_cents
         when "scheduled_work_date"
           #
-        when "second_estimate___for_homeowner"
-          attribute_as_amount_in_cents
-        when "second_estimate___from_vendor"
-          attribute_as_amount_in_cents
+        # when "second_estimate___for_homeowner"
+        #   attribute_as_amount_in_cents
+        # when "second_estimate___from_vendor"
+        #   attribute_as_amount_in_cents
         when "size_of_home__sq_ft_"
           #
         when "state"
