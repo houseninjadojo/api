@@ -51,4 +51,15 @@ class PaymentMethodResource < ApplicationResource
   def base_scope
     PaymentMethod.active.order(created_at: :desc).limit(1)
   end
+
+  def save(model_instance)
+    # do the save
+    model_instance.save
+    # check if the error is because of a pre-existing stripe token
+    if model_instance.errors.of_kind?(:stripe_token, :taken)
+      model_instance = PaymentMethod.find_by(stripe_token: model_instance.stripe_token)
+    end
+    # return the model instance
+    model_instance
+  end
 end
