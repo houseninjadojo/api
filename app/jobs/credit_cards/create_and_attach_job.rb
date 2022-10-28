@@ -11,7 +11,7 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
 
     begin
       if matched_card.present?
-        Rails.logger.success("CreditCards::CreateAndAttachJob: match found", {
+        Rails.logger.info("CreditCards::CreateAndAttachJob: match found", {
           usr: {
             id: resource&.user&.id,
             email: resource&.user&.email,
