@@ -22,9 +22,10 @@ GIT
 
 GIT
   remote: https://github.com/houseninjadojo/hubspot-api-ruby.git
-  revision: ddaec37c6467469af70076b02908118e222056b3
+  revision: 8ae9b363f83423d433eb7208cac5e72a56e3e791
+  ref: 8ae9b36
   specs:
-    hubspot-api-ruby (0.8.1)
+    hubspot-api-ruby (0.13.0)
       activesupport (>= 4.2.2)
       httparty (>= 0.10)
 
