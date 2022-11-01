@@ -436,7 +436,7 @@ module Hubspot
       # fetch hubspot stuff
 
       def hubspot_contact
-        contacts = Hubspot::Association.all(hubspot_id, Hubspot::Association::DEAL_TO_CONTACT) || []
+        contacts = Hubspot::Association.all("Deal", hubspot_id, "Contact") || []
         contacts.first
       end
 
