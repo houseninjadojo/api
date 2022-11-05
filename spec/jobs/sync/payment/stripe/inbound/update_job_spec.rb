@@ -60,12 +60,10 @@ RSpec.describe Sync::Payment::Stripe::Inbound::UpdateJob, type: :job do
           "failure_balance_transaction": nil,
           "failure_code": nil,
           "failure_message": nil,
-          "fraud_details": {
-          },
+          "fraud_details": {},
           "invoice": "in_1LAk6PAWN1SYQ0CtCC1pSWvD",
           "livemode": false,
-          "metadata": {
-          },
+          "metadata": {},
           "on_behalf_of": nil,
           "order": nil,
           "outcome": {

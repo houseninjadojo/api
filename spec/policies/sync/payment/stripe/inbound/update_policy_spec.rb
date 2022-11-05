@@ -43,12 +43,10 @@ RSpec.describe Sync::Payment::Stripe::Inbound::UpdatePolicy, type: :policy do
           "failure_balance_transaction": nil,
           "failure_code": nil,
           "failure_message": nil,
-          "fraud_details": {
-          },
+          "fraud_details": {},
           "invoice": "in_1LAoJTAWN1SYQ0Ct5gdCBKvd",
           "livemode": false,
-          "metadata": {
-          },
+          "metadata": {},
           "on_behalf_of": nil,
           "order": nil,
           "outcome": {
