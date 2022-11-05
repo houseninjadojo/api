@@ -1,6 +1,6 @@
 class Estimate::ExternalAccess::GenerateDeepLinkJob < ApplicationJob
   queue_as :default
-  unique :until_expired, runtime_lock_ttl: 1.minute, on_conflict: :log
+  unique :until_expired, runtime_lock_ttl: 1.minute
 
   attr_accessor :estimate, :deep_link
 

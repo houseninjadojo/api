@@ -17,7 +17,20 @@ ActiveJob::Uniqueness.configure do |config|
   #   :log - instruments ActiveSupport::Notifications and logs event to the ActiveJob::Logger
   #   proc - custom Proc. For example, ->(job) { job.logger.info("Job already in queue: #{job.class.name} #{job.arguments.inspect} (#{job.job_id})") }
   #
-  config.on_conflict = :log
+  config.on_conflict = ->(job) {
+    job.logger.warn(
+      "Job already in queue: #{job.class.name} (#{job.job_id})",
+      payload: {
+        adapter: "Sidekiq",
+        arguments: job.arguments.inspect,
+        job_id: job.job_id,
+        job_class: job.class.name,
+        queue_name: job.queue_name,
+        provider_job_id: job.provider_job_id,
+        enqueued: false
+      }
+    )
+  }
 
   # Digest method for lock keys generating. Expected to have `hexdigest` class method.
   #
