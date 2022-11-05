@@ -46,8 +46,7 @@ RSpec.describe Sync::Subscription::Stripe::Inbound::UpdateJob, type: :job do
               "duration_in_months": 6,
               "livemode": true,
               "max_redemptions": nil,
-              "metadata": {
-              },
+              "metadata": {},
               "name": "Six Months Free",
               "percent_off": 100,
               "redeem_by": nil,
@@ -71,8 +70,7 @@ RSpec.describe Sync::Subscription::Stripe::Inbound::UpdateJob, type: :job do
                 "object": "subscription_item",
                 "billing_thresholds": nil,
                 "created": 1657208363,
-                "metadata": {
-                },
+                "metadata": {},
                 "plan": {
                   "id": "price_1Ie6wdAWN1SYQ0CtKiaqMHcA",
                   "object": "plan",
@@ -86,8 +84,7 @@ RSpec.describe Sync::Subscription::Stripe::Inbound::UpdateJob, type: :job do
                   "interval": "month",
                   "interval_count": 1,
                   "livemode": true,
-                  "metadata": {
-                  },
+                  "metadata": {},
                   "nickname": nil,
                   "product": "prod_J1eBMo47WiDtcH",
                   "tiers_mode": nil,
@@ -105,8 +102,7 @@ RSpec.describe Sync::Subscription::Stripe::Inbound::UpdateJob, type: :job do
                   "custom_unit_amount": nil,
                   "livemode": true,
                   "lookup_key": nil,
-                  "metadata": {
-                  },
+                  "metadata": {},
                   "nickname": nil,
                   "product": "prod_J1eBMo47WiDtcH",
                   "recurring": {
@@ -160,8 +156,7 @@ RSpec.describe Sync::Subscription::Stripe::Inbound::UpdateJob, type: :job do
             "interval": "month",
             "interval_count": 1,
             "livemode": true,
-            "metadata": {
-            },
+            "metadata": {},
             "nickname": nil,
             "product": "prod_J1eBMo47WiDtcH",
             "tiers_mode": nil,
