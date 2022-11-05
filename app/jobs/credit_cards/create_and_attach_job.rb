@@ -11,23 +11,57 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
 
     begin
       if matched_card.present?
+        Rails.logger.info("CreditCards::CreateAndAttachJob: match found", {
+          usr: {
+            id: resource&.user&.id,
+            email: resource&.user&.email,
+          },
+          resource: {
+            id: matched_card&.id,
+            type: "CreditCard",
+          },
+        })
         # matched card
         payment_method = matched_card
       elsif stored_payment_methods.size > 0
+        Rails.logger.warn("customer has cards, but no match found", {
+          usr: {
+            id: resource&.user&.id,
+            email: resource&.user&.email,
+          },
+        })
         # payment methods exist, but no match found
         resource.errors.add(:card_number, :mismatch, message: "does not match existing card on file")
         return resource
       else
+        Rails.logger.info("no match found, creating new card", {
+          usr: {
+            id: resource&.user&.id,
+            email: resource&.user&.email,
+          },
+        })
         # Create Payment Method
         payment_method = create_stripe_payment_method
         attach_stripe_payment_method
       end
     rescue Stripe::CardError => e
+      Rails.logger.error("stripe error - #{e.message}", {
+        usr: {
+          id: resource&.user&.id,
+          email: resource&.user&.email,
+        },
+      })
       # str
       attribute = e.param&.to_sym == :number ? :card_number : e.param&.to_sym
       attribute = attribute || :base
       resource.errors.add(attribute, :invalid, message: e.message)
-    rescue
+    rescue => e
+      Rails.logger.error("generic error matching card: #{e.message}", {
+        usr: {
+          id: resource&.user&.id,
+          email: resource&.user&.email,
+        },
+      })
       resource.errors.add(:base, :invalid, message: "Something went wrong. Please try again.")
     end
     if payment_method.present?

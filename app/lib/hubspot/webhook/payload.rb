@@ -50,6 +50,17 @@ module Hubspot
       def is_create_event?
         webhook_payload.first["subscriptionType"].split(".").last == "creation"
       end
+
+      # lets try handling multiple params for same object in one go
+      def is_update_batch?
+        entries.size > 1 &&
+        entries.map(&:resource_klass).uniq.size == 1 &&
+        entries.map(&:handler_action).uniq == [:update]
+      end
+
+      def update_batch_resource_klass
+        entries.map(&:resource_klass).uniq.first
+      end
     end
   end
 end

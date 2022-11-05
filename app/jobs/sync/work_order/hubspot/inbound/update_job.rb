@@ -11,7 +11,11 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdateJob < Sync::BaseJob
 
     return unless policy.can_sync?
 
-    resource&.update!(attribute_name => attribute_value)
+    if payload.is_update_batch? && is_estimate_batch?
+      resource&.update!(payload.as_params.except(:hubspot_id))
+    else
+      resource&.update!(attribute_name => attribute_value)
+    end
 
     webhook_event.update!(processed_at: Time.now)
   end
@@ -25,6 +29,14 @@ class Sync::WorkOrder::Hubspot::Inbound::UpdateJob < Sync::BaseJob
 
   def entry
     Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
+  end
+
+  def payload
+    Hubspot::Webhook::Payload.new(webhook_event)
+  end
+
+  def is_estimate_batch?
+    payload.is_update_batch? && payload.update_batch_resource_klass == Estimate
   end
 
   # def sync_line_items!

@@ -42,4 +42,8 @@ class WebhookEvent < ApplicationRecord
   def processed?
     processed_at.present?
   end
+
+  def hubspot_payload
+    Hubspot::Webhook::Payload.new(self)
+  end
 end

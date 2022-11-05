@@ -86,15 +86,15 @@ class PaymentMethod < ApplicationRecord
     self.errors.merge!(card&.errors) if card&.errors&.present?
 
     errors = card&.errors&.messages.dup
-    has_errors = errors.respond_to?(:[]) && errors.blank?
+    has_no_errors = errors.respond_to?(:[]) && errors.blank?
 
-    throw(:abort) if !has_errors
+    throw(:abort) if !has_no_errors
 
     # self.stripe_token = card.id
     # self.last_four = card.card.last4
 
     # set new default and mark the old
-    if has_errors && current_method.present?
+    if has_no_errors && current_method.present?
       # Sync::CreditCard::Stripe::Outbound::DeleteJob.perform_later(current_method)
     end
   end

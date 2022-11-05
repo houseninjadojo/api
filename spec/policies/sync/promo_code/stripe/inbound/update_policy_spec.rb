@@ -23,8 +23,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::UpdatePolicy, type: :policy do
             "duration_in_months": nil,
             "livemode": true,
             "max_redemptions": nil,
-            "metadata": {
-            },
+            "metadata": {},
             "name": "TEST CODE",
             "percent_off": 100,
             "redeem_by": nil,
@@ -36,8 +35,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::UpdatePolicy, type: :policy do
           "expires_at": nil,
           "livemode": true,
           "max_redemptions": nil,
-          "metadata": {
-          },
+          "metadata": {},
           "restrictions": {
             "first_time_transaction": false,
             "minimum_amount": nil,
