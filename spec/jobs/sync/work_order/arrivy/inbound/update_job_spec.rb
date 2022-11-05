@@ -73,11 +73,13 @@ RSpec.describe Sync::WorkOrder::Arrivy::Inbound::UpdateJob, type: :job do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       event = Arrivy::Event.new(payload)
       expect(work_order).to receive(:update!).with(
-        arrivy_id: 5892463768371200,
-        scheduled_date: event.scheduled_date,
-        scheduled_time: event.scheduled_time,
-        scheduled_window_end: event.scheduled_window_end,
-        scheduled_window_start: event.scheduled_window_start,
+        hash_including(
+          arrivy_id: 5892463768371200,
+          scheduled_date: event.scheduled_date,
+          scheduled_time: event.scheduled_time,
+          scheduled_window_end: event.scheduled_window_end,
+          scheduled_window_start: event.scheduled_window_start,
+        )
       )
       expect(webhook_event).to receive(:update!)
       job.perform_now(webhook_event)
@@ -95,7 +97,7 @@ RSpec.describe Sync::WorkOrder::Arrivy::Inbound::UpdateJob, type: :job do
     it "returns params for WorkOrder" do
       allow_any_instance_of(job).to(receive(:webhook_event).and_return(webhook_event))
       event = Arrivy::Event.new(payload)
-      expect(job.new(webhook_event).params).to eq({
+      expect(job.new(webhook_event).params).to include({
         arrivy_id: 5892463768371200,
         scheduled_date: event.scheduled_date,
         scheduled_time: event.scheduled_time,
