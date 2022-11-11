@@ -30,10 +30,13 @@ fi
 #   fi
 # fi
 
-# # set datadog.yaml config
-# cat << 'EOF' >> "$DATADOG_CONF"
+# set datadog.yaml config
+cat << 'EOF' >> "$DATADOG_CONF"
 
-# apm_config:
-#   filter_tags:
-#     reject: ["outcome:success"]
-# EOF
+otlp_config:
+  receiver:
+    protocols:
+      http:
+        endpoint: localhost:4318
+
+EOF
