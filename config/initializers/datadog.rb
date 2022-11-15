@@ -111,6 +111,13 @@ Datadog.configure do |c|
   c.tracing.instrument :sidekiq,
     service_name: 'sidekiq',
     tag_args:     true
+
+  # List of header formats that should be extracted
+  c.tracing.distributed_tracing.propagation_extract_style = [
+    Datadog::Tracing::Configuration::Ext::Distributed::PROPAGATION_STYLE_DATADOG,
+    # Datadog::Tracing::Configuration::Ext::Distributed::PROPAGATION_STYLE_B3,
+    # Datadog::Tracing::Configuration::Ext::Distributed::PROPAGATION_STYLE_B3_SINGLE_HEADER
+  ]
 end
 
 Datadog::Tracing.before_flush(

@@ -31,12 +31,12 @@ fi
 # fi
 
 # set datadog.yaml config
-cat << 'EOF' >> "$DATADOG_CONF"
+# cat << 'EOF' >> "$DATADOG_CONF"
 
-otlp_config:
-  receiver:
-    protocols:
-      http:
-        endpoint: localhost:4318
+# otlp_config:
+#   receiver:
+#     protocols:
+#       http:
+#         endpoint: localhost:4318
 
-EOF
+# EOF
