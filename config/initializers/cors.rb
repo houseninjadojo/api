@@ -8,9 +8,17 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     if Rails.env.development?
-      origins "localhost:4200", "co.houseninja.application"
+      origins "localhost:4200",
+              "co.houseninja.application",
+              "co.houseninja.application://localhost",
+              "co.houseninja.application://localhost:4200"
     else
-      origins /co\.houseninja\.application\:\/\//, /[a-z0-9]+\.houseninja\.pages\.dev/, "app.houseninja.co", "api-origin.houseninja.co", "tntmcgm6sar.live.verygoodproxy.com"
+      origins /co\.houseninja\.application\:\/\/(?:localhost(?:\:\d{1,5})?)?/,
+              /co\.houseninja\.application\:\/\//,
+              /[a-z0-9]+\.houseninja\.pages\.dev/,
+              "app.houseninja.co",
+              "api-origin.houseninja.co",
+              "tntmcgm6sar.live.verygoodproxy.com"
     end
 
     resource "*",
