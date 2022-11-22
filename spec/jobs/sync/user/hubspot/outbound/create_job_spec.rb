@@ -35,6 +35,7 @@ RSpec.describe Sync::User::Hubspot::Outbound::CreateJob, type: :job do
       expect(job.new(user).params).to eq(
         {
           contact_type:    user.contact_type,
+          coupon_code:     user&.subscription&.promo_code&.code,
           house_ninja_id:  user.id,
           email:           user.email,
           firstname:       user.first_name,
@@ -45,6 +46,8 @@ RSpec.describe Sync::User::Hubspot::Outbound::CreateJob, type: :job do
           onboarding_link:  user.onboarding_link,
           onboarding_step:  user.onboarding_step,
           onboarding_token: user.onboarding_token,
+
+          personal_referral_code: user&.promo_code&.code,
 
           how_did_you_hear_about_us_: user.how_did_you_hear_about_us,
         }
