@@ -20,7 +20,7 @@ gem 'graphiti-rails'
 gem 'httplog',          github: 'houseninjadojo/httplog', ref: 'b134d7a'
 gem 'image_processing',        '~> 1.12'                                        # Use Active Storage variant
 gem 'intercom'
-gem 'hubspot-api-ruby', github: 'houseninjadojo/hubspot-api-ruby'
+gem 'hubspot-api-ruby', github: 'houseninjadojo/hubspot-api-ruby', ref: '8ae9b36'
 # gem 'hubspot-api-client'
 gem 'jwt'
 gem 'kaminari'

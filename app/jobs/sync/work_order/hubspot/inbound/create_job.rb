@@ -66,7 +66,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
   end
 
   def hubspot_contact
-    @hubspot_contacts ||= Hubspot::Association.all(deal[:hs_object_id], Hubspot::Association::DEAL_TO_CONTACT) || []
+    @hubspot_contacts ||= Hubspot::Association.all("Deal", deal[:hs_object_id], "Contact") || []
     @hubspot_contacts.first
   end
 
