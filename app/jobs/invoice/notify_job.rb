@@ -44,8 +44,7 @@ class Invoice::NotifyJob < ApplicationJob
   def should_send?
     work_order.present? &&
     device.present? &&
-    user.present? &&
-    user.is_houseninja?
+    user.present?
   end
 
   def clear_lock!

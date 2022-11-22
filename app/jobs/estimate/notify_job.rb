@@ -45,8 +45,7 @@ class Estimate::NotifyJob < ApplicationJob
     estimate.present? &&
     work_order.present? &&
     device.present? &&
-    user.present? &&
-    user.is_houseninja?
+    user.present?
   end
 
   def clear_lock!
