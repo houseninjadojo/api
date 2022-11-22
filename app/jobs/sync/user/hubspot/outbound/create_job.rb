@@ -28,6 +28,10 @@ class Sync::User::Hubspot::Outbound::CreateJob < Sync::BaseJob
       onboarding_step:  user.onboarding_step,
       onboarding_token: user.onboarding_token,
 
+      coupon_code: user&.subscription&.promo_code&.code,
+      # customer's referral promo code
+      personal_referral_code: user&.promo_code&.code,
+
       how_did_you_hear_about_us_: user.how_did_you_hear_about_us,
     }
   end

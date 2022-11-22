@@ -17,6 +17,8 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < Sync::BaseJob
       invoice_paid: invoice_paid,
       branch_payment_link: branch_link,
       date_customer_paid_invoice: date_customer_paid_invoice,
+      stripe_invoice_number: stripe_invoice_number,
+      date_deal_added: date_deal_added,
     }
   end
 
@@ -42,5 +44,13 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < Sync::BaseJob
   def date_customer_paid_invoice
     epoch = work_order.invoice&.paid_at&.to_datetime.to_i * 1000
     epoch == 0 ? nil : epoch
+  end
+
+  def stripe_invoice_number
+    work_order.invoice&.stripe_invoice_number
+  end
+
+  def date_deal_added
+    work_order.created_at.iso8601
   end
 end

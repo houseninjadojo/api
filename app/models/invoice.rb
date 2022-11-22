@@ -122,6 +122,10 @@ class Invoice < ApplicationRecord
     work_order&.can_finalize_invoice?
   end
 
+  def stripe_invoice_number
+    stripe_object&.dig('number')
+  end
+
   # actions
 
   def send_payment_approval_email!

@@ -28,7 +28,7 @@ class Sync::User::Hubspot::Outbound::UpdateJob < Sync::BaseJob
       customer_type: user.customer_type,
 
       # promo code used in signup, NOT the customer's referrral promo code
-      'promo_code_used_': user&.subscription&.promo_code&.code,
+      coupon_code: user.subscription&.promo_code&.code,
 
       # customer's referral promo code
       personal_referral_code: user&.promo_code&.code,
