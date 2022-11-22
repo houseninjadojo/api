@@ -106,11 +106,7 @@ class WorkOrder < ApplicationRecord
   end
 
   def fetch_or_create_estimate
-    if estimate.present?
-      estimate
-    else
-      create_estimate
-    end
+    @estimate ||= Estimate.find_or_create_by(work_order: self)
   end
 
   def estimate_approved?
