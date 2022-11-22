@@ -18,4 +18,5 @@ Rails.application.config.filter_parameters += [
   "x-auth-token",
   "authorization",
   "Bearer",
+  "content-security-policy",
 ]
