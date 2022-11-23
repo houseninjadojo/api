@@ -249,7 +249,7 @@ RSpec.describe Hubspot::Webhook::Entry do
     it 'createdate => Time' do
       entry.payload["propertyName"] = "createdate"
       entry.payload["propertyValue"] = "1654715463090"
-      expect(entry.attribute_value).to eq("1654715463090")
+      expect(entry.attribute_value).to eq(Time.at(1654715463090/1000)&.in_time_zone(-6)&.iso8601)
     end
 
     it 'date_estimate_sent => Time' do

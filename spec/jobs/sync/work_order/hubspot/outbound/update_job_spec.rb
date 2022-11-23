@@ -42,7 +42,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Outbound::UpdateJob, type: :job do
       allow_any_instance_of(job).to(receive(:work_order).and_return(work_order))
       expect(job.new(work_order, changeset).params).to eq({
         dealstage: work_order.status.hubspot_id,
-        date_deal_added: work_order.created_at.iso8601,
+        date_deal_added: work_order.created_at&.in_time_zone(-6)&.iso8601,
         invoice_paid: "No",
         branch_payment_link: nil,
         date_customer_paid_invoice: nil,
