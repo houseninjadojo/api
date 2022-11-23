@@ -51,6 +51,8 @@ class Sync::WorkOrder::Hubspot::Outbound::UpdateJob < Sync::BaseJob
   end
 
   def date_deal_added
-    work_order.created_at.iso8601
+    # in central standard time
+    offset = -6
+    work_order.created_at&.in_time_zone(offset)&.iso8601
   end
 end
