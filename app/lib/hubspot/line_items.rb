@@ -83,7 +83,7 @@ module Hubspot
           description: props["description"],
           name: props["name"],
           quantity: props["quantity"],
-          created_at: props["createdate"],
+          requested_at: props["createdate"],
           updated_at: props["hs_lastmodifieddate"],
         }
       end

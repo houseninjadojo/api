@@ -46,7 +46,7 @@ module Hubspot
       when "closed_won_reason"
         #
       when "createdate"
-        :created_at
+        :requested_at
       when "customer_approved_work_"
         :customer_approved_work
       when "date_estimate_sent"

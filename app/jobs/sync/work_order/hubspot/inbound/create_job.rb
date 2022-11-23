@@ -53,7 +53,7 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
       description: deal[:dealname],
       hubspot_id: deal[:hs_object_id],
       status: work_order_status,
-      # created_at: Time.at(deal[:createdate]&.to_i / 1000),
+      requested_at: Time.at(deal[:createdate]&.to_i / 1000),
       # updated_at: Time.at(deal[:hs_lastmodifieddate]&.to_i / 1000),
 
       # scheduled_date: timestamps[:scheduled_date],

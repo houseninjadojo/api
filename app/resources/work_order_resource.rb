@@ -13,6 +13,7 @@
 #  invoice_notes           :text
 #  refund_amount           :string
 #  refund_reason           :string
+#  requested_at            :datetime
 #  scheduled_date          :string
 #  scheduled_time          :string
 #  scheduled_window_end    :datetime
