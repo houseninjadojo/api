@@ -52,7 +52,7 @@ Datadog.configure do |c|
     service_name: 'orm' # Service name used for database portion of active_record instrumentation.
 
   c.tracing.instrument :active_support,
-    service_name: 'cache'
+    cache_service: 'cache'
 
   c.tracing.instrument :aws,
     service_name: 'aws'
