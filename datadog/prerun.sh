@@ -33,10 +33,7 @@ fi
 # set datadog.yaml config
 # cat << 'EOF' >> "$DATADOG_CONF"
 
-# otlp_config:
-#   receiver:
-#     protocols:
-#       http:
-#         endpoint: localhost:4318
+# serviceMonitoring:
+#   enabled: true
 
 # EOF
