@@ -28,10 +28,8 @@ Datadog.configure do |c|
     'env': ENV["NAMESPACE_ENV"] || Rails.env.to_s,
     'service': ENV["NAMESPACE_SERVICE"] || 'api',
     'resource': ENV["NAMESPACE_RESOURCE"] || 'app',
-    'git': {
-      'repository_url': 'github.com/houseninjadojo/api',
-      'commit': { 'sha': ENV["HEROKU_SLUG_COMMIT"] },
-    }
+    'git.commit.sha': ENV["HEROKU_SLUG_COMMIT"],
+    'git.repository_url': 'github.com/houseninjadojo/api',
   }
   c.version = ENV['HEROKU_SLUG_COMMIT']
 
