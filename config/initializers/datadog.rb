@@ -50,9 +50,9 @@ Datadog.configure do |c|
   c.tracing.instrument :active_job,
     service_name: 'workers'
 
-  c.tracing.instrument :active_record,
-    orm_service_name: 'orm',     # Service name used for the mapping portion of query results to ActiveRecord objects. Inherits service name from parent by default.
-    service_name:     'database' # Service name used for database portion of active_record instrumentation.
+  # c.tracing.instrument :active_record,
+  #   orm_service_name: 'orm',     # Service name used for the mapping portion of query results to ActiveRecord objects. Inherits service name from parent by default.
+  #   service_name:     'database' # Service name used for database portion of active_record instrumentation.
 
   c.tracing.instrument :active_support,
     service_name: 'cache'
@@ -107,10 +107,20 @@ Datadog.configure do |c|
   end
   c.tracing.instrument :http, split_by_domain: true
 
+  c.tracing.instrument :rack,
+    headers: {
+      request: ['X-Request-ID', 'Host', 'Content-Type'],
+      response: ['X-Request-ID', 'Content-Type']
+    }
+
   c.tracing.instrument :rails,
     distributed_tracing: true,
     request_queuing:     false,
     service_name:        'api'
+
+  c.tracing.instrument :pg,
+    service_name:        'database',
+    comment_propagation: 'service'
 
   c.tracing.instrument :redis,
     service_name: 'redis'
