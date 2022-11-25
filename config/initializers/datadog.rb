@@ -9,12 +9,13 @@ Datadog.configure do |c|
     post_sampler: Datadog::Tracing::Sampling::RuleSampler.new(
       [
         Datadog::Tracing::Sampling::SimpleRule.new(service: 'o1061437.ingest.sentry.io', sample_rate: 0.0),
-        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.job_fetch', sample_rate: 0.05),
-        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.heartbeat', sample_rate: 0.05),
-        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.scheduled_push', sample_rate: 0.05),
-        Datadog::Tracing::Sampling::SimpleRule.new(name: 'BRPOP', sample_rate: 0.05),
-        Datadog::Tracing::Sampling::SimpleRule.new(name: 'SCARD', sample_rate: 0.05),
-        Datadog::Tracing::Sampling::SimpleRule.new(name: 'EVALSHA', sample_rate: 0.05),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.job_fetch', sample_rate: 0.01),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.heartbeat', sample_rate: 0.01),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.scheduled_push', sample_rate: 0.01),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'sidekiq.scheduled_poller_wait', sample_rate: 0.01),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'BRPOP', sample_rate: 0.01),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'SCARD', sample_rate: 0.01),
+        Datadog::Tracing::Sampling::SimpleRule.new(name: 'EVALSHA', sample_rate: 0.01),
       ]
     )
   )
@@ -27,6 +28,10 @@ Datadog.configure do |c|
     'env': ENV["NAMESPACE_ENV"] || Rails.env.to_s,
     'service': ENV["NAMESPACE_SERVICE"] || 'api',
     'resource': ENV["NAMESPACE_RESOURCE"] || 'app',
+    'git': {
+      'repository_url': 'github.com/houseninjadojo/api',
+      'commit': { 'sha': ENV["HEROKU_SLUG_COMMIT"] },
+    }
   }
   c.version = ENV['HEROKU_SLUG_COMMIT']
 
@@ -39,7 +44,8 @@ Datadog.configure do |c|
   # c.tracing.instrument :action_pack,
   #   service_name: 'controllers'
   c.tracing.instrument :action_mailer,
-    service_name: 'mailers'
+    service_name: 'mailers',
+    email_data: true
 
   c.tracing.instrument :active_job,
     service_name: 'workers'
@@ -54,10 +60,10 @@ Datadog.configure do |c|
   c.tracing.instrument :aws,
     service_name: 'aws'
 
-  # c.tracing.instrument :faraday, describes: /fcm\.googleapis\.com/ do |faraday|
-  #   faraday.service_name = 'firebase'
-  #   faraday.split_by_domain = false
-  # end
+  c.tracing.instrument :faraday, describes: /(fcm|www)\.googleapis\.com/ do |faraday|
+    faraday.service_name = 'firebase'
+    faraday.split_by_domain = false
+  end
 
   c.tracing.instrument :http, describes: /((app|api)\.)?arrivy\.com/ do |http|
     http.service_name    = 'arrivy'
@@ -79,15 +85,15 @@ Datadog.configure do |c|
     http.service_name    = 'cloudflare'
     http.split_by_domain = false
   end
-  c.tracing.instrument :http, describes: /(fcm|www)\.googleapis\.com/ do |http|
-    http.service_name = 'firebase'
-    http.split_by_domain = false
-  end
+  # c.tracing.instrument :http, describes: /(fcm|www)\.googleapis\.com/ do |http|
+  #   http.service_name = 'firebase'
+  #   http.split_by_domain = false
+  # end
   c.tracing.instrument :http, describes: /((\w*\.)*hubapi\.com)|hubspotusercontent-\w+\.net/ do |http|
     http.service_name    = 'hubspot'
     http.split_by_domain = false
   end
-  c.tracing.instrument :http, describes: /(api)?\.intercom.com/ do |http|
+  c.tracing.instrument :http, describes: /api\.intercom.com/ do |http|
     http.service_name    = 'intercom'
     http.split_by_domain = false
   end
@@ -103,6 +109,7 @@ Datadog.configure do |c|
 
   c.tracing.instrument :rails,
     distributed_tracing: true,
+    request_queuing:     false,
     service_name:        'api'
 
   c.tracing.instrument :redis,
@@ -123,7 +130,8 @@ end
 Datadog::Tracing.before_flush(
   # Remove spans that are trafficked to sentry
   Datadog::Tracing::Pipeline::SpanFilter.new { |span| span.get_tag('sevice') =~ /\.sentry\.io/ },
-  Datadog::Tracing::Pipeline::SpanFilter.new { |span| span.service =~ /\.sentry\.io/ }
+  Datadog::Tracing::Pipeline::SpanFilter.new { |span| span.service =~ /\.sentry\.io/ },
+  Datadog::Tracing::Pipeline::SpanProcessor.new { |span| span&.http&.url&.gsub!(/\/work\-orders\/[\w\%]+\-\-[\w\%\-\?]+/, '/work-orders/[REDACTED]?include') }
 )
 
 # Datadog::Tracing.before_flush do |trace|
