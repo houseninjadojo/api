@@ -76,6 +76,11 @@ module HouseNinja
     # time zone
     # config.time_zone = 'Pacific Time (US & Canada)'
 
+    # Sessions
+    config.session_store :cache_store, key: '_session_id'
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
+
     # config.debug_exception_response_format = :api
     # config.action_dispatch.show_exceptions = false
 

@@ -1,3 +1,5 @@
+require "sidekiq/web"
+
 # == Route Map
 #
 
@@ -5,6 +7,7 @@ Rails.application.routes.draw do
   # Mounts
   mount OkComputer::Engine, at: '/health'           # Health Checks
   # mount VandalUi::Engine,   at: '/vandal' if Rails.env.development?
+  mount Sidekiq::Web => "/sidekiq"
 
   # webhooks
   post '/webhooks/arrivy',  to: 'webhooks#arrivy'

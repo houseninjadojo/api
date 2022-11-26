@@ -1,0 +1,5 @@
+{
+  "yaml.schemas": {
+    "https://json.schemastore.org/yamllint.json": "file:///Users/miles/HouseNinja/api/datadog/conf.d/puma.d/conf.yaml"
+  }
+}
