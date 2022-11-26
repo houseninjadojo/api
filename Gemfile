@@ -41,7 +41,7 @@ gem 'sendgrid-actionmailer', github: 'houseninjadojo/sendgrid-actionmailer', ref
 gem 'sentry-ruby'
 gem 'sentry-rails'
 gem 'sentry-sidekiq'
-gem 'sidekiq',                 '~> 6.5'
+gem 'sidekiq',                 '~> 7.0'
 gem 'stripe',                  '~> 7.1.0'
 gem 'strong_migrations',       '~> 1.4.0'
 gem 'valid_email'
