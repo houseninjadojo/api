@@ -90,7 +90,7 @@ class UsersController < ApplicationController
     @build_user_resource ||= begin
       email = params.dig(:data, :attributes, :email)&.downcase
       user = User.find_by(email: email) if email.present?
-      resource = UserResource.find(id: user.id)
+      resource = UserResource.find(id: user&.id)
       if resource.data&.is_currently_onboarding?
         Rails.logger.info("User is onboarding", params: params)
         resource
