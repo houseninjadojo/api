@@ -1,7 +1,7 @@
 class InvoiceMailer < ApplicationMailer
   before_action {
     @invoice = params[:invoice]
-    @work_order = @invoice&.work_order
+    @work_order = @invoice&.work_order || WorkOrder.new
   }
 
   def payment_approval
@@ -29,6 +29,7 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def should_cancel_delivery?
+    return true unless @work_order.persisted?
     !@invoice.open? ||
     @work_order.status != WorkOrderStatus::INVOICE_SENT_TO_CUSTOMER ||
     @work_order&.customer_approved_work == false
