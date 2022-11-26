@@ -33,8 +33,7 @@ class UsersController < ApplicationController
       Rails.logger.info("User is requesting service", params: params)
       user = create_interested_user
     else
-      Rails.logger.info("User is creating a new user", params: params)
-      user = create_user_resource
+      user = find_or_create_user_resource
     end
 
     if user&.errors.blank?
@@ -85,6 +84,21 @@ class UsersController < ApplicationController
     user = UserResource.build(params)
     user.save
     user
+  end
+
+  def find_or_create_user_resource
+    @build_user_resource ||= begin
+      email = params.dig(:data, :attributes, :email)&.downcase
+      user = User.find_by(email: email) if email.present?
+      resource = UserResource.find(id: user.id)
+      if resource.data&.is_currently_onboarding?
+        Rails.logger.info("User is onboarding", params: params)
+        resource
+      else
+        Rails.logger.info("User is creating a new user", params: params)
+        create_user_resource
+      end
+    end
   end
 
   def user_resource
