@@ -30,16 +30,6 @@ GIT
       httparty (>= 0.10)
 
 GIT
-  remote: https://github.com/houseninjadojo/rails_semantic_logger.git
-  revision: 81a7cd7451d7b509c1b45f2d0742d88a140089a5
-  ref: 81a7cd7
-  specs:
-    rails_semantic_logger (4.10.0)
-      rack
-      railties (>= 5.1)
-      semantic_logger (~> 4.9)
-
-GIT
   remote: https://github.com/houseninjadojo/sendgrid-actionmailer.git
   revision: e55f2b32cd50ecdd8e24e229c60ecabc47558d15
   ref: e55f2b3
@@ -47,6 +37,15 @@ GIT
     sendgrid-actionmailer (3.2.0)
       mail (~> 2.7)
       sendgrid-ruby (~> 6.6)
+
+GIT
+  remote: https://github.com/veeqo/activejob-uniqueness.git
+  revision: 76a7fe9f3a8ce584d92d64751f7e329bfacfd54d
+  ref: 76a7fe9
+  specs:
+    activejob-uniqueness (0.2.4)
+      activejob (>= 4.2, < 7.1)
+      redlock (>= 1.2, < 2)
 
 GEM
   remote: https://rubygems.org/
@@ -103,9 +102,6 @@ GEM
     activejob (7.0.4)
       activesupport (= 7.0.4)
       globalid (>= 0.3.6)
-    activejob-uniqueness (0.2.4)
-      activejob (>= 4.2, < 7.1)
-      redlock (>= 1.2, < 2)
     activemodel (7.0.4)
       activesupport (= 7.0.4)
     activerecord (7.0.4)
@@ -354,6 +350,10 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
+    rails_semantic_logger (4.11.0)
+      rack
+      railties (>= 5.1)
+      semantic_logger (~> 4.9)
     railties (7.0.4)
       actionpack (= 7.0.4)
       activesupport (= 7.0.4)
@@ -364,8 +364,10 @@ GEM
     rainbow (3.1.1)
     rake (13.0.6)
     redis (4.8.0)
-    redlock (1.2.2)
-      redis (>= 3.0.0, < 5.0)
+    redis-client (0.11.2)
+      connection_pool
+    redlock (1.3.2)
+      redis (>= 3.0.0, < 6.0)
     regexp_parser (2.6.1)
     rescue_registry (1.0.0)
       activesupport (>= 5.0)
@@ -429,7 +431,7 @@ GEM
       rails (>= 6.0, < 7.1)
     seedbank (0.5.0)
       rake (>= 10.0)
-    semantic_logger (4.11.0)
+    semantic_logger (4.12.0)
       concurrent-ruby (~> 1.0)
     sendgrid-ruby (6.6.2)
       ruby_http_client (~> 3.4)
@@ -441,10 +443,11 @@ GEM
     sentry-sidekiq (5.6.0)
       sentry-ruby (~> 5.6.0)
       sidekiq (>= 3.0)
-    sidekiq (6.5.7)
-      connection_pool (>= 2.2.5)
-      rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+    sidekiq (7.0.1)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.9.0)
     signet (0.17.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -472,7 +475,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     zache (0.12.0)
-    zeitwerk (2.6.4)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   arm64-darwin-21
@@ -481,7 +484,7 @@ PLATFORMS
 DEPENDENCIES
   action_policy (~> 0.6.3)
   active_hash
-  activejob-uniqueness
+  activejob-uniqueness!
   amazing_print
   annotate
   auth0
@@ -516,7 +519,7 @@ DEPENDENCIES
   puma (~> 6.0)
   rack-cors
   rails (~> 7.0.4)
-  rails_semantic_logger!
+  rails_semantic_logger
   redis (~> 4.8)
   responders
   rspec-rails (~> 6.0.1)
@@ -528,7 +531,7 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   sentry-sidekiq
-  sidekiq (~> 6.5)
+  sidekiq (~> 7.0)
   stripe (~> 7.1.0)
   strong_migrations (~> 1.4.0)
   valid_email

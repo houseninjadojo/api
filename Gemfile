@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.1.2"
 
 gem 'active_hash'
-gem 'activejob-uniqueness', require: 'active_job/uniqueness/sidekiq_patch'
+gem 'activejob-uniqueness', github: 'veeqo/activejob-uniqueness', ref: '76a7fe9'
 gem 'amazing_print'
 gem 'auth0'
 gem 'action_policy',           '~> 0.6.3'
@@ -32,7 +32,7 @@ gem 'phonelib'
 gem 'puma',                    '~> 6.0'                                        # Use Puma as the app server
 gem 'rack-cors'                                                                # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails',                   '~> 7.0.4'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'rails_semantic_logger', github: 'houseninjadojo/rails_semantic_logger', ref: '81a7cd7' 
+gem 'rails_semantic_logger'
 gem 'redis',                   '~> 4.8'                                        # Use Redis adapter to run Action Cable in production
 gem 'responders'
 gem 'safer_rails_console'
@@ -41,7 +41,7 @@ gem 'sendgrid-actionmailer', github: 'houseninjadojo/sendgrid-actionmailer', ref
 gem 'sentry-ruby'
 gem 'sentry-rails'
 gem 'sentry-sidekiq'
-gem 'sidekiq',                 '~> 6.5'
+gem 'sidekiq',                 '~> 7.0'
 gem 'stripe',                  '~> 7.1.0'
 gem 'strong_migrations',       '~> 1.4.0'
 gem 'valid_email'
