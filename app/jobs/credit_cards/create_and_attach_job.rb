@@ -23,16 +23,16 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
         })
         # matched card
         payment_method = matched_card
-      elsif stored_payment_methods.size > 0
-        Rails.logger.warn("customer has cards, but no match found", {
-          usr: {
-            id: resource&.user&.id,
-            email: resource&.user&.email,
-          },
-        })
-        # payment methods exist, but no match found
-        resource.errors.add(:card_number, :mismatch, message: "does not match existing card on file")
-        return resource
+      # elsif stored_payment_methods.size > 0
+      #   Rails.logger.warn("customer has cards, but no match found", {
+      #     usr: {
+      #       id: resource&.user&.id,
+      #       email: resource&.user&.email,
+      #     },
+      #   })
+      #   # payment methods exist, but no match found
+      #   resource.errors.add(:card_number, :invalid, message: "does not match existing card on file")
+      #   return resource
       else
         Rails.logger.info("no match found, creating new card", {
           usr: {
