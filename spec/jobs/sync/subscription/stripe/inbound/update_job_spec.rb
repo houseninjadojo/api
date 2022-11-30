@@ -240,7 +240,7 @@ RSpec.describe Sync::Subscription::Stripe::Inbound::UpdateJob, type: :job do
       allow(Stripe::Subscription).to receive(:retrieve).and_return(subscription_object)
       expect(job.new(webhook_event).params).to include(
         status: 'canceled',
-        stripe_object: Stripe::Event.construct_from(payload).data.object,
+        stripe_object: Stripe::Event.construct_from(payload).data.object.as_json,
       )
     end
   end
