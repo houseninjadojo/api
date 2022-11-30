@@ -24,7 +24,7 @@ class Sync::Estimate::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
         factors: {
           has_external_id: has_external_id?,
           has_changed_attributes: has_changed_attributes?,
-          is_modifiable: is_modifiable?,
+          has_present_attributes: has_present_attributes?,
           enabled: enabled?,
         },
         changeset: changeset,
