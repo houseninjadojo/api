@@ -20,6 +20,7 @@ ActiveJob::Uniqueness.configure do |config|
   config.on_conflict = ->(job) {
     job.logger.warn(
       "Job already in queue: #{job.class.name} (#{job.job_id})",
+      message: "Job already in queue: #{job.class.name} (#{job.job_id})",
       payload: {
         adapter: "Sidekiq",
         arguments: job.arguments.inspect,

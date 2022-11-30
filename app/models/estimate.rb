@@ -194,6 +194,8 @@ class Estimate < ApplicationRecord
       self,
       [{ path: [:approved_at] }], # mimicking a changeset
     )
+    # for some reason we need to clear the enqueued job lock
+    Sync::WorkOrder::Hubspot::Outbound::UpdateJob.unlock!(self, [{ path: [:status] }])
     Sync::WorkOrder::Hubspot::Outbound::UpdateJob.perform_later(
       self.work_order,
       [{ path: [:status] }], # mimicking a changeset
