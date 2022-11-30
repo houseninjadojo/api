@@ -33,11 +33,31 @@ class Sync::User::Hubspot::Outbound::UpdatePolicy < ApplicationPolicy
   authorize :changeset
 
   def can_sync?
-    Rails.logger.info("Sync::User::Hubspot::Outbound::UpdatePolicy.can_sync?")
-    Rails.logger.info("  has_external_id?=#{has_external_id?}")
-    Rails.logger.info("  has_changed_attributes?=#{has_changed_attributes?}")
-    Rails.logger.info("  enabled?=#{enabled?}")
-    Rails.logger.info("changeset: #{changeset.inspect}")
+    if !Rails.env.test?
+      Rails.logger.info("sync policy action=update user=#{record.id}", {
+        policy: {
+          resource: "user",
+          service: "hubspot",
+          direction: "outbound",
+          action: "update",
+          result: can_sync_result,
+        },
+        resource: {
+          id: record&.id,
+          type: "user",
+        },
+        factors: {
+          has_external_id: has_external_id?,
+          has_changed_attributes: has_changed_attributes?,
+          enabled: enabled?,
+        },
+        changeset: changeset,
+      })
+    end
+    can_sync_result
+  end
+
+  def can_sync_result
     has_external_id? &&
     has_changed_attributes? &&
     enabled?
