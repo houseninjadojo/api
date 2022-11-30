@@ -123,7 +123,16 @@ class Invoice < ApplicationRecord
   end
 
   def stripe_invoice_number
-    stripe_object&.dig('number')
+    obj = begin
+      if stripe_object.is_a?(String)
+        JSON.parse(stripe_object)
+      else
+        stripe_object
+      end
+    rescue
+      {}
+    end
+    obj&.dig('number')
   end
 
   # actions

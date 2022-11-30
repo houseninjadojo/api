@@ -253,7 +253,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::UpdateJob, type: :job do
         period_start: Time.at(1652574451),
         status: "paid",
         total: 2900,
-        stripe_object: Stripe::Event.construct_from(payload).data.object.to_json,
+        stripe_object: Stripe::Event.construct_from(payload).data.object.as_json,
         subscription: subscription,
         user: user,
         promo_code: promo_code
@@ -303,7 +303,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::UpdateJob, type: :job do
         # payment: payment,
         promo_code: promo_code,
 
-        stripe_object: Stripe::Event.construct_from(payload).data.object.to_json,
+        stripe_object: Stripe::Event.construct_from(payload).data.object.as_json,
       )
     end
   end

@@ -34,7 +34,7 @@ class Sync::Payment::Stripe::Inbound::UpdateJob < Sync::BaseJob
       payment_method: payment_method,
       user: user,
 
-      stripe_object: stripe_object.to_json,
+      stripe_object: stripe_object.as_json,
     }.compact
   end
 

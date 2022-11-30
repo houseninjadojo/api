@@ -33,7 +33,7 @@ class Sync::Invoice::Stripe::Inbound::CreateJob < Sync::BaseJob
       user: user,
 
       stripe_id: stripe_object.id,
-      stripe_object: stripe_object.to_json,
+      stripe_object: stripe_object.as_json,
     }.compact
   end
 

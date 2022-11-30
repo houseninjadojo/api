@@ -88,7 +88,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::CreateJob, type: :job do
         coupon_id: "VeNkKlf7",
         created_at: Time.at(1654892941),
         stripe_id: "promo_1KYdROAWN1SYQ0CtylED88jt",
-        stripe_object: payload[:data][:object].to_json,
+        stripe_object: payload[:data][:object].as_json
       })
       expect(webhook_event).to receive(:update!)
       job.perform_now(webhook_event)
@@ -122,7 +122,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::CreateJob, type: :job do
         coupon_id: "VeNkKlf7",
         created_at: Time.at(1654892941),
         stripe_id: "promo_1KYdROAWN1SYQ0CtylED88jt",
-        stripe_object: payload[:data][:object].to_json,
+        stripe_object: payload[:data][:object].as_json
       )
     end
   end

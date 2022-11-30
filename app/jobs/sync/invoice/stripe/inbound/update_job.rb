@@ -34,7 +34,7 @@ class Sync::Invoice::Stripe::Inbound::UpdateJob < Sync::BaseJob
       subscription: subscription,
       user: user,
 
-      stripe_object: stripe_object.to_json,
+      stripe_object: stripe_object.as_json,
     }.compact
   end
 

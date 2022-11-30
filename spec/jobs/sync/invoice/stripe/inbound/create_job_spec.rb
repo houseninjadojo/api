@@ -274,7 +274,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::CreateJob, type: :job do
         total: 2900,
         created_at: Time.at(1655252937),
         stripe_id: "in_1LAk6PAWN1SYQ0CtCC1pSWvD",
-        stripe_object: Stripe::Event.construct_from(payload).data.object.to_json,
+        stripe_object: Stripe::Event.construct_from(payload).data.object.as_json,
         subscription: subscription,
         user: user,
         promo_code: promo_code
@@ -326,7 +326,7 @@ RSpec.describe Sync::Invoice::Stripe::Inbound::CreateJob, type: :job do
         promo_code: promo_code,
 
         stripe_id: "in_1LAk6PAWN1SYQ0CtCC1pSWvD",
-        stripe_object: Stripe::Event.construct_from(payload).data.object.to_json,
+        stripe_object: Stripe::Event.construct_from(payload).data.object.as_json,
       )
     end
   end
