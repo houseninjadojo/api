@@ -36,7 +36,7 @@ class Sync::Subscription::Stripe::Inbound::UpdateJob < Sync::BaseJob
     {
       status: stripe_object.status,
 
-      stripe_object: stripe_object,
+      stripe_object: stripe_object.as_json,
     }.compact
   end
 end

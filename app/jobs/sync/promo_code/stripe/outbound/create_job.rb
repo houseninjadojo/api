@@ -12,7 +12,7 @@ class Sync::PromoCode::Stripe::Outbound::CreateJob < Sync::BaseJob
     promo_code = Stripe::PromotionCode.create(params, { idempotency_key: idempotency_key })
     resource.update!(
       stripe_id: promo_code.id,
-      stripe_object: promo_code,
+      stripe_object: promo_code.as_json,
       active: promo_code.active,
       name: promo_code.coupon&.name,
       percent_off: promo_code.coupon&.percent_off,

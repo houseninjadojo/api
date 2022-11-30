@@ -50,7 +50,7 @@ class Sync::PromoCode::Stripe::Inbound::CreateJob < Sync::BaseJob
       created_at: Time.at(stripe_object.created),
 
       stripe_id: stripe_object.id,
-      stripe_object: stripe_object,
+      stripe_object: stripe_object.as_json,
     }.compact
   end
 
@@ -67,7 +67,7 @@ class Sync::PromoCode::Stripe::Inbound::CreateJob < Sync::BaseJob
       created_at: Time.at(stripe_object.created),
 
       stripe_id: nil,
-      stripe_object: stripe_object,
+      stripe_object: stripe_object.as_json,
     }.compact
   end
 

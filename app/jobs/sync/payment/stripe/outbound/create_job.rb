@@ -44,7 +44,7 @@ class Sync::Payment::Stripe::Outbound::CreateJob < Sync::BaseJob
         paid_at: (paid_at.present? ? Time.at(paid_at) : nil),
         payment_attempted_at: Time.current,
         status: paid_invoice.status,
-        stripe_object: paid_invoice
+        stripe_object: paid_invoice.as_json
       )
     end
   end

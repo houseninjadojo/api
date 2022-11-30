@@ -163,7 +163,7 @@ RSpec.describe Sync::Payment::Stripe::Inbound::UpdateJob, type: :job do
         # statement_descriptor: nil,
         status: "succeeded",
 
-        stripe_object: Stripe::Event.construct_from(payload).data.object.to_json,
+        stripe_object: Stripe::Event.construct_from(payload).data.object.as_json,
         invoice: invoice,
         user: user,
         payment_method: payment_method
@@ -207,7 +207,7 @@ RSpec.describe Sync::Payment::Stripe::Inbound::UpdateJob, type: :job do
         # statement_descriptor: nil,
         status: "succeeded",
 
-        stripe_object: Stripe::Event.construct_from(payload).data.object.to_json,
+        stripe_object: Stripe::Event.construct_from(payload).data.object.as_json,
         invoice: invoice,
         user: user,
         payment_method: payment_method

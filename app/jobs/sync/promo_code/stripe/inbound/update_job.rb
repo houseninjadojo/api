@@ -43,7 +43,7 @@ class Sync::PromoCode::Stripe::Inbound::UpdateJob < Sync::BaseJob
       duration_in_months: stripe_object.coupon.duration_in_months,
       coupon_id: stripe_object.coupon.id,
 
-      stripe_object: stripe_object,
+      stripe_object: stripe_object.as_json,
     }.compact
   end
 end
