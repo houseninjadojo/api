@@ -189,6 +189,8 @@ class Estimate < ApplicationRecord
       Rails.logger.info("Not syncing after approval, estimate=#{id} is not approved/declined or work_order=#{work_order&.id} is not in scheduling_in_progress")
       return
     end
+    # for some reason we need to clear the enqueued job lock
+    Estimate::ExternalAccess::ExpireJob.unlock!(estimate: self)
     Estimate::ExternalAccess::ExpireJob.perform_later(estimate: self)
     Sync::Estimate::Hubspot::Outbound::UpdateJob.perform_later(
       self,
