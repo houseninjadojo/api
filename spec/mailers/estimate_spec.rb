@@ -28,6 +28,7 @@ RSpec.describe EstimateMailer, type: :mailer do
         estimate_amount_or_actual_estimate_if_populated: estimate.formatted_total,
         estimate_notes: estimate.description,
         estimate_link: deep_link.to_s,
+        approve_estimate_header: "You have an estimate ready for review."
       }.to_s)
     end
   end
