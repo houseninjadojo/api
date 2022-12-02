@@ -30,6 +30,14 @@ GIT
       httparty (>= 0.10)
 
 GIT
+  remote: https://github.com/houseninjadojo/safer_rails_console.git
+  revision: bb64558fd1aa00a4df5fe9fafeaa60bfc0a049a6
+  branch: redis
+  specs:
+    safer_rails_console (0.6.0)
+      rails (>= 6.0, < 7.1)
+
+GIT
   remote: https://github.com/houseninjadojo/sendgrid-actionmailer.git
   revision: e55f2b32cd50ecdd8e24e229c60ecabc47558d15
   ref: e55f2b3
@@ -427,8 +435,6 @@ GEM
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     ruby_http_client (3.5.5)
-    safer_rails_console (0.6.0)
-      rails (>= 6.0, < 7.1)
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_logger (4.12.0)
@@ -525,7 +531,7 @@ DEPENDENCIES
   rspec-rails (~> 6.0.1)
   rspec-sidekiq
   rubocop-rails
-  safer_rails_console
+  safer_rails_console!
   seedbank
   sendgrid-actionmailer!
   sentry-rails

@@ -35,7 +35,7 @@ gem 'rails',                   '~> 7.0.4'                                      #
 gem 'rails_semantic_logger'
 gem 'redis',                   '~> 4.8'                                        # Use Redis adapter to run Action Cable in production
 gem 'responders'
-gem 'safer_rails_console'
+gem 'safer_rails_console', github: 'houseninjadojo/safer_rails_console', branch: 'redis'
 gem 'seedbank'
 gem 'sendgrid-actionmailer', github: 'houseninjadojo/sendgrid-actionmailer', ref: 'e55f2b3'
 gem 'sentry-ruby'
