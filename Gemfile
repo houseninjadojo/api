@@ -33,7 +33,7 @@ gem 'puma',                    '~> 6.0'                                        #
 gem 'rack-cors'                                                                # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails',                   '~> 7.0.4'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails_semantic_logger'
-gem 'redis',                   '~> 4.8'                                        # Use Redis adapter to run Action Cable in production
+gem 'redis',                   '~> 5.0'                                        # Use Redis adapter to run Action Cable in production
 gem 'responders'
 gem 'safer_rails_console', github: 'houseninjadojo/safer_rails_console', branch: 'redis'
 gem 'seedbank'
