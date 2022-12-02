@@ -46,6 +46,10 @@ class Campaign::PaymentApprovalJob < ApplicationJob
         active_job: {
           job_id: job_id,
         },
+        resource: {
+          id: invoice&.id,
+          type: "Invoice",
+        },
         usr: {
           id: user&.id,
           email: user&.email,

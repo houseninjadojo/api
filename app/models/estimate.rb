@@ -176,10 +176,7 @@ class Estimate < ApplicationRecord
     if !should_share_with_customer?
       Rails.logger.info("Not sending estimate approval email, customer has already decided on estimate for work_order=#{work_order&.id}")
     end
-    EstimateMailer.with(
-      user: user,
-      estimate: self
-    ).estimate_approval.deliver_later
+    Campaign::EstimateApprovalJob.perform_later(user: user, estimate: self)
   end
 
   # force it
