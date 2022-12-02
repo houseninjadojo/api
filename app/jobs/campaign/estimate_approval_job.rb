@@ -5,16 +5,19 @@ class Campaign::EstimateApprovalJob < ApplicationJob
     [
       {
         subject: "Reminder: You have an estimate ready for review",
-        wait: 3.days,
+        # wait: 3.days,
+        wait: 1.minute,
       },
       {
         subject: "Reminder: You have an estimate ready for review",
-        wait: 6.days,
+        # wait: 6.days,
+        wait: 2.minutes,
       },
       {
         subject: "Review your estimate before it expires!",
         approve_estimate_header: "Don't forget to review your estimate before it expires!",
-        wait: 9.days,
+        # wait: 9.days,
+        wait: 3.minutes,
       }
     ]
   end
