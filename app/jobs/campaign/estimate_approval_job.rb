@@ -29,6 +29,9 @@ class Campaign::EstimateApprovalJob < ApplicationJob
       .estimate_approval
       .deliver_later
 
+    # dont send if not houseninja
+    return unless user.is_houseninja?
+
     # Schedule followups
     followup_schedule.each do |followup|
       mailer = EstimateMailer
