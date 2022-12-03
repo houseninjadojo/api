@@ -51,6 +51,7 @@ gem 'net-ssh', '7.0.1'
 group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'                                              # Generate fake data
+  gem 'fitting'
   gem 'graphiti_spec_helpers'
   gem 'rspec-rails',           '~> 6.0.1'
   gem 'rspec-sidekiq'

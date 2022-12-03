@@ -10,6 +10,7 @@ require 'graphiti_spec_helpers/rspec'
 require "action_policy/rspec/dsl"
 require 'sidekiq/testing'
 require 'rspec-sidekiq'
+require 'fitting'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -109,6 +110,7 @@ RSpec.configure do |config|
 end
 
 Faker::Config.locale = 'en-US'
+Fitting.logger
 
 RSpec::Sidekiq.configure do |config|
   # Clears all job queues before each example
