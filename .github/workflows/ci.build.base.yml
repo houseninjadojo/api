@@ -23,7 +23,7 @@ jobs:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CI_CD }}
   intermediate:
     name: Intermediate Container
-    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@fly
     with:
       docker_repo: ghcr.io/houseninjadojo/api-intermediate
       dockerfile: platform/docker/Dockerfile.intermediate
