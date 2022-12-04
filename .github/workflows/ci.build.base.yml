@@ -3,6 +3,7 @@ name: CI / Build / Base Containers
 on:
   push:
     branches:
+      - fly
       - main
     paths:
       - Gemfile.lock

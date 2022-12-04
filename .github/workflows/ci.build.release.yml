@@ -8,12 +8,13 @@ name: CI / Build / Release Container
 # Trigger after tests pass
 on:
   workflow_run:
-    workflows:
-      - "CI / Tests"
+    # workflows:
+    #   - "CI / Tests"
     branches:
       - main
-    types: 
-      - completed
+      - fly
+    # types: 
+    #   - completed
 
 concurrency:
   group: build-release
