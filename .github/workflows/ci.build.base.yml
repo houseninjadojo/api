@@ -13,7 +13,7 @@ on:
 jobs:
   base:
     name: Base Container
-    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@fly
     with:
       docker_repo: ghcr.io/houseninjadojo/api-base
       dockerfile: platform/docker/Dockerfile.builder
