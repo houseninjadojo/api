@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - fly
-      - main
-    paths:
-      - Gemfile.lock
-      - platform/docker/Dockerfile.builder
-      - platform/docker/Dockerfile.intermediate
+      # - main
+    # paths:
+    #   - Gemfile.lock
+    #   - platform/docker/Dockerfile.builder
+    #   - platform/docker/Dockerfile.intermediate
 
 jobs:
   base:
