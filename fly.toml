@@ -5,10 +5,7 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 
 [build]
-  builder = "paketobuildpacks/builder:full"
-  buildpacks = [
-    "gcr.io/paketo-buildpacks/ruby",
-  ]
+  image = "registry.fly.io/hn-api-sandbox:v0"
 
 [deploy]
   release_command = "./platform/scripts/release.sh"

@@ -36,6 +36,12 @@ sandbox:
   url: <%= ENV["DATABASE_URL"] %>
 
 production:
-  <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
-  # sslca: vendor/certs/aws/aurora/global-bundle.pem 
+  primary:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+    # sslca: vendor/certs/aws/aurora/global-bundle.pem 
+  primary_replica:
+    <<: *default
+    url: <%= ENV["DATABASE_REPLICA_URL"] %>
+    replica: true
+    # sslca: vendor/certs/aws/aurora/global-bundle.pem 
