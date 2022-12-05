@@ -1,29 +1,8 @@
-# fly.toml file generated for hn-api-prod on 2022-12-03T07:38:31-08:00
+# fly.toml file generated for hn-api-sandbox on 2022-12-04T16:28:14-08:00
 
-app = "hn-api-prod"
+app = "hn-api-sandbox"
 kill_signal = "SIGINT"
 kill_timeout = 5
-
-[env]
-  APPNAME = "api"
-  DD_APM_ENABLED = false
-  DD_ENV = "sandbox"
-  DD_LOG_LEVEL = "error"
-  DD_PROCESS_AGENT = false
-  DD_SYSTEM_PROBE_SERVICE_MONITORING_ENABLED = false
-  DISABLE_ACTION_MAILER = true
-  HUBSPOT_OUTBOUND_DISABLED = true
-  HUBSPOT_WEBHOOK_DISABLED = true
-  LANG = "en_US.UTF-8"
-  NAMESPACE_ENV = "sandbox"
-  NAMESPACE_ORG = "houseninja"
-  NAMESPACE_SERVICE = "api"
-  RACK_ENV = "sandbox"
-  RAILS_ENV = "sandbox"
-  RAILS_LOG_TO_STDOUT = "enabled"
-  RAILS_MAX_THREADS = 10
-  RAILS_SERVE_STATIC_FILES = "enabled"
-  STRIPE_WEBHOOK_DISABLED = true
 
 [build]
   builder = "paketobuildpacks/builder:full"
@@ -31,21 +10,44 @@ kill_timeout = 5
     "gcr.io/paketo-buildpacks/ruby",
   ]
 
-[processes]
-  web = "bundle exec rails server -b [::] -p 8080"
-  worker = "bundle exec sidekiq -C config/sidekiq.yml"
-
 [deploy]
   release_command = "./platform/scripts/release.sh"
+
+[env]
+  APPNAME = "api"
+  DD_APM_ENABLED = "false"
+  DD_ENV = "sandbox"
+  DD_LOG_LEVEL = "error"
+  DD_PROCESS_AGENT = "false"
+  DD_SYSTEM_PROBE_SERVICE_MONITORING_ENABLED = "false"
+  DISABLE_ACTION_MAILER = "true"
+  HUBSPOT_OUTBOUND_DISABLED = "true"
+  HUBSPOT_WEBHOOK_DISABLED = "true"
+  LANG = "en_US.UTF-8"
+  NAMESPACE_ENV = "sandbox"
+  NAMESPACE_ORG = "houseninja"
+  NAMESPACE_SERVICE = "api"
+  PORT = "3000"
+  PRIMARY_REGION = "dfw"
+  RACK_ENV = "sandbox"
+  RAILS_ENV = "sandbox"
+  RAILS_LOG_TO_STDOUT = "enabled"
+  RAILS_MAX_THREADS = "10"
+  RAILS_SERVE_STATIC_FILES = "enabled"
+  STRIPE_WEBHOOK_DISABLED = "true"
 
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
 
+[processes]
+  web = "bundle exec rails server"
+  worker = "bundle exec sidekiq -C config/sidekiq.yml"
+
 [[services]]
   http_checks = []
-  internal_port = 8080
-  processes = ["app"]
+  internal_port = 3000
+  processes = ["web"]
   protocol = "tcp"
   script_checks = []
   [services.concurrency]

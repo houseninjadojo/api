@@ -27,7 +27,7 @@ jobs:
   release:
     name: Release Container
     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@fly
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     with:
       docker_repo: ghcr.io/houseninjadojo/api
       dockerfile: Dockerfile
