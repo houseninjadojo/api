@@ -36,7 +36,7 @@ class UsersController < ApplicationController
       user = find_or_create_user_resource
     end
 
-    if user&.errors.blank?
+    if user.try(:errors).blank?
       render jsonapi: user, status: 201
     else
       render jsonapi_errors: user
@@ -139,7 +139,7 @@ class UsersController < ApplicationController
     email = params.dig(:data, :attributes, :email)
     zip = params.dig(:data, :attributes, :requested_zipcode)
     if email.present? && zip.present?
-      Users::CreateIntestedUserJob.perform_later(email: email, zipcode: zip)
+      Users::CreateInterestedUserJob.perform_later(email: email, zipcode: zip)
     end
     {
       data: {

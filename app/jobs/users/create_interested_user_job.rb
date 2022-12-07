@@ -1,4 +1,4 @@
-class Users::CreateIntestedUserJob < ApplicationJob
+class Users::CreateInterestedUserJob < ApplicationJob
   queue_as :default
 
   def perform(email:, zipcode:)
