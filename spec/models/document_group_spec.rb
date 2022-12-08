@@ -20,5 +20,13 @@
 require 'rails_helper'
 
 RSpec.describe DocumentGroup, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'associations' do
+    subject { build(:document_group) }
+    it { should belong_to(:user) }
+    it { should have_many(:documents).dependent(:nullify) }
+  end
+
+  describe 'validations' do
+    subject { build(:document_group) }
+  end
 end

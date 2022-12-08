@@ -32,6 +32,19 @@
 require 'rails_helper'
 
 RSpec.describe Document, type: :model do
+  describe 'associations' do
+    subject { build(:document) }
+    it { should belong_to(:document_group).optional }
+    it { should belong_to(:invoice).optional }
+    it { should belong_to(:payment).optional }
+    it { should belong_to(:property).optional }
+    it { should belong_to(:user).optional }
+  end
+
+  describe 'validations' do
+    subject { build(:document) }
+  end
+
   describe "#name" do
     it "returns the filename if no name is set" do
       document = build(:document, name: nil)

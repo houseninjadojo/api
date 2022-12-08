@@ -35,5 +35,15 @@
 require 'rails_helper'
 
 RSpec.describe Device, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'associations' do
+    subject { build(:device) }
+    it { should belong_to(:user).optional }
+    it { should have_many(:push_notifications) }
+  end
+
+  describe 'validations' do
+    subject { build(:device) }
+    it { should validate_presence_of(:device_id) }
+    # it { should validate_uniqueness_of(:device_id) }
+  end
 end

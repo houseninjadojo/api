@@ -35,5 +35,15 @@
 require 'rails_helper'
 
 RSpec.describe Estimate, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'associations' do
+    subject { build(:estimate) }
+    it { should belong_to(:work_order) }
+    it { should have_one(:deep_link).optional }
+  end
+
+  describe 'validations' do
+    subject { build(:estimate) }
+    it { should validate_presence_of(:work_order).with_message('must exist') }
+    it { should validate_uniqueness_of(:access_token).allow_nil }
+  end
 end
