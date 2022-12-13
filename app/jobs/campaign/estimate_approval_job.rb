@@ -5,19 +5,16 @@ class Campaign::EstimateApprovalJob < ApplicationJob
     [
       {
         subject: "Reminder: You have an estimate ready for review",
-        # wait: 3.days,
-        wait: 1.minute,
+        wait: 3.days,
       },
       {
         subject: "Reminder: You have an estimate ready for review",
-        # wait: 6.days,
-        wait: 2.minutes,
+        wait: 6.days,
       },
       {
         subject: "Review your estimate before it expires!",
         approve_estimate_header: "Don't forget to review your estimate before it expires!",
-        # wait: 9.days,
-        wait: 3.minutes,
+        wait: 9.days,
       }
     ]
   end
@@ -28,9 +25,6 @@ class Campaign::EstimateApprovalJob < ApplicationJob
       .with(user: user, estimate: estimate)
       .estimate_approval
       .deliver_later
-
-    # dont send if not houseninja
-    return unless user.is_houseninja?
 
     # Schedule followups
     followup_schedule.each do |followup|
