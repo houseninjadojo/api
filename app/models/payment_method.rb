@@ -7,6 +7,7 @@
 #  card_number  :string
 #  country      :string
 #  cvv          :string
+#  deleted_at   :datetime
 #  exp_month    :string
 #  exp_year     :string
 #  last_four    :string
@@ -31,7 +32,7 @@ class PaymentMethod < ApplicationRecord
     'CreditCard',
   ]
 
-  scope :active, -> { where.not(stripe_token: nil) }
+  scope :active, -> { where(deleted_at: nil).where.not(stripe_token: nil) }
 
   # callbacks
 

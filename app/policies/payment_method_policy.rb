@@ -27,6 +27,6 @@ class PaymentMethodPolicy < ApplicationPolicy
   # Scoping
   # See https://actionpolicy.evilmartians.io/#/scoping
   relation_scope do |relation|
-    relation.where(user_id: user.try(:id))
+    relation.where(user_id: user.try(:id)).active
   end
 end
