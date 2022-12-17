@@ -7,6 +7,7 @@
 #  card_number  :string
 #  country      :string
 #  cvv          :string
+#  deleted_at   :datetime
 #  exp_month    :string
 #  exp_year     :string
 #  last_four    :string
