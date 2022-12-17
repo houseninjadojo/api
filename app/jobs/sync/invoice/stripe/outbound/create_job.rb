@@ -9,7 +9,18 @@ class Sync::Invoice::Stripe::Outbound::CreateJob < Sync::BaseJob
     line_item = Stripe::InvoiceItem.create(line_item_params)
 
     # create the invoice
-    invoice = Stripe::Invoice.create(params, { idempotency_key: idempotency_key })
+    begin
+      invoice = Stripe::Invoice.create(params, { idempotency_key: idempotency_key })
+    rescue Stripe::InvalidRequestError => e
+      # if the payment method is invalid, try again without it
+      if e.message.include?('payment method')
+        Rails.logger.warn("failed when trying to create invoice=#{resource.id}. trying without payment method - #{e.message}")
+        idempotency_key = Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i + 1}")
+        invoice = Stripe::Invoice.create(params.except(:default_payment_method), { idempotency_key: idempotency_key })
+      else
+        raise e
+      end
+    end
 
     # save to db
     resource.update!(
