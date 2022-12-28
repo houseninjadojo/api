@@ -52,9 +52,14 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
         },
       })
       # str
-      attribute = e.param&.to_sym == :number ? :card_number : e.param&.to_sym
-      attribute = attribute || :base
-      resource.errors.add(attribute, :invalid, message: e.message)
+      attr = if e.param == 'number'
+        :card_number
+      elsif e.param.present?
+        e.param.to_sym
+      else
+        :base
+      end
+      resource.errors.add(attr, :invalid, message: e.message) 
     rescue => e
       Rails.logger.error("generic error matching card: #{e.message}", {
         usr: {
