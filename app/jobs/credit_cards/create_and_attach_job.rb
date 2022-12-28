@@ -59,7 +59,7 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
       else
         :base
       end
-      resource.errors.add(attr, :invalid, message: e.message) 
+      resource.errors.add(attr, :invalid, message: e.message)
     rescue => e
       Rails.logger.error("generic error matching card: #{e.message}", {
         usr: {
