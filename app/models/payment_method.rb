@@ -80,16 +80,19 @@ class PaymentMethod < ApplicationRecord
     # sync user if needed
     Sync::User::Stripe::Outbound::CreateJob.perform_now(user) unless user&.stripe_id&.present?
 
-    current_method = user&.default_payment_method
+    # current_method = user&.default_payment_method
 
     self.id = SecureRandom.uuid
     card = CreditCards::CreateAndAttachJob.perform_now(self)
-    self.errors.merge!(card&.errors) if card&.errors&.present?
 
-    errors = card&.errors&.messages.dup
-    has_no_errors = errors.respond_to?(:[]) && errors.blank?
+    errors = card.try(:errors)
+    err_msgs = errors.try(:messages).dup
+    has_no_errors = err_msgs.respond_to?(:[]) && err_msgs.blank?
 
-    throw(:abort) if !has_no_errors
+    unless has_no_errors
+      self.errors.merge!(errors)
+      throw(:abort)
+    end
 
     # self.stripe_token = card.id
     # self.last_four = card.card.last4

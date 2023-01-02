@@ -3,6 +3,13 @@ class Sync::CreditCard::Stripe::Outbound::CreateJob < Sync::BaseJob
 
   attr_accessor :resource
 
+  # Perform the job by creating a payment method in Stripe and attaching it to the customer's account.
+  # If a payment method with the same last 4 digits as the resource's card number already exists,
+  # just touch the resource. Otherwise, create a new payment method and attach it to the customer,
+  # and update the resource with the payment method's id and the last 4 digits of the card.
+  #
+  # @param resource [ActiveRecord::Base] the credit card resource to sync with Stripe
+  # @return [ActiveRecord::Base] the credit card resource
   def perform(resource)
     @resource = resource
     return unless policy.can_sync?
@@ -31,6 +38,9 @@ class Sync::CreditCard::Stripe::Outbound::CreateJob < Sync::BaseJob
     resource
   end
 
+  # Get the params for creating a payment method in Stripe.
+  #
+  # @return [Hash] the params for creating a payment method in Stripe
   def params
     # @todo
     # assuming this is a card for now, but it should be more generic
@@ -48,16 +58,25 @@ class Sync::CreditCard::Stripe::Outbound::CreateJob < Sync::BaseJob
     }
   end
 
+  # Get the policy for creating a payment method in Stripe.
+  #
+  # @return [Sync::CreditCard::Stripe::Outbound::CreatePolicy] the policy for creating a payment method in Stripe
   def policy
     Sync::CreditCard::Stripe::Outbound::CreatePolicy.new(
       resource
     )
   end
 
+  # Get the idempotency key for the Stripe API request.
+  #
+  # @return [String] the idempotency key for the Stripe API request
   def idempotency_key
     Digest::SHA256.hexdigest("#{resource.id}#{resource.updated_at.to_i}")
   end
 
+  # Get the payment method with the same last 4 digits as the resource's card number, if one exists.
+  #
+  # @return [Stripe::PaymentMethod, nil] the payment method with the same last 4 digits as the resource's card number, if one exists
   def matched_card
     @matched_card ||= begin
       payment_methods = Stripe::Customer.list_payment_methods(resource.user&.stripe_id, { type: 'card' })
