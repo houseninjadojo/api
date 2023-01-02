@@ -1,0 +1,139 @@
+FORMAT: 1A
+
+# API for User Management
+
+## Data Structures
+
+### User (object)
+
++ data (object)
+    + type: `users` (string, required) ... The type of the resource.
+    + id: `702605a7-4d09-4f85-a32c-a2ab0957f30d` (string, required) ... The unique identifier of the user.
+    + attributes (object)
+        + email: `miles@houseninja.co` (string, required) ... The email address of the user.
+        + first_name: `Miles` (string, required) ... The first name of the user.
+        + last_name: `Davis` (string, required) ... The last name of the user.
+        + phone_number: `555-555-5555` (string, required) ... The phone number of the user.
+        + created_at: `2015-05-18T15:00:00Z` (string) ... The date and time the user was created.
+        + updated_at: `2015-05-18T15:00:00Z` (string) ... The date and time the user was last updated.
+    + relationships (object)
+        + devices (object)
+            + 
+
+## Users [/users]
+
+### List All Users [GET]
+
+- Response 200 (application/vnd.api+json)
+
+  - Attributes (array[User])
+
+- Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "users",
+                    "id": "1",
+                    "attributes": {
+                        "username": "johndoe",
+                        "email": "johndoe@example.com"
+                    }
+                },
+                {
+                    "type": "users",
+                    "id": "2",
+                    "attributes": {
+                        "username": "janedoe",
+                        "email": "janedoe@example.com"
+                    }
+                }
+            ]
+        }
+
+### Create a New User [POST]
+
+- Request (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "users",
+                "attributes": {
+                    "username": "johndoe",
+                    "email": "johndoe@example.com"
+                }
+            }
+        }
+
+- Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "users",
+                "id": "1",
+                "attributes": {
+                    "username": "johndoe",
+                    "email": "johndoe@example.com"
+                }
+            }
+        }
+
+## User [/users/{id}]
+
+### Get User Details [GET]
+
+- Parameters
+
+  - id (required, number, `1`) ... The ID of the user to retrieve.
+
+- Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "users",
+                "id": "1",
+                "attributes": {
+                    "username": "johndoe",
+                    "email": "johndoe@example.com"
+                }
+            }
+        }
+
+### Update User Details [PATCH]
+
+- Parameters
+
+  - id (required, number, `1`) ... The ID of the user to update.
+
+- Request (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "users",
+                "id": "1",
+                "attributes": {
+                    "email": "johndoe@newdomain.com"
+                }
+            }
+        }
+
+- Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "users",
+                "id": "1",
+                "attributes": {
+                    "username": "johndoe",
+                    "email": "johndoe@newdomain.com"
+                }
+            }
+        }
+
+### Delete a User [DELETE]
+
+- Parameters
+
+  - id (required, number, `1`) ... The ID of the user to delete.
+
+- Response 204
