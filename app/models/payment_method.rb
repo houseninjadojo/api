@@ -80,7 +80,7 @@ class PaymentMethod < ApplicationRecord
     # sync user if needed
     Sync::User::Stripe::Outbound::CreateJob.perform_now(user) unless user&.stripe_id&.present?
 
-    # current_method = user&.default_payment_method
+    current_method = user&.default_payment_method
 
     self.id = SecureRandom.uuid
     card = CreditCards::CreateAndAttachJob.perform_now(self)
