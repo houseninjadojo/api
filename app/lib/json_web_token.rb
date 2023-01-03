@@ -64,25 +64,16 @@ class JSONWebToken
     end
 
     def jwks
-      cache.fetch('json_web_keys', expires_in: 24.hours, race_condition_ttl: 10.seconds, namespace: CACHE_NAMESPACE) do
+      cache.fetch('json_web_keys', **cache_options) do
         uri = URI("https://#{Rails.application.credentials.auth[:domain]}/.well-known/jwks.json")
         response = Net::HTTP.get(uri)
-        JSON.parse(response)
+        JWT::JWK::Set.new(JSON.parse(response))
       end
     end
 
     def jwks_hash
-      cache.fetch('json_web_keys_hash', expires_in: 24.hours, race_condition_ttl: 10.seconds, namespace: CACHE_NAMESPACE) do
-        jwk_hash = Array(jwks['keys'])
-        map = jwk_hash.map do |key|
-          [
-            key['kid'],
-            OpenSSL::X509::Certificate.new(
-              Base64.decode64(key['x5c'].first)
-            ).public_key
-          ]
-        end
-        Hash[map]
+      cache.fetch('json_web_keys_hash', **cache_options) do
+        jwks.keys.map {|k| [key.kid, key.public_key]}.to_h
       end
     end
 
@@ -133,6 +124,10 @@ class JSONWebToken
         verify_iat: true,
         jwks: jwk_loader,
       }
+    end
+
+    def cache_options
+      { expires_in: 24.hours, race_condition_ttl: 10.seconds, namespace: CACHE_NAMESPACE }
     end
   end
 end
