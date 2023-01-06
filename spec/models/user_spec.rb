@@ -44,6 +44,37 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  describe 'associations' do
+    subject { build(:user) }
+    it { should have_many(:devices) }
+    it { should have_many(:documents) }
+    it { should have_many(:document_groups) }
+    it { should have_many(:invoices) }
+    it { should have_many(:payment_methods) }
+    it { should have_many(:payments) }
+    it { should have_many(:properties) }
+    it { should have_one(:subscription) }
+    it { should belong_to(:promo_code).optional }
+  end
+
+  describe 'validations' do
+    subject { build(:user) }
+    it { should validate_presence_of(:first_name) }
+    it { should validate_presence_of(:last_name) }
+    it { should validate_presence_of(:phone_number) }
+    it { should validate_presence_of(:email) }
+    it { should validate_uniqueness_of(:email).case_insensitive }
+    # it { should validate_uniqueness_of(:phone_number).case_insensitive }
+    it { should validate_uniqueness_of(:onboarding_code).allow_nil }
+    it { should validate_uniqueness_of(:hubspot_id).allow_nil }
+    it { should validate_uniqueness_of(:intercom_id).allow_nil }
+    it { should validate_uniqueness_of(:stripe_id).allow_nil }
+    it { should validate_uniqueness_of(:arrivy_id).allow_nil }
+    # it { should validate_inclusion_of(:contact_type).in_array([ContactType::SERVICE_AREA_REQUESTED, ContactType::CUSTOMER, ContactType::LEAD]) }
+    it { should validate_inclusion_of(:onboarding_step).in_array(OnboardingStep::ALL) }
+    it { should validate_inclusion_of(:gender).in_array(%w(male female other)) }
+  end
+
   describe "syncable" do
     it "should be syncable" do
       ActiveJob::Base.queue_adapter = :test

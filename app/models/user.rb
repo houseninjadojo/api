@@ -82,8 +82,10 @@ class User < ApplicationRecord
   validates :email,           presence: true, uniqueness: { case_sensitive: false }
   validates :phone_number,    presence: true, phone: true
   validates :gender,          inclusion: { in: %w(male female other) }
-  validates :stripe_id,       uniqueness: true, allow_nil: true
+  validates :arrivy_id,       uniqueness: true, allow_nil: true
+  validates :intercom_id,     uniqueness: true, allow_nil: true
   validates :hubspot_id,      uniqueness: true, allow_nil: true
+  validates :stripe_id,       uniqueness: true, allow_nil: true
   validates :onboarding_code, uniqueness: true, allow_nil: true
   validates :contact_type,    inclusion: { in: ContactType::ALL }
   validates :onboarding_step, inclusion: { in: OnboardingStep::ALL }, allow_nil: true

@@ -54,6 +54,6 @@ class Device < ApplicationRecord
   # attributes
 
   def device_id
-    read_attribute(:device_id).upcase
+    read_attribute(:device_id)&.upcase
   end
 end

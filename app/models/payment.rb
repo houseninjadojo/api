@@ -133,6 +133,22 @@ class Payment < ApplicationRecord
     return nil
   end
 
+  def create_and_charge_now!(now: true)
+    if self.save != true
+      return false
+    end
+    begin
+      charge_payment_method!(now: now)
+    rescue Stripe::CardError => e
+      self.errors.add(:base, :invalid, message: e.message)
+      return false
+    rescue => e
+      self.errors.add(:base, :invalid, message: "Something went wrong, but we received your payment request and it will be charged as expected. You can close this window when ready.")
+      return false
+    end
+    return true
+  end
+
   def pay_with_charge!(now: true)
     return if has_charge?
     if now == true
