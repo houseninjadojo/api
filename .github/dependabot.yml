@@ -3,6 +3,13 @@
 
 version: 2
 updates:
+
+  # check updates for github actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
   # Ruby
   - package-ecosystem: "bundler"
     directory: "/"
