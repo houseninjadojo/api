@@ -79,7 +79,7 @@ module Hubspot
         props = line_item["properties"]
         {
           hubspot_id: line_item["id"] || props["hs_object_id"],
-          amount: props["amount"].present? && Money.from_amount(props["amount"]&.to_f).cents,
+          amount: props["amount"].present? && Monetize.parse("USD #{props["amount"]}").try(:fractional).try(:to_s),
           description: props["description"],
           name: props["name"],
           quantity: props["quantity"],
