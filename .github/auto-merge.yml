@@ -1,3 +1,55 @@
 - match:
-    dependency_type: bundler
-    update_type: "semver:patch" # includes patch updates!
+    dependency_type: development
+    update_type: "semver:minor" # includes patch updates!
+
+- match:
+    dependency_type: all
+    update_type: "security:patch"
+
+- match:
+    dependency_name: strong_migrations
+    update_type: all
+
+- match:
+    dependency_name: phonelib
+    update_type: all
+
+- match:
+    dependency_name: amazing_print
+    update_type: all
+
+- match:
+    dependency_name: credit_card_validations
+    update_type: semver:patch
+
+- match:
+    dependency_name: ddtrace
+    update_type: all
+
+- match:
+    dependency_name: okcomputer
+    update_type: all
+
+- match:
+    dependency_name: seedbank
+    update_type: all
+
+- match:
+    dependency_name: sentry-ruby
+    update_type: all
+
+- match:
+    dependency_name: sentry-rails
+    update_type: all
+
+- match:
+    dependency_name: sentry-sidekiq
+    update_type: all
+
+- match:
+    dependency_name: valid_email
+    update_type: all
+
+- match:
+    dependency_name: cloudflare-rails
+    update_type: semver:patch
