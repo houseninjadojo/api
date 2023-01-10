@@ -193,7 +193,7 @@ module Hubspot
         attribute_as_amount_in_cents(property_value)
       when "est__home_value"
         val = property_value.to_s.gsub(/\D/, "")
-        Money.from_cents(val).fractional.to_s
+        Monetize.parse("USD #{val}").try(:fractional).try(:to_s)
       when "firstname"
         property_value
       when "first_walkthrough_performed_"

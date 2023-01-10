@@ -384,7 +384,7 @@ module Hubspot
 
       # "805.5" => "80550"
       def attribute_as_amount_in_cents
-        Money.from_amount(property_value.to_f).fractional.to_s
+        Monetize.parse("USD #{property_value}").try(:fractional).try(:to_s)
       end
 
       # "1644204893172" => "2016-04-20T18:53:13.172Z"
