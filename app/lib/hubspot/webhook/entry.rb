@@ -420,8 +420,9 @@ module Hubspot
       def signed_url_attribute_as_io
         uri = URI.parse(property_value)
         file_id = uri.path&.split("/")&.last
-        first_url = "https://api.hubapi.com/files/v3/files/#{file_id}/signed-url?hapikey=#{Rails.secrets.dig(:hubspot, :api_key)}"
-        signed_url_payload = OpenURI.open_uri(first_url).read
+        first_url = "https://api.hubapi.com/files/v3/files/#{file_id}/signed-url"
+        headers = { "authorization" => "Bearer #{Rails.secrets.dig(:hubspot, :app_token)}", "accept" => "application/json" }
+        signed_url_payload = OpenURI.open_uri(first_url, headers).read
         signed_url = JSON.parse(signed_url_payload)["url"]
         URI.open(signed_url)
       end
