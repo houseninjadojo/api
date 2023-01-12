@@ -47,6 +47,13 @@ GIT
       sendgrid-ruby (~> 6.6)
 
 GIT
+  remote: https://github.com/mileszim/treblle-ruby.git
+  revision: d1972a8495a5dbb607bfc0fc178895e48c6906e1
+  ref: d1972a8495a5dbb607bfc0fc178895e48c6906e1
+  specs:
+    treblle (1.0.4)
+
+GIT
   remote: https://github.com/veeqo/activejob-uniqueness.git
   revision: 76a7fe9f3a8ce584d92d64751f7e329bfacfd54d
   ref: 76a7fe9
@@ -469,7 +476,6 @@ GEM
     strscan (3.0.4)
     thor (1.2.1)
     timeout (0.3.0)
-    treblle (1.0.3)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -544,7 +550,7 @@ DEPENDENCIES
   sidekiq (~> 7.0)
   stripe (~> 7.1.0)
   strong_migrations (~> 1.4.0)
-  treblle (~> 1.0.3)
+  treblle!
   valid_email
 
 RUBY VERSION
