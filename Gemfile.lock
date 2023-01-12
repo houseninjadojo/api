@@ -471,7 +471,7 @@ GEM
     simpleidn (0.2.1)
       unf (~> 0.1.4)
     stripe (7.1.0)
-    strong_migrations (1.4.0)
+    strong_migrations (1.4.1)
       activerecord (>= 5.2)
     strscan (3.0.4)
     thor (1.2.1)
@@ -549,7 +549,7 @@ DEPENDENCIES
   sentry-sidekiq
   sidekiq (~> 7.0)
   stripe (~> 7.1.0)
-  strong_migrations (~> 1.4.0)
+  strong_migrations (~> 1.4.1)
   treblle!
   valid_email
 
