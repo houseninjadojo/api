@@ -469,6 +469,7 @@ GEM
     strscan (3.0.4)
     thor (1.2.1)
     timeout (0.3.0)
+    treblle (1.0.3)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -543,6 +544,7 @@ DEPENDENCIES
   sidekiq (~> 7.0)
   stripe (~> 7.1.0)
   strong_migrations (~> 1.4.0)
+  treblle (~> 1.0.3)
   valid_email
 
 RUBY VERSION

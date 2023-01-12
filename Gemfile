@@ -45,6 +45,7 @@ gem 'sentry-sidekiq'
 gem 'sidekiq',                 '~> 7.0'
 gem 'stripe',                  '~> 7.1.0'
 gem 'strong_migrations',       '~> 1.4.0'
+gem 'treblle',                 '~> 1.0.3'
 gem 'valid_email'
 
 gem 'net-ssh', '7.0.1'
