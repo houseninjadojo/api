@@ -7,7 +7,7 @@ gem 'active_hash'
 gem 'activejob-uniqueness', github: 'veeqo/activejob-uniqueness', ref: '76a7fe9'
 gem 'amazing_print'
 gem 'auth0'
-gem 'action_policy',           '~> 0.6.3'
+gem 'action_policy',           '~> 0.6.4'
 gem 'aws-sdk-s3',                          require: false
 gem 'bootsnap',                '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
 gem 'branch_io'
