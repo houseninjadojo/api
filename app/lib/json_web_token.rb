@@ -68,12 +68,6 @@ class JSONWebToken
       end
     end
 
-    def jwks_hash
-      cache.fetch('json_web_keys_hash', **cache_options) do
-        jwks.keys.map { |k| [k.kid, k.public_key] }.to_h
-      end
-    end
-
     private
 
     def cache
