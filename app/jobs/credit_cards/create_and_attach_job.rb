@@ -54,6 +54,8 @@ class CreditCards::CreateAndAttachJob < ApplicationJob
       # str
       attr = if e.param == 'number'
         :card_number
+      elsif e.param == 'cvc'
+        :cvv
       elsif e.param.present?
         e.param.to_sym
       else

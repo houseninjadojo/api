@@ -7,7 +7,7 @@ gem 'active_hash'
 gem 'activejob-uniqueness', github: 'veeqo/activejob-uniqueness', ref: '76a7fe9'
 gem 'amazing_print'
 gem 'auth0'
-gem 'action_policy',           '~> 0.6.3'
+gem 'action_policy',           '~> 0.6.4'
 gem 'aws-sdk-s3',                          require: false
 gem 'bootsnap',                '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
 gem 'branch_io'
@@ -26,6 +26,7 @@ gem 'jwt'
 gem 'kaminari'
 gem 'kredis'                                                                   # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 gem 'money'
+gem 'monetize'
 gem 'okcomputer'                                                               # Health Check
 gem 'pg',                      '~> 1.4'                                        # Use postgresql as the database for Active Record
 gem 'phonelib'
@@ -43,7 +44,8 @@ gem 'sentry-rails'
 gem 'sentry-sidekiq'
 gem 'sidekiq',                 '~> 7.0'
 gem 'stripe',                  '~> 7.1.0'
-gem 'strong_migrations',       '~> 1.4.0'
+gem 'strong_migrations',       '~> 1.4.1'
+gem 'treblle', github: 'mileszim/treblle-ruby', ref: 'd1972a8495a5dbb607bfc0fc178895e48c6906e1'
 gem 'valid_email'
 
 gem 'net-ssh', '7.0.1'
