@@ -41,25 +41,22 @@ class JSONWebToken
 
     def decode(token)
       begin
-        decoded = JWT.decode(token, nil, true, **decoder_options) do |header|
-          jwks_hash[header['kid']]
-        end
-        return decoded
+        JWT.decode(token, nil, true, **decoder_options)
       rescue JWT::ExpiredSignature, JWT::InvalidIatError
         # Expired
         # puts "EXPIRED"
-        return nil
+        nil
       rescue JWT::InvalidIssuerError, JWT::InvalidAudError
         # Invalid Token
         # puts "INVALID"
-        return nil
+        nil
       rescue JWT::JWKError, JWT::DecodeError
         # Invalid
         # puts "JWK ERROR"
-        return nil
+        nil
       rescue
         # Etc
-        return nil
+        nil
       end
     end
 
@@ -73,7 +70,7 @@ class JSONWebToken
 
     def jwks_hash
       cache.fetch('json_web_keys_hash', **cache_options) do
-        jwks.keys.map { |k| [key.kid, key.public_key] }.to_h
+        jwks.keys.map { |k| [k.kid, k.public_key] }.to_h
       end
     end
 
@@ -116,13 +113,14 @@ class JSONWebToken
 
     def decoder_options
       {
-        algorithms: 'RS256',
+        algorithms: jwks.map { |key| key[:alg] }.compact.uniq,
+        jwks: jwks,
         iss: Rails.application.credentials.auth[:issuer],
         verify_iss: true,
         aud: Rails.application.credentials.auth[:audience],
         verify_aud: true,
         verify_iat: true,
-        jwks: jwk_loader,
+        # jwks: jwk_loader,
       }
     end
 
