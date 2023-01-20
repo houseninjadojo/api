@@ -73,7 +73,7 @@ class JSONWebToken
 
     def jwks_hash
       cache.fetch('json_web_keys_hash', **cache_options) do
-        jwks.keys.map {|k| [key.kid, key.public_key]}.to_h
+        jwks.keys.map { |k| [key.kid, key.public_key] }.to_h
       end
     end
 
