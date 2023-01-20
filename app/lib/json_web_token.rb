@@ -41,48 +41,30 @@ class JSONWebToken
 
     def decode(token)
       begin
-        decoded = JWT.decode(token, nil, true, **decoder_options) do |header|
-          jwks_hash[header['kid']]
-        end
-        return decoded
+        JWT.decode(token, nil, true, **decoder_options)
       rescue JWT::ExpiredSignature, JWT::InvalidIatError
         # Expired
         # puts "EXPIRED"
-        return nil
+        nil
       rescue JWT::InvalidIssuerError, JWT::InvalidAudError
         # Invalid Token
         # puts "INVALID"
-        return nil
+        nil
       rescue JWT::JWKError, JWT::DecodeError
         # Invalid
         # puts "JWK ERROR"
-        return nil
+        nil
       rescue
         # Etc
-        return nil
+        nil
       end
     end
 
     def jwks
-      cache.fetch('json_web_keys', expires_in: 24.hours, race_condition_ttl: 10.seconds, namespace: CACHE_NAMESPACE) do
+      cache.fetch('json_web_keys', **cache_options) do
         uri = URI("https://#{Rails.application.credentials.auth[:domain]}/.well-known/jwks.json")
         response = Net::HTTP.get(uri)
-        JSON.parse(response)
-      end
-    end
-
-    def jwks_hash
-      cache.fetch('json_web_keys_hash', expires_in: 24.hours, race_condition_ttl: 10.seconds, namespace: CACHE_NAMESPACE) do
-        jwk_hash = Array(jwks['keys'])
-        map = jwk_hash.map do |key|
-          [
-            key['kid'],
-            OpenSSL::X509::Certificate.new(
-              Base64.decode64(key['x5c'].first)
-            ).public_key
-          ]
-        end
-        Hash[map]
+        JWT::JWK::Set.new(JSON.parse(response))
       end
     end
 
@@ -125,14 +107,19 @@ class JSONWebToken
 
     def decoder_options
       {
-        algorithms: 'RS256',
+        algorithms: jwks.map { |key| key[:alg] }.compact.uniq,
+        jwks: jwks,
         iss: Rails.application.credentials.auth[:issuer],
         verify_iss: true,
         aud: Rails.application.credentials.auth[:audience],
         verify_aud: true,
         verify_iat: true,
-        jwks: jwk_loader,
+        # jwks: jwk_loader,
       }
+    end
+
+    def cache_options
+      { expires_in: 24.hours, race_condition_ttl: 10.seconds, namespace: CACHE_NAMESPACE }
     end
   end
 end
