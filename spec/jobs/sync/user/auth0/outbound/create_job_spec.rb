@@ -13,6 +13,7 @@ RSpec.describe Sync::User::Auth0::Outbound::CreateJob, type: :job do
     it "will not sync if policy declines" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: false))
       expect(AuthZero.client).not_to receive(:create_user)
+      expect(AuthZero.client).not_to receive(:add_user_roles)
       job.perform_now(user)
     end
 
@@ -21,6 +22,7 @@ RSpec.describe Sync::User::Auth0::Outbound::CreateJob, type: :job do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       params = job.new(user).params
       expect(AuthZero.client).to receive(:create_user).with(AuthZero.connection, params)
+      expect(AuthZero.client).to receive(:add_user_roles)
       job.perform_now(user)
       expect(user.auth_zero_user_created).to be_truthy
     end
