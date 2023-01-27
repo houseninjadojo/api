@@ -32,7 +32,7 @@ RSpec.describe Sync::User::Auth0::Outbound::UpdateJob, type: :job do
       params = job.new(user, changeset).params
       expect(AuthZero.client).to receive(:patch_user).with(user.auth_id, params)
       expect(AuthZero.client).not_to receive(:add_user_roles)
-      expect(AuthZero.client).to receive(:remove_user_roles)
+      expect(AuthZero.client).to receive(:remove_user_roles).with(user.auth_id, AuthZero::Params.roles_for_subscribed)
       job.perform_now(user, changeset)
     end
   end
