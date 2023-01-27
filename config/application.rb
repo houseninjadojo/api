@@ -11,6 +11,7 @@ require 'graphiti/rails/railtie'
 # core_ext
 require_relative "../lib/core_ext/rails/settings"
 require_relative "../lib/core_ext/ruby/array/intersect"
+require_relative "../lib/core_ext/ruby/json/safe_parse"
 require_relative "../lib/core_ext/rails/active_support/time"
 require_relative "../app/lib/clean_backtrace_formatter"
 
@@ -87,7 +88,13 @@ module HouseNinja
         headers = {}
         request.headers.each do |key, value|
           if key.is_a?(String) && key.start_with?("HTTP_")
-            headers[key] = value
+            case key
+            when "HTTP_X_HN_USER_PERMISSIONS"
+            when "HTTP_X_JWT_CLAIMS"
+              headers[key] = JSON.safe_parse(value)
+            else
+              headers[key] = value
+            end
           end
         end
         headers.except(
