@@ -44,6 +44,8 @@ class Document < ApplicationRecord
   scope :except_invoices, -> { where(invoice_id: nil) }
   scope :for_vault, -> { where(invoice_id: nil, payment_id: nil) }
 
+  after_create :send_email_if_receipt
+
   # callbacks
 
   # associations
@@ -104,5 +106,12 @@ class Document < ApplicationRecord
   end
 
   def url=(val)
+  end
+
+  private
+  def send_email_if_receipt
+    if self.tags.include?(SystemTags::RECEIPT)
+      ReceiptMailer.with(document).receipt.deliver_later
+    end
   end
 end
