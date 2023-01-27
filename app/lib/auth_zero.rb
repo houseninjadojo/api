@@ -89,7 +89,7 @@ module AuthZero
     end
 
     def self.roles_for_subscribed
-      ["rol_ITqVFgNr3EvAqM6v"]
+      [Rails.secrets.auth.dig(:roles, :customer)]
     end
 
     def self.roles_for_unsubscribed
