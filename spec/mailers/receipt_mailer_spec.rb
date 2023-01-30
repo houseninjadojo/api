@@ -7,13 +7,13 @@ RSpec.describe ReceiptMailer, type: :mailer do
       create(:document, user: user)
     }
     let(:mail) {
-      ReceiptMailer.with(document).payment_approval
+      ReceiptMailer.with(user: user, document: document).receipt
     }
     it "calls sendgrid" do
       expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["hello@houseninja.co"])
       expect(mail.body).to eq('')
-      # expect(mail[:'template-id'].to_s).to eq('d-8f179d92b29645278a32855f82eda36b') ???
+      expect(mail[:'template-id'].to_s).to eq('d-287df16bd5bb4153b442a9da7bd226b8')
       expect(mail[:dynamic_template_data].value).to eq({
         subject: "Here is your receipt.",
         first_name: user.first_name,
