@@ -19,6 +19,8 @@ RSpec.describe ReceiptMailer, type: :mailer do
         first_name: user.first_name,
         app_store_url: Rails.settings.app_store_url,
       }.to_s)
+      expect(mail.attachments.count).to eq 1
+      expect(mail.attachments.first.filename).to eq "receipt-#{document.id}.pdf"
     end
   end
 end
