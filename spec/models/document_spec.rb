@@ -43,4 +43,16 @@ RSpec.describe Document, type: :model do
       expect(document.name).to eq("My document")
     end
   end
+
+  describe "mailing receipts" do
+    it "calls mailer if receipt is attached" do
+      mailer = double(:mailer)
+      mail = double(:mail)
+      expect(ReceiptMailer).to receive(:with).and_return(mailer)
+      expect(mailer).to receive(:receipt).and_return(mail)
+      expect(mail).to receive(:deliver_later)
+
+      document = create(:document, tags: [Document::SystemTags::RECEIPT])
+    end
+  end
 end

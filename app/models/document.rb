@@ -111,7 +111,7 @@ class Document < ApplicationRecord
   private
   def send_email_if_receipt
     if self.tags.include?(SystemTags::RECEIPT)
-      ReceiptMailer.with(document).receipt.deliver_later
+      ReceiptMailer.with(document: self, user: self.user).receipt.deliver_later
     end
   end
 end
