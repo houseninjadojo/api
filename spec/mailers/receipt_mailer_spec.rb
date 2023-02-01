@@ -13,7 +13,7 @@ RSpec.describe ReceiptMailer, type: :mailer do
       expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["hello@houseninja.co"])
       expect(mail.body).to eq('')
-      expect(mail[:'template-id'].to_s).to eq('d-287df16bd5bb4153b442a9da7bd226b8')
+      expect(mail[:'template-id'].to_s).to eq('d-817572d309d140029cd6837d3ea3670f')
       expect(mail[:dynamic_template_data].value).to eq({
         subject: "Here is your receipt.",
         first_name: user.first_name,
