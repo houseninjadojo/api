@@ -60,6 +60,13 @@ class JSONWebToken
       end
     end
 
+    def encode(payload, sub: nil, exp: 60.days.from_now, iat: Time.now, permissions: [])
+      payload = payload.is_a?(Hash) ? payload : { data: payload.to_s }
+      payload = payload.merge({ sub: sub, exp: exp.to_i, iat: iat.to_i, permissions: permissions })
+      payload = payload.merge(encoder_options)
+      JWT.encode(payload.compact, access_token_jwk.signing_key, access_token_jwk[:alg], kid: access_token_jwk[:kid])
+    end
+
     def jwks
       cache.fetch('json_web_keys', **cache_options) do
         uri = URI("https://#{Rails.application.credentials.auth[:domain]}/.well-known/jwks.json")
@@ -120,6 +127,26 @@ class JSONWebToken
 
     def cache_options
       { expires_in: 24.hours, race_condition_ttl: 10.seconds, namespace: CACHE_NAMESPACE }
+    end
+
+    def pkey
+      OpenSSL::PKey::RSA.new(
+        Rails.secrets.dig(:house_ninja, :access_token, :signing_key),
+        Rails.secrets.secret_key_base
+      )
+    end
+
+    def access_token_jwk
+      cache.fetch('access_token_jwk', **cache_options) do
+        JWT::JWK::RSA.new(pkey, { use: 'sig', alg: 'RS256' }, kid_generator: ::JWT::JWK::Thumbprint)
+      end
+    end
+
+    def encoder_options
+      {
+        iss: Rails.secrets.dig(:house_ninja, :access_token, :iss),
+        aud: Rails.secrets.dig(:house_ninja, :access_token, :aud),
+      }
     end
   end
 end
