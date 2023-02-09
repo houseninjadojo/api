@@ -44,15 +44,25 @@ RSpec.describe Document, type: :model do
     end
   end
 
-  describe "mailing receipts" do
+  describe "#email_receipt!" do
     it "calls mailer if receipt is attached" do
       mailer = double(:mailer)
       mail = double(:mail)
-      expect(ReceiptMailer).to receive(:with).and_return(mailer)
+      expect(DocumentMailer).to receive(:with).and_return(mailer)
       expect(mailer).to receive(:receipt).and_return(mail)
       expect(mail).to receive(:deliver_later)
 
       document = create(:document, tags: [Document::SystemTags::RECEIPT])
+    end
+
+    it "does not call mailer if receipt is not attached" do
+      mailer = double(:mailer)
+      mail = double(:mail)
+      expect(DocumentMailer).not_to receive(:with)
+      expect(mailer).not_to receive(:receipt)
+      expect(mail).not_to receive(:deliver_later)
+
+      document = create(:document, tags: [])
     end
   end
 end
