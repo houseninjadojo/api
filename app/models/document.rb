@@ -46,6 +46,8 @@ class Document < ApplicationRecord
 
   # callbacks
 
+  after_create_commit :email_receipt!, if: :is_receipt?
+
   # associations
 
   belongs_to :document_group, required: false
@@ -88,6 +90,14 @@ class Document < ApplicationRecord
     tags.include?(SystemTags::WALKTHROUGH_REPORT)
   end
 
+  def is_receipt?
+    tags.include?(SystemTags::RECEIPT)
+  end
+
+  def has_asset?
+    asset.attached?
+  end
+
   # def signed_asset=(val)
   #   puts val
   #   self.asset = ActiveStorage::Blob.find_signed(val)
@@ -104,5 +114,22 @@ class Document < ApplicationRecord
   end
 
   def url=(val)
+  end
+
+  # user isn't always attached directly, so lets find it
+  #
+  # @return [User]
+  def user_from_graph
+    @user_from_graph ||= user || invoice&.user || payment&.user || property&.user || invoice&.work_order&.user
+  end
+
+  def mailer
+    DocumentMailer.with(document: self, user: user_from_graph)
+  end
+
+  # actions
+
+  def email_receipt!
+    mailer.receipt.deliver_later
   end
 end
