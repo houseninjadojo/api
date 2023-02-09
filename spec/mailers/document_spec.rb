@@ -2,13 +2,14 @@ require "rails_helper"
 
 RSpec.describe DocumentMailer, type: :mailer do
   describe "receipt" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, email: "random@houseninja.co") }
     let(:document) {
       create(:document, user: user)
     }
     let(:mail) {
       DocumentMailer.with(user: user, document: document).receipt
     }
+
     it "calls sendgrid" do
       expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["hello@houseninja.co"])
@@ -21,6 +22,16 @@ RSpec.describe DocumentMailer, type: :mailer do
       }.to_s)
       expect(mail.attachments.count).to eq 1
       expect(mail.attachments.first.filename).to eq "receipt.pdf"
+    end
+
+    context "when the document does not have an asset" do
+      let(:document) {
+        create(:document, user: user, asset: nil)
+      }
+
+      it "does not send the email" do
+        expect(mail.perform_deliveries).to eq false
+      end
     end
   end
 end
