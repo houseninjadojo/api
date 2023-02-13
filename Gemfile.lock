@@ -338,7 +338,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.1)
-    puma (6.0.2)
+    puma (6.1.0)
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.6.2)
@@ -529,7 +529,7 @@ DEPENDENCIES
   pg (~> 1.4)
   phonelib
   pry
-  puma (~> 6.0)
+  puma (~> 6.1)
   rack-cors
   rails (~> 7.0.4)
   rails_semantic_logger
