@@ -14,8 +14,9 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
     resource = resource_klass.create!(deal_params)
 
     if user && !user.current_customer?
-      # alert or log here???
-      Datadog.tracer.trace("non_customer_created_walkthrough")
+      span = Datadog::Tracing.trace("non_customer_created_walkthrough", start_time: Time.now)
+      span.resource = user
+      span.finish
     end
     webhook_event.update!(
       processed_at: Time.now,
