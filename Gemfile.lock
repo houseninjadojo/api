@@ -469,7 +469,7 @@ GEM
     simpleidn (0.2.1)
       unf (~> 0.1.4)
     stripe (7.1.0)
-    strong_migrations (1.4.2)
+    strong_migrations (1.4.3)
       activerecord (>= 5.2)
     thor (1.2.1)
     timeout (0.3.1)
@@ -546,7 +546,7 @@ DEPENDENCIES
   sentry-sidekiq
   sidekiq (~> 7.0)
   stripe (~> 7.1.0)
-  strong_migrations (~> 1.4.2)
+  strong_migrations (~> 1.4.3)
   treblle!
   valid_email
 
