@@ -7,7 +7,7 @@ gem 'active_hash'
 gem 'activejob-uniqueness', github: 'veeqo/activejob-uniqueness', ref: '76a7fe9'
 gem 'amazing_print'
 gem 'auth0'
-gem 'action_policy',           '~> 0.6.4'
+gem 'action_policy',           '~> 0.6.5'
 gem 'aws-sdk-s3',                          require: false
 gem 'bootsnap',                '>= 1.9.3', require: false                      # Reduces boot times through caching; required in config/boot.rb
 gem 'branch_io'
@@ -30,7 +30,7 @@ gem 'monetize'
 gem 'okcomputer'                                                               # Health Check
 gem 'pg',                      '~> 1.4'                                        # Use postgresql as the database for Active Record
 gem 'phonelib'
-gem 'puma',                    '~> 6.0'                                        # Use Puma as the app server
+gem 'puma',                    '~> 6.1'                                        # Use Puma as the app server
 gem 'rack-cors'                                                                # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails',                   '~> 7.0.4'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails_semantic_logger'
@@ -44,7 +44,7 @@ gem 'sentry-rails'
 gem 'sentry-sidekiq'
 gem 'sidekiq',                 '~> 7.0'
 gem 'stripe',                  '~> 7.1.0'
-gem 'strong_migrations',       '~> 1.4.2'
+gem 'strong_migrations',       '~> 1.4.3'
 gem 'treblle', github: 'mileszim/treblle-ruby', ref: 'd1972a8495a5dbb607bfc0fc178895e48c6906e1'
 gem 'valid_email'
 
