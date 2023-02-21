@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 # Disable the Datadog Agent based on dyno type
-if [ "$DYNOTYPE" == "run" ] || [ "$DYNOTYPE" == "scheduler" ] || [ "$DYNOTYPE" == "release" ]; then
+if [ "$DISABLE_DATADOG_AGENT" == "false" ]; then
+  DISABLE_DATADOG_AGENT="false"
+elif [ "$DYNOTYPE" == "run" ] || [ "$DYNOTYPE" == "scheduler" ] || [ "$DYNOTYPE" == "release" ]; then
   DISABLE_DATADOG_AGENT="true"
 fi
 
