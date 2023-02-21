@@ -2,7 +2,7 @@
 
 # Disable the Datadog Agent based on dyno type
 if [ "$DISABLE_DATADOG_AGENT" == "false" ]; then
-  DISABLE_DATADOG_AGENT="false"
+  unset DISABLE_DATADOG_AGENT
 elif [ "$DYNOTYPE" == "run" ] || [ "$DYNOTYPE" == "scheduler" ] || [ "$DYNOTYPE" == "release" ]; then
   DISABLE_DATADOG_AGENT="true"
 fi
