@@ -13,6 +13,14 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
 
     resource = resource_klass.create!(deal_params)
 
+    if user && !user.current_customer?
+      span = Datadog::Tracing.trace("alerting.event", start_time: Time.now)
+      span.resource = "non_customer_created_walkthrough"
+      span.set_tag('usr.email', user&.email)
+      span.set_tag('usr.name', user&.full_name)
+      span.set_tag('usr.id', user&.id)
+      span.finish
+    end
     webhook_event.update!(
       processed_at: Time.now,
       webhookable: resource
