@@ -38,5 +38,5 @@ jobs:
       dockerfile: Dockerfile
     secrets:
       RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
-      GHCR_TOKEN: ${{ secrets.GHCR_PAT }}
+      GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CI_CD }}
