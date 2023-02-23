@@ -1,19 +1,18 @@
-name: CI / Build / Release Container
-
-# on:
-#   push:
-#     branches:
-#       - main
+name: ci / build
 
 # Trigger after tests pass
 on:
+  workflow_dispatch:
   workflow_run:
     workflows:
-      - "CI / Tests"
+      - "ci / tests"
     branches:
       - main
     types: 
       - completed
+  # push:
+  #   branches:
+  #     - docker
 
 concurrency:
   group: build-release
@@ -25,7 +24,7 @@ env:
 
 jobs:
   release:
-    name: Release Container
+    name: release container
     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     with:
@@ -33,5 +32,5 @@ jobs:
       dockerfile: Dockerfile
     secrets:
       RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
-      GHCR_TOKEN: ${{ secrets.GHCR_PAT }}
+      GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CI_CD }}

@@ -62,6 +62,7 @@ end
 
 group :development do
   gem 'annotate'
+  gem 'dockerfile-rails', '>= 1.1'
   gem 'foreman'
   # gem 'vandal_ui' # install for API UI utility
 end

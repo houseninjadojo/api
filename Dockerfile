@@ -9,4 +9,4 @@ LABEL org.opencontainers.image.source https://github.com/houseninjadojo/api
 COPY --from=Builder /etc/passwd /etc/passwd_builder 
 
 # USER app
-CMD ["bundle", "exec", "rails", "server"]
+CMD ["bin/rails", "server"]
