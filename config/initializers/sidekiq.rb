@@ -1,9 +1,9 @@
 if Rails.env.production? || Rails.env.sandbox?
   redis_config = {
     url: ENV['REDIS_URL'],
-    ssl_params: {
-      verify_mode: OpenSSL::SSL::VERIFY_NONE
-    },
+    # ssl_params: {
+    #   verify_mode: OpenSSL::SSL::VERIFY_NONE
+    # },
   }
 else
   redis_config = {

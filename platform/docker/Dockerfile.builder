@@ -33,6 +33,8 @@ RUN bundle config set --local frozen 1 && \
 ONBUILD COPY Gemfile* /app/
 ONBUILD RUN bundle config set --local without 'development test' && \
   bundle install -j4 --retry 3 && \
+  # Precompile gems with Bootsnap (and ignore errors)
+  bundle exec bootsnap precompile --gemfile || true && \
   # Remove unneeded gems
   bundle clean --force && \
   # Remove unneeded files from installed gems (cached *.gem, *.o, *.c)
@@ -42,6 +44,9 @@ ONBUILD RUN bundle config set --local without 'development test' && \
 
 # Copy the whole application folder into the image
 ONBUILD COPY . /app
+
+# Precompile application code with Bootsnap (and ignore errors)
+ONBUILD RUN bundle exec bootsnap precompile app/ lib/ || true
 
 # # Compile assets with Webpacker or Sprockets
 # #
@@ -68,8 +73,16 @@ ONBUILD COPY . /app
 # ONBUILD RUN mv config/credentials.yml.enc.bak config/credentials.yml.enc 2>/dev/null || true
 # ONBUILD RUN mv config/credentials.bak config/credentials 2>/dev/null || true
 
+# # Remove folders not needed in resulting image
+# ONBUILD RUN rm -rf tmp/cache vendor/bundle test spec
+
 # Remove folders not needed in resulting image
-ONBUILD RUN rm -rf tmp/cache vendor/bundle test spec
+# This includes `app/javascript` which contains the JavaScript source code.
+# Normally it is not needed in the resulting image, because it was compiled
+# to `public/`. But if the app uses importmaps, the folder is still required
+# for pinning and must not be removed.
+ONBUILD RUN rm -rf node_modules yarn.lock .yarn vendor/bundle test spec app/packs
+ONBUILD RUN if [ ! -f config/importmap.rb ]; then rm -rf app/javascript; fi
 
 # Configure Entrypoint
 ONBUILD RUN chmod +x entrypoint.sh

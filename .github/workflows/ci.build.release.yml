@@ -7,6 +7,7 @@ name: CI / Build / Release Container
 
 # Trigger after tests pass
 on:
+  workflow_dispatch:
   workflow_run:
     workflows:
       - "CI / Tests"
@@ -26,7 +27,7 @@ env:
 jobs:
   release:
     name: Release Container
-    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@docker
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     with:
       docker_repo: ghcr.io/houseninjadojo/api

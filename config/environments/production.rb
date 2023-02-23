@@ -98,9 +98,9 @@ Rails.application.configure do
   config.cache_store = :redis_cache_store, {
     url: ENV['REDIS_URL'],
     reconnect_attempts: 3,
-    ssl_params: {
-      verify_mode: OpenSSL::SSL::VERIFY_NONE,
-    },
+    # ssl_params: {
+    #   verify_mode: OpenSSL::SSL::VERIFY_NONE,
+    # },
   }
 
   # Sendgrid

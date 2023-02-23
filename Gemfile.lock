@@ -193,6 +193,8 @@ GEM
       msgpack
     debase-ruby_core_source (3.2.0)
     diff-lcs (1.5.0)
+    dockerfile-rails (1.1.2)
+      rails
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.8.1)
@@ -282,7 +284,10 @@ GEM
       activesupport (>= 6.0.0)
       redis (>= 4.2, < 6)
     libdatadog (1.0.1.1.0)
+    libdatadog (1.0.1.1.0-aarch64-linux)
     libdatadog (1.0.1.1.0-x86_64-linux)
+    libddwaf (1.5.1.0.0-aarch64-linux)
+      ffi (~> 1.0)
     libddwaf (1.5.1.0.0-arm64-darwin)
       ffi (~> 1.0)
     libddwaf (1.5.1.0.0-x86_64-linux)
@@ -323,6 +328,8 @@ GEM
     net-ssh (7.0.1)
     netrc (0.11.0)
     nio4r (2.5.8)
+    nokogiri (1.14.0-aarch64-linux)
+      racc (~> 1.4)
     nokogiri (1.14.0-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.14.0-x86_64-linux)
@@ -490,6 +497,7 @@ GEM
     zeitwerk (2.6.6)
 
 PLATFORMS
+  aarch64-linux-musl
   arm64-darwin-21
   x86_64-linux
 
@@ -507,6 +515,7 @@ DEPENDENCIES
   credit_card_validations
   database_cleaner
   ddtrace
+  dockerfile-rails (>= 1.1)
   dotenv-rails
   factory_bot_rails
   faker
@@ -554,4 +563,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.7
+   2.3.19
