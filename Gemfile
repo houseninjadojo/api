@@ -62,6 +62,7 @@ end
 
 group :development do
   gem 'annotate'
+  gem 'dockerfile-rails', '>= 1.1'
   gem 'foreman'
   # gem 'vandal_ui' # install for API UI utility
 end
@@ -76,5 +77,3 @@ end
 
 # gem 'bcrypt',           '~> 3.1.7'                                        # Use Active Model has_secure_password
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]        # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-
-gem "dockerfile-rails", ">= 1.1", :group => :development
