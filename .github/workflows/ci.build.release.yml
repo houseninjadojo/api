@@ -10,9 +10,9 @@ on:
       - main
     types: 
       - completed
-  push:
-    branches:
-      - docker
+  # push:
+  #   branches:
+  #     - docker
 
 concurrency:
   group: build-release
@@ -25,8 +25,8 @@ env:
 jobs:
   release:
     name: release container
-    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@docker
-    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     with:
       docker_repo: ghcr.io/houseninjadojo/api
       dockerfile: Dockerfile
