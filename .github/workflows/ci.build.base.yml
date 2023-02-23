@@ -5,16 +5,15 @@ on:
   push:
     branches:
       - main
-      - docker
-    # paths:
-    #   - Gemfile.lock
-    #   - platform/docker/Dockerfile.builder
-    #   - platform/docker/Dockerfile.intermediate
+    paths:
+      - Gemfile.lock
+      - platform/docker/Dockerfile.builder
+      - platform/docker/Dockerfile.intermediate
 
 jobs:
   base:
     name: Base Container
-    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@docker
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     with:
       docker_repo: ghcr.io/houseninjadojo/api-base
       dockerfile: platform/docker/Dockerfile.builder
@@ -24,7 +23,7 @@ jobs:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CI_CD }}
   intermediate:
     name: Intermediate Container
-    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@docker
+    uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     with:
       docker_repo: ghcr.io/houseninjadojo/api-intermediate
       dockerfile: platform/docker/Dockerfile.intermediate
