@@ -8,12 +8,15 @@ name: CI / Build / Release Container
 # Trigger after tests pass
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - docker
   workflow_run:
     workflows:
-      - "CI / Tests"
+      - "ci / tests"
     branches:
       - main
-      - docker
+      # - docker
     types: 
       - completed
 
