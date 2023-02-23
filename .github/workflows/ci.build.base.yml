@@ -1,4 +1,4 @@
-name: CI / Build / Base Containers
+name: ci / build
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   base:
-    name: Base Container
+    name: base container
     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     with:
       docker_repo: ghcr.io/houseninjadojo/api-base
@@ -22,7 +22,7 @@ jobs:
       GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CI_CD }}
   intermediate:
-    name: Intermediate Container
+    name: intermediate container
     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     with:
       docker_repo: ghcr.io/houseninjadojo/api-intermediate

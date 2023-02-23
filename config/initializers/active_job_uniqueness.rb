@@ -44,9 +44,9 @@ ActiveJob::Uniqueness.configure do |config|
     config.redlock_servers = [
       Redis.new(
         url: ENV.fetch('REDIS_URL', 'redis://localhost:6379'),
-        # ssl_params: {
-        #   verify_mode: OpenSSL::SSL::VERIFY_NONE
-        # }
+        ssl_params: {
+          verify_mode: OpenSSL::SSL::VERIFY_NONE
+        }
       ),
     ]
   end

@@ -1,9 +1,4 @@
-name: CI / Build / Release Container
-
-# on:
-#   push:
-#     branches:
-#       - main
+name: ci / build
 
 # Trigger after tests pass
 on:
@@ -15,6 +10,9 @@ on:
       - main
     types: 
       - completed
+  push:
+    branches:
+      - docker
 
 concurrency:
   group: build-release
@@ -26,7 +24,7 @@ env:
 
 jobs:
   release:
-    name: Release Container
+    name: release container
     uses: houseninjadojo/api/.github/workflows/reusable.build.yml@main
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     with:
