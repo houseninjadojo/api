@@ -9,6 +9,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     if Rails.env.development?
       origins "localhost:4200", "co.houseninja.application"
+    elsif Rails.env.sandbox?
+      origins /co\.houseninja\.application\:\/\//, /[a-z0-9]+\.houseninja\.pages\.dev/, "sandbox-origin.api.houseninja.co", "tntefwmvax1.sandbox.verygoodproxy.com", "http://localhost"
     else
       origins /co\.houseninja\.application\:\/\//, /[a-z0-9]+\.houseninja\.pages\.dev/, "app.houseninja.co", "api-origin.houseninja.co", "tntmcgm6sar.live.verygoodproxy.com"
     end
