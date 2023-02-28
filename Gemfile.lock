@@ -561,7 +561,7 @@ DEPENDENCIES
   valid_email
 
 RUBY VERSION
-   ruby 3.1.2p20
+   ruby 3.2.0p-1
 
 BUNDLED WITH
    2.3.19
