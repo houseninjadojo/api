@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.2"
+ruby "3.2.0"
 
 gem 'active_hash'
 gem 'activejob-uniqueness', github: 'veeqo/activejob-uniqueness', ref: '76a7fe9'
