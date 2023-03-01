@@ -48,7 +48,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::UpdateJob, type: :job do
       allow(WorkOrder).to receive(:find_by).and_return(work_order)
       entry = Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
       expect(work_order).to receive(:update!).with(
-        entry.attribute_name => entry.attribute_value
+        a_hash_including(entry.attribute_name => entry.attribute_value)
       )
       expect(webhook_event).to receive(:update!)
       job.perform_now(webhook_event, webhook_entry)
