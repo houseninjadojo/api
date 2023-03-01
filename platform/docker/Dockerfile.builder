@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM} ruby:3.2.0-alpine
+FROM --platform=${BUILDPLATFORM} ruby:3.2.1-alpine
 ENV RUBY_YJIT_ENABLE=1
 
 LABEL maintainer="engineering@houseninja.co"

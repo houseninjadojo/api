@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  RUBY_VERSION: 3.2.0
+  RUBY_VERSION: 3.2.1
   RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_MASTER_KEY }}
   # ImageOS: ubuntu20 # Self Hosted
 
