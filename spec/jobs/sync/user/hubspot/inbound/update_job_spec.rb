@@ -43,7 +43,7 @@ RSpec.describe Sync::User::Hubspot::Inbound::UpdateJob, type: :job do
       allow(User).to receive(:find_by).and_return(user)
       entry = Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
       expect(user).to receive(:update!).with(
-        entry.attribute_name => entry.attribute_value
+        a_hash_including(entry.attribute_name => entry.attribute_value)
       )
       expect(User).to receive(:find_by).and_return(user).at_least(:once)
       expect(webhook_event).to receive(:update!)

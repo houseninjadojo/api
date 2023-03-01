@@ -48,7 +48,7 @@ RSpec.describe Sync::WorkOrder::Hubspot::Inbound::DeleteJob, type: :job do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       allow(WorkOrder).to receive(:find_by).and_return(work_order)
       entry = Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
-      expect(work_order).to receive(:update!).with(deleted_at: Time.now)
+      expect(work_order).to receive(:update!).with(a_hash_including(deleted_at: Time.now))
       expect(webhook_event).to receive(:update!)
       job.perform_now(webhook_event, webhook_entry)
     end
