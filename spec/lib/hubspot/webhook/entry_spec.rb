@@ -90,6 +90,7 @@ RSpec.describe Hubspot::Webhook::Entry do
   describe '#resource' do
     it 'returns resource if exists' do
       expect(WorkOrder).to receive(:find_by).with(hubspot_id: '123456789').and_return(work_order)
+      # expect(WorkOrder).to receive(:find_by).with(hubspot_id: '123456789').and_return(work_order)
       expect(entry.resource).to eq(work_order)
     end
 

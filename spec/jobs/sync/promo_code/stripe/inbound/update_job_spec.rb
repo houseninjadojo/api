@@ -81,6 +81,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::UpdateJob, type: :job do
 
     it "will sync if policy approves" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
+      allow(PromoCode).to receive(:find_by).and_return(promo_code)
       expect(promo_code).to receive(:update!).with({
         active: true,
         code: "test",
@@ -113,6 +114,7 @@ RSpec.describe Sync::PromoCode::Stripe::Inbound::UpdateJob, type: :job do
   describe "#promo_code" do
     it "returns found promo_code" do
       expect_any_instance_of(job).to(receive(:webhook_event).at_least(:once).and_return(webhook_event))
+      allow(PromoCode).to receive(:find_by).and_return(promo_code)
       expect(job.new(webhook_event).promo_code).to eq(promo_code)
     end
   end
