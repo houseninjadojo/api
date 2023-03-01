@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.2"
+ruby "~> 3.2.0"
 
 gem 'active_hash'
 gem 'activejob-uniqueness', github: 'veeqo/activejob-uniqueness', ref: '76a7fe9'
@@ -27,6 +27,7 @@ gem 'kaminari'
 gem 'kredis'                                                                   # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 gem 'money'
 gem 'monetize'
+gem 'nokogiri', force_ruby_platform: true
 gem 'okcomputer'                                                               # Health Check
 gem 'pg',                      '~> 1.4'                                        # Use postgresql as the database for Active Record
 gem 'phonelib'

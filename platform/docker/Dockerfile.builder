@@ -1,5 +1,6 @@
-# syntax = docker/dockerfile:1.0-experimental
-FROM --platform=$BUILDPLATFORM ruby:3.1.2-alpine
+FROM --platform=${BUILDPLATFORM} ruby:3.2.1-alpine
+ENV RUBY_YJIT_ENABLE=1
+
 LABEL maintainer="engineering@houseninja.co"
 LABEL org.opencontainers.image.source="https://github.com/houseninjadojo/api"
 

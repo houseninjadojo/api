@@ -40,9 +40,10 @@ RSpec.describe Sync::User::Hubspot::Inbound::UpdateJob, type: :job do
 
     it "will sync if policy approves" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
+      allow(User).to receive(:find_by).and_return(user)
       entry = Hubspot::Webhook::Entry.new(webhook_event, webhook_entry)
       expect(user).to receive(:update!).with(
-        entry.attribute_name => entry.attribute_value
+        a_hash_including(entry.attribute_name => entry.attribute_value)
       )
       expect(User).to receive(:find_by).and_return(user).at_least(:once)
       expect(webhook_event).to receive(:update!)
