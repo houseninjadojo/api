@@ -19,16 +19,18 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
       span.set_tag('usr.email', user&.email)
       span.set_tag('usr.name', user&.full_name)
       span.set_tag('usr.id', user&.id)
-      if(user.email != deal.email)
-        span.set_tag('usr.mismatched_email', true)
-      end
-      if(user.phone_number != deal.phone_number)
-        span.set_tag('usr.mismatched_phone', true)
-      end
-      if(user.full_name != deal.homeowner_name)
+      # TODO can't find phone number in the deal payload
+      # if(user.phone_number != deal.properties[""])
+      #   span.set_tag('usr.mismatched_phone', true)
+      # end
+      # TODO don't see an email either
+      # if(user.email != deal.email)
+      #   span.set_tag('usr.mismatched_email', true)
+      # end
+      if(user.full_name != deal.properties["homeowner_name"])
         span.set_tag('usr.mismatched_name', true)
       end
-      if(user.default_property.street_address1 != deal.address)
+      if(user.default_property.street_address1 != deal.properties["walkthrough_address"])
         span.set_tag('usr.mismatched_property_address', true)
       end
       span.finish
