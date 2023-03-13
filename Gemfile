@@ -49,7 +49,7 @@ gem 'strong_migrations',       '~> 1.4.4'
 gem 'treblle', github: 'mileszim/treblle-ruby', ref: 'd1972a8495a5dbb607bfc0fc178895e48c6906e1'
 gem 'valid_email'
 
-gem 'net-ssh', '7.0.1'
+gem 'net-ssh', '7.1.0'
 
 group :development, :test do
   gem 'factory_bot_rails'
