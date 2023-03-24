@@ -19,6 +19,20 @@ class Sync::WorkOrder::Hubspot::Inbound::CreateJob < Sync::BaseJob
       span.set_tag('usr.email', user&.email)
       span.set_tag('usr.name', user&.full_name)
       span.set_tag('usr.id', user&.id)
+      hubspot_phone = hubspot_contact.properties["phone"]["value"]
+      if(user.phone_number != hubspot_phone)
+        span.set_tag('usr.mismatched_phone', true)
+      end
+      hubspot_email = hubspot_contact.properties["email"]["value"]
+      if(user.email != hubspot_email)
+        span.set_tag('usr.mismatched_email', true)
+      end
+      if(user.full_name != deal.properties["homeowner_name"])
+        span.set_tag('usr.mismatched_name', true)
+      end
+      if(user.default_property.street_address1 != deal.properties["walkthrough_address"])
+        span.set_tag('usr.mismatched_property_address', true)
+      end
       span.finish
     end
     webhook_event.update!(
