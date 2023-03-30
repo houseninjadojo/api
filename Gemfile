@@ -31,7 +31,7 @@ gem 'nokogiri', force_ruby_platform: true
 gem 'okcomputer'                                                               # Health Check
 gem 'pg',                      '~> 1.4'                                        # Use postgresql as the database for Active Record
 gem 'phonelib'
-gem 'puma',                    '~> 6.1'                                        # Use Puma as the app server
+gem 'puma',                    '~> 6.2'                                        # Use Puma as the app server
 gem 'rack-cors'                                                                # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails',                   '~> 7.0.4'                                      # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails_semantic_logger'
