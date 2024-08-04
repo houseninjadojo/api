@@ -123,7 +123,7 @@ class Estimate < ApplicationRecord
   end
 
   def should_share_with_customer?
-    !(declined? || approved? || deleted?)
+    !(declined? || approved? || deleted?) && persisted?
   end
 
   def deep_link

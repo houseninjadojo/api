@@ -1,7 +1,7 @@
 class EstimateMailer < ApplicationMailer
   before_action {
-    @estimate = params[:estimate]
-    @work_order = @estimate&.work_order
+    @estimate = params[:estimate] || Estimate.new
+    @work_order = @estimate&.work_order || WorkOrder.new
   }
 
   def estimate_approval
