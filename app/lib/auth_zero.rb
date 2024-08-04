@@ -87,6 +87,14 @@ module AuthZero
         # verify_email: true,
       }
     end
+
+    def self.roles_for_subscribed
+      [Rails.secrets.auth.dig(:roles, :customer)]
+    end
+
+    def self.roles_for_unsubscribed
+      []
+    end
   end
 
   def self.client

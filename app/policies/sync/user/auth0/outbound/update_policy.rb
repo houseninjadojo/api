@@ -1,8 +1,9 @@
 class Sync::User::Auth0::Outbound::UpdatePolicy < ApplicationPolicy
   class Changeset < TreeDiff
-    # observe :email,
-    observe :first_name,
-            :last_name
+    observe :email,
+            :first_name,
+            :last_name,
+            :contact_type
   end
 
   authorize :user, optional: true

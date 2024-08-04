@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Sync::User::Auth0::Outbound::UpdateJob, type: :job do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, ) }
   let(:changeset) {
     [
       {
@@ -14,13 +14,15 @@ RSpec.describe Sync::User::Auth0::Outbound::UpdateJob, type: :job do
   let(:job) { Sync::User::Auth0::Outbound::UpdateJob }
 
   before(:each) do
-    allow(AuthZero).to(receive(:client).and_return(double(patch_user: true)))
+    allow(AuthZero).to(receive(:client).and_return(double(patch_user: true, add_user_roles: true, remove_user_roles: true)))
   end
 
   describe "#perform" do
     it "will not sync if policy declines" do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: false))
       expect(AuthZero.client).not_to receive(:patch_user)
+      expect(AuthZero.client).not_to receive(:add_user_roles)
+      expect(AuthZero.client).not_to receive(:remove_user_roles)
       job.perform_now(user, changeset)
     end
 
@@ -29,6 +31,8 @@ RSpec.describe Sync::User::Auth0::Outbound::UpdateJob, type: :job do
       allow_any_instance_of(job).to receive(:policy).and_return(double(can_sync?: true))
       params = job.new(user, changeset).params
       expect(AuthZero.client).to receive(:patch_user).with(user.auth_id, params)
+      expect(AuthZero.client).not_to receive(:add_user_roles)
+      expect(AuthZero.client).to receive(:remove_user_roles).with(user.auth_id, AuthZero::Params.roles_for_subscribed)
       job.perform_now(user, changeset)
     end
   end
