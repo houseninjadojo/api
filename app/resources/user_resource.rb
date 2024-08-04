@@ -23,6 +23,7 @@
 #  created_at                                :datetime         not null
 #  updated_at                                :datetime         not null
 #  arrivy_id                                 :string
+#  default_payment_method_id                 :uuid
 #  hubspot_id                                :string
 #  intercom_id                               :string
 #  promo_code_id                             :uuid
@@ -39,6 +40,10 @@
 #  index_users_on_phone_number     (phone_number)
 #  index_users_on_promo_code_id    (promo_code_id)
 #  index_users_on_stripe_id        (stripe_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (default_payment_method_id => payment_methods.id)
 #
 
 class UserResource < ApplicationResource

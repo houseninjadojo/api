@@ -23,6 +23,7 @@
 #  created_at                                :datetime         not null
 #  updated_at                                :datetime         not null
 #  arrivy_id                                 :string
+#  default_payment_method_id                 :uuid
 #  hubspot_id                                :string
 #  intercom_id                               :string
 #  promo_code_id                             :uuid
@@ -39,6 +40,10 @@
 #  index_users_on_phone_number     (phone_number)
 #  index_users_on_promo_code_id    (promo_code_id)
 #  index_users_on_stripe_id        (stripe_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (default_payment_method_id => payment_methods.id)
 #
 class User < ApplicationRecord
   encrypts :hubspot_contact_object
@@ -73,6 +78,7 @@ class User < ApplicationRecord
   has_many   :payments
   has_many   :properties
   has_one    :subscription
+  has_one    :default_payment_method, class_name: 'PaymentMethod', foreign_key: :default_payment_method_id
   belongs_to :promo_code, required: false
 
   # validations
@@ -120,7 +126,7 @@ class User < ApplicationRecord
   # Get the user's default payment method
   #
   # @return {PaymentMethod}
-  def default_payment_method
+  def old_default_payment_method
     # self.payment_methods.where.not(stripe_token: nil).first
     self.payment_methods
       .where.not(stripe_token: nil)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_17_095941) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_17_105621) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -392,6 +392,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_17_095941) do
     t.boolean "test_account", default: false
     t.boolean "first_walkthrough_performed", default: false, null: false
     t.datetime "deleted_at"
+    t.uuid "default_payment_method_id"
     t.index ["arrivy_id"], name: "index_users_on_arrivy_id", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["gender"], name: "index_users_on_gender"
@@ -481,5 +482,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_17_095941) do
   add_foreign_key "subscriptions", "promo_codes"
   add_foreign_key "subscriptions", "subscription_plans"
   add_foreign_key "subscriptions", "users"
+  add_foreign_key "users", "payment_methods", column: "default_payment_method_id"
   add_foreign_key "work_orders", "properties"
 end
