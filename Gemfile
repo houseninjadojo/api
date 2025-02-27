@@ -43,7 +43,7 @@ gem 'sendgrid-actionmailer', github: 'houseninjadojo/sendgrid-actionmailer', ref
 gem 'sentry-ruby'
 gem 'sentry-rails'
 gem 'sentry-sidekiq'
-gem 'sidekiq',                 '~> 7.0'
+gem 'sidekiq',                 '~> 7.3'
 gem 'stripe',                  '~> 7.1.0'
 gem 'strong_migrations',       '~> 1.4.4'
 gem 'treblle', github: 'mileszim/treblle-ruby', ref: 'd1972a8495a5dbb607bfc0fc178895e48c6906e1'
