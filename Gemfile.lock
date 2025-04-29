@@ -185,7 +185,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    date (3.3.3)
+    date (3.4.1)
     ddtrace (1.11.0)
       debase-ruby_core_source (>= 0.10.16, <= 3.2.0)
       libdatadog (~> 2.0.0.1.0)
@@ -317,12 +317,12 @@ GEM
     msgpack (1.7.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
-    net-imap (0.3.4)
+    net-imap (0.3.9)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.2.1)
+    net-protocol (0.2.2)
       timeout
     net-smtp (0.3.3)
       net-protocol
@@ -477,7 +477,7 @@ GEM
     strong_migrations (1.4.4)
       activerecord (>= 5.2)
     thor (1.2.1)
-    timeout (0.3.2)
+    timeout (0.4.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
